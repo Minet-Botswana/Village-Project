@@ -56,16 +56,7 @@
         transform: translate(-50%,-50%);
         box-shadow: 0px 2px 5px rgba(223, 4, 4, 0.986);
 
-        @media only screen and (max-width: 900px) {
-            .row {
-                grid-template-columns: auto auto;
-            }
-        }
-        @media only screen and (max-width: 6px) {
-            .row {
-                grid-template-columns: auto;
-            }
-      }
+        
     }
 
       input {
@@ -134,6 +125,17 @@
         background-color: #ffffff; /* Background color for the logo-header */
         padding: 0px; /* Adjust padding as needed to add for another header */
         text-align: center;
+      }
+
+      @media only screen and (max-width: 900px) {
+            .row {
+                grid-template-columns: auto auto;
+            }
+        }
+        @media only screen and (max-width: 6px) {
+            .row {
+                grid-template-columns: auto;
+            }
       }
     </style>
 
