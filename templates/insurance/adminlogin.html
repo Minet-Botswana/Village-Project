@@ -1,142 +1,168 @@
 <!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>login</title>
+
 {% load widget_tweaks %}
+{% load static %}
+<link rel="icon" href="{% static 'image/favicon.ico' %}">
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <style media="screen">
-     @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,300,600);
 
-*{box-sizing:border-box;}
+<head>
 
-body {
-  font-family: 'open sans', helvetica, arial, sans;
-background:url(http://farm8.staticflickr.com/7064/6858179818_5d652f531c_h.jpg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
+  <style media="screen">
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,300,600);
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Koulen&family=Lato&family=Nunito&family=Playfair+Display:ital@1&family=Prata&family=Raleway:ital,wght@1,100&family=Roboto&family=Roboto+Condensed&family=Teko&display=swap');
 
-@grey:#2a2a2a;
-@blue:#1fb5bf;
-.log-form {
-  width: 40%;
-  min-width: 320px;
-  max-width: 475px;
-  background: #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%,-50%);
--moz-transform: translate(-50%,-50%);
--o-transform: translate(-50%,-50%);
--ms-transform: translate(-50%,-50%);
-transform: translate(-50%,-50%);
-  
-  box-shadow: 0px 2px 5px rgba(0,0,0,.25);
-  
-  @media(max-width: 40em){
-    width: 95%;
-    position: relative;
-    margin: 2.5% auto 0 auto;
-    left: 0%;
-  -webkit-transform: translate(0%,0%);
--moz-transform: translate(0%,0%);
--o-transform: translate(0%,0%);
--ms-transform: translate(0%,0%);
-transform: translate(0%,0%);
-  }
-  
-  form {
-    display: block;
-    width: 100%;
-    padding: 2em;
-  }
-  
-  h2 {
-    width: 100%;
-    color: lighten(@grey, 20%);
-    font-family: 'open sans condensed';
-    font-size: 1.35em;
-    display: block;
-    background:@grey;
-    width: 100%;
-    text-transform: uppercase;
-    padding: .75em 1em .75em 1.5em;
-    box-shadow:inset 0px 1px 1px fadeout(white, 95%);
-    border: 1px solid darken(@grey, 5%);
-    //text-shadow: 0px 1px 1px darken(@grey, 5%);
-    margin: 0;
-    font-weight: 200;
-  }
-  
-  input {
-    display: block;
-    margin: auto auto;
-    width: 100%;
-    margin-bottom: 2em;
-    padding: .5em 0;
-    border: none;
-    border-bottom: 1px solid #eaeaea;
-    padding-bottom: 1.25em;
-    color: #757575;
-    &:focus {
-      outline: none;
-    }
-  }
-  
-  .btn {
-    display: inline-block;
-    background: blue;
-    border: 1px solid darken(@blue, 5%);
-    padding: .5em 2em;
-    color: white;
-    margin-right: .5em;
-    box-shadow: inset 0px 1px 0px fadeout(white, 80%); 
-    &:hover {
-      background: lighten(@blue, 5%);
-    }
-    &:active {
-      background: @blue; 
-      box-shadow: inset 0px 1px 1px fadeout(black, 90%); 
-    }
-    &:focus {
-      outline: none;
-    }
-  }
-  
- 
-  
-}
+      *{box-sizing:border-box;}
+
+      body {
+        font-family: 'open sans', helvetica, arial, sans;
+        background:url(http://farm8.staticflickr.com/7064/6858179818_5d652f531c_h.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      }
+      
+      h2 {
+        width: 100%;
+        color: #201d0b; /* Replace var(--blue) with the actual color value */
+        font-family: 'open sans condensed';
+        font-size: 1.35em;
+        display: block;
+        background: #e21a22; /* Replace var(--grey) with the actual color value */
+        text-transform: uppercase;
+        padding: .75em 1em .75em 1.5em;
+        box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.95);
+        border: 1px solid #262626; /* Replace darken(var(--grey), 5%) with the actual color value */
+        text-shadow: 0px 1px 1px #262626; /* Replace darken(var(--grey), 5%) with the actual color value */
+        margin: 0;
+        font-weight: 20; /* Assuming you meant font-weight: 200 instead of 20 */
+      }
 
 
+      .log-form {
+        width: 30%;
+        min-width: 320px;
+        background: #ffffff;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 2px;
+        -webkit-transform: translate(-50%,-50%);
+        -moz-transform: translate(-50%,-50%);
+        -o-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+        box-shadow: 0px 2px 5px rgba(223, 4, 4, 0.986);
 
+        @media(max-width: 40em){
+          width: 95%;
+          position: relative;
+          margin: 2.5% auto 0 auto;
+          left: 0%;
+          -webkit-transform: translate(0%,0%);
+          -moz-transform: translate(0%,0%);
+          -o-transform: translate(0%,0%);
+          -ms-transform: translate(0%,0%);
+          transform: translate(0%,0%);
+        }
+      }
 
+      input {
+          display: block;
+          margin: auto auto;
+          width: 50%;
+          margin-bottom: 8em;
+          padding: .5em 0;
+          border: none;
+          border-bottom: 1px solid #eaeaea;
+          padding-bottom: 1.25em;
+          color: #757575;
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .login-btn{
+          font-family: Raleway;
+          font-weight: 100;
+          font-size: 16px;
+          margin: auto;
+          color: #fff;
+          background-color: #d62828;
+          padding: 10px 30px;
+          border: solid #d62828 1px;
+          box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+          border-radius: 30px 30px 30px 30px;
+          transition : 497ms;
+          transform: translateY(0);
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          cursor: pointer;
+          text-transform: lowercase;
+        }
+
+        .login-btn:hover{
+          transition : 497ms;
+          padding: 10px 36px;
+          transform : translateY(-0px);
+          background-color: #fff;
+          color: #d62828;
+          border: solid 1px #d62828;
+          border-radius: 30px;
+        }
+
+      form {
+          display: block;
+          width: 100%;
+          padding: 2em;
+        }
+
+      .logo {
+        position: absolute;
+        top: 40px; /* Adjust the vertical position for the logo */
+        left: 0px; /* Adjust the horizontal position for the logo */
+        padding: 50px;
+      }
+
+      .navbar {
+        position: relative;
+      }
+
+      .logo-header {
+        background-color: #ffffff; /* Background color for the logo-header */
+        padding: 0px; /* Adjust padding as needed to add for another header */
+        text-align: center;
+      }
     </style>
-  </head>
-  <body>
-    {% include "insurance/navbar.html" %}
 
+  {% include "insurance/navbar.html" %}
+  <!-- Logo Header -->
+  <div class="logo-header">
+    <div class="logo">
+      <img src="{% static 'image/Minet1.png' %}" alt="Logo" width="100">
+    </div>
+  </div>
+</head>
 
-
+<body>
 <div class="log-form">
-  <h2 class="text-center">LOGIN TO YOUR ACCOUNT</h2><br>
+  <h2 class="text-center">Login</h2>
+  <br>
   <form method="post">
-   {% csrf_token %}
-     {% render_field form.username class="form-control" placeholder="Username" %}
-     <br>
+    {% csrf_token %}
+    {% render_field form.username class="form-control" placeholder="Username" %}
+    <br>
     {% render_field form.password class="form-control" placeholder="Password" %}
     <br>
-    <button type="submit" class="btn primary text-center">Login</button>
-    
+    <button type="submit" class="login-btn">Login</button>
   </form>
 </div><!--end log form -->
-
-
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br>
-{% include "insurance/footer.html" %}
-  </body>
+</body>
+<footer>
+  {% include "insurance/footer.html" %}
+</footer>
 </html>
