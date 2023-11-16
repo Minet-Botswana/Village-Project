@@ -14,12 +14,26 @@
   <style type="text/css">
     .bs-example {
       margin: 0px;
+      color: #e21a22;
     }
     .bg-dark {
       background-color: #212529!important;
     }
     .navbar {
-      padding: 20px 0; /* Adjust the height vertical of the navbar */
+      padding: 0px 0; /* Adjust the height vertical of the navbar */
+    }
+    .navbar-dark .navbar-nav .nav-link {
+    color: #060202 !important;
+    margin-right: 2% !important; 
+}
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    background-color: #e21a22 !important;
+    margin-right: 2% !important; 
+}
+
+    .navbar-nav a {
+        color: #e21a22;
     }
     .navbar-brand {
       font-size: 15px; /* Increase the font size */
@@ -42,18 +56,15 @@
     color: #ffffff;
   }
   </style>
-</head>
 
 <body>
   <div class="bs-example">
     <nav 
       class="navbar navbar-expand-md  navbar-dark fixed-top" 
-      style="background-color: #e21a22;"
+      style="background-color: rgb(255, 255, 255);"
     >
-    <a style="color: #ffffff; text-decoration: none; margin-left: 10px;" href="/">
-      <font face="Gill" size="5">
-        Minet eKYC Compliance
-      </font>
+    <a style="color: #e21a22; text-decoration: none; margin-left: 10px;" href="/">
+      <img src="./static/image/Minet-Logo-2.png" alt="Minet eKYC Compliance Image" >
       <br />
     </a>
     
@@ -79,7 +90,6 @@
         </div>
 
         <div class="navbar-nav">
-          <a href="/" class="nav-item nav-link">FAQs</a>
           <a href="/aboutus" class="nav-item nav-link">About Us</a>
           <a href="/contactus" class="nav-item nav-link">Contact Us</a>
         </div>
