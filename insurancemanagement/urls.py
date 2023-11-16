@@ -4,10 +4,10 @@ from django.urls import path
 from insurance import views
 from django.contrib.auth.views import LogoutView,LoginView
 from django.urls import path,include
+from insurance.views import custom_dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
 
     path('customer/',include('customer.urls')),
     path('',views.home_view,name=''),
@@ -19,10 +19,13 @@ urlpatterns = [
     
     path('adminlogin', LoginView.as_view(template_name='insurance/adminlogin.html'),name='adminlogin'),
     path('admin-dashboard', views.admin_dashboard_view,name='admin-dashboard'),
+    path('custom_dashboard/', custom_dashboard, name='custom_dashboard'),
 
     path('admin-view-customer', views.admin_view_customer_view,name='admin-view-customer'),
     path('update-customer/<int:pk>', views.update_customer_view,name='update-customer'),
     path('delete-customer/<int:pk>', views.delete_customer_view,name='delete-customer'),
+    
+    
 
     path('admin-category', views.admin_category_view,name='admin-category'),
     path('admin-view-category', views.admin_view_category_view,name='admin-view-category'),
