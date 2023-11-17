@@ -302,6 +302,8 @@ text-align: center;
 }
 
 
+/*TEST FOR RESPONSIVENESS OF FEATURES*/
+
 
 
 
@@ -504,6 +506,13 @@ transition: var(--transition);
 .features {
 padding-block: var(--section-padding);
 background: #000000;
+height: 100%;
+}
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .features {
+    height: 100%;
+  }
 }
 
 .features .section-title { margin-bottom: 15px; color: #e21a22; }
@@ -534,7 +543,7 @@ font-size: 20px;
 .features-content-title {
 font-size: var(--fs-2);
 font-family: var(--ff-mulish);
-color: #eFF;
+color: #e21a22;
 font-family: "Titillium Web", sans-serif;
 font-weight: var(--fw-600);
 margin-bottom: 25px;
@@ -735,7 +744,7 @@ font-size: 20px;
 \*-----------------------------------*/
 
 footer {
-background: var(--raisin-black-1);
+background: #000000;
 color: var(--white-opacity);
 font-weight: var(--fw-500);
 }
@@ -765,7 +774,7 @@ font-size: 25px;
 transition: var(--transition);
 }
 
-.social-link:is(:hover, :focus) { color: var(--white); }
+.social-link:is(:hover, :focus) { color: #e21a22; }
 
 .footer-link-box {
 display: grid;
@@ -788,12 +797,12 @@ padding-block: 10px;
 }
 
 .footer-link:is(:hover, :focus) {
-color: var(--white);
+color: #e21a22;
 transform: translateX(5px);
 }
 
 .footer-bottom {
-background: var(--raisin-black-2);
+background: #e21a22;
 padding-block: 20px;
 text-align: center;
 }
@@ -1011,9 +1020,10 @@ transition: var(--transition);
 
 .hero .container {
   display: grid;
-  grid-template-columns: 4fr 5fr;
+  grid-template-columns: 4 5fr;
   align-items: center;
   gap: 60px;
+  justify-items: center;
 }
 
 .hero-content { margin-bottom: 0; }
@@ -1110,9 +1120,6 @@ transition: var(--transition);
 }
 
 
-
-
-
 /**
 * responsive for larger than 1200px screen
 */
@@ -1131,7 +1138,7 @@ transition: var(--transition);
  * HERO
  */
 
-.hero .container { gap: 150px; }
+.hero .container { gap: 15px; }
 
 
 
@@ -1177,7 +1184,7 @@ transition: var(--transition);
           </div>
 
           <figure class="hero-banner">
-            <img src="./static/image/landing2.png" alt="Hero image">
+            <img src="./static/image/MinetHero.png" alt="Hero image">
           </figure>
 
         </div>
@@ -1300,10 +1307,10 @@ transition: var(--transition);
 
           <h2 class="h2 section-title">Awesome Features</h2>
 
-          <p class="section-text">
+          <!--p class="section-text">
             Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis eligendi
             cumque.
-          </p>
+          </p-->
 
           <div class="features-wrapper">
 
@@ -1313,21 +1320,19 @@ transition: var(--transition);
 
             <div class="features-content">
 
-              <p class="features-content-subtitle">
+              <!--p class="features-content-subtitle">
                 <ion-icon name="sparkles"></ion-icon>
 
                 <span>CREATIVE FEATURES</span>
-              </p>
+              </p-->
 
               <h3 class="features-content-title">
-                Build <strong>community</strong> & <strong>conversion</strong> with our suite of <strong>social
-                  tool</strong>
+                <strong> Online Payments for Policies</strong>
               </h3>
 
               <p class="features-content-text">
-                Temporibus autem quibusdam et aut officiis debitis aut rerum a necessitatibus saepe eveniet ut et
-                voluptates repudiandae
-                sint molestiae non recusandae itaque.
+                Say goodbye to the inconvenience of traditional payment methods! We've streamlined the process to empower you with the ease of online payments. 
+                Now, securing your short-term insurance policy is just a click away.
               </p>
 
               <ul class="features-list">
@@ -1335,22 +1340,22 @@ transition: var(--transition);
                 <li class="features-list-item">
                   <ion-icon name="layers-outline"></ion-icon>
 
-                  <p>Donec pede justo fringilla vel nec.</p>
+                  <p>Enjoy the flexibility to pay from the comfort of your home, office, or anywhere with an internet connection. </p>
                 </li>
 
                 <li class="features-list-item">
                   <ion-icon name="megaphone-outline"></ion-icon>
 
-                  <p>Cras ultricies mi eu turpis hendrerit fringilla.</p>
+                  <p>Fast, secure, and convenient – because your time is valuable.</p>
                 </li>
 
               </ul>
 
-              <div class="btn-group">
+              <!--div class="btn-group">
                 <button class="btn btn-primary">Read More</button>
 
                 <button class="btn btn-secondary">Buy Now</button>
-              </div>
+              </div-->
 
             </div>
 
@@ -1364,20 +1369,20 @@ transition: var(--transition);
 
             <div class="features-content">
 
-              <p class="features-content-subtitle">
+              <!--p class="features-content-subtitle">
                 <ion-icon name="sparkles"></ion-icon>
 
                 <span>CREATIVE FEATURES</span>
-              </p>
+              </p-->
 
               <h3 class="features-content-title">
-                We do the work you <strong>stay focused</strong> on <strong>your customers.</strong>
+                <strong>eKYC at Your Convenience</strong>
               </h3>
 
               <p class="features-content-text">
-                Temporibus autem quibusdam et aut officiis debitis aut rerum a necessitatibus saepe eveniet ut et
-                voluptates repudiandae
-                sint molestiae non recusandae itaque.
+                We understand that your time is precious, and convenience is key. Introducing our cutting-edge eKYC (Electronic Know Your Customer) feature 
+                – a revolutionary way to complete the KYC process wherever you are! No more lengthy paperwork or tiresome visits. With our seamless eKYC, 
+                verifying your identity is now as simple as a few taps on your device. Experience the future of insurance with hassle-free, on-the-go KYC.
               </p>
 
               <ul class="features-list">
@@ -1385,22 +1390,22 @@ transition: var(--transition);
                 <li class="features-list-item">
                   <ion-icon name="rocket-outline"></ion-icon>
 
-                  <p>Donec pede justo fringilla vel nec.</p>
+                  <p>Verification Made Virtually Effortless – Your Identity, Your Way.</p>
                 </li>
 
                 <li class="features-list-item">
                   <ion-icon name="wifi-outline"></ion-icon>
 
-                  <p>Cras ultricies mi eu turpis hendrerit fringilla.</p>
+                  <p>KYC Redefined: Easy, Quick, Anywhere You Are.</p>
                 </li>
 
               </ul>
 
-              <div class="btn-group">
+              <!--div class="btn-group">
                 <button class="btn btn-primary">Read More</button>
 
                 <button class="btn btn-secondary">Buy Now</button>
-              </div>
+              </div-->
 
             </div>
 
@@ -1674,7 +1679,7 @@ transition: var(--transition);
         <div class="footer-brand">
 
           <a href="#" class="logo">
-            <img src="./assets/images/logo-footer.svg" alt="Landio logo">
+            <img src="./static/image/MinetLogoBlack.png" alt="Landio logo">
           </a>
 
           <p class="footer-text">
@@ -1685,25 +1690,25 @@ transition: var(--transition);
           <ul class="social-list">
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://www.facebook.com/MinetBotswana/" class="social-link">
                 <ion-icon name="logo-facebook"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://twitter.com/minet_botswana?lang=en" class="social-link">
                 <ion-icon name="logo-twitter"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://www.instagram.com/minet_botswana_holdings/" class="social-link">
                 <ion-icon name="logo-instagram"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://www.linkedin.com/company/minet-bw/mycompany/" class="social-link">
                 <ion-icon name="logo-linkedin"></ion-icon>
               </a>
             </li>
@@ -1802,7 +1807,7 @@ transition: var(--transition);
     <div class="footer-bottom">
       <div class="container">
         <p class="copyright">
-          &copy; 2022 <a href="">codewithsadee</a>. All Right Reserved
+          &copy; 2023 <a href="">Minet Botswana Holdings</a>. All Right Reserved
         </p>
       </div>
     </div>
