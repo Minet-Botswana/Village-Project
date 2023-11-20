@@ -1,23 +1,44 @@
 {% extends 'insurance/adminbase.html' %}
 {% block content %}
-{%load static%}
+{% load static %}
 
+<!-- Move the head content to the base template if it's not already there -->
 <head>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <style media="screen">
     a:link {
       text-decoration: none;
     }
-
     h6 {
       text-align: center;
+      font-family: "Titillium Web", sans-serif;
     }
+    .panel-heading h6 {
+      background-color: #e21a22 !important;
+      color: white !important; /* Adjust text color for better visibility */
+      border: 1px solid #e21a22!important;
+    }
+    .btn-primary {
+    color: #fff;
+    background-color: #e21a22;
+    border-color: #e21a22;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #e21a22;
+    border-color: #e21a22;
+}
+    .panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #e21a22;
+    border-color: #333;
+  }
 
     .row {
-      margin: 100px;
+      margin: 10px;
     }
     label #sidebar_btn {
       z-index: 1;
@@ -28,39 +49,37 @@
       padding-left: 60px;
       margin-top:15px;
       font-size: 20px;
+      font-family: "Titillium Web", sans-serif;
       
       transition: 0.5s;
       transition-property: color;
     }
   </style>
 </head>
+
 <br><br>
 <div class="container">
-  <div class="panel panel-primary">
+  <div class="panel panel-primary panel-default">
     <div class="panel-heading">
-      <h6 class="panel-title">Customers</h6>
+      <h6 class="panel-title">Clients</h6>
     </div>
     <table class="table table-hover" id="dev-table">
       <thead>
         <tr>
-
           <th>Name</th>
           <th>Profile Picture</th>
           <th>Mobile</th>
           <th>Address</th>
-         
           <th>Update</th>
           <th>Delete</th>
         </tr>
       </thead>
       {% for t in customers %}
       <tr>
-
-        <td> {{t.get_name}}</td>
-        <td> <img src="{% static t.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
-        <td>{{t.mobile}}</td>
-        <td>{{t.address}}</td>
-        
+        <td>{{ t.get_name }}</td>
+        <td><img src="{% static t.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
+        <td>{{ t.mobile }}</td>
+        <td>{{ t.address }}</td>
         <td><a class="btn btn-primary btn-xs" href="{% url 'update-customer' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
         <td><a class="btn btn-danger btn-xs" href="{% url 'delete-customer' t.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
       </tr>

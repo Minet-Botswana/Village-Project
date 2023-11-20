@@ -9,16 +9,35 @@
            margin: 50px; 
           
         }
+        .title {
+            text-align: center;
+            color: red;
+            margin-top: 75px; /* Adjust the top margin as needed */
+        }
+        .btn-primary{
+          background-color: red !important;
+          border-radius: 25px !important;
+          border: #e22a21 !important;
+        }
+        .btn-primary:hover{
+          background-color: #fff !important;
+          color: #e22a21 !important;
+          border: 1px solid #2f597d !important;
+        }
+        .form-group{
+          color: #e22a21 !important;
+          font-family: "Titillium Web", sans-serif !important;
+        }
 
     </style>
   </head>
   <body>
-    {% include "insurance/navbar.html" %}
+    {% include "customer/customer_nav.html" %}
  
 
 
 <br><br><br>
-<h3 style="text-align: center;color: red;">CUSTOMER SIGNUP</h3>
+<h3 class="title" style="text-align: center;color: red;">CUSTOMER SIGNUP</h3>
 <form method="POST" autocomplete="off" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-row">

@@ -1,44 +1,180 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Minet - eKYC Portal</title>
-{% load static %}
-<link rel="icon" href="{% static 'image/favicon.ico' %}">
 <html lang="en" dir="ltr">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Minet - eKYC Portal</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'image/favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-  <style media="screen">
-    .jumbotron {
-      margin-top: 0px;
-      margin-bottom: 0px;
+    <style media="screen">
+        body {
+            background-color: #1260ad;
+            font-family: "Titillium Web", sans-serif;
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            min-height: 60vh; /* Set minimum height to ensure full visibility */
+            overflow: hidden;
+            margin-top: 60px; /* Add margin to push content below the navbar */
+            
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 10px; /* Adjusted padding for better small screen visibility */
+            text-align: center;
+            min-height: 100%; /* Ensure content occupies the full height */
+            opacity: 0;
+            animation-duration: 1.0s;
+         
+        }
+
+        .section-left {
+            background-color: #e21a22;
+            color: #ffffff;
+            animation-name: fadeInLeft;
+        }
+
+        .section-right {
+            background-color: #ffffff;
+            color: #e21a22;
+            animation-name: fadeInRight;
+        }
+
+        .section h1 {
+            font-size: 2.5em; /* Adjusted font size for better small screen visibility */
+            margin-bottom: 20px;
+        }
+
+        .lead {
+            font-size: 1.2em;
+        }
+
+        .btn-signup {
+        background-color: #fff !important; /* !important to ensure specificity */
+        color: #e21a22 !important; /* !important to ensure specificity */
+        border: 1px solid #2f597d !important; /* !important to ensure specificity */
+        border-radius: 95px !important ;
+        padding: 15px 30px; /* Adjusted padding for better visual */
+        margin-right: 10px;
+        font-size: 0.9rem !important; /* Change button font size */
+        font-family: "Titillium Web", sans-serif;
     }
 
-    .jumbotron h1 {
-      text-align: center;
+    .btn-signup:hover {
+        background-color: rgb(0, 0, 0) !important; /* Hover background color */
+        color: #ffffff !important; /* Hover text color */
+        transform: scale(1.05) rotate(0deg);
+        border: 1px solid #e21a22 !important; /* !important to ensure specificity */
+    }
+    .btn-login {
+        background-color: #e21a22 !important; /* !important to ensure specificity */
+        color: #ffffff !important; /* !important to ensure specificity */
+        border: 1px solid #e21a22 !important; /* !important to ensure specificity */
+        border-radius: 95px !important ;
+        padding: 15px 30px; /* Adjusted padding for better visual */
+        margin-right: 10px;
+        font-size: 0.9rem !important; /* Change button font size */
+        font-family: "Titillium Web", sans-serif;
     }
 
-  </style>
+    .btn-login:hover {
+        background-color: #efff !important; /* Hover background color */
+        color: #e21a22 !important; /* Hover text color */
+        transform: scale(1.05) rotate(0deg);
+        
+    }
 
+        .footer {
+            background-color: #f7dedf;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+
+            .section-left,
+            .section-right {
+                order: 1; /* Reverse order for small screens */
+            }
+
+            .section h1 {
+                font-size: 1.7rem; /* Adjusted font size for better small screen visibility */
+            }
+
+            .btn-signup {
+                margin-top: 10px; /* Add margin to separate button from the bottom */
+                font-size: 5rem;
+            }
+            .btn-login {
+                margin-top: 10px; /* Add margin to separate button from the bottom */
+                font-size: 5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  {% include "insurance/navbar.html" %}
-  <br><br>
-  <div class="jumbotron text-center" style="margin-bottom:0px;">
-    <h1 class="display-4">Hello, Customer</h1>
-    <p class="lead">Welcome to Insurance Management System</p>
-    <hr class="my-4">
-    <p>You can access various features after Login.</p>
-    <p class="lead">
-      <a class="btn btn-primary btn-lg" href="customersignup" role="button">KYC Submission</a>
-      <a class="btn btn-primary btn-lg" href="customerlogin" role="button">Log In to Dashboard</a>
-    </p>
-    <br><br><br>
-  </div>
- 
-  {% include "insurance/footer.html" %}
+    <div class="container">
+        <div class="section section-left animate__animated animate__fadeInLeft">
+            <h1>Join Us Today!</h1>
+            <p class="lead">Experience the Exceptional Standards of Our Services</p>
+            <hr class="my-4">
+            <p>Your journey with Minet begins here. Unlock a variety of features by creating your account.</p>
+            <p class="lead">
+                <a class="btn btn-signup btn-lg" href="customersignup" role="button">Create Your Account</a>
+            </p>
+        </div>
+
+        <div class="section section-right animate__animated animate__fadeInRight">
+            <h1>Welcome Back!</h1>
+            <p class="lead">Discover the Exceptional Standards of Our Services</p>
+            <hr class="my-4">
+            <p>Your trust in Minet means a lot to us. Access exclusive features by logging into your account.</p>
+            <p class="lead">
+                <a class="btn btn-login btn-lg" href="customerlogin" role="button">Log In to Your Dashboard</a>
+            </p>
+        </div>
+    </div>
+
+    {% include "customer/customer_nav.html" %}
 </body>
 
 </html>
