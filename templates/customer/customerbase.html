@@ -14,12 +14,12 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: "Gill Sans", sans-serif;;
+      font-family: "Titillium Web", sans-serif;
     }
 
     header {
       position: fixed;
-      background: #22242A;
+      background: #e21a22;
       padding: 20px;
       width: 100%;
       z-index: 1;
@@ -39,25 +39,28 @@
 
     .logout_btn {
       padding: 5px;
-      background: #19B3D3;
+      background: #1a1919;
       text-decoration: none;
       float: right;
       margin-top: -30px;
       margin-right: 40px;
-      border-radius: 2px;
-      font-size: 15px;
+      border-radius: 20px;
+      font-size: 16px;
       font-weight: 600;
       color: #fff;
       transition: 0.5s;
+      font-family: "Titillium Web", sans-serif;
 
     }
 
     .logout_btn:hover {
-      background: #0B87A6;
+      background: #fff;
+      color: #e21a22;
+      font-family: "Titillium Web", sans-serif;
     }
 
     .sidebar {
-      background: #2f323a;
+      background: #2e2e2e;
       margin-top: 70px;
       padding-top: 30px;
       position: fixed;
@@ -69,8 +72,8 @@
     }
 
     .sidebar .profile_image {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 100px;
       margin-bottom: 10px;
     }
@@ -90,11 +93,13 @@
       padding-left: 40px;
       box-sizing: border-box;
       transition: 0.5s;
+      font-family: "Titillium Web", sans-serif;
 
     }
 
     .sidebar a:hover {
-      background: #19B3D3;
+      background: #e21a22;
+      color: #fff;
     }
 
     .sidebar i {
@@ -111,10 +116,11 @@
       margin: 5px 0;
       transition: 0.5s;
       transition-property: color;
+      margin-top: 17px;
     }
 
     label #sidebar_btn:hover {
-      color: #19B3D3;
+      color: #000000;
     }
 
     #check:checked~.sidebar {
@@ -130,6 +136,14 @@
       margin-left: 170px;
       width: 80px;
     }
+    .logo-image {
+    margin-top: -4px;
+    width: 150px; /* Set the width as per your design */
+    height: auto; /* Maintain the aspect ratio */
+    border: 2px solid #ccc; /* Add a border if desired */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    /* Add more styles as needed */
+  }
 
     .content {
       margin-left: 250px;
@@ -138,6 +152,8 @@
       background-size: cover;
       height: 100vh;
       transition: 0.5s;
+      font-family: "Titillium Web", sans-serif;
+      font-size: large;
     }
 
     #check:checked~.content {
@@ -146,6 +162,16 @@
 
     #check {
       display: none;
+    }
+    .username {
+    color: white;
+    /* Add any additional styling as needed */
+    border: 2px solid red;
+    margin-top: -10px;
+    border-radius: 20%; /* Make it circular */
+    padding: 8px; /* Adjust the padding as needed */
+    display: inline-block; /* Ensures the border wraps around the text */
+    font-family: "Titillium Web", sans-serif;
     }
   </style>
 
@@ -161,23 +187,26 @@
   <!--header area start-->
   <header style="padding-top: 0px;">
     <label for="check">
-      <i style="padding-left: 60px;margin-top: 17px;" class="fas fa-bars" id="sidebar_btn"></i>
+      <i style=" "class="fas fa-bars" id="sidebar_btn"></i>
     </label>
     <div class="left_area">
-      <h3>Insurance Management</h3>
+      <img src="../static/image/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image">
     </div>
     <div class="right_area">
       <a href="/logout" class="logout_btn">Logout</a>
     </div>
   </header>
+  
   <!--header area end-->
+
+
   <!--sidebar start-->
   <div class="sidebar" style="margin-top:60px;">
     <center>
 
       <img src="{% static customer.profile_pic.url %}" class="profile_image" alt="">
       <h4>{{request.user.first_name}}</h4>
-      <h6 style="color: rgb(255, 255, 255);">( Customer )</h6>
+      <h6 style="color: rgb(255, 255, 255);">( Client )</h6>
 
     </center>
 
