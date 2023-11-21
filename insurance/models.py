@@ -13,7 +13,7 @@ class Category(models.Model):
 
 class Policy(models.Model):
     category= models.ForeignKey('Category', on_delete=models.CASCADE)
-    policy_name=models.CharField(max_length=200)
+    policy_name=models.CharField(max_length=205)
     sum_assurance=models.PositiveIntegerField()
     premium=models.PositiveIntegerField()
     tenure=models.PositiveIntegerField()

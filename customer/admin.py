@@ -5,7 +5,7 @@ from django.conf import settings
 from .models import Customer
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('get_name', 'address', 'mobile', 'display_profile_pic')
+    list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone',  'display_profile_pic')
 
     def display_profile_pic(self, obj):
         if obj.profile_pic:

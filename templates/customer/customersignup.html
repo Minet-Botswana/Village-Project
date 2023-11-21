@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 {% load widget_tweaks %}
 <html lang="en" dir="ltr">
-  <head>
+  <>
     <meta charset="utf-8">
+    <!-- Add these links to include Bootstrap and jQuery -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <style>
 
         form{
@@ -42,11 +49,17 @@
     {% csrf_token %}
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="username">Username</label>
+        <label for="username">
+            Username
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter your username"></i>
+        </label>
         {% render_field userForm.username|attr:'required:true'  class="form-control" placeholder="username" %}
       </div>
       <div class="form-group col-md-6">
-        <label for="inputPassword4">Password</label>
+        <label for="inputPassword4">
+            Password
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter your password"></i>
+        </label>
         {% render_field userForm.password|attr:'required:true'  class="form-control" placeholder="password" %}
       </div>
     </div>
@@ -68,14 +81,50 @@
           {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
         </div>
         <div class="form-group col-md-6">
-          <label for="address">Address</label>
-          {% render_field customerForm.address|attr:'required:true'  class="form-control" placeholder="Address" %}
+          <label for="address">Email Address</label>
+          {% render_field customerForm.address|attr:'required:true'  class="form-control" placeholder="Email" %}
         </div>
       </div>
 
       <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="mobile">Alternate Phone
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter N/A if not available"></i>
+          </label>
+          {% render_field customerForm.alternate_phone|attr:'required:false'  class="form-control" placeholder="Mobile" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">ID Number</label>
+          {% render_field customerForm.id_number|attr:'required:true'  class="form-control" placeholder="ID" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="mobile">Physical Address</label>
+          {% render_field customerForm.physical_address|attr:'required:true'  class="form-control" placeholder="Physical Address" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">Postal Address</label>
+          {% render_field customerForm.postal_address|attr:'required:true'  class="form-control" placeholder="Postal Address" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!--div class="form-group col-md-6">
+          <label for="mobile">Physical Address</label>
+          {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
+        </div-->
+        <div class="form-group col-md-6">
+          <label for="address">Occupation</label>
+          {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group col-md-12">
-          <label for="profile_pic">Profile Picture</label>
+          <label for="profile_pic">Profile Picture
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Please upload an image displaying the upper body, covering the area from the chest to the head. This helps us create a professional and identifiable profile for you."></i>
+          </label>
           {% render_field customerForm.profile_pic|attr:'required:true' class="form-control" placeholder="" %}
         </div>
         
@@ -87,6 +136,12 @@
 
 
 <br><br>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+</script>
 {% include "insurance/footer.html" %}
   </body>
 </html>
