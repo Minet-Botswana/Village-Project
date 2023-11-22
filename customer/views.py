@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from insurance import models as CMODEL
 from insurance import forms as CFORM
 from django.contrib.auth.models import User
+from insurance.models import Policy
 
 
 def customerclick_view(request):
@@ -43,20 +44,31 @@ def is_customer(user):
 
 @login_required(login_url='customerlogin')
 def customer_dashboard_view(request):
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    policies = Policy.objects.filter(insured__id_number=customer.id_number)
     dict={
         'customer':models.Customer.objects.get(user_id=request.user.id),
         'available_policy':CMODEL.Policy.objects.all().count(),
         'applied_policy':CMODEL.PolicyRecord.objects.all().filter(customer=models.Customer.objects.get(user_id=request.user.id)).count(),
         'total_category':CMODEL.Category.objects.all().count(),
         'total_question':CMODEL.Question.objects.all().filter(customer=models.Customer.objects.get(user_id=request.user.id)).count(),
-
+        'policies': policies,
     }
     return render(request,'customer/customer_dashboard.html',context=dict)
 
+#def apply_policy_view(request):
+    #customer = models.Customer.objects.get(user_id=request.user.id)
+    #policies = CMODEL.Policy.objects.all()
+    #return render(request,'customer/apply_policy.html',{'policies':policies,'customer':customer})
+
 def apply_policy_view(request):
+    # Assuming the user is logged in
     customer = models.Customer.objects.get(user_id=request.user.id)
-    policies = CMODEL.Policy.objects.all()
-    return render(request,'customer/apply_policy.html',{'policies':policies,'customer':customer})
+    # Filter policies based on the customer's id_number
+    policies = Policy.objects.filter(insured__id_number=customer.id_number)
+    print("Number of policies:", policies.count())  # Debug statement
+
+    return render(request, 'customer/apply_policy.html', {'policies': policies, 'customer': customer})
 
 def apply_view(request,pk):
     customer = models.Customer.objects.get(user_id=request.user.id)

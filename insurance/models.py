@@ -13,6 +13,7 @@ class Category(models.Model):
 
 class Policy(models.Model):
     category= models.ForeignKey('Category', on_delete=models.CASCADE)
+    insured = models.ForeignKey(Customer, on_delete=models.CASCADE, to_field='id_number', null=True, related_name='policies')
     policy_name=models.CharField(max_length=205)
     sum_assurance=models.PositiveIntegerField()
     premium=models.PositiveIntegerField()

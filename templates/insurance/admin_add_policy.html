@@ -7,10 +7,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <style>
-       <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   a:link {
         text-decoration: none;
       }
@@ -18,7 +14,7 @@
   </style>
 </head>
 <h2 style="text-align:center; color:#e21a22; font-family: Titillium Web, sans-serif;">ADD POLICY</h2>
-<form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
+<!--form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
     {%csrf_token%}
     <div class="form-group">
       <label for="course_name">Category</label>
@@ -35,9 +31,31 @@
 
           <label for="course_name">Tenure</label>
       {% render_field policyForm.tenure class="form-control" placeholder="12" %}
+    </div-->
+    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
+      {% csrf_token %}
+      <div class="form-group">
+          <label for="id_number">ID Number</label>
+          {% render_field policyForm.id_number class="form-control" placeholder="Enter ID Number" %}
+        
+          <label for="category">Cover Category</label>
+          {% render_field policyForm.category class="form-control" placeholder="long term cover | short term cover" %}
+  
+          <label for="policy_name">Risk</label>
+          {% render_field policyForm.policy_name class="form-control" placeholder="e.g. household cover | motor vehicle cover" %}
+  
+          <label for="sum_assurance">Value</label>
+          {% render_field policyForm.sum_assurance class="form-control" placeholder="sum insured" %}
+  
+          <label for="premium">Premium</label>
+          {% render_field policyForm.premium class="form-control" placeholder=" " %}
 
-
-    </div>
+          <label for="tenure">Cover End</label>
+          {% render_field policyForm.tenure class="form-control" placeholder=" " %}
+      </div>
+      <button type="submit">View Policy</button>
+      <button type="submit">Create Policy</button>
+  </form>
     
     
 <br>

@@ -12,6 +12,17 @@ from django.contrib.auth.models import User
 from customer import models as CMODEL
 from customer import forms as CFORM
 from .models import CustomModelName
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.views import View
+from .forms import PolicyForm 
+from customer.models import Customer 
+from .models import Category
+
+
+
+
+
 
 @login_required
 def custom_dashboard(request):
@@ -63,10 +74,6 @@ def admin_view_customer_view(request):
     customers= CMODEL.Customer.objects.filter(user__groups__name='CUSTOMER')
     return render(request,'insurance/admin_view_customer.html',{'customers':customers})
 
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
-
-# Your existing imports...
 
 @login_required(login_url='adminlogin')
 def update_customer_view(request, pk):
@@ -98,11 +105,9 @@ def update_customer_view(request, pk):
     else:
         userForm = CFORM.CustomerUserForm(instance=user)
         customerForm = CFORM.CustomerForm(instance=customer)
-
+        
     mydict = {'userForm': userForm, 'customerForm': customerForm}
     return render(request, 'insurance/update_customer.html', context=mydict)
-
-
 
 
 @login_required(login_url='adminlogin')
@@ -165,19 +170,30 @@ def admin_policy_view(request):
 
 
 def admin_add_policy_view(request):
-    policyForm=forms.PolicyForm() 
-    
-    if request.method=='POST':
-        policyForm=forms.PolicyForm(request.POST)
+    policyForm = PolicyForm()
+    if request.method == 'POST':
+        policyForm = PolicyForm(request.POST)
         if policyForm.is_valid():
-            categoryid = request.POST.get('category')
-            category = models.Category.objects.get(id=categoryid)
-            
+            id_number = request.POST.get('id_number')  # Get the ID number from the form
+            category_id = request.POST.get('category')
+            category = Category.objects.get(id=category_id)
+
+            # Get the existing Customer based on the provided ID number
+            try:
+                customer = Customer.objects.get(id_number=id_number)
+            except Customer.DoesNotExist:
+                # Handle the case where the customer with the provided ID number doesn't exist
+                # You may want to display an error message or take appropriate action
+                return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
+
             policy = policyForm.save(commit=False)
-            policy.category=category
+            policy.category = category
+            policy.insured = customer  # Link the policy to the Customer
             policy.save()
+
             return redirect('admin-view-policy')
-    return render(request,'insurance/admin_add_policy.html',{'policyForm':policyForm})
+
+    return render(request, 'insurance/admin_add_policy.html', {'policyForm': policyForm})
 
 def admin_view_policy_view(request):
     policies = models.Policy.objects.all()

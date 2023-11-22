@@ -8,6 +8,8 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
+
   <style media="screen">
     a:link {
       text-decoration: none;
@@ -68,6 +70,17 @@
       transition-property: color;
     }
   </style>
+<br><br>
+<!--div class="container">
+  <form method="get" class="form-inline mb-2">
+    <div class="form-group">
+      <label for="search">Search:</label>
+      <input type="text" name="search" class="form-control" placeholder="Enter any name or ID">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</div-->
+
 </head>
 
 <br><br>
@@ -97,6 +110,7 @@
         <td><a class="btn btn-danger btn-xs" href="{% url 'delete-customer' t.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
       </tr>
       {% endfor %}
+     
     </table>
   </div>
 </div>

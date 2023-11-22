@@ -14,10 +14,12 @@ class CategoryForm(forms.ModelForm):
         fields=['category_name']
 
 class PolicyForm(forms.ModelForm):
-    category=forms.ModelChoiceField(queryset=models.Category.objects.all(),empty_label="Category Name", to_field_name="id")
+    category = forms.ModelChoiceField(queryset=models.Category.objects.all(), empty_label="long term cover, short term cover etc.", to_field_name="id")
+    id_number = forms.CharField(label='ID Number', max_length=20, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter ID Number'}))
+
     class Meta:
-        model=models.Policy
-        fields=['policy_name','sum_assurance','premium','tenure']
+        model = models.Policy
+        fields = ['category', 'policy_name', 'sum_assurance', 'premium', 'tenure', 'id_number']
 
 class QuestionForm(forms.ModelForm):
     class Meta:

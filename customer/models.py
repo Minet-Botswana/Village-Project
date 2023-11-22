@@ -8,7 +8,7 @@ class Customer(models.Model):
     mobile = models.CharField(max_length=20,null=False)
     
     # New fields
-    id_number = models.CharField(max_length=20, null=True, blank=True)
+    id_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     postal_address = models.CharField(max_length=100, null=True, blank=True)
     physical_address = models.CharField(max_length=100, null=True, blank=True)
     occupation = models.CharField(max_length=50, null=True, blank=True)
