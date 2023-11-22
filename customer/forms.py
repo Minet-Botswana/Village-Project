@@ -16,5 +16,4 @@ class CustomerForm(forms.ModelForm):
         model=models.Customer
         fields=['address','mobile','profile_pic','id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone']
         
-        
 
