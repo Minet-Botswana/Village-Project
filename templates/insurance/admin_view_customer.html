@@ -26,6 +26,16 @@
     background-color: #e21a22;
     border-color: #e21a22;
 }
+.content {
+    margin-left: 250px;
+    background-color: #fff;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    transition: 0.5s;
+    font-family: "Titillium Web", sans-serif;
+    font-size: small;
+}
 .btn-danger {
     color: #fff;
     background-color: #e21a22;
@@ -68,7 +78,7 @@
         <tr>
           <th>Name</th>
           <th>Profile Picture</th>
-          <th>Mobile</th>
+          <th>ID #</th>
           <th>Address</th>
           <th>Update</th>
           <th>Delete</th>
@@ -78,7 +88,7 @@
       <tr>
         <td>{{ t.get_name }}</td>
         <td><img src="{% static t.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
-        <td>{{ t.mobile }}</td>
+        <td>{{ t.id_number }}</td>
         <td>{{ t.address }}</td>
         <td><a class="btn btn-primary btn-xs" href="{% url 'update-customer' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
         <td><a class="btn btn-danger btn-xs" href="{% url 'delete-customer' t.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>

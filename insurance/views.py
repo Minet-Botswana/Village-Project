@@ -60,28 +60,56 @@ def admin_dashboard_view(request):
 
 @login_required(login_url='adminlogin')
 def admin_view_customer_view(request):
-    customers= CMODEL.Customer.objects.all()
+    customers= CMODEL.Customer.objects.filter(user__groups__name='CUSTOMER')
     return render(request,'insurance/admin_view_customer.html',{'customers':customers})
 
-
-
+#@login_required(login_url='adminlogin')
+#def update_customer_view(request,pk):
+    #customer=CMODEL.Customer.objects.get(id=pk)
+    #user=CMODEL.User.objects.get(id=customer.user_id)
+    #userForm=CFORM.CustomerUserForm(instance=user)
+    #customerForm=CFORM.CustomerForm(request.FILES,instance=customer)
+    #mydict={'userForm':userForm,'customerForm':customerForm}
+    #if request.method=='POST':
+        #userForm=CFORM.CustomerUserForm(request.POST,instance=user)
+        #customerForm=CFORM.CustomerForm(request.POST,request.FILES,instance=customer)
+        #if userForm.is_valid() and customerForm.is_valid():
+            #user=userForm.save()
+            #user.set_password(user.password)
+            #user.save()
+            #customerForm.save()
+            #return redirect('admin-view-customer')
+    #return render(request,'insurance/update_customer.html',context=mydict)z
 @login_required(login_url='adminlogin')
-def update_customer_view(request,pk):
-    customer=CMODEL.Customer.objects.get(id=pk)
-    user=CMODEL.User.objects.get(id=customer.user_id)
-    userForm=CFORM.CustomerUserForm(instance=user)
-    customerForm=CFORM.CustomerForm(request.FILES,instance=customer)
-    mydict={'userForm':userForm,'customerForm':customerForm}
-    if request.method=='POST':
-        userForm=CFORM.CustomerUserForm(request.POST,instance=user)
-        customerForm=CFORM.CustomerForm(request.POST,request.FILES,instance=customer)
+def update_customer_view(request, pk):
+    customer = CMODEL.Customer.objects.get(id=pk)
+    user = CMODEL.User.objects.get(id=customer.user_id)
+    
+    if request.method == 'POST':
+        userForm = CFORM.CustomerUserForm(request.POST, instance=user)
+        customerForm = CFORM.CustomerForm(request.POST, request.FILES, instance=customer)
+
         if userForm.is_valid() and customerForm.is_valid():
-            user=userForm.save()
-            user.set_password(user.password)
+            user = userForm.save(commit=False)
+
+            # Check if password is present in the form
+            if 'password' in request.POST:
+                user.set_password(userForm.cleaned_data['password'])
+
             user.save()
+
+            # Save the customer form
             customerForm.save()
+
             return redirect('admin-view-customer')
-    return render(request,'insurance/update_customer.html',context=mydict)
+    else:
+        userForm = CFORM.CustomerUserForm(instance=user)
+        customerForm = CFORM.CustomerForm(instance=customer)
+
+    mydict = {'userForm': userForm, 'customerForm': customerForm}
+    return render(request, 'insurance/update_customer.html', context=mydict)
+
+
 
 
 

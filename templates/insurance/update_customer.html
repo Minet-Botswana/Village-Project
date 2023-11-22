@@ -2,6 +2,36 @@
 {% load widget_tweaks %}
 {% block content %}
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- JAVASCRIPT SCRIPTS FOR MORE FUNCTIONALITIES -->
+
+  <script>
+    //Function to display the tooltip information 'i' icon
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip(); 
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      // Function to update the username field
+      function updateUsername() {
+        var firstName = $('#id_first_name').val().toLowerCase();
+        var lastName = $('#id_last_name').val().toLowerCase();
+        var generatedUsername = firstName.charAt(0) + lastName;
+        $('#id_username').val(generatedUsername);
+      }
+  
+      // Listen for changes in the first_name and last_name fields
+      $('#id_first_name, #id_last_name').on('input', function () {
+        updateUsername();
+      });
+      // Initial username update
+      updateUsername();
+    });
+
+  </script>
   <style media="screen">
     input[type=text], select,input[type=number] ,input[type=password], textarea{
     width: 100%;
@@ -27,6 +57,17 @@
   input[type=submit]:hover {
     background-color: #45a049;
   }
+  .content {
+      margin-left: 250px;
+      background: url(background.png) no-repeat;
+      background-color: #fff;
+      background-position: center;
+      background-size: cover;
+      height: 100vh;
+      transition: 0.5s;
+      font-family: "Titillium Web", sans-serif;
+      font-size: small;
+    }
 
 
    label #sidebar_btn {
@@ -55,27 +96,95 @@
 <div>
   <form method="post" autocomplete="off" enctype="multipart/form-data" style="margin-left:200px;margin-right:200px;">
       {% csrf_token %}
-        <label for="first_name">First Name</label>
-        {% render_field userForm.first_name class="form-control" placeholder="First Name" %}
-        <label for="last_name">Last Name</label>
-        {% render_field userForm.last_name class="form-control" placeholder="Last Name" %}
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="first_name">First Name</label>
+          {% render_field userForm.first_name|attr:'required:true'  class="form-control" placeholder="First Name" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="last_name">Last Name</label>
+          {% render_field userForm.last_name|attr:'required:true'  class="form-control" placeholder="Last Name" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="username">
+              Username
+              <i class="fas fa-info-circle" data-toggle="tooltip" title="Username is auto-generated from client's first name and last name"></i>
+          </label>
+          {% render_field userForm.username|attr:'required:true'  class="form-control" placeholder="Username" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">
+              Password
+              <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter your password"></i>
+          </label>
+          {% render_field userForm.password|attr:'required:true'  class="form-control" placeholder="password" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
           <label for="mobile">Mobile</label>
-          {% render_field customerForm.mobile class="form-control" placeholder="Mobile" %}
-            <label for="address">Address</label>
-          {% render_field customerForm.address class="form-control" placeholder="Address" %}
-          
-        <label for="username">Username</label>
-        {% render_field userForm.username class="form-control" placeholder="Username" %}
-          <label for="password">Password</label>
-        {% render_field userForm.password class="form-control" placeholder="Password" %} <br><br>
-        <label for="profile_pic">Profile Picture</label>
-          {% render_field customerForm.profile_pic class="form-control" placeholder="Profile Picture" %}
-<br><br>
-    <input type="submit" value="Update">
+          {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="mobile" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">Email Address</label>
+          {% render_field customerForm.address|attr:'required:true'  class="form-control" placeholder="Email" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="mobile">Alternate Phone
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter N/A if not available"></i>
+          </label>
+          {% render_field customerForm.alternate_phone|attr:'required:false'  class="form-control" placeholder="Mobile" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">ID Number</label>
+          {% render_field customerForm.id_number|attr:'required:true'  class="form-control" placeholder="ID" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="mobile">Physical Address</label>
+          {% render_field customerForm.physical_address|attr:'required:true'  class="form-control" placeholder="Physical Address" %}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">Postal Address</label>
+          {% render_field customerForm.postal_address|attr:'required:true'  class="form-control" placeholder="Postal Address" %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <!--div class="form-group col-md-6">
+          <label for="mobile">Physical Address</label>
+          {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
+        </div-->
+        <div class="form-group col-md-6">
+          <label for="address">Occupation</label>
+          {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label for="profile_pic">Profile Picture
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Please upload an image displaying the upper body, covering the area from the chest to the head. This helps us create a professional and identifiable profile for you."></i>
+          </label>
+          {% render_field customerForm.profile_pic|attr:'required:true' class="form-control" placeholder="" %}
+        </div>
+        
+        
+      </div>
+      <input type="submit" class="btn btn-primary" value="Update">
   </form>
 </div>
 
 
 
 <br><br><br><br><br><br><br><br>
+
 {% endblock content %}
