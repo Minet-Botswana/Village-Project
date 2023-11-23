@@ -18,7 +18,7 @@ from django.views import View
 from .forms import PolicyForm 
 from customer.models import Customer 
 from .models import Category
-
+from django.http import JsonResponse
 
 
 
@@ -90,7 +90,6 @@ def update_customer_view(request, pk):
             # Check if password is present in the form
             if 'password' in request.POST:
                 user.set_password(userForm.cleaned_data['password'])
-
             user.save()
 
             # Check if profile_pic is empty in the form data
@@ -194,6 +193,30 @@ def admin_add_policy_view(request):
             return redirect('admin-view-policy')
 
     return render(request, 'insurance/admin_add_policy.html', {'policyForm': policyForm})
+
+def get_user_details_view(request, id_number):
+    if request.method == 'GET':
+        try:
+            customer = models.Customer.objects.get(id_number=id_number)
+            user_details = {
+                'name': customer.user.get_full_name(),
+                'address': customer.address,
+                'mobile': customer.mobile,
+                'profile_pic': str(customer.profile_pic),
+                'id_number': customer.id_number,
+                'postal_address': customer.postal_address,
+                'physical_address': customer.physical_address,
+                'occupation': customer.occupation,
+                'alternate_phone': customer.alternate_phone
+            }
+            return JsonResponse({'success': True, 'user': user_details})
+        except models.Customer.DoesNotExist:
+            return JsonResponse({'success': False, 'error_message': 'Customer not found'})
+
+    return JsonResponse({'success': False, 'error_message': 'Invalid request method'})
+
+
+
 
 def admin_view_policy_view(request):
     policies = models.Policy.objects.all()

@@ -1,6 +1,5 @@
 
 from django.contrib import admin
-from django.urls import path
 from insurance import views
 from django.contrib.auth.views import LogoutView,LoginView
 from django.urls import path,include
@@ -10,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('customer/',include('customer.urls')),
+    
     path('',views.home_view,name=''),
     path('logout', LogoutView.as_view(template_name='insurance/logout.html'),name='logout'),
     path('aboutus', views.aboutus_view),
@@ -38,6 +38,7 @@ urlpatterns = [
 
     path('admin-policy', views.admin_policy_view,name='admin-policy'),
     path('admin-add-policy', views.admin_add_policy_view,name='admin-add-policy'),
+    path('admin-get-user/<str:id_number>/', views.get_user_details_view,name='admin-get-user'),
     path('admin-view-policy', views.admin_view_policy_view,name='admin-view-policy'),
     path('admin-update-policy', views.admin_update_policy_view,name='admin-update-policy'),
     path('update-policy/<int:pk>', views.update_policy_view,name='update-policy'),
