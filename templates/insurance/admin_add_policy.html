@@ -13,6 +13,9 @@
         a:link {
             text-decoration: none;
         }
+        .content{
+          background-color: #fff;
+        }
     </style>
 </head>
 
@@ -59,8 +62,18 @@
           <label for="premium">Premium</label>
           {% render_field policyForm.premium class="form-control" placeholder=" " %}
 
-          <label for="tenure">Cover End</label>
-          {% render_field policyForm.tenure class="form-control" placeholder=" " %}
+          <label for="{{ policyForm.cover_start.id_for_label }}">Cover Start:</label>
+          {{ policyForm.cover_start }}
+
+          <label for="{{ policyForm.tenure.id_for_label }}">Tenure (in months):</label>
+          <div>{{ policyForm.tenure }}</div>
+
+          <!-- Display the automatically calculated cover_end -->
+        <div>
+          <label for="id_cover_end">Cover End:</label>
+          <input type="text" class="form-control" id="id_cover_end" value="{{ policy.cover_end|default:''|date:'Y-m-d' }}" readonly>
+      </div>
+          
         </div>
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
         View Policy
@@ -75,6 +88,26 @@
     <!-- Include jQuery and Bootstrap JS from CDN -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+      // Function to calculate cover_end based on cover_start and tenure
+      function updateCoverEnd() {
+          var coverStart = new Date(document.getElementById("id_cover_start").value);
+          var tenure = parseInt(document.getElementById("id_tenure").value);
+          
+          if (!isNaN(tenure) && coverStart instanceof Date && !isNaN(coverStart)) {
+              var coverEnd = new Date(coverStart);
+              coverEnd.setMonth(coverEnd.getMonth() + tenure);
+  
+              // Format the date as "YYYY-MM-DD"
+              var formattedCoverEnd = coverEnd.toISOString().split('T')[0];
+              
+              document.getElementById("id_cover_end").value = formattedCoverEnd;
+          }
+      }
+  
+      // Attach the function to the change event of the tenure field
+      document.getElementById("id_tenure").addEventListener("input", updateCoverEnd);
+  </script>
 
     <script>
       $(document).ready(function () {

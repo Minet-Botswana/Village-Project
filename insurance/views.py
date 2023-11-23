@@ -167,6 +167,17 @@ def update_category_view(request,pk):
 def admin_policy_view(request):
     return render(request,'insurance/admin_policy.html')
 
+from datetime import timedelta, date
+import calendar
+
+def add_months(start_date, months):
+    # Function to add months to a date
+    month = start_date.month - 1 + months
+    year = start_date.year + month // 12
+    month = month % 12 + 1
+    last_day_of_month = calendar.monthrange(year, month)[1]
+    day = min(start_date.day, last_day_of_month)
+    return date(year, month, day)
 
 def admin_add_policy_view(request):
     policyForm = PolicyForm()
@@ -188,7 +199,16 @@ def admin_add_policy_view(request):
             policy = policyForm.save(commit=False)
             policy.category = category
             policy.insured = customer  # Link the policy to the Customer
+            
+            policy.cover_start = policyForm.cleaned_data['cover_start']
+            policy.tenure = policyForm.cleaned_data['tenure']
+
+            # Calculate and set cover_end based on cover_start and tenure
+            if policy.cover_start and policy.tenure:
+                policy.cover_end = add_months(policy.cover_start, policy.tenure)
+
             policy.save()
+            print("Cover End:", policy.cover_end)
 
             return redirect('admin-view-policy')
 

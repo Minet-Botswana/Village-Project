@@ -19,6 +19,8 @@ class Policy(models.Model):
     premium=models.PositiveIntegerField()
     tenure=models.PositiveIntegerField()
     creation_date =models.DateField(auto_now=True)
+    cover_start = models.DateField(null=True)  # New field for cover start date
+    cover_end = models.DateField(null=True) 
     def __str__(self):
         return self.policy_name
 
@@ -27,6 +29,19 @@ class PolicyRecord(models.Model):
     Policy= models.ForeignKey(Policy, on_delete=models.CASCADE)
     status = models.CharField(max_length=100,default='Pending')
     creation_date =models.DateField(auto_now=True)
+    
+    @property
+    def cover_start(self):
+        return self.policy.cover_start  
+    
+    @property
+    def cover_end(self):
+        return self.policy.cover_end  
+    
+    @property
+    def tenure(self):
+        return self.policy.tenure
+    
     def __str__(self):
         return self.policy
 
