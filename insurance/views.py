@@ -170,6 +170,7 @@ def admin_policy_view(request):
 from datetime import timedelta, date
 import calendar
 
+# Function to generate months with their actual number of days in that particular year
 def add_months(start_date, months):
     # Function to add months to a date
     month = start_date.month - 1 + months
@@ -178,6 +179,12 @@ def add_months(start_date, months):
     last_day_of_month = calendar.monthrange(year, month)[1]
     day = min(start_date.day, last_day_of_month)
     return date(year, month, day)
+
+# Function to generate policy_number based on your specific logic
+def generate_policy_number(policy):
+    # You can implement your logic here to generate the policy_number
+    # For example, if you have it stored as an attribute of the Policy model:
+    return policy.policy_number
 
 def admin_add_policy_view(request):
     policyForm = PolicyForm()
@@ -193,7 +200,7 @@ def admin_add_policy_view(request):
                 customer = Customer.objects.get(id_number=id_number)
             except Customer.DoesNotExist:
                 # Handle the case where the customer with the provided ID number doesn't exist
-                # You may want to display an error message or take appropriate action
+                # display an error message or take appropriate action
                 return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
 
             policy = policyForm.save(commit=False)
@@ -206,8 +213,11 @@ def admin_add_policy_view(request):
             # Calculate and set cover_end based on cover_start and tenure
             if policy.cover_start and policy.tenure:
                 policy.cover_end = add_months(policy.cover_start, policy.tenure)
-
+                
+            # Save the policy to get the auto-generated policy_number
             policy.save()
+            
+            print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
 
             return redirect('admin-view-policy')

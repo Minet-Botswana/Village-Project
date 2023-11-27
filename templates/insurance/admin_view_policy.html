@@ -1,24 +1,28 @@
 {% extends 'insurance/adminbase.html' %}
 {% block content %}
-{%load static%}
+{% load static %}
 
 <head>
+
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  
 
   <style media="screen">
     a:link {
       text-decoration: none;
     }
+
     .panel-primary>.panel-heading {
-    color: #fff;
-    background-color: #e21a22;
-    border-color: #333;
-  }
-  .panel-heading h6 {
+      color: #fff;
+      background-color: #e21a22;
+      border-color: #333;
+    }
+
+    .panel-heading h6 {
       background-color: #e21a22 !important;
-      color: white !important; /* Adjust text color for better visibility */
+      color: white !important;
       border: 1px solid #e21a22!important;
     }
 
@@ -29,8 +33,18 @@
     .row {
       margin: 100px;
     }
+
+    /* Add the following styles for clickable rows */
+    
+    /* Style the Policy Number column */
+    .policy-number-col {
+      cursor: pointer;
+      color: #e21a22;
+      text-decoration: underline;
+    }
   </style>
 </head>
+
 <br><br>
 <div class="container">
   <div class="panel panel-primary">
@@ -40,26 +54,54 @@
     <table class="table table-hover" id="dev-table">
       <thead>
         <tr>
-        <th>Policy No.</th>
-          <th>Policy Name</th>
+          <th>Policy No.</th>
+          <th>Risk</th>
           <th> Category</th>
-          <th> Sum Assurance</th>
+          <th> Value</th>
           <th> Premium</th>
           <th> Tenure</th>
           <th> Creation Date</th>
-          
         </tr>
       </thead>
       {% for t in policies %}
-      <tr>
-        <td> {{ forloop.counter }}</td>
-        <td> {{t.policy_name}}</td>
-        <td> {{t.category}}</td>
-        <td> {{t.sum_assurance}}</td>
-        <td> {{t.premium}}</td>
-        <td> {{t.tenure}}</td>
-        <td>{{t.creation_date}}</td>
+      <tr class="policy-row" data-toggle="modal" data-target="#policyModal{{ t.id }}">
+        <td class="policy-number-col">{{ t.policy_number }}</td>
+        <td>{{ t.policy_name }}</td>
+        <td>{{ t.category }}</td>
+        <td>{{ t.sum_assurance }}</td>
+        <td>{{ t.premium }}</td>
+        <td>{{ t.tenure }}</td>
+        <td>{{ t.creation_date }}</td>
       </tr>
+
+      <!-- Modal for Policy Details -->
+      <div class="modal fade" id="policyModal{{ t.id }}" tabindex="-1" role="dialog" aria-labelledby="policyModalLabel{{ t.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="policyModalLabel{{ t.id }}">Policy Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Policy Number: {{ t.policy_number }}</p>
+              <p>Risk: {{ t.policy_name }}</p>
+              <p>Category: {{ t.category }}</p>
+              <p>Value: {{ t.sum_assurance }}</p>
+              <p>Premium: {{ t.premium }}</p>
+              <p>Tenure: {{ t.tenure }}</p>
+              <p>Creation Date: {{ t.creation_date }}</p>
+              <p>Insured ID: {{ t.insured_id }}</p>
+              <!-- Add more details here based on your model -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {% endfor %}
     </table>
   </div>
@@ -67,3 +109,16 @@
 
 <br><br><br><br><br><br>
 {% endblock content %}
+
+<script>
+  $(document).ready(function () {
+    // Enable Bootstrap tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Handle click on Policy Number to show the modal
+    $('.policy-number-col').click(function () {
+      var modalId = $(this).closest('tr').data('target');
+      $(modalId).modal('show');
+    });
+  });
+</script>

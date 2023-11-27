@@ -21,7 +21,7 @@ class PolicyForm(forms.ModelForm):
 
     class Meta:
         model = models.Policy
-        fields = ['category', 'policy_name', 'sum_assurance', 'premium', 'tenure', 'id_number', 'cover_start']
+        fields = ['category', 'policy_name', 'sum_assurance', 'premium', 'tenure', 'id_number', 'cover_start', 'policy_number']
 
 class QuestionForm(forms.ModelForm):
     class Meta:
