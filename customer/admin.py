@@ -5,7 +5,10 @@ from django.conf import settings
 from .models import Customer
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone',  'display_profile_pic')
+    list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status', 'display_profile_pic')
+
+    def get_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
 
     def display_profile_pic(self, obj):
         if obj.profile_pic:
@@ -14,6 +17,7 @@ class CustomerAdmin(admin.ModelAdmin):
         else:
             return 'No Image'
 
+    get_name.short_description = 'Name'
     display_profile_pic.allow_tags = True
     display_profile_pic.short_description = 'Profile Picture'
 

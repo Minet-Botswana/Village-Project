@@ -73,14 +73,37 @@
 
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="mobile">Mobile</label>
-          {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
+            <label for="gender">Gender</label>
+            {{ customerForm.gender|attr:'required:true' }}
         </div>
         <div class="form-group col-md-6">
-          <label for="address">Email Address</label>
-          {% render_field customerForm.address|attr:'required:true'  class="form-control" placeholder="Email" %}
+            <label for="date_of_birth">Date of Birth</label>
+            {{ customerForm.date_of_birth|attr:'required:true' }}
         </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="marital_status">Marital Status</label>
+            {{ customerForm.marital_status|attr:'required:true' }}
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">Occupation</label>
+          {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
+        </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+          <label for="mobile">Mobile</label>
+          {% render_field customerForm.mobile|attr:'required:true' class="form-control" placeholder="Mobile" id="id_mobile" %}
+          <div id="mobile-error-message" style="color: red;"></div>
       </div>
+      <div class="form-group col-md-6">
+          <label for="address">Email Address</label>
+          {% render_field customerForm.address|attr:'required:true' class="form-control" placeholder="Email" %}
+      </div>
+  </div>
 
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -88,6 +111,7 @@
             <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter N/A if not available"></i>
           </label>
           {% render_field customerForm.alternate_phone|attr:'required:false'  class="form-control" placeholder="Mobile" %}
+          <div id="mobile-error-message" style="color: red;"></div>
         </div>
         <div class="form-group col-md-6">
           <label for="address">ID Number</label>
@@ -110,11 +134,11 @@
         <!--div class="form-group col-md-6">
           <label for="mobile">Physical Address</label>
           {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
-        </div-->
+        </div>
         <div class="form-group col-md-6">
           <label for="address">Occupation</label>
           {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
-        </div>
+        </div-->
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
@@ -156,6 +180,24 @@
       });
 
     </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          var mobileInput = document.getElementById("id_mobile");
+  
+          mobileInput.addEventListener("input", function () {
+              var mobileValue = mobileInput.value.trim();
+              var errorMessage = document.getElementById("mobile-error-message");
+  
+              // Validate if the mobile number is exactly 8 digits and does not include the country code +267
+              if (/^\d{8}$/.test(mobileValue) && !mobileValue.startsWith("+267")) {
+                  errorMessage.textContent = "";  // Clear any previous error message
+              } else {
+                  errorMessage.textContent = "Please enter a valid 8-digit mobile number without the country code +267.";
+              }
+          });
+      });
+  </script>
+  
     {% include "insurance/footer.html" %}
   </body>
 </html>
