@@ -237,7 +237,11 @@ def get_user_details_view(request, id_number):
                 'postal_address': customer.postal_address,
                 'physical_address': customer.physical_address,
                 'occupation': customer.occupation,
-                'alternate_phone': customer.alternate_phone
+                'alternate_phone': customer.alternate_phone,
+                'date_of_birth': customer.date_of_birth,
+                'gender': customer.gender,
+                'marital_status': customer.marital_status
+                
             }
             return JsonResponse({'success': True, 'user': user_details})
         except models.Customer.DoesNotExist:
@@ -250,6 +254,17 @@ def get_user_details_view(request, id_number):
 
 def admin_view_policy_view(request):
     policies = models.Policy.objects.all()
+    
+    # Fetch customer details for each policy based on insured_id
+    customers = Customer.objects.filter(id_number__in=[policy.insured_id for policy in policies])
+
+    # Create a dictionary to map customer id_numbers to customer details
+    customer_details = {customer.id_number: customer for customer in customers}
+
+    # Add customer details to each policy
+    for policy in policies:
+        policy.customer_details = customer_details.get(policy.insured_id)
+        
     return render(request,'insurance/admin_view_policy.html',{'policies':policies})
 
 

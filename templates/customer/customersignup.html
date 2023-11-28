@@ -109,6 +109,7 @@
         <div class="form-group col-md-6">
           <label for="mobile">Alternate Phone
             <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter N/A if not available"></i>
+            <div id="mobile-error-message" style="color: red;"></div>
           </label>
           {% render_field customerForm.alternate_phone|attr:'required:false'  class="form-control" placeholder="Mobile" %}
           <div id="mobile-error-message" style="color: red;"></div>
@@ -182,7 +183,7 @@
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          var mobileInput = document.getElementById("id_mobile");
+          var mobileInput = document.getElementById("id_mobile", "id_alternate_phone");
   
           mobileInput.addEventListener("input", function () {
               var mobileValue = mobileInput.value.trim();
