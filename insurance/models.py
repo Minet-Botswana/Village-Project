@@ -62,7 +62,7 @@ class PolicyRecord(models.Model):
         return self.policy.tenure
     
     def __str__(self):
-        return self.policy
+        return f"{self.customer} - {self.Policy} - {self.status}"
 
 class Question(models.Model):
     customer= models.ForeignKey(Customer, on_delete=models.CASCADE)

@@ -15,12 +15,18 @@ class Customer(models.Model):
         ('W', 'Widowed'),
     ]
     
+    ID_TYPE_CHOICES = [
+        ('ID', 'ID'),
+        ('Passport', 'Passport'),
+    ]
+    
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     profile_pic= models.ImageField(upload_to='profile_pic/Customer/',null=True,blank=True)
     address = models.CharField(max_length=40)
     mobile = models.CharField(max_length=20,null=False)
     
     # New fields
+    id_type = models.CharField(max_length=10, choices=ID_TYPE_CHOICES, null=True, blank=True)
     id_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     postal_address = models.CharField(max_length=100, null=True, blank=True)
     physical_address = models.CharField(max_length=100, null=True, blank=True)

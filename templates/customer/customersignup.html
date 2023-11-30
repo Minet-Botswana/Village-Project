@@ -87,9 +87,15 @@
             <label for="marital_status">Marital Status</label>
             {{ customerForm.marital_status|attr:'required:true' }}
         </div>
-        <div class="form-group col-md-6">
-          <label for="address">Occupation</label>
-          {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label for="id_type">Identification Type</label>
+              {% render_field customerForm.id_type|attr:'required:true' class="form-control" %}
+          </div>
+          <div class="form-group col-md-6">
+              <label for="id_number">ID/Passport Number</label>
+              {% render_field customerForm.id_number|attr:'required:true' class="form-control" placeholder="ID/Passport Number" %}
+          </div>
         </div>
     </div>
 
@@ -99,11 +105,12 @@
           {% render_field customerForm.mobile|attr:'required:true' class="form-control" placeholder="Mobile" id="id_mobile" %}
           <div id="mobile-error-message" style="color: red;"></div>
       </div>
+     
       <div class="form-group col-md-6">
-          <label for="address">Email Address</label>
-          {% render_field customerForm.address|attr:'required:true' class="form-control" placeholder="Email" %}
-      </div>
-  </div>
+          <label for="address">Occupation</label>
+          {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
+        </div>
+    </div>
 
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -115,10 +122,11 @@
           <div id="mobile-error-message" style="color: red;"></div>
         </div>
         <div class="form-group col-md-6">
-          <label for="address">ID Number</label>
-          {% render_field customerForm.id_number|attr:'required:true'  class="form-control" placeholder="ID" %}
-        </div>
+          <label for="address">Email Address</label>
+          {% render_field customerForm.address|attr:'required:true' class="form-control" placeholder="Email" %}
+        </div>  
       </div>
+      
 
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -183,7 +191,9 @@
     </script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-          var mobileInput = document.getElementById("id_mobile", "id_alternate_phone");
+        var mobileInput = document.getElementById("id_mobile");
+        var alternatePhoneInput = document.getElementById("id_alternate_phone");
+
   
           mobileInput.addEventListener("input", function () {
               var mobileValue = mobileInput.value.trim();

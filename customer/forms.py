@@ -25,11 +25,18 @@ class CustomerForm(forms.ModelForm):
         ('D', 'Divorced'),
         ('W', 'Widowed'),
     ]
+    
+    ID_TYPE_CHOICES = [
+        ('', 'Select ID Type'),
+        ('ID', 'ID'),
+        ('Passport', 'Passport'),
+    ]
 
     gender = forms.ChoiceField(choices=GENDER_CHOICES, required=True, initial='', widget=forms.Select(attrs={'class': 'form-control'}))
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}), required=True)
     marital_status = forms.ChoiceField(choices=MARITAL_STATUS_CHOICES, required=True, initial='', widget=forms.Select(attrs={'class': 'form-control'}))
+    id_type = forms.ChoiceField(choices=ID_TYPE_CHOICES, required=True, initial='', widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Customer
-        fields = ['address', 'mobile', 'profile_pic', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status']
+        fields = ['address', 'mobile', 'profile_pic', 'id_type', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status']
