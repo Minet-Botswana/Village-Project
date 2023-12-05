@@ -9,7 +9,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
-
   <style media="screen">
     a:link {
       text-decoration: none;
@@ -69,6 +68,13 @@
       transition: 0.5s;
       transition-property: color;
     }
+
+    .breadcrumb {
+      font-size: 14px;
+      font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+      color: #e21a22;
+
+    }
   </style>
 <br><br>
 <!--div class="container">
@@ -80,11 +86,23 @@
     <button type="submit" class="btn btn-primary">Search</button>
   </form>
 </div-->
+<div class="container-fluid">
+  <!-- Add the following paragraph to display the page route -->
+  <div class="row">
+    <div class="col-md-12">
+      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
+        Home / Clients
+      </p>
+    </div>
+  </div>
+
+  <!-- Your existing content goes here -->
+</div>
 
 </head>
 
 <br><br>
-<div class="container">
+<div class="table-responsive container-fluid">
   <div class="panel panel-primary panel-default">
     <div class="panel-heading">
       <h6 class="panel-title">Clients</h6>
