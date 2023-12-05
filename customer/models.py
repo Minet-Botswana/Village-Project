@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
 
 class Customer(models.Model):
     GENDER_CHOICES = [
@@ -46,3 +47,61 @@ class Customer(models.Model):
         return self
     def __str__(self):
         return self.user.first_name
+    
+class KYCForm(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='kyc_forms')
+    submission_date = models.DateField(auto_now_add=True)
+    file_upload = models.FileField(upload_to='Forms/KYC/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])])
+
+    def get_download_url(self):
+        if self.file_upload:
+            return self.file_upload.url
+        return None
+
+    def __str__(self):
+        return f"KYC Form - {self.customer.get_name}"
+
+class DirectDebitForm(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
+    submission_date = models.DateField(auto_now_add=True)
+    file_upload = models.FileField(upload_to='Forms/DirectDebit/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])])
+
+    def get_download_url(self):
+        if self.file_upload:
+            return self.file_upload.url
+        return None
+
+    def __str__(self):
+        return f"Direct Debit Form - {self.customer.get_name}"
+
+class HomeownersCover(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='homeowners_covers')
+    submission_date = models.DateField(auto_now_add=True)
+    file_upload = models.FileField(upload_to='Forms/HomeOwnersCover/', null=True, blank=True, )
+    file_upload = models.FileField(upload_to='Forms/HomeOwnersCover/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])])
+
+    def get_download_url(self):
+        if self.file_upload:
+            return self.file_upload.url
+        return None
+
+    def __str__(self):
+        return f"Homeowners Cover - {self.customer.get_name}"
+
+class ThirdPartyCarInsurance(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='car_insurance_covers')
+    submission_date = models.DateField(auto_now_add=True)
+    file_upload = models.FileField(upload_to='Forms/ThirdPartyCarInsurance/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf']) ])
+
+    def get_download_url(self):
+        if self.file_upload:
+            return self.file_upload.url
+        return None
+
+    def __str__(self):
+        return f"Third Party Car Insurance Cover - {self.customer.get_name}"
+

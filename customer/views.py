@@ -103,3 +103,30 @@ def question_history_view(request):
     questions = CMODEL.Question.objects.all().filter(customer=customer)
     return render(request,'customer/question_history.html',{'questions':questions,'customer':customer})
 
+#################### VIEWS FOR FORMS #########################################
+@login_required
+def client_forms(request):
+    # Fetch all form instances for each form type
+    kyc_forms = models.KYCForm.objects.all()
+    direct_debit_forms = models.DirectDebitForm.objects.all()
+    homeowners_cover_forms = models.HomeownersCover.objects.all()
+    car_insurance_forms = models.ThirdPartyCarInsurance.objects.all()
+
+    # Initialize form instances for each form type (for uploading)
+    kyc_form = forms.KYCFormModelForm()
+    direct_debit_form = forms.DirectDebitFormModelForm()
+    homeowners_cover_form = forms.HomeownersCoverModelForm()
+    car_insurance_form = forms.ThirdPartyCarInsuranceModelForm()
+
+    context = {
+        'kyc_forms': kyc_forms,
+        'direct_debit_forms': direct_debit_forms,
+        'homeowners_cover_forms': homeowners_cover_forms,
+        'car_insurance_forms': car_insurance_forms,
+        'kyc_form': kyc_form,
+        'direct_debit_form': direct_debit_form,
+        'homeowners_cover_form': homeowners_cover_form,
+        'car_insurance_form': car_insurance_form,
+    }
+
+    return render(request, 'customer/client_forms.html', context)

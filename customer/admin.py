@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.conf import settings
-from .models import Customer
+from .models import Customer, KYCForm, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status', 'display_profile_pic')
@@ -22,3 +22,8 @@ class CustomerAdmin(admin.ModelAdmin):
     display_profile_pic.short_description = 'Profile Picture'
 
 admin.site.register(Customer, CustomerAdmin)
+admin.site.register(KYCForm)
+admin.site.register(DirectDebitForm)
+admin.site.register(HomeownersCover)
+admin.site.register(ThirdPartyCarInsurance)
+

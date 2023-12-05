@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth.views import LoginView
+from .views import client_forms
 
 urlpatterns = [
     path('customerclick', views.customerclick_view,name='customerclick'),
@@ -14,4 +15,6 @@ urlpatterns = [
 
     path('ask-question', views.ask_question_view,name='ask-question'),
     path('question-history', views.question_history_view,name='question-history'),
+    path('forms', views.client_forms, name='client_forms'),
+    path('customer/forms/', client_forms, name='client_forms'),
 ]

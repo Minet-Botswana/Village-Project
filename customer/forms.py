@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Customer
+from .models import Customer, KYCForm, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance
 
 class CustomerUserForm(forms.ModelForm):
     class Meta:
@@ -40,3 +40,35 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = ['address', 'mobile', 'profile_pic', 'id_type', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status']
+
+class KYCFormModelForm(forms.ModelForm):
+    class Meta:
+        model = KYCForm
+        fields = ['file_upload']
+        widgets = {
+            'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+
+class DirectDebitFormModelForm(forms.ModelForm):
+    class Meta:
+        model = DirectDebitForm
+        fields = ['file_upload']
+        widgets = {
+            'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+
+class HomeownersCoverModelForm(forms.ModelForm):
+    class Meta:
+        model = HomeownersCover
+        fields = ['file_upload']
+        widgets = {
+            'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+
+class ThirdPartyCarInsuranceModelForm(forms.ModelForm):
+    class Meta:
+        model = ThirdPartyCarInsurance
+        fields = ['file_upload']
+        widgets = {
+            'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
