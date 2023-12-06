@@ -45,30 +45,54 @@ class KYCFormModelForm(forms.ModelForm):
     class Meta:
         model = KYCForm
         fields = ['file_upload']
+        # Set 'file_upload' as required
         widgets = {
             'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        error_messages = {
+            'file_upload': {
+                'required': 'This field is required.',
+            }
         }
 
 class DirectDebitFormModelForm(forms.ModelForm):
     class Meta:
         model = DirectDebitForm
         fields = ['file_upload']
+        # Set 'file_upload' as required
         widgets = {
             'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        error_messages = {
+            'file_upload': {
+                'required': 'This field is required.',
+            }
         }
 
-class HomeownersCoverModelForm(forms.ModelForm):
+class HomeownersCoverForm(forms.ModelForm):
     class Meta:
         model = HomeownersCover
-        fields = ['file_upload']
-        widgets = {
-            'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-        }
+        fields = ['geo_location', 'plot_number', 'ward', 'village', 'district', 'title_deed', 'financial_interest']
+
+    def clean_title_deed(self):
+        title_deed = self.cleaned_data.get('title_deed')
+        if title_deed:
+            # Validate the file extension or any other criteria if needed
+            ext = title_deed.name.split('.')[-1].lower()
+            if ext not in ['pdf']:
+                raise forms.ValidationError('Only PDF files are allowed.')
+        return title_deed
 
 class ThirdPartyCarInsuranceModelForm(forms.ModelForm):
     class Meta:
         model = ThirdPartyCarInsurance
         fields = ['file_upload']
+        # Set 'file_upload' as required
         widgets = {
             'file_upload': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        error_messages = {
+            'file_upload': {
+                'required': 'This field is required.',
+            }
         }

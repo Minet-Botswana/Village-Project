@@ -17,4 +17,8 @@ urlpatterns = [
     path('question-history', views.question_history_view,name='question-history'),
     path('forms', views.client_forms, name='client_forms'),
     path('customer/forms/', client_forms, name='client_forms'),
+    
+    path('form/direct_debit.html/', views.direct_debit_view, name='direct_debit'),
+    path('form/homeowners_insurance.html/', views.homeowners_insurance_view, name='homeowners_insurance'),
+    path('form/motor_insurance.html/', views.motor_insurance_view, name='motor_insurance'),
 ]

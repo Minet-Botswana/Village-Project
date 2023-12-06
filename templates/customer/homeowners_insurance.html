@@ -1,0 +1,184 @@
+{% extends 'customer/customerbase.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+<style>
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: 1rem;
+        font-weight: 400;
+        color: #212529;
+        text-align: left;
+        background-color: #f8f9fa; /* Set background color as needed */
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 50px 20px; /* Adjust padding as needed */
+    }
+
+    .form-card {
+        width: 90%; /* Adjust width as needed */
+        max-width: 800px; /* Set maximum width for responsiveness */
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
+        border-radius: 10px; /* Add border radius for rounded corners */
+    }
+
+    .form-header {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .h1, h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #e21a22;
+        border-color: #e21a22;
+    }
+
+    .btn-primary:hover {
+        color: #000000;
+        background-color: #ffffff;
+        border-color: #b91d23;
+    }
+    .page-title {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
+</style>
+
+<div class="container">
+    <!-- Add the following paragraph to display the page route -->
+    <div class="row">
+        <div class="col-md-12">
+            <p class="breadcrumb" style="font-size: 14px; font-family: 
+              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+              sans-serif; color: #e21a22;"
+            >
+              Home / Forms / Home Owners Insurance Form Application
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add the following paragraph to display the page route -->
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="breadcrumb" style=" font-size: 18px; font-family: 
+                  'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                  -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                  sans-serif; color: #e21a22; margin-top: 42px;"
+                >
+                Home Owners Insurance
+                </h1>
+            </div>
+            <div class="col-md-12">
+                <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
+                'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                sans-serif; color: #e21a22;" >
+                   Complete our streamlined Know Your Customer Application (eKYC) Form effortlessly to initiate a secure and compliant onboarding process.
+                    At Minet Botswana, we value your time and prioritize the confidentiality of your information. By submitting this form, 
+                    you contribute to a smooth verification process, ensuring a seamless and trustworthy customer experience. Thank you for choosing 
+                    Minet Botswana for your services – where simplicity meets security.
+                </p>
+            </div>
+        </div>
+    </div>
+
+<div class="form-container">
+    <div class="card form-card">
+        <div class="form-header">
+            <h1>Insurance Application Form</h1>
+        </div>
+        <div class="form-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="form-label" for="field1">Sum Insured</label>
+                    <input type="text" name="field1" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="field2">Geo-Location</label>
+                    <input type="text" name="field2" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="field3">Plot Number</label>
+                    <input type="text" name="field3" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="field4">Ward/Kgotla</label>
+                    <input type="text" name="field4" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="field5">Village</label>
+                    <input type="text" name="field5" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="field5">District</label>
+                    <input type="text" name="field5" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="field6">Attachments(e.g Title Deed)</label>
+                    <input type="text" name="field6" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="field6">Financial Interest (Optional)</label>
+                    <input type="text" name="field6" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="field6">Image Uploads</label>
+                    <input type="file" name="field6" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit Form</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

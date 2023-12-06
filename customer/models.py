@@ -61,6 +61,11 @@ class KYCForm(models.Model):
 
     def __str__(self):
         return f"KYC Form - {self.customer.get_name}"
+    
+    def save(self, *args, **kwargs):
+        # Additional logic before saving, if needed
+        super().save(*args, **kwargs)
+        # Additional logic after saving, if needed
 
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
@@ -75,21 +80,43 @@ class DirectDebitForm(models.Model):
 
     def __str__(self):
         return f"Direct Debit Form - {self.customer.get_name}"
+    
+    def save(self, *args, **kwargs):
+        # Additional logic before saving, if needed
+        super().save(*args, **kwargs)
+        # Additional logic after saving, if needed
 
 class HomeownersCover(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='homeowners_covers')
+    # Link to the authenticated customer
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='homeowners_cover')
+    # Fields for Geo-location
+    geo_location = models.CharField(max_length=255, blank=True, null=True)
+    plot_number = models.CharField(max_length=50,null=True, blank=True)
+    village = models.CharField(max_length=50, blank=True, null=True)
+    ward = models.CharField(max_length=50, blank=True, null=True)
+    district = models.CharField(max_length=50, blank=True, null=True)
+    # Attachments
+    title_deed = models.FileField(upload_to='Forms/HomeOwnersCover/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    # Financial Interest
+    financial_interest = models.TextField(blank=True, null=True)
+    # Submission Date
     submission_date = models.DateField(auto_now_add=True)
-    file_upload = models.FileField(upload_to='Forms/HomeOwnersCover/', null=True, blank=True, )
-    file_upload = models.FileField(upload_to='Forms/HomeOwnersCover/', null=True, blank=True, validators=[
-        FileExtensionValidator(allowed_extensions=['pdf'])])
 
     def get_download_url(self):
-        if self.file_upload:
-            return self.file_upload.url
+        if self.title_deed:
+            return self.title_deed.url
         return None
 
     def __str__(self):
-        return f"Homeowners Cover - {self.customer.get_name}"
+        return f"Homeowners Cover - {self.customer.username}"
+
+    def save(self, *args, **kwargs):
+        # Additional logic before saving, if needed
+        super().save(*args, **kwargs)
+        # Additional logic after saving, if needed
+
 
 class ThirdPartyCarInsurance(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='car_insurance_covers')
@@ -104,4 +131,9 @@ class ThirdPartyCarInsurance(models.Model):
 
     def __str__(self):
         return f"Third Party Car Insurance Cover - {self.customer.get_name}"
+    
+    def save(self, *args, **kwargs):
+        # Additional logic before saving, if needed
+        super().save(*args, **kwargs)
+        # Additional logic after saving, if needed
 

@@ -1,12 +1,14 @@
 {% extends 'customer/customerbase.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
+
 
 <head>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
+        
         <style>
             .card {
                 margin-bottom: 20px;
@@ -24,8 +26,8 @@
                 margin-right: -15px;
                 margin-left: -15px;
                 align-content: space-around;
-                justify-content: flex-end;
-                align-items: flex-end;
+                justify-content: flex-start;
+                align-items: flex-start;
                 justify-items: stretch;
                 flex-direction: row;
             }
@@ -79,16 +81,40 @@
         </div>
     </div>
 
-    <!-- Your existing content goes here -->
 
 </div>
 
-<div class="container mt-40 container-cards">
-    <div class="row">
+<div class="container mt-10 container-cards">
+    <div class="COLUMN">
+
+        <div class="container">
+            <!-- Add the following paragraph to display the page route -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="breadcrumb" style="font-size: 18px; font-family: 
+                      'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                      -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                      sans-serif; color: #e21a22;"
+                    >
+                      KNOW YOUR CUSTOMER APPLICATION (eKYC) FORM
+                    </h1>
+                </div>
+                <div class="col-md-12">
+                    <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
+                    'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                    sans-serif; color: #e21a22;" >
+                       Complete our streamlined Know Your Customer Application (eKYC) Form effortlessly to initiate a secure and compliant onboarding process.
+                        At Minet Botswana, we value your time and prioritize the confidentiality of your information. By submitting this form, 
+                        you contribute to a smooth verification process, ensuring a seamless and trustworthy customer experience. Thank you for choosing 
+                        Minet Botswana for your services – where simplicity meets security.
+                    </p>
+                </div>
+            </div>
+        </div>
         <!-- KYC Forms -->
         <div class="col-md-6 col-sm-12">
-            <div class="card">
-                
+            <div class="card"> 
                 <div class="card-header" style="background-color: #e21a22; color: #fff;">KYC Forms</div>
                 <div class="card-body">
                     {% for kyc_form_instance in kyc_forms %}
@@ -97,78 +123,142 @@
                     {% endfor %}
 
                     <!-- Display KYC form for uploading -->
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ kyc_form.as_p }}
                         <button type="submit" class="btn btn-primary">Submit Form</button>
+                        <!-- Download button for KYC form -->
+                        <a href="/static/Downloads/KYC.pdf" download style="font-size: 16px;" >Download KYC Form</a>
                     </form>
-                </div>
-                
-            </div>
-            
+                </div>               
+            </div>            
         </div>
+    </div>
+</div>
+
+                            <!--POLICY APPLICATION FORMS-->
+
+<div class="container mt-40 container-cards">
+    <div class="row">
+
+        <div class="container">
+            <!-- Add the following paragraph to display the page route -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="breadcrumb" style="margin-top: 20px; font-size: 18px; font-family: 
+                      'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                      -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                      sans-serif; color: #e21a22;"
+                    >
+                      POLICY APPLICATION FORMS
+                    </h1>
+                </div>
+                <div class="col-md-12">
+                    <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
+                    'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                    sans-serif; color: #e21a22;" >
+                        Welcome to our Policy Application Forms section, where you can easily initiate your journey towards comprehensive coverage. 
+                        Our user-friendly forms are designed to streamline the application process, ensuring a hassle-free experience for our valued clients.
+                        Whether you are seeking insurance coverage for your home, vehicle, or other valuable assets, our policy application forms are 
+                        tailored to gather essential information to provide you with the best possible coverage. Simply navigate through the specific 
+                        forms related to your insurance needs, fill in the required details, and submit your application. Our dedicated team is committed 
+                        to processing your application promptly, ensuring that you receive the protection you deserve. Thank you for choosing us for your 
+                        insurance needs, and we look forward to securing your peace of mind with our reliable policies.
+                    </p>
+                </div>
+            </div>
+        
+        
+        </div>
+
 
         <!-- Direct Debit Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card">
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Direct Debit Forms</div>
-                <div class="card-body">
-                    {% for direct_debit_form_instance in direct_debit_forms %}
-                    <!-- Display Direct Debit form instance details -->
-                    {{ direct_debit_form_instance }}
-                    {% endfor %}
+<div class="col-md-6 col-sm-12">
+    <div class="card">
+        <div class="card-header" style="background-color: #e21a22; color: #fff;">Direct Debit Forms</div>
+        <div class="card-body">
+            {% for direct_debit_form_instance in direct_debit_forms %}
+            <!-- Display Direct Debit form instance details -->
+            {{ direct_debit_form_instance }}
+            {% endfor %}
+            <p style="font-size: small; font: #e21a22; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+            -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+            sans-serif;">
+                Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
+                safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
+                 you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated Homeowners Cover Forms.</p>
 
-                    <!-- Display Direct Debit form for uploading -->
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ direct_debit_form.as_p }}
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                    </form>
-                </div>
-            </div>
+            <!-- Replace the form with a button to redirect -->
+            <button type="button" class="btn btn-primary" onclick="redirectToDirectDebit()">Go to Form</button>
         </div>
+    </div>
+</div>
+
+<script>
+    function redirectToDirectDebit() {
+        window.location.href = "form/direct_debit.html/";
+    }
+</script>
+
      <!--/div>
 
      <div class="row"-->
         <!-- Homeowners Cover Forms -->
         <div class="col-md-6 col-sm-12">
             <div class="card">
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Homeowners Cover Forms</div>
+                <div class="card-header" style="background-color: #e21a22; color: #fff;">Home Owners Insurance</div>
                 <div class="card-body">
-                    {% for homeowners_cover_form_instance in homeowners_cover_forms %}
-                    <!-- Display Homeowners Cover form instance details -->
-                    {{ homeowners_cover_form_instance }}
+                    {% for direct_debit_form_instance in direct_debit_forms %}
+                    <!-- Display Direct Debit form instance details -->
+                    {{ direct_debit_form_instance }}
                     {% endfor %}
-
-                    <!-- Display Homeowners Cover form for uploading -->
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ homeowners_cover_form.as_p }}
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                    </form>
+                    <p style="font-size: small; font: #e21a22; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                    sans-serif;">
+                        Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
+                        safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
+                         you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated Homeowners Cover Forms.</p>
+        
+                    <!-- Replace the form with a button to redirect -->
+                    <button type="button" class="btn btn-primary" onclick="redirectToHomeOwnersInsurance()">Go to Form</button>
                 </div>
             </div>
         </div>
+        
+        <script>
+            function redirectToHomeOwnersInsurance() {
+                window.location.href = "form/homeowners_insurance.html";
+            }
+        </script>
 
         <!-- Third Party Car Insurance Forms -->
         <div class="col-md-6 col-sm-12">
             <div class="card">
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Third Party Car Insurance Forms</div>
+                <div class="card-header" style="background-color: #e21a22; color: #fff;">Third Party Motor Insurance</div>
                 <div class="card-body">
-                    {% for car_insurance_form_instance in car_insurance_forms %}
-                    <!-- Display Third Party Car Insurance form instance details -->
-                    {{ car_insurance_form_instance }}
+                    {% for direct_debit_form_instance in direct_debit_forms %}
+                    <!-- Display Direct Debit form instance details -->
+                    {{ direct_debit_form_instance }}
                     {% endfor %}
-
-                    <!-- Display Third Party Car Insurance form for uploading -->
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ car_insurance_form.as_p }}
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                    </form>
+                    <p style="font-size: small; font: #e21a22; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                    sans-serif;">
+                        Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
+                        safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
+                         you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated Homeowners Cover Forms.</p>
+        
+                    <!-- Replace the form with a button to redirect -->
+                    <button type="button" class="btn btn-primary" onclick="redirectToThirdPartyInsurance()">Go to Form</button>
                 </div>
             </div>
         </div>
+        
+        <script>
+            function redirectToThirdPartyInsurance() {
+                window.location.href = "forms/motor_insurance.html";
+            }
+        </script>
     </div>
 </div>
 

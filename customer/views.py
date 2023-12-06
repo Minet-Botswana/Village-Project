@@ -12,6 +12,10 @@ from insurance import models as CMODEL
 from insurance import forms as CFORM
 from django.contrib.auth.models import User
 from insurance.models import Policy
+from django.views import View
+from django.template.loader import get_template
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 
 def customerclick_view(request):
@@ -104,29 +108,60 @@ def question_history_view(request):
     return render(request,'customer/question_history.html',{'questions':questions,'customer':customer})
 
 #################### VIEWS FOR FORMS #########################################
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+
 @login_required
 def client_forms(request):
-    # Fetch all form instances for each form type
-    kyc_forms = models.KYCForm.objects.all()
-    direct_debit_forms = models.DirectDebitForm.objects.all()
-    homeowners_cover_forms = models.HomeownersCover.objects.all()
-    car_insurance_forms = models.ThirdPartyCarInsurance.objects.all()
+    user = request.user
+    customer = user.customer
+
+    # Fetch user-specific form instances for each form type
+    kyc_forms = models.KYCForm.objects.filter(customer=customer)
+
 
     # Initialize form instances for each form type (for uploading)
     kyc_form = forms.KYCFormModelForm()
-    direct_debit_form = forms.DirectDebitFormModelForm()
-    homeowners_cover_form = forms.HomeownersCoverModelForm()
-    car_insurance_form = forms.ThirdPartyCarInsuranceModelForm()
 
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'kyc':
+            form = forms.KYCFormModelForm(request.POST, request.FILES)
+            if form.is_valid():
+                kyc_form_instance = form.save(commit=False)
+                kyc_form_instance.customer = customer
+                kyc_form_instance.save()
+                messages.success(request, 'KYC Form submitted successfully.')
+                return redirect('client_forms')
+            
     context = {
-        'kyc_forms': kyc_forms,
-        'direct_debit_forms': direct_debit_forms,
-        'homeowners_cover_forms': homeowners_cover_forms,
-        'car_insurance_forms': car_insurance_forms,
-        'kyc_form': kyc_form,
-        'direct_debit_form': direct_debit_form,
-        'homeowners_cover_form': homeowners_cover_form,
-        'car_insurance_form': car_insurance_form,
-    }
+        'kyc_forms': kyc_forms,}
+
 
     return render(request, 'customer/client_forms.html', context)
+
+
+def direct_debit_view(request):
+    return render(request, 'customer/direct_debit.html')
+
+def homeowners_insurance_view(request):
+    return render(request, 'customer/homeowners_insurance.html')
+
+def motor_insurance_view(request):
+    return render(request, 'customer/motor_insurance.html')
+
+def create_homeowners_cover(request):
+    if request.method == 'POST':
+        form = forms.HomeownersCoverForm(request.POST, request.FILES)
+        if form.is_valid():
+            homeowners_cover = form.save(commit=False)
+            homeowners_cover.customer = request.user
+            homeowners_cover.save()
+            return redirect('success_page')  # Redirect to a success page
+    else:
+        form = forms.HomeownersCoverForm()
+
+    return render(request, 'customer/homeowners_insurance.html', {'form': form})
+
