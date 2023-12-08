@@ -117,19 +117,20 @@
             <div class="card"> 
                 <div class="card-header" style="background-color: #e21a22; color: #fff;">KYC Forms</div>
                 <div class="card-body">
-                    {% for kyc_form_instance in kyc_forms %}
-                    <!-- Display KYC form instance details -->
-                    {{ kyc_form_instance }}
-                    {% endfor %}
-
                     <!-- Display KYC form for uploading -->
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" action="{% url 'customer:upload_kyc_form' %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ kyc_form.as_p }}
+                        <!-- Your form fields here -->
+                        <div class="form-group">
+                            <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">KYC Form Upload </label>
+                            <input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required>
+                            {{ KYCuploadForm.kyc_form.errors }}
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit Form</button>
                         <!-- Download button for KYC form -->
-                        <a href="/static/Downloads/KYC.pdf" download style="font-size: 16px;" >Download KYC Form</a>
+                        <a href="/static/Downloads/KYC.pdf" download style="font-size: 16px;">Download KYC Form</a>
                     </form>
+                    
                 </div>               
             </div>            
         </div>
@@ -187,7 +188,10 @@
             sans-serif;">
                 Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
                 safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
-                 you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated Homeowners Cover Forms.</p>
+                you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners 
+                to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated 
+                Homeowners Cover Forms.
+            </p>
 
             <!-- Replace the form with a button to redirect -->
             <button type="button" class="btn btn-primary" onclick="redirectToDirectDebit()">Go to Form</button>

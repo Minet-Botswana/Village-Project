@@ -48,24 +48,28 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.first_name
     
-class KYCForm(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='kyc_forms')
+class KYCform(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='kyc_form', unique=True)
+    # Attachments
+    kyc_form = models.FileField(upload_to='Forms/KYC/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
     submission_date = models.DateField(auto_now_add=True)
-    file_upload = models.FileField(upload_to='Forms/KYC/', null=True, blank=True, validators=[
-        FileExtensionValidator(allowed_extensions=['pdf'])])
 
     def get_download_url(self):
-        if self.file_upload:
-            return self.file_upload.url
+        if self.kyc_form:
+            return self.kyc_form.url
         return None
 
     def __str__(self):
-        return f"KYC Form - {self.customer.get_name}"
+        return f"KYC Form - {self.customer.username}"
     
     def save(self, *args, **kwargs):
-        # Additional logic before saving, if needed
-        super().save(*args, **kwargs)
-        # Additional logic after saving, if needed
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving KYC Form instance: {e}")
 
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
@@ -111,29 +115,49 @@ class HomeownersCover(models.Model):
 
     def __str__(self):
         return f"Homeowners Cover - {self.customer.username}"
-
+    
     def save(self, *args, **kwargs):
-        # Additional logic before saving, if needed
-        super().save(*args, **kwargs)
-        # Additional logic after saving, if needed
-
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving HomeownersCover instance: {e}")
 
 class ThirdPartyCarInsurance(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='car_insurance_covers')
+    
+    LOCAL = 'Local'
+    IMPORT = 'Import'
+
+    CAR_TYPE_CHOICES = [
+        ('', 'Select car type'),
+        (LOCAL, 'Local'),
+        (IMPORT, 'Import'),
+    ]
+    
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='thirdparty_car_cover', unique=True)
+    make = models.CharField(max_length=255, blank=True, null=True)
+    model = models.CharField(max_length=50,null=True, blank=True)
+    year_of_manufacture = models.CharField(max_length=50, blank=True, null=True)
+    registration_number = models.CharField(max_length=50, blank=True, null=True)
+    registered_owner = models.CharField(max_length=50, blank=True, null=True)
+    # Attachments
+    blue_book = models.FileField(upload_to='Forms/ThirdPartyCarCover/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    car_type = models.CharField(max_length=10, choices=CAR_TYPE_CHOICES, default='')
+    relationship_to_owner = models.TextField(blank=True, null=True)
     submission_date = models.DateField(auto_now_add=True)
-    file_upload = models.FileField(upload_to='Forms/ThirdPartyCarInsurance/', null=True, blank=True, validators=[
-        FileExtensionValidator(allowed_extensions=['pdf']) ])
 
     def get_download_url(self):
-        if self.file_upload:
-            return self.file_upload.url
+        if self.blue_book:
+            return self.blue_book.url
         return None
 
     def __str__(self):
-        return f"Third Party Car Insurance Cover - {self.customer.get_name}"
+        return f"Third Party Car Cover - {self.customer.username}"
     
     def save(self, *args, **kwargs):
-        # Additional logic before saving, if needed
-        super().save(*args, **kwargs)
-        # Additional logic after saving, if needed
-
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving Third Party Car Cover instance: {e}")

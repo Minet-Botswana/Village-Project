@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDV1Vw9jedE30w1SNV6nGsT4H8pO_qbhxQ&libraries=places" defer></script>
+
 <style>
     body {
         margin: 0;
@@ -129,7 +131,7 @@
             <h1>Insurance Application Form</h1>
         </div>
         <div class="form-body">
-            <form method="POST" enctype="multipart/form-data">
+            <!--form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -176,7 +178,90 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit Form</button>
-            </form>
+            </form-->
+            <!-- customer/forms.html -->
+
+<form method="POST" action="{% url 'customer:create_homeowners_cover' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!--div class="form-group">
+        <label for="{{ form.geo_location.id_for_label }}">Geo Location</label>
+        <input type="text" name="{{ form.geo_location.name }}" id="{{ form.geo_location.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.plot_number.id_for_label }}">Plot Number</label>
+        <input type="text" name="{{ form.plot_number.name }}" id="{{ form.plot_number.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.ward.id_for_label }}">Ward/Kgotla</label>
+        <input type="text" name="{{ form.ward.name }}" id="{{ form.ward.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.village.id_for_label }}">Village</label>
+        <input type="text" name="{{ form.village.name }}" id="{{ form.village.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.district.id_for_label }}">District</label>
+        <input type="text" name="{{ form.district.name }}" id="{{ form.district.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.title_deed.id_for_label }}">Attachments (e.g., Title Deed)</label>
+        <input type="file" name="{{ form.title_deed.name }}" id="{{ form.title_deed.id }}" class="form-control" required>
+        {{ form.title_deed.errors }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.financial_interest.id_for_label }}">Financial Interest (Optional)</label>
+        <input type="text" name="{{ form.financial_interest.name }}" id="{{ form.financial_interest.id }}" class="form-control">
+        {{ form.financial_interest.errors }}
+    </div-->
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.geo_location.id_for_label }}">Geo Location</label>
+        <input type="text" name="{{ homeownersForm.geo_location.name }}" id="{{ homeownersForm.geo_location.id }}" class="form-control" required>
+        <!-- You may include a button to trigger Google Maps API for Geo Location here -->
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.plot_number.id_for_label }}">Plot Number</label>
+        <input type="text" name="{{ homeownersForm.plot_number.name }}" id="{{ homeownersForm.plot_number.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.ward.id_for_label }}">Ward/Kgotla</label>
+        <input type="text" name="{{ homeownersForm.ward.name }}" id="{{ homeownersForm.ward.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.village.id_for_label }}">Village</label>
+        <input type="text" name="{{ homeownersForm.village.name }}" id="{{ homeownersForm.village.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.district.id_for_label }}">District</label>
+        <input type="text" name="{{ homeownersForm.district.name }}" id="{{ homeownersForm.district.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.title_deed.id_for_label }}">Attachments (e.g., Title Deed)</label>
+        <input type="file" name="{{ homeownersForm.title_deed.name }}" id="{{ homeownersForm.title_deed.id }}" class="form-control" required>
+        {{ homeownersForm.title_deed.errors }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.financial_interest.id_for_label }}">Financial Interest (Optional)</label>
+        <input type="text" name="{{ homeownersForm.financial_interest.name }}" id="{{ homeownersForm.financial_interest.id }}" class="form-control">
+        {{ homeownersForm.financial_interest.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Form</button>
+</form>
+
         </div>
     </div>
 </div>

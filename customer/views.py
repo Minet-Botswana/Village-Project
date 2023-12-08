@@ -43,6 +43,10 @@ def customer_signup_view(request):
         return HttpResponseRedirect('customerlogin')
     return render(request,'customer/customersignup.html',context=mydict)
 
+def success_page(request):
+    return render(request, 'customer/success_page.html')  # Use the actual template path
+
+
 def is_customer(user):
     return user.groups.filter(name='CUSTOMER').exists()
 
@@ -81,7 +85,7 @@ def apply_view(request,pk):
     policyrecord.Policy = policy
     policyrecord.customer = customer
     policyrecord.save()
-    return redirect('history')
+    return redirect('customer:history')
 
 def history_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
@@ -99,7 +103,7 @@ def ask_question_view(request):
             question = questionForm.save(commit=False)
             question.customer=customer
             question.save()
-            return redirect('question-history')
+            return redirect('customer:question-history')
     return render(request,'customer/ask_question.html',{'questionForm':questionForm,'customer':customer})
 
 def question_history_view(request):
@@ -116,31 +120,7 @@ from django.contrib import messages
 def client_forms(request):
     user = request.user
     customer = user.customer
-
-    # Fetch user-specific form instances for each form type
-    kyc_forms = models.KYCForm.objects.filter(customer=customer)
-
-
-    # Initialize form instances for each form type (for uploading)
-    kyc_form = forms.KYCFormModelForm()
-
-    if request.method == 'POST':
-        form_type = request.POST.get('form_type')
-
-        if form_type == 'kyc':
-            form = forms.KYCFormModelForm(request.POST, request.FILES)
-            if form.is_valid():
-                kyc_form_instance = form.save(commit=False)
-                kyc_form_instance.customer = customer
-                kyc_form_instance.save()
-                messages.success(request, 'KYC Form submitted successfully.')
-                return redirect('client_forms')
-            
-    context = {
-        'kyc_forms': kyc_forms,}
-
-
-    return render(request, 'customer/client_forms.html', context)
+    return render(request, 'customer/client_forms.html')
 
 
 def direct_debit_view(request):
@@ -152,16 +132,87 @@ def homeowners_insurance_view(request):
 def motor_insurance_view(request):
     return render(request, 'customer/motor_insurance.html')
 
-def create_homeowners_cover(request):
-    if request.method == 'POST':
-        form = forms.HomeownersCoverForm(request.POST, request.FILES)
-        if form.is_valid():
-            homeowners_cover = form.save(commit=False)
-            homeowners_cover.customer = request.user
-            homeowners_cover.save()
-            return redirect('success_page')  # Redirect to a success page
-    else:
-        form = forms.HomeownersCoverForm()
+from .forms import HomeownersCoverForm
+from django.shortcuts import get_object_or_404
 
-    return render(request, 'customer/homeowners_insurance.html', {'form': form})
+def create_homeowners_cover(request):
+    homeownersForm = HomeownersCoverForm()
+    homeownersdict = {'homeownersForm': homeownersForm}
+
+    if request.method == 'POST':
+        homeownersForm = HomeownersCoverForm(request.POST, request.FILES)
+
+        if homeownersForm.is_valid():
+            homeowners_cover = homeownersForm.save(commit=False)
+
+            # Assuming there is a one-to-one relationship between User and Customer
+            user_instance = request.user
+            customer_instance = get_object_or_404(models.Customer, user=user_instance)
+
+            homeowners_cover.customer = customer_instance
+            homeowners_cover.save()
+
+            print("Form data:", request.POST)  # Debugging line
+            print("Saved homeowners_cover:", homeowners_cover.__dict__)  # Debugging line
+
+        else:
+            print(homeownersForm.errors)  # Print form errors for debugging
+
+    return render(request, 'customer/homeowners_insurance.html', context=homeownersdict)
+
+
+from .forms import ThirdPartyCarInsuranceForm
+from django.shortcuts import get_object_or_404
+
+def create_thirdpartycar_cover(request):
+    thirdpartycarForm = ThirdPartyCarInsuranceForm()
+    thirdpartycardict = {'thirdpartycarForm': thirdpartycarForm}
+
+    if request.method == 'POST':
+        thirdpartycarForm = ThirdPartyCarInsuranceForm(request.POST, request.FILES)
+
+        if thirdpartycarForm.is_valid():
+            thirdpartycar_cover = thirdpartycarForm.save(commit=False)
+
+            # Assuming there is a one-to-one relationship between User and Customer
+            user_instance = request.user
+            customer_instance = get_object_or_404(models.Customer, user=user_instance)
+
+            thirdpartycar_cover.customer = customer_instance
+            thirdpartycar_cover.save()
+
+            print("Form data:", request.POST)  # Debugging line
+            print("Saved thirdpartycar_cover:", thirdpartycar_cover.__dict__)  # Debugging line
+
+        else:
+            print(thirdpartycarForm.errors)  # Print form errors for debugging
+
+    return render(request, 'customer/motor_insurance.html', context=thirdpartycardict)
+
+
+from .forms import KYCuploadForm
+def upload_kyc_form(request):
+    KYC_Form = KYCuploadForm()
+    KYCdict = {'KYC_Form': KYC_Form}
+
+    if request.method == 'POST':
+        KYC_Form = KYCuploadForm(request.POST, request.FILES)
+
+        if KYC_Form.is_valid():
+            kyc_cover = KYC_Form.save(commit=False)
+
+            # Assuming there is a one-to-one relationship between User and Customer
+            user_instance = request.user
+            customer_instance = get_object_or_404(models.Customer, user=user_instance)
+
+            kyc_cover.customer = customer_instance
+            kyc_cover.save()
+
+            print("Form data:", request.POST)  # Debugging line
+            print("Saved KYC Uploads:", kyc_cover.__dict__)  # Debugging line
+
+        else:
+            print(KYC_Form.errors)  # Print form errors for debugging
+
+    return render(request, 'customer/client_forms.html', context=KYCdict)
 
