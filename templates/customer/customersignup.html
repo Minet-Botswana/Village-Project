@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load widget_tweaks %}
 <html lang="en" dir="ltr">
-  <>
+  <head>
     <meta charset="utf-8">
     <!-- Add these links to include Bootstrap and jQuery -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" crossorigin="anonymous">
@@ -11,7 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
-
         form{
            margin: 50px; 
           
@@ -40,31 +39,11 @@
   </head>
   <body>
     {% include "customer/customer_nav.html" %}
- 
-
-
-<br><br><br>
-<h3 class="title" style="text-align: center;color: red;">CUSTOMER SIGNUP</h3>
-<form method="POST" autocomplete="off" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="username">
-            Username
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter your username"></i>
-        </label>
-        {% render_field userForm.username|attr:'required:true'  class="form-control" placeholder="username" %}
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputPassword4">
-            Password
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter your password"></i>
-        </label>
-        {% render_field userForm.password|attr:'required:true'  class="form-control" placeholder="password" %}
-      </div>
-    </div>
-
-    <div class="form-row">
+    <br><br><br>
+    <h3 class="title" style="text-align: center;color: red;">CLIENT SIGNUP</h3>
+    <form method="POST" autocomplete="off" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-row">
         <div class="form-group col-md-6">
           <label for="first_name">First Name</label>
           {% render_field userForm.first_name|attr:'required:true'  class="form-control" placeholder="First Name" %}
@@ -77,27 +56,77 @@
 
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="mobile">Mobile</label>
-          {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
+          <label for="username">
+              Username
+              <i class="fas fa-info-circle" data-toggle="tooltip" title="Username is auto-generated from client's first name and last name"></i>
+          </label>
+          {% render_field userForm.username|attr:'required:true'  class="form-control" placeholder="Username" %}
         </div>
         <div class="form-group col-md-6">
-          <label for="address">Email Address</label>
-          {% render_field customerForm.address|attr:'required:true'  class="form-control" placeholder="Email" %}
+          <label for="inputPassword4">
+              Password
+              <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter your password"></i>
+          </label>
+          {% render_field userForm.password|attr:'required:true'  class="form-control" placeholder="password" %}
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="mobile">Alternate Phone
-            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter N/A if not available"></i>
-          </label>
-          {% render_field customerForm.alternate_phone|attr:'required:false'  class="form-control" placeholder="Mobile" %}
+            <label for="gender">Gender</label>
+            {{ customerForm.gender|attr:'required:true' }}
         </div>
         <div class="form-group col-md-6">
-          <label for="address">ID Number</label>
-          {% render_field customerForm.id_number|attr:'required:true'  class="form-control" placeholder="ID" %}
+            <label for="date_of_birth">Date of Birth</label>
+            {{ customerForm.date_of_birth|attr:'required:true' }}
         </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="marital_status">Marital Status</label>
+            {{ customerForm.marital_status|attr:'required:true' }}
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label for="id_type">Identification Type</label>
+              {% render_field customerForm.id_type|attr:'required:true' class="form-control" %}
+          </div>
+          <div class="form-group col-md-6">
+              <label for="id_number">ID/Passport Number</label>
+              {% render_field customerForm.id_number|attr:'required:true' class="form-control" placeholder="ID/Passport Number" %}
+          </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+          <label for="mobile">Mobile</label>
+          {% render_field customerForm.mobile|attr:'required:true' class="form-control" placeholder="Mobile" id="id_mobile" %}
+          <div id="mobile-error-message" style="color: red;"></div>
       </div>
+     
+      <div class="form-group col-md-6">
+          <label for="address">Occupation</label>
+          {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
+        </div>
+    </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="mobile">Alternate Phone
+            <i class="fas fa-info-circle" data-toggle="tooltip" title="Enter N/A if not available"></i>
+            <div id="mobile-error-message" style="color: red;"></div>
+          </label>
+          {% render_field customerForm.alternate_phone|attr:'required:false'  class="form-control" placeholder="Mobile" %}
+          <div id="mobile-error-message" style="color: red;"></div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="address">Email Address</label>
+          {% render_field customerForm.address|attr:'required:true' class="form-control" placeholder="Email" %}
+        </div>  
+      </div>
+      
 
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -114,11 +143,11 @@
         <!--div class="form-group col-md-6">
           <label for="mobile">Physical Address</label>
           {% render_field customerForm.mobile|attr:'required:true'  class="form-control" placeholder="Mobile" %}
-        </div-->
+        </div>
         <div class="form-group col-md-6">
           <label for="address">Occupation</label>
           {% render_field customerForm.occupation|attr:'required:true'  class="form-control" placeholder="Occupation" %}
-        </div>
+        </div-->
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
@@ -129,19 +158,57 @@
         </div>
         
       </div>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <br><br>
 
+    <!-- JAVASCRIPT SCRIPTS FOR MORE FUNCTIONALITIES -->
 
-    <button type="submit" class="btn btn-primary">Sign Up</button>
-  </form>
-
-
-<br><br>
-
-<script>
-    $(document).ready(function(){
+    <script>
+      //Function to display the tooltip information 'i' icon
+      $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip(); 
-    });
-</script>
-{% include "insurance/footer.html" %}
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        // Function to update the username field
+        function updateUsername() {
+          var firstName = $('#id_first_name').val().toLowerCase();
+          var lastName = $('#id_last_name').val().toLowerCase();
+          var generatedUsername = firstName.charAt(0) + lastName;
+          $('#id_username').val(generatedUsername);
+        }
+    
+        // Listen for changes in the first_name and last_name fields
+        $('#id_first_name, #id_last_name').on('input', function () {
+          updateUsername();
+        });
+        // Initial username update
+        updateUsername();
+      });
+
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var mobileInput = document.getElementById("id_mobile");
+        var alternatePhoneInput = document.getElementById("id_alternate_phone");
+
+  
+          mobileInput.addEventListener("input", function () {
+              var mobileValue = mobileInput.value.trim();
+              var errorMessage = document.getElementById("mobile-error-message");
+  
+              // Validate if the mobile number is exactly 8 digits and does not include the country code +267
+              if (/^\d{8}$/.test(mobileValue) && !mobileValue.startsWith("+267")) {
+                  errorMessage.textContent = "";  // Clear any previous error message
+              } else {
+                  errorMessage.textContent = "Please enter a valid 8-digit mobile number without the country code +267.";
+              }
+          });
+      });
+  </script>
+  
+    {% include "insurance/footer.html" %}
   </body>
 </html>

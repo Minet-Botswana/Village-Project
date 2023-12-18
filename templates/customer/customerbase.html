@@ -147,7 +147,6 @@
 
     .content {
       margin-left: 250px;
-      background: url(background.png) no-repeat;
       background-position: center;
       background-size: cover;
       height: 100vh;
@@ -177,6 +176,7 @@
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+  
 
 
 </head>
@@ -190,7 +190,9 @@
       <i style=" "class="fas fa-bars" id="sidebar_btn"></i>
     </label>
     <div class="left_area">
-      <img src="../static/image/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image">
+      <!--img src="../static/image/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image"-->
+      <img src="{% static 'image/MinetLogoBlack.png' %}" alt="Minet Botswana Logo" class="logo-image">
+
     </div>
     <div class="right_area">
       <a href="/logout" class="logout_btn">Logout</a>
@@ -211,9 +213,12 @@
     </center>
 
     <a href="/customer/customer-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+    <a href="/customer/available-policies"><i class="fab fa-product-hunt"></i><span>Available  Policies</span></a>
     <a href="/customer/apply-policy"><i class="fab fa-product-hunt"></i><span>Apply Policy</span></a>
     <a href="/customer/history"><i class="fas fa-history"></i><span>History</span></a>
 
+    <a href="/customer/forms"><i class="fas fa-file"></i><span>Forms</span></a>
+    <a href="/#sets"><i class="fas fa-credit-card"></i><span>Payments</span></a>
     <a href="/customer/ask-question"><i class="fas fa-question-circle"></i><span>Ask Question</span></a>
     <a href="/customer/question-history"><i class="fas fa-sync-alt"></i><span>Question History</span></a>
   </div>
