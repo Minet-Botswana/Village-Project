@@ -5,6 +5,9 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDV1Vw9jedE30w1SNV6nGsT4H8pO_qbhxQ&libraries=places" defer></script>
+        <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
+    </script>
 
 <style>
     body {
@@ -82,6 +85,19 @@
         padding: 20px;
         text-align: center;
     }
+    .change {
+      cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 40%;
+      width: 20px;
+      text-align: center;
+      padding: 5px;
+      margin-left: 8px;
+    }
+    .dark {
+      background-color: #222;
+      color: #e6e6e6;
+    }
 
 </style>
 
@@ -131,96 +147,8 @@
             <h1>Insurance Application Form</h1>
         </div>
         <div class="form-body">
-            <!--form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="form-group">
-                    <label class="form-label" for="field1">Sum Insured</label>
-                    <input type="text" name="field1" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="field2">Geo-Location</label>
-                    <input type="text" name="field2" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="field3">Plot Number</label>
-                    <input type="text" name="field3" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="field4">Ward/Kgotla</label>
-                    <input type="text" name="field4" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="field5">Village</label>
-                    <input type="text" name="field5" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="field5">District</label>
-                    <input type="text" name="field5" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="field6">Attachments(e.g Title Deed)</label>
-                    <input type="text" name="field6" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="field6">Financial Interest (Optional)</label>
-                    <input type="text" name="field6" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="field6">Image Uploads</label>
-                    <input type="file" name="field6" class="form-control">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Submit Form</button>
-            </form-->
-            <!-- customer/forms.html -->
-
 <form method="POST" action="{% url 'customer:create_homeowners_cover' %}" enctype="multipart/form-data">
     {% csrf_token %}
-
-    <!--div class="form-group">
-        <label for="{{ form.geo_location.id_for_label }}">Geo Location</label>
-        <input type="text" name="{{ form.geo_location.name }}" id="{{ form.geo_location.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.plot_number.id_for_label }}">Plot Number</label>
-        <input type="text" name="{{ form.plot_number.name }}" id="{{ form.plot_number.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.ward.id_for_label }}">Ward/Kgotla</label>
-        <input type="text" name="{{ form.ward.name }}" id="{{ form.ward.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.village.id_for_label }}">Village</label>
-        <input type="text" name="{{ form.village.name }}" id="{{ form.village.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.district.id_for_label }}">District</label>
-        <input type="text" name="{{ form.district.name }}" id="{{ form.district.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.title_deed.id_for_label }}">Attachments (e.g., Title Deed)</label>
-        <input type="file" name="{{ form.title_deed.name }}" id="{{ form.title_deed.id }}" class="form-control" required>
-        {{ form.title_deed.errors }}
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.financial_interest.id_for_label }}">Financial Interest (Optional)</label>
-        <input type="text" name="{{ form.financial_interest.name }}" id="{{ form.financial_interest.id }}" class="form-control">
-        {{ form.financial_interest.errors }}
-    </div-->
-
     <div class="form-group">
         <label for="{{ homeownersForm.geo_location.id_for_label }}">Geo Location</label>
         <input type="text" name="{{ homeownersForm.geo_location.name }}" id="{{ homeownersForm.geo_location.id }}" class="form-control" required>
@@ -261,9 +189,25 @@
 
     <button type="submit" class="btn btn-primary">Submit Form</button>
 </form>
+<a href="/customer/display_user_homeowners_covers/"> View and edit details</a>
 
         </div>
     </div>
 </div>
+<div class="mode">
+    Dark mode:
+    <span class="change">OFF</span>
+  </div>
+<script>
+    $(".change").on("click", function () {
+      if ($("body").hasClass("dark")) {
+        $("body").removeClass("dark");
+        $(".change").text("OFF");
+      } else {
+        $("body").addClass("dark");
+        $(".change").text("ON");
+      }
+    });
+  </script>
 
 {% endblock content %}

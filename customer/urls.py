@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth.views import LoginView
 from .views import client_forms
+from .views import update_homeowners_cover
 
 app_name = 'customer'
 
@@ -11,6 +12,7 @@ urlpatterns = [
     path('customer-dashboard', views.customer_dashboard_view,name='customer-dashboard'),
     path('customerlogin', LoginView.as_view(template_name='insurance/adminlogin.html'),name='customerlogin'),
 
+    path('available-policies', views.available_policy_view,name='available-policies'),
     path('apply-policy', views.apply_policy_view,name='apply-policy'),
     path('apply/<int:pk>', views.apply_view,name='apply'),
     path('history', views.history_view,name='history'),
@@ -28,4 +30,9 @@ urlpatterns = [
     path('customer/create_homeowners_cover/', views.create_homeowners_cover, name='create_homeowners_cover'),
     path('customer/create_thirdpartycar_cover/', views.create_thirdpartycar_cover, name='create_thirdpartycar_cover'),
     path('customer/upload_kyc_form/', views.upload_kyc_form, name='upload_kyc_form'),
+    
+    # Example URL pattern in urls.py with namespace
+    path('display_user_homeowners_covers/', views.display_user_homeowners_covers, name='display_user_homeowners_covers'),
+    path('update_homeowners_cover/<int:id>/', views.update_homeowners_cover, name='update_homeowners_cover'),
+
 ]

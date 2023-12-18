@@ -140,7 +140,8 @@ LOGIN_URL = '/'
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Adjust the path as needed
 
-
+MEDIA_URL = '/media/'  # Ensure it starts and ends with a forward slash
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static')  # You may need to adjust this path based on your project structure
 
 
 STATICFILES_DIRS=[

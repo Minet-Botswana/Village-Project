@@ -5,8 +5,14 @@ from django.contrib.auth.views import LogoutView,LoginView
 from django.urls import path,include
 from insurance.views import custom_dashboard
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+    # Add the following line to serve media files during development
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 
     path('customer/',include('customer.urls')),
     
@@ -56,3 +62,6 @@ urlpatterns = [
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -16,6 +16,8 @@ from django.views import View
 from django.template.loader import get_template
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from datetime import timedelta, date
+import calendar
 
 
 def customerclick_view(request):
@@ -69,14 +71,70 @@ def customer_dashboard_view(request):
     #policies = CMODEL.Policy.objects.all()
     #return render(request,'customer/apply_policy.html',{'policies':policies,'customer':customer})
 
-def apply_policy_view(request):
+def available_policy_view(request):
     # Assuming the user is logged in
     customer = models.Customer.objects.get(user_id=request.user.id)
     # Filter policies based on the customer's id_number
     policies = Policy.objects.filter(insured__id_number=customer.id_number)
     print("Number of policies:", policies.count())  # Debug statement
 
-    return render(request, 'customer/apply_policy.html', {'policies': policies, 'customer': customer})
+    return render(request, 'customer/available_policies.html', {'policies': policies, 'customer': customer})
+
+def add_months(start_date, months):
+    # Function to add months to a date
+    month = start_date.month - 1 + months
+    year = start_date.year + month // 12
+    month = month % 12 + 1
+    last_day_of_month = calendar.monthrange(year, month)[1]
+    day = min(start_date.day, last_day_of_month)
+    return date(year, month, day)
+
+# Function to generate policy_number based on your specific logic
+def generate_policy_number(policy):
+    # You can implement your logic here to generate the policy_number
+    # For example, if you have it stored as an attribute of the Policy model:
+    return policy.policy_number
+
+from insurance.forms import PolicyForm
+from insurance.models import Category
+
+def apply_policy_view(request):
+    policyForm = PolicyForm()
+    if request.method == 'POST':
+        policyForm = PolicyForm(request.POST)
+        if policyForm.is_valid():
+            id_number = request.POST.get('id_number')  # Get the ID number from the form
+            category_id = request.POST.get('category')
+            category = Category.objects.get(id=category_id)
+
+            # Get the existing Customer based on the provided ID number
+            try:
+                customer = models.Customer.objects.get(id_number=id_number)
+            except models.Customer.DoesNotExist:
+                # Handle the case where the customer with the provided ID number doesn't exist
+                # display an error message or take appropriate action
+                return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
+
+            policy = policyForm.save(commit=False)
+            policy.category = category
+            policy.insured = customer  # Link the policy to the Customer
+            
+            policy.cover_start = policyForm.cleaned_data['cover_start']
+            policy.tenure = policyForm.cleaned_data['tenure']
+
+            # Calculate and set cover_end based on cover_start and tenure
+            if policy.cover_start and policy.tenure:
+                policy.cover_end = add_months(policy.cover_start, policy.tenure)
+                
+            # Save the policy to get the auto-generated policy_number
+            policy.save()
+            
+            print("Policy Number:", policy.policy_number)
+            print("Cover End:", policy.cover_end)
+
+            return redirect('available-policies')
+
+    return render(request, 'customer/apply_policy.html', {'policyForm': policyForm})
 
 def apply_view(request,pk):
     customer = models.Customer.objects.get(user_id=request.user.id)
@@ -134,6 +192,7 @@ def motor_insurance_view(request):
 
 from .forms import HomeownersCoverForm
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 
 def create_homeowners_cover(request):
     homeownersForm = HomeownersCoverForm()
@@ -157,8 +216,21 @@ def create_homeowners_cover(request):
 
         else:
             print(homeownersForm.errors)  # Print form errors for debugging
+            messages.error(request, 'Please correct the errors in the form.')
 
     return render(request, 'customer/homeowners_insurance.html', context=homeownersdict)
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import HomeownersCover
+
+@login_required
+def display_user_homeowners_covers(request):
+    homeowners_covers = HomeownersCover.objects.filter(customer__user=request.user)
+    return render(request, 'customer/update_homeowners_cover.html', {'homeowners_covers': homeowners_covers})
+
+
+
 
 
 from .forms import ThirdPartyCarInsuranceForm
@@ -215,4 +287,25 @@ def upload_kyc_form(request):
             print(KYC_Form.errors)  # Print form errors for debugging
 
     return render(request, 'customer/client_forms.html', context=KYCdict)
+
+# views.py
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import HomeownersCover
+from .forms import HomeownersCoverForm  # Assuming you have a form for your model
+
+def update_homeowners_cover(request, cover_id):
+    homeowners_cover = get_object_or_404(HomeownersCover, id=cover_id)
+
+    if request.method == 'POST':
+        form = HomeownersCoverForm(request.POST, instance=homeowners_cover)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page or display a success message
+            return redirect('success_page')  # Replace 'success_page' with the actual URL name
+    else:
+        form = HomeownersCoverForm(instance=homeowners_cover)
+
+    return render(request, 'customer/update_homeowners_cover.html', {'form': form, 'homeowners_cover': homeowners_cover})
+
 
