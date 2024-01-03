@@ -376,3 +376,15 @@ def contactus_view(request):
             return render(request, 'insurance/contactussuccess.html')
     return render(request, 'insurance/contactus.html', {'form':sub})
 
+
+from django.conf import settings
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+
+
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect ("/adminlogin")
+    return render(request, "insurance/logout.html", {})
+        

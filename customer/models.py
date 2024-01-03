@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 
+from google.cloud import storage
+from storages.backends.gcloud import GoogleCloudStorage
+from django.conf import settings
+import mimetypes
+from django.utils import timezone
+
+
 class Customer(models.Model):
     GENDER_CHOICES = [
         ('M', 'Male'),
@@ -22,7 +29,7 @@ class Customer(models.Model):
     ]
     
     user=models.OneToOneField(User,on_delete=models.CASCADE)
-    profile_pic= models.ImageField(upload_to='profile_pic/Customer/',null=True,blank=True)
+    #profile_pic= models.TextField(null=True, blank=True)
     address = models.CharField(max_length=40)
     mobile = models.CharField(max_length=20,null=False)
     
@@ -38,6 +45,23 @@ class Customer(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES, null=True, blank=True)
+    '''
+    @staticmethod
+    def upload_image(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('media/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extensions
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            print("picture url:", blob.public_url)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
+    '''
    
     @property
     def get_name(self):
@@ -61,10 +85,7 @@ class KYCform(models.Model):
         if self.kyc_form:
             return self.kyc_form.url
         return None
-
-    def __str__(self):
-        return f"KYC Form - {self.customer.username}"
-    
+   
     def save(self, *args, **kwargs):
         try:
             super().save(*args, **kwargs)
@@ -81,9 +102,6 @@ class DirectDebitForm(models.Model):
         if self.file_upload:
             return self.file_upload.url
         return None
-
-    def __str__(self):
-        return f"Direct Debit Form - {self.customer.get_name}"
     
     def save(self, *args, **kwargs):
         # Additional logic before saving, if needed
@@ -113,8 +131,6 @@ class HomeownersCover(models.Model):
             return self.title_deed.url
         return None
 
-    def __str__(self):
-        return f"Homeowners Cover - {self.customer.username}"
     
     def save(self, *args, **kwargs):
         try:
@@ -152,9 +168,6 @@ class ThirdPartyCarInsurance(models.Model):
         if self.blue_book:
             return self.blue_book.url
         return None
-
-    def __str__(self):
-        return f"Third Party Car Cover - {self.customer.username}"
     
     def save(self, *args, **kwargs):
         try:

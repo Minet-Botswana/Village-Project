@@ -190,13 +190,11 @@
       <i style=" "class="fas fa-bars" id="sidebar_btn"></i>
     </label>
     <div class="left_area">
-      <!--img src="../static/image/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image"-->
-      <img src="{% static 'image/MinetLogoBlack.png' %}" alt="Minet Botswana Logo" class="logo-image">
-
+      <img src="https://storage.googleapis.com/ko_gae_bucket/logos/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image">
     </div>
     <div class="right_area">
-      <a href="/logout" class="logout_btn">Logout</a>
-    </div>
+      <a href="#" id="logoutBtn" class="logout_btn">Logout</a>
+  </div>
   </header>
   
   <!--header area end-->
@@ -205,11 +203,8 @@
   <!--sidebar start-->
   <div class="sidebar" style="margin-top:60px;">
     <center>
-
-      <img src="{% static customer.profile_pic.url %}" class="profile_image" alt="">
       <h4>{{request.user.first_name}}</h4>
       <h6 style="color: rgb(255, 255, 255);">( Client )</h6>
-
     </center>
 
     <a href="/customer/customer-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
@@ -237,6 +232,21 @@
   
   </div>
   <!--content end-->
+  <script>
+    // JavaScript
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        // Simulate the logout process on the client side
+        // In a real-world scenario, you would make an AJAX/Fetch request to the server-side logout endpoint
+
+        // Clear any client-side tokens, cookies, or local storage if necessary
+
+        // For demonstration purposes, let's clear a hypothetical token stored in localStorage
+        localStorage.removeItem('userToken');
+
+        // Redirect the user to the login page
+        window.location.href = '/adminlogin'; // Replace '/login' with your actual login page URL
+    });
+</script>
 </body>
 
 </html>

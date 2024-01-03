@@ -194,11 +194,11 @@
       <i style=" " class="fas fa-bars" id="sidebar_btn"></i>
     </label>
     <div class="left_area">
-      <img src="../static/image/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image">
+      <img src="https://storage.googleapis.com/ko_gae_bucket/logos/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image">
     </div>
     <div class="right_area">
-      <a href="/logout" class="logout_btn">Logout</a>
-    </div>
+      <a href="#" id="logoutBtn" class="logout_btn">Logout</a>
+  </div>
   </header>
   <!--header area end-->
   
@@ -208,7 +208,7 @@
 ">
     <center>
 
-      <img src="{% static "image/admin.png" %}" class="profile_image" alt="">
+      <img src="https://storage.googleapis.com/ko_gae_bucket/logos/admin.png" class="profile_image" alt="">
       <h4 class="u" >Staff</h4>
       <p class="username">{{ user.username }}</p>
 
@@ -238,6 +238,21 @@
  
   </div>
   <!--content end-->
+  <script>
+    // JavaScript
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        // Simulate the logout process on the client side
+        // In a real-world scenario, you would make an AJAX/Fetch request to the server-side logout endpoint
+
+        // Clear any client-side tokens, cookies, or local storage if necessary
+
+        // For demonstration purposes, let's clear a hypothetical token stored in localStorage
+        localStorage.removeItem('userToken');
+
+        // Redirect the user to the login page
+        window.location.href = '/adminlogin'; // Replace '/login' with your actual login page URL
+    });
+</script>
 </body>
 
 </html>

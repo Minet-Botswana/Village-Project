@@ -40,7 +40,7 @@ class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['address', 'mobile', 'profile_pic', 'id_type', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status']
+        fields = ['address', 'mobile', 'id_type', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status']
 
 class KYCuploadForm(forms.ModelForm):
     class Meta:

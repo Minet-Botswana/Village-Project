@@ -25,7 +25,7 @@ def customerclick_view(request):
         return HttpResponseRedirect('afterlogin')
     return render(request,'customer/customerclick.html')
 
-
+''''
 def customer_signup_view(request):
     userForm=forms.CustomerUserForm()
     customerForm=forms.CustomerForm()
@@ -44,6 +44,40 @@ def customer_signup_view(request):
             my_customer_group[0].user_set.add(user)
         return HttpResponseRedirect('customerlogin')
     return render(request,'customer/customersignup.html',context=mydict)
+'''
+def customer_signup_view(request):
+    user_form = forms.CustomerUserForm()
+    customer_form = forms.CustomerForm()
+    mydict = {'userForm': user_form, 'customerForm': customer_form}
+
+    if request.method == 'POST':
+        user_form = forms.CustomerUserForm(request.POST)
+        customer_form = forms.CustomerForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and customer_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            customer = customer_form.save(commit=False)
+            customer.user = user
+
+            # Upload profile picture
+            profile_pic = request.FILES.get('profile_pic')
+            if profile_pic:
+                pro_pic_url = models.Customer.upload_image(profile_pic, profile_pic.name)
+                customer.profile_pic = pro_pic_url
+
+            customer.save()
+
+            # Add user to CUSTOMER group
+            my_customer_group = Group.objects.get_or_create(name='CUSTOMER')
+            my_customer_group[0].user_set.add(user)
+
+            return HttpResponseRedirect('customerlogin')
+
+    return render(request, 'customer/customersignup.html', context=mydict)
+
 
 def success_page(request):
     return render(request, 'customer/success_page.html')  # Use the actual template path
@@ -309,3 +343,9 @@ def update_homeowners_cover(request, cover_id):
     return render(request, 'customer/update_homeowners_cover.html', {'form': form, 'homeowners_cover': homeowners_cover})
 
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)
+    return redirect('customerlogin')  # Redirect to the login page or another appropriate page
