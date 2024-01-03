@@ -197,9 +197,7 @@ STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 
 LOGIN_REDIRECT_URL='/afterlogin'
-#LOGOUT_REDIRECT_URL = "/logout_successful"  
-LOGOUT_REDIRECT_URL = '/logout-redirect/'
-
+LOGOUT_REDIRECT_URL = "/"  # 
 
 #for contact us give your gmail id and password
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'

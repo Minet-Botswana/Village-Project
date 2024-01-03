@@ -54,7 +54,7 @@
     <table class="table table-hover" id="dev-table">
       <thead>
         <tr>
-        <th>Serial No.</th>
+        <!--th>Policy No.</th-->
           <th>Policy Name</th>
 
           <th> Applied Date</th>
@@ -64,7 +64,7 @@
       </thead>
       {% for t in policies %}
       <tr>
-        <td> {{ forloop.counter }}</td>
+        <!--td> {{ t.policy_number }}</td-->
         <td> {{t.Policy}}</td>
 
         <td>{{t.creation_date}}</td>
