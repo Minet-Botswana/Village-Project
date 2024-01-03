@@ -3,7 +3,7 @@ from django.contrib import admin
 from insurance import views
 from django.contrib.auth.views import LogoutView,LoginView
 from django.urls import path,include
-from insurance.views import custom_dashboard, logout_view
+from insurance.views import custom_dashboard, logout_redirect
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,8 +14,8 @@ urlpatterns = [
     path('customer/',include('customer.urls')),
     
     path('',views.home_view,name='home'),
-    #path('logout/', LogoutView.as_view(template_name='insurance/logout.html'), name='logout'),
-    path("logout/", logout_view),
+    path('logout/', LogoutView.as_view(template_name='insurance/logout.html'), name='logout'),
+    path('logout-redirect/', views.logout_redirect, name='logout_redirect'),
     path('aboutus', views.aboutus_view),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),

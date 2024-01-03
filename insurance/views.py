@@ -24,7 +24,8 @@ from django.http import JsonResponse
 
 
 
-@login_required
+#@login_required
+@login_required(login_url='adminlogin')
 def custom_dashboard(request):
     user = request.user
     return render(request, 'insurance/adminbase.html', {'user': user})
@@ -44,6 +45,9 @@ def afterlogin_view(request):
         return redirect('customer/customer-dashboard')
     else:
         return redirect('admin-dashboard')
+    
+def logout_redirect(request):
+        return redirect('logout')
 
 
 
@@ -376,15 +380,3 @@ def contactus_view(request):
             return render(request, 'insurance/contactussuccess.html')
     return render(request, 'insurance/contactus.html', {'form':sub})
 
-
-from django.conf import settings
-from django.shortcuts import redirect
-from django.contrib.auth import logout
-
-
-def logout_view(request):
-    if request.method == "POST":
-        logout(request)
-        return redirect ("/adminlogin")
-    return render(request, "insurance/logout.html", {})
-        
