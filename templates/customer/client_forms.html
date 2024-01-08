@@ -123,14 +123,23 @@
                         <!-- Your form fields here -->
                         <div class="form-group">
                             <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">KYC Form Upload </label>
-                            <input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required>
+                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
+                            <input type="file" name="kyc_form" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required>
+
                             {{ KYCuploadForm.kyc_form.errors }}
                         </div>
+                        {% if existing_kyc_form %}
+                        <!-- Display a message for existing KYC form -->
+                        <p style="font-size: 14px;">KYC form already submitted! You can view it <a href="{{ existing_kyc_form.kyc_form }}" target="_blank">here</a>.</p>
+                        <!-- Disable the submit button -->
+                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
+                        {% else %}
+                        <!-- Enable the submit button for new KYC form -->
                         <button type="submit" class="btn btn-primary">Submit Form</button>
+                        {% endif %}
                         <!-- Download button for KYC form -->
                         <a href="https://storage.googleapis.com/ko_gae_bucket/forms_downloads/KYC.pdf" download style="font-size: 16px;">Download KYC Form</a>
-                    </form>
-                    
+                    </form>     
                 </div>               
             </div>            
         </div>

@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import Customer
+from .models import KYCform
 
-
-class CustomerSerializer(serializers.ModelSerializer):
+class KYCuploadForm(serializers.ModelSerializer):
     class Meta:
-        model = Customer
-        fields = '__all__'
+        model = KYCform
+        fields = ['kyc_form']
 
     def create(self, validated_data):
-        profile_pic_file = validated_data['profile_pic']
-        filename = profile_pic_file.name
-        pro_pic_url = Customer.upload_image(profile_pic_file, filename)
+        form_file = validated_data['kyc_form']
+        filename = form_file.name
+        form_file_url = KYCform.upload_form(form_file, filename)
         user = validated_data.get('user', None)
-        return Customer.objects.create(user=user, profile_pic=pro_pic_url, **validated_data)
+        return KYCform.objects.create(customer=user, kyc_form=form_file_url, **validated_data)
+

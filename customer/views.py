@@ -295,32 +295,114 @@ def create_thirdpartycar_cover(request):
 
     return render(request, 'customer/motor_insurance.html', context=thirdpartycardict)
 
-
+'''
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .forms import KYCuploadForm
+from .models import KYCform, Customer
+
 def upload_kyc_form(request):
-    KYC_Form = KYCuploadForm()
-    KYCdict = {'KYC_Form': KYC_Form}
-
     if request.method == 'POST':
-        KYC_Form = KYCuploadForm(request.POST, request.FILES)
+        form = KYCuploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Ensure the user is authenticated
+            if request.user.is_authenticated:
+                # Get or create the associated Customer instance for the user
+                customer, created = Customer.objects.get_or_create(user=request.user)
 
-        if KYC_Form.is_valid():
-            kyc_cover = KYC_Form.save(commit=False)
+                # Save the form data to the database
+                kyc_instance = form.save(commit=False)
+                kyc_instance.customer = customer  # Associate the KYC form with the Customer
 
-            # Assuming there is a one-to-one relationship between User and Customer
-            user_instance = request.user
-            customer_instance = get_object_or_404(models.Customer, user=user_instance)
+                # Upload the form to Google Cloud Storage
+                form_file = request.FILES['kyc_form']
+                filename = form_file.name
+                form_file_url = KYCform.upload_form(form_file, filename)
 
-            kyc_cover.customer = customer_instance
-            kyc_cover.save()
+                if form_file_url:
+                    # Save the Google Cloud Storage URL to the model instance
+                    kyc_instance.kyc_form = form_file_url
+                    kyc_instance.save()
 
-            print("Form data:", request.POST)  # Debugging line
-            print("Saved KYC Uploads:", kyc_cover.__dict__)  # Debugging line
+                    messages.success(request, 'KYC form uploaded successfully!')
+                    return redirect('customer:upload_kyc_form')
+
+                else:
+                    messages.error(request, 'Failed to upload KYC form.')
+            else:
+                messages.error(request, 'User is not authenticated.')
 
         else:
-            print(KYC_Form.errors)  # Print form errors for debugging
+            messages.error(request, 'Form submission failed. Please check the form data.')
 
-    return render(request, 'customer/client_forms.html', context=KYCdict)
+    else:
+        form = KYCuploadForm()
+
+    return render(request, 'customer/client_forms.html', {'form': form})
+'''
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .forms import KYCuploadForm
+from .models import KYCform, Customer
+
+def upload_kyc_form(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
+
+    # Check if a KYCform instance exists for the current customer
+    existing_kyc_form = KYCform.objects.filter(customer=customer).first()
+
+    if existing_kyc_form:
+        # KYC form has already been submitted
+        submit_button_disabled = True
+        submit_button_text = 'Form Submitted'
+    else:
+        submit_button_disabled = False
+        submit_button_text = 'Submit Form'
+
+    if request.method == 'POST':
+        form = KYCuploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not existing_kyc_form:
+                # Save the form data to the database only if a form hasn't been submitted already
+                kyc_instance = form.save(commit=False)
+                kyc_instance.customer = customer
+                form_file = request.FILES['kyc_form']
+                filename = form_file.name
+                form_file_url = KYCform.upload_form(form_file, filename)
+
+                if form_file_url:
+                    kyc_instance.kyc_form = form_file_url
+                    kyc_instance.save()
+
+                    messages.success(request, 'KYC form uploaded successfully!')
+                    return redirect('customer:upload_kyc_form')
+                else:
+                    messages.error(request, 'Failed to upload KYC form to Google Cloud Storage.')
+
+    else:
+        form = KYCuploadForm()
+
+    return render(request, 'customer/client_forms.html', {
+        'form': form,
+        'submit_button_disabled': submit_button_disabled,
+        'submit_button_text': submit_button_text,
+        'existing_kyc_form': existing_kyc_form,
+    })
+    
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def display_kyc_forms(request):
+    user = request.user
+    existing_kyc_form = KYCform.objects.filter(customer__user=user).first()
+
+    return render(request, 'customer/client_forms.html', {
+        'existing_kyc_form': existing_kyc_form,
+    })
+
+
 
 # views.py
 

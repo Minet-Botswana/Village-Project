@@ -8,6 +8,10 @@ from django.conf import settings
 import mimetypes
 from django.utils import timezone
 
+from django.core.files.base import ContentFile
+import uuid
+
+
 
 class Customer(models.Model):
     GENDER_CHOICES = [
@@ -45,23 +49,6 @@ class Customer(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES, null=True, blank=True)
-    '''
-    @staticmethod
-    def upload_image(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('media/' + filename)
-            #blob.upload_from_file(file)
-            # Set the content type based on the file extensions
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-            print("picture url:", blob.public_url)
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None
-    '''
    
     @property
     def get_name(self):
@@ -72,6 +59,7 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.first_name
     
+from urllib.parse import quote  
 class KYCform(models.Model):
     # Link to the authenticated customer
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='kyc_form', unique=True)
@@ -87,10 +75,38 @@ class KYCform(models.Model):
         return None
    
     def save(self, *args, **kwargs):
+        if self.kyc_form:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.kyc_form.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.kyc_form, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.kyc_form.name = uploaded_url
+            else:
+                print("Failed to upload KYC form to Google Cloud Storage.")
+        
         try:
             super().save(*args, **kwargs)
         except Exception as e:
             print(f"Error saving KYC Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/KYC/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
 
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
