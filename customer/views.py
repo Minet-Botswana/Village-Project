@@ -389,19 +389,6 @@ def upload_kyc_form(request):
         'submit_button_text': submit_button_text,
         'existing_kyc_form': existing_kyc_form,
     })
-    
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-
-@login_required
-def display_kyc_forms(request):
-    user = request.user
-    existing_kyc_form = KYCform.objects.filter(customer__user=user).first()
-
-    return render(request, 'customer/client_forms.html', {
-        'existing_kyc_form': existing_kyc_form,
-    })
-
 
 
 # views.py
