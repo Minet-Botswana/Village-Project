@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Customer, KYCform, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance
+from .models import Customer, KYCform, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance, CopyOfOmang
 
 class CustomerUserForm(forms.ModelForm):
     class Meta:
@@ -55,6 +55,20 @@ class KYCuploadForm(forms.ModelForm):
             if ext != 'pdf':
                 raise forms.ValidationError('Only PDF files are allowed.')
         return kyc_form
+    
+class CopyOfOmangForm(forms.ModelForm):
+    class Meta:
+        model = CopyOfOmang
+        fields = ['copy_of_omang']
+
+    def clean_copy_of_omang(self):
+        copy_of_omang = self.cleaned_data.get('copy_of_omang')
+        if copy_of_omang:
+            # Validate the file extension or any other criteria if needed
+            ext = copy_of_omang.name.split('.')[-1].lower()
+            if ext != 'pdf':
+                raise forms.ValidationError('Only PDF files are allowed.')
+        return copy_of_omang
 
 
 

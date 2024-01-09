@@ -107,6 +107,54 @@ class KYCform(models.Model):
         except Exception as e:
             print("Failed to upload!")
             return None
+        
+class CopyOfOmang(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='copy_of_omang', unique=True)
+    # Attachments
+    copy_of_omang = models.FileField(upload_to='Forms/CopyOfOmang/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    submission_date = models.DateField(auto_now_add=True)
+
+    def get_download_url(self):
+        if self.copy_of_omang:
+            return self.copy_of_omang.url
+        return None
+   
+    def save(self, *args, **kwargs):
+        if self.copy_of_omang:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.copy_of_omang.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.copy_of_omang, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.copy_of_omang.name = uploaded_url
+            else:
+                print("Failed to upload Copy Of Omang  form to Google Cloud Storage.")
+        
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving Copy of Omang Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/CopyOfOmang/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
 
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')

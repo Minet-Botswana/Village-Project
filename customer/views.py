@@ -342,8 +342,8 @@ def upload_kyc_form(request):
 '''
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .forms import KYCuploadForm
-from .models import KYCform, Customer
+from .forms import KYCuploadForm, CopyOfOmangForm
+from .models import KYCform, Customer, CopyOfOmang
 
 def upload_kyc_form(request):
     user = request.user
@@ -389,7 +389,52 @@ def upload_kyc_form(request):
         'submit_button_text': submit_button_text,
         'existing_kyc_form': existing_kyc_form,
     })
+    
+#Omang View
+def upload_copy_of_omang(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
 
+    # Check if a KYCform instance exists for the current customer
+    existing_copy_of_omang =  CopyOfOmang.objects.filter(customer=customer).first()
+
+    if existing_copy_of_omang:
+        # KYC form has already been submitted
+        submit_button_disabled = True
+        submit_button_text = 'Form Submitted'
+    else:
+        submit_button_disabled = False
+        submit_button_text = 'Submit Form'
+
+    if request.method == 'POST':
+        form = CopyOfOmangForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not existing_copy_of_omang:
+                # Save the form data to the database only if a form hasn't been submitted already
+                copy_of_omang_instance = form.save(commit=False)
+                copy_of_omang_instance.customer = customer
+                form_file = request.FILES['copy_of_omang']
+                filename = form_file.name
+                form_file_url = CopyOfOmang.upload_form(form_file, filename)
+
+                if form_file_url:
+                    copy_of_omang_instance.copy_of_omang = form_file_url
+                    copy_of_omang_instance.save()
+
+                    messages.success(request, 'Omang File uploaded successfully!')
+                    return redirect('customer:upload_copy_of_omang')
+                else:
+                    messages.error(request, 'Failed to upload Omang File to Google Cloud Storage.')
+
+    else:
+        form = CopyOfOmangForm()
+
+    return render(request, 'customer/client_forms.html', {
+        'form': form,
+        'submit_button_disabled': submit_button_disabled,
+        'submit_button_text': submit_button_text,
+        'existing_copy_of_omang': existing_copy_of_omang,
+    })
 
 # views.py
 
