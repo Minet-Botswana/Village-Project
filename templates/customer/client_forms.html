@@ -173,6 +173,67 @@
                 </div>               
             </div>            
         </div>
+
+        <!-- Proof Of residence Forms -->
+        <div class="col-md-6 col-sm-12">
+            <div class="card"> 
+                <div class="card-header" style="background-color: #e21a22; color: #fff;">Proof of Residence</div>
+                <div class="card-body">
+                    <!-- Display KYC form for uploading -->
+                    <form method="POST" action="{% url 'customer:upload_residence_proof' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- Your form fields here -->
+                        <div class="form-group">
+                            <label for="{{ ResidenceProofForm.residence_proof.id_for_label }}">Proof of Residence Upload </label>
+                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
+                            <input type="file" name="residence_proof" id="{{ ResidenceProofForm.residence_proof.id }}" class="form-control" required>
+
+                            {{ ResidenceProofForm.residence_proof.errors }}
+                        </div>
+                        {% if existing_residence_proof %}
+                        <!-- Display a message for existing KYC form -->
+                        <p style="font-size: 14px; color: #e21a22; font-weight: bold;">Proof of Residence already submitted! You can view it <a href="{{ existing_residence_proof.residence_proof }}" target="_blank">here</a>.</p>
+                        <!-- Disable the submit button -->
+                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
+                        {% else %}
+                        <!-- Enable the submit button for new KYC form -->
+                        <button type="submit" class="btn btn-primary">Submit Form</button>
+                        {% endif %}
+                    </form>     
+                </div>               
+            </div>            
+        </div>
+
+        <!-- Proof Of Income Forms -->
+        <div class="col-md-6 col-sm-12">
+            <div class="card"> 
+                <div class="card-header" style="background-color: #e21a22; color: #fff;">Proof of Residence</div>
+                <div class="card-body">
+                    <!-- Display KYC form for uploading -->
+                    <form method="POST" action="{% url 'customer:upload_income_proof' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- Your form fields here -->
+                        <div class="form-group">
+                            <label for="{{ IncomeProofForm.income_proof.id_for_label }}">Proof of Income Upload </label>
+                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
+                            <input type="file" name="income_proof" id="{{ IncomeProofForm.income_proof.id }}" class="form-control" required>
+
+                            {{ IncomeProofForm.income_proof.errors }}
+                        </div>
+                        {% if existing_income_proof %}
+                        <!-- Display a message for existing KYC form -->
+                        <p style="font-size: 14px; color: #e21a22; font-weight: bold;">Proof of Residence already submitted! You can view it <a href="{{ existing_income_proof.income_proof }}" target="_blank">here</a>.</p>
+                        <!-- Disable the submit button -->
+                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
+                        {% else %}
+                        <!-- Enable the submit button for new KYC form -->
+                        <button type="submit" class="btn btn-primary">Submit Form</button>
+                        {% endif %}
+                    </form>     
+                </div>               
+            </div>            
+        </div>
+
     </div>
 </div>
 

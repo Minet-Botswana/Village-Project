@@ -156,6 +156,104 @@ class CopyOfOmang(models.Model):
             print("Failed to upload!")
             return None
 
+# Proof Of Residence 
+class ResidenceProof(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='residence_proof', unique=True)
+    # Attachments
+    residence_proof = models.FileField(upload_to='Forms/ResidenceProof/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    submission_date = models.DateField(auto_now_add=True)
+
+    def get_download_url(self):
+        if self.residence_proof:
+            return self.residence_proof.url
+        return None
+   
+    def save(self, *args, **kwargs):
+        if self.residence_proof:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.residence_proof.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.residence_proof, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.residence_proof.name = uploaded_url
+            else:
+                print("Failed to upload proof of residence form to Google Cloud Storage.")
+        
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error savingproof of residence Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/ResidenceProof/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None       
+
+#Proof of Income Model
+class IncomeProof(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='income_proof', unique=True)
+    # Attachments
+    income_proof = models.FileField(upload_to='Forms/IncomeProof/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    submission_date = models.DateField(auto_now_add=True)
+
+    def get_download_url(self):
+        if self.income_proof:
+            return self.income_proof.url
+        return None
+   
+    def save(self, *args, **kwargs):
+        if self.income_proof:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.income_proof.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.income_proof, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.income_proof.name = uploaded_url
+            else:
+                print("Failed to upload proof of income form to Google Cloud Storage.")
+        
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving proof of income Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/IncomeProof/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None  
+
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
     submission_date = models.DateField(auto_now_add=True)
