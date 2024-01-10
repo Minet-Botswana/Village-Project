@@ -25,7 +25,7 @@ def customerclick_view(request):
         return HttpResponseRedirect('afterlogin')
     return render(request,'customer/customerclick.html')
 
-
+''''
 def customer_signup_view(request):
     userForm=forms.CustomerUserForm()
     customerForm=forms.CustomerForm()
@@ -44,6 +44,40 @@ def customer_signup_view(request):
             my_customer_group[0].user_set.add(user)
         return HttpResponseRedirect('customerlogin')
     return render(request,'customer/customersignup.html',context=mydict)
+'''
+def customer_signup_view(request):
+    user_form = forms.CustomerUserForm()
+    customer_form = forms.CustomerForm()
+    mydict = {'userForm': user_form, 'customerForm': customer_form}
+
+    if request.method == 'POST':
+        user_form = forms.CustomerUserForm(request.POST)
+        customer_form = forms.CustomerForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and customer_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            customer = customer_form.save(commit=False)
+            customer.user = user
+
+            # Upload profile picture
+            profile_pic = request.FILES.get('profile_pic')
+            if profile_pic:
+                pro_pic_url = models.Customer.upload_image(profile_pic, profile_pic.name)
+                customer.profile_pic = pro_pic_url
+
+            customer.save()
+
+            # Add user to CUSTOMER group
+            my_customer_group = Group.objects.get_or_create(name='CUSTOMER')
+            my_customer_group[0].user_set.add(user)
+
+            return HttpResponseRedirect('customerlogin')
+
+    return render(request, 'customer/customersignup.html', context=mydict)
+
 
 def success_page(request):
     return render(request, 'customer/success_page.html')  # Use the actual template path
@@ -194,6 +228,7 @@ from .forms import HomeownersCoverForm
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
+@login_required
 def create_homeowners_cover(request):
     homeownersForm = HomeownersCoverForm()
     homeownersdict = {'homeownersForm': homeownersForm}
@@ -235,7 +270,7 @@ def display_user_homeowners_covers(request):
 
 from .forms import ThirdPartyCarInsuranceForm
 from django.shortcuts import get_object_or_404
-
+@login_required
 def create_thirdpartycar_cover(request):
     thirdpartycarForm = ThirdPartyCarInsuranceForm()
     thirdpartycardict = {'thirdpartycarForm': thirdpartycarForm}
@@ -261,39 +296,247 @@ def create_thirdpartycar_cover(request):
 
     return render(request, 'customer/motor_insurance.html', context=thirdpartycardict)
 
-
+'''
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .forms import KYCuploadForm
+from .models import KYCform, Customer
+
 def upload_kyc_form(request):
-    KYC_Form = KYCuploadForm()
-    KYCdict = {'KYC_Form': KYC_Form}
-
     if request.method == 'POST':
-        KYC_Form = KYCuploadForm(request.POST, request.FILES)
+        form = KYCuploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Ensure the user is authenticated
+            if request.user.is_authenticated:
+                # Get or create the associated Customer instance for the user
+                customer, created = Customer.objects.get_or_create(user=request.user)
 
-        if KYC_Form.is_valid():
-            kyc_cover = KYC_Form.save(commit=False)
+                # Save the form data to the database
+                kyc_instance = form.save(commit=False)
+                kyc_instance.customer = customer  # Associate the KYC form with the Customer
 
-            # Assuming there is a one-to-one relationship between User and Customer
-            user_instance = request.user
-            customer_instance = get_object_or_404(models.Customer, user=user_instance)
+                # Upload the form to Google Cloud Storage
+                form_file = request.FILES['kyc_form']
+                filename = form_file.name
+                form_file_url = KYCform.upload_form(form_file, filename)
 
-            kyc_cover.customer = customer_instance
-            kyc_cover.save()
+                if form_file_url:
+                    # Save the Google Cloud Storage URL to the model instance
+                    kyc_instance.kyc_form = form_file_url
+                    kyc_instance.save()
 
-            print("Form data:", request.POST)  # Debugging line
-            print("Saved KYC Uploads:", kyc_cover.__dict__)  # Debugging line
+                    messages.success(request, 'KYC form uploaded successfully!')
+                    return redirect('customer:upload_kyc_form')
+
+                else:
+                    messages.error(request, 'Failed to upload KYC form.')
+            else:
+                messages.error(request, 'User is not authenticated.')
 
         else:
-            print(KYC_Form.errors)  # Print form errors for debugging
+            messages.error(request, 'Form submission failed. Please check the form data.')
 
-    return render(request, 'customer/client_forms.html', context=KYCdict)
+    else:
+        form = KYCuploadForm()
+
+    return render(request, 'customer/client_forms.html', {'form': form})
+'''
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .forms import KYCuploadForm, CopyOfOmangForm, ResidenceProofForm, IncomeProofForm
+from .models import KYCform, Customer, CopyOfOmang, ResidenceProof, IncomeProof
+@login_required
+def upload_kyc_form(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
+
+    # Check if a KYCform instance exists for the current customer
+    existing_kyc_form = KYCform.objects.filter(customer=customer).first()
+
+    if existing_kyc_form:
+        # KYC form has already been submitted
+        submit_button_disabled = True
+        submit_button_text = 'Form Submitted'
+    else:
+        submit_button_disabled = False
+        submit_button_text = 'Submit Form'
+
+    if request.method == 'POST':
+        form = KYCuploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not existing_kyc_form:
+                # Save the form data to the database only if a form hasn't been submitted already
+                kyc_instance = form.save(commit=False)
+                kyc_instance.customer = customer
+                form_file = request.FILES['kyc_form']
+                filename = form_file.name
+                form_file_url = KYCform.upload_form(form_file, filename)
+
+                if form_file_url:
+                    kyc_instance.kyc_form = form_file_url
+                    kyc_instance.save()
+
+                    messages.success(request, 'KYC form uploaded successfully!')
+                    return redirect('customer:upload_kyc_form')
+                else:
+                    messages.error(request, 'Failed to upload KYC form to Google Cloud Storage.')
+
+    else:
+        form = KYCuploadForm()
+
+    return render(request, 'customer/client_forms.html', {
+        'form': form,
+        'submit_button_disabled': submit_button_disabled,
+        'submit_button_text': submit_button_text,
+        'existing_kyc_form': existing_kyc_form,
+    })
+    
+#Omang View
+@login_required
+def upload_copy_of_omang(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
+
+    # Check if a KYCform instance exists for the current customer
+    existing_copy_of_omang =  CopyOfOmang.objects.filter(customer=customer).first()
+
+    if existing_copy_of_omang:
+        # KYC form has already been submitted
+        submit_button_disabled = True
+        submit_button_text = 'Form Submitted'
+    else:
+        submit_button_disabled = False
+        submit_button_text = 'Submit Form'
+
+    if request.method == 'POST':
+        form = CopyOfOmangForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not existing_copy_of_omang:
+                # Save the form data to the database only if a form hasn't been submitted already
+                copy_of_omang_instance = form.save(commit=False)
+                copy_of_omang_instance.customer = customer
+                form_file = request.FILES['copy_of_omang']
+                filename = form_file.name
+                form_file_url = CopyOfOmang.upload_form(form_file, filename)
+
+                if form_file_url:
+                    copy_of_omang_instance.copy_of_omang = form_file_url
+                    copy_of_omang_instance.save()
+
+                    messages.success(request, 'Omang File uploaded successfully!')
+                    return redirect('customer:upload_copy_of_omang')
+                else:
+                    messages.error(request, 'Failed to upload Omang File to Google Cloud Storage.')
+
+    else:
+        form = CopyOfOmangForm()
+
+    return render(request, 'customer/client_forms.html', {
+        'form': form,
+        'submit_button_disabled': submit_button_disabled,
+        'submit_button_text': submit_button_text,
+        'existing_copy_of_omang': existing_copy_of_omang,
+    })
+    
+#Proof of Residence Proof
+@login_required
+def upload_residence_proof(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
+
+    # Check if a KYCform instance exists for the current customer
+    existing_residence_proof =  ResidenceProof.objects.filter(customer=customer).first()
+
+    if existing_residence_proof:
+        # KYC form has already been submitted
+        submit_button_disabled = True
+        submit_button_text = 'Form Submitted'
+    else:
+        submit_button_disabled = False
+        submit_button_text = 'Submit Form'
+
+    if request.method == 'POST':
+        form = ResidenceProofForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not existing_residence_proof:
+                # Save the form data to the database only if a form hasn't been submitted already
+                residence_proof_instance = form.save(commit=False)
+                residence_proof_instance.customer = customer
+                form_file = request.FILES['residence_proof']
+                filename = form_file.name
+                form_file_url = ResidenceProof.upload_form(form_file, filename)
+
+                if form_file_url:
+                    residence_proof_instance.residence_proof = form_file_url
+                    residence_proof_instance.save()
+
+                    messages.success(request, 'residence_proof uploaded successfully!')
+                    return redirect('customer:upload_residence_proof')
+                else:
+                    messages.error(request, 'Failed to upload residence_proof to Google Cloud Storage.')
+
+    else:
+        form = ResidenceProofForm()
+
+    return render(request, 'customer/client_forms.html', {
+        'form': form,
+        'submit_button_disabled': submit_button_disabled,
+        'submit_button_text': submit_button_text,
+        'existing_residence_proof': existing_residence_proof,
+    })
+
+@login_required
+def upload_income_proof(request):
+    user = request.user
+    customer = get_object_or_404(Customer, user=user)
+
+    # Check if a KYCform instance exists for the current customer
+    existing_income_proof =  IncomeProof.objects.filter(customer=customer).first()
+
+    if existing_income_proof:
+        # KYC form has already been submitted
+        submit_button_disabled = True
+        submit_button_text = 'Form Submitted'
+    else:
+        submit_button_disabled = False
+        submit_button_text = 'Submit Form'
+
+    if request.method == 'POST':
+        form = IncomeProofForm(request.POST, request.FILES)
+        if form.is_valid():
+            if not existing_income_proof:
+                # Save the form data to the database only if a form hasn't been submitted already
+                income_proof_instance = form.save(commit=False)
+                income_proof_instance.customer = customer
+                form_file = request.FILES['income_proof']
+                filename = form_file.name
+                form_file_url = IncomeProof.upload_form(form_file, filename)
+
+                if form_file_url:
+                    income_proof_instance.income_proof = form_file_url
+                    income_proof_instance.save()
+
+                    messages.success(request, 'income_proof uploaded successfully!')
+                    return redirect('customer:upload_income_proof')
+                else:
+                    messages.error(request, 'Failed to upload income_proof to Google Cloud Storage.')
+
+    else:
+        form = IncomeProofForm()
+
+    return render(request, 'customer/client_forms.html', {
+        'form': form,
+        'submit_button_disabled': submit_button_disabled,
+        'submit_button_text': submit_button_text,
+        'existing_income_proof': existing_income_proof,
+    })
 
 # views.py
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import HomeownersCover
 from .forms import HomeownersCoverForm  # Assuming you have a form for your model
-
+@login_required
 def update_homeowners_cover(request, cover_id):
     homeowners_cover = get_object_or_404(HomeownersCover, id=cover_id)
 
@@ -309,3 +552,9 @@ def update_homeowners_cover(request, cover_id):
     return render(request, 'customer/update_homeowners_cover.html', {'form': form, 'homeowners_cover': homeowners_cover})
 
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def logout_view(request):
+    logout(request)
+    return redirect('customerlogin')  # Redirect to the login page or another appropriate page

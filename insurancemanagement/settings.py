@@ -30,7 +30,12 @@ SECRET_KEY = 'ls@!_(edqp*xy76kvbsst$07at(v^li*2&ew!^$8o(@wa6@a+$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+]
 
 
 # Application definition
@@ -137,18 +142,62 @@ LOGIN_URL = '/'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Adjust the path as needed
+#STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Adjust the path as needed
 
-MEDIA_URL = '/media/'  # Ensure it starts and ends with a forward slash
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static')  # You may need to adjust this path based on your project structure
+#MEDIA_URL = '/media/'  # Ensure it starts and ends with a forward slash
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'static')  # You may need to adjust this path based on your project structure
 
 
-STATICFILES_DIRS=[
-STATIC_DIR,
-]
+#STATICFILES_DIRS=[
+#STATIC_DIR,
+#]
+
+# for media in the bucket
+import google.auth
+from google.oauth2 import service_account
+from google.cloud import storage
+
+# FINAL TESTING TO GOOGLE CLOUD BUCKET WHICH WILL WORK IN JESUS'S NAME
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+os.environ['DJANGO_SETTINGS_MODULE'] = 'insurancemanagement.settings'
+
+# Use application default credentials
+credentials, project_id = google.auth.default()
+
+
+# Google Cloud Storage credentials THE REAL ONES HERE
+#GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.join(BASE_DIR, 'credentials.json'))
+GS_PROJECT_ID = 'xenon-petal-407313'
+GS_BUCKET_NAME = 'ko_gae_bucket'
+GS_DEFAULT_ACL = 'publicRead'
+UPLOAD_ROOT = 'media/uploads'
+GS_FILE_OVERWRITE = 'False'
+
+# Media files settings
+#MEDIA_ROOT = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'https://storage.googleapis.com/ko_gae_bucket/media/'
+
+# Static files (CSS, JavaScript, images) settings
+STATIC_URL = 'https://storage.googleapis.com/ko_gae_bucket/static/'
+GS_STATIC_BUCKET_NAME = "ko_gae_bucket"
+
+#DEFAULT_FILE_STORAGE = 'gcloud.GoogleCloudMediaFileStorage'
+#STATICFILES_STORAGE = 'gcloud.GoogleCloudStaticFileStorage'
+
+# settings.py
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
 
 LOGIN_REDIRECT_URL='/afterlogin'
+LOGOUT_REDIRECT_URL = "/"  # 
 
 #for contact us give your gmail id and password
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
@@ -164,6 +213,11 @@ EMAIL_HOST_PASSWORD = 'xyz' # host email password required
 # this process is required because google blocks apps authentication by default
 EMAIL_RECEIVING_USER = ['to@gmail.com'] # email on which you will receive messages sent from website
 
+SESSION_COOKIE_AGE = 1800  # 30 minutes
+SESSION_SAVE_EVERY_REQUEST = True # update the session expiration time every time a request is made, ensuring that the session doesn't expire as long as the user is active
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # log users out when they close their browser
+
+
 
 # Administrators Login settings
 
@@ -178,10 +232,10 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Botswana",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "\image\Minet2.png",
+    "site_logo": "logos/Minet2.png",
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": "\image\Minet2.png",
+    "login_logo": "logos/Minet2.png",
 
     # Logo to use for login form in dark themes (defaults to login_logo)
     "login_logo_dark": None,

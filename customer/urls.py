@@ -30,6 +30,9 @@ urlpatterns = [
     path('customer/create_homeowners_cover/', views.create_homeowners_cover, name='create_homeowners_cover'),
     path('customer/create_thirdpartycar_cover/', views.create_thirdpartycar_cover, name='create_thirdpartycar_cover'),
     path('customer/upload_kyc_form/', views.upload_kyc_form, name='upload_kyc_form'),
+    path('customer/upload_omang_form/', views.upload_copy_of_omang, name='upload_copy_of_omang'),
+    path('customer/upload_residence_proof/', views.upload_residence_proof, name='upload_residence_proof'),
+    path('customer/upload_income_proof/', views.upload_income_proof, name='upload_income_proof'),
     
     # Example URL pattern in urls.py with namespace
     path('display_user_homeowners_covers/', views.display_user_homeowners_covers, name='display_user_homeowners_covers'),

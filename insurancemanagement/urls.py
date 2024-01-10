@@ -3,21 +3,19 @@ from django.contrib import admin
 from insurance import views
 from django.contrib.auth.views import LogoutView,LoginView
 from django.urls import path,include
-from insurance.views import custom_dashboard
+from insurance.views import custom_dashboard, logout_redirect
 
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
-    # Add the following line to serve media files during development
-    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 
     path('customer/',include('customer.urls')),
     
-    path('',views.home_view,name=''),
-    path('logout', LogoutView.as_view(template_name='insurance/logout.html'),name='logout'),
+    path('',views.home_view,name='home'),
+    path('logout/', LogoutView.as_view(template_name='insurance/logout.html'), name='logout'),
+    path('logout-redirect/', views.logout_redirect, name='logout_redirect'),
     path('aboutus', views.aboutus_view),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
@@ -59,9 +57,13 @@ urlpatterns = [
     path('reject-request/<int:pk>', views.disapprove_request_view,name='reject-request'),
 
     path('admin-question', views.admin_question_view,name='admin-question'),
+    path('admin-customerforms', views.admin_customerforms,name='admin_customerforms'),
+    path('delete_selected', views.delete_selected, name='delete_selected'),
+    
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),
 
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve static files from Google Cloud Storage in production
+if not settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

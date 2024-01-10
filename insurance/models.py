@@ -51,15 +51,15 @@ class PolicyRecord(models.Model):
     
     @property
     def cover_start(self):
-        return self.policy.cover_start  
+        return self.Policy.cover_start 
     
     @property
     def cover_end(self):
-        return self.policy.cover_end  
+        return self.Policy.cover_end  
     
     @property
     def tenure(self):
-        return self.policy.tenure
+        return self.Policy.tenure
     
     def __str__(self):
         return f"{self.customer} - {self.Policy} - {self.status}"
