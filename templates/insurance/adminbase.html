@@ -15,6 +15,7 @@
       margin: 0;
       padding: 0;
       font-family: "Titillium Web", sans-serif;
+      overflow: auto;
     }
 
     header {
@@ -69,6 +70,7 @@
       height: 100%;
       transition: 0.5s;
       transition-property: left;
+      overflow-y: auto; /* Enable vertical scrolling */
     }
 
     .sidebar .profile_image {
@@ -88,7 +90,7 @@
       color: #ffffff;
       display: block;
       width: 100%;
-      line-height: 60px;
+      line-height: 53px;
       text-decoration: none;
       padding-left: 40px;
       box-sizing: border-box;
@@ -149,7 +151,8 @@
 
     .content {
       margin-left: 250px;
-      background: url(background.png) no-repeat;
+      background: url(https://storage.googleapis.com/ko_gae_bucket/media/pexels-kindel-media-7688374.jpg) no-repeat;
+      backdrop-filter: blur(100px); /* Adjust the blur radius as needed */
       background-color: #b9dce1;
       background-position: center;
       background-size: cover;
@@ -168,21 +171,44 @@
     }
 
     .username {
-    color: white;
-    /* Add any additional styling as needed */
-    border: 2px solid red;
-    margin-top: -10px;
-    border-radius: 20%; /* Make it circular */
-    padding: 8px; /* Adjust the padding as needed */
-    display: inline-block; /* Ensures the border wraps around the text */
-    font-family: "Titillium Web", sans-serif;
+      color: white;
+      /* Add any additional styling as needed */
+      border: 2px solid red;
+      margin-top: -10px;
+      border-radius: 20%; /* Make it circular */
+      padding: 8px; /* Adjust the padding as needed */
+      display: inline-block; /* Ensures the border wraps around the text */
+      font-family: "Titillium Web", sans-serif;
+      background-color: #000000;
     }
-  </style>
+
+    .dropdown-options {
+      display: none;
+      position: absolute;
+      overflow: auto;
+      background-color:#fff;
+      border-radius:5px;
+      box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+      width: 80%;
+      background-color: #2e2e2e;
+      border-color: #c2e1b9;
+      margin-left: 20px;
+      font-size: 13px;
+    }
+
+    .dropdown:hover .dropdown-options {
+      display: block;
+      
+    }
+
+    .dropdown-options a {
+      display: block;
+    }
+  
+    </style>
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
-
-
 </head>
 
 <body>
@@ -191,7 +217,7 @@
   <!--header area start-->
   <header style="padding-top: 0px;">
     <label for="check">
-      <i style=" " class="fas fa-bars" id="sidebar_btn"></i>
+      <i class="fas fa-bars" id="sidebar_btn"></i>
     </label>
     <div class="left_area">
       <img src="https://storage.googleapis.com/ko_gae_bucket/logos/MinetLogoBlack.png" alt="Minet Botswana Logo" class="logo-image">
@@ -211,14 +237,11 @@
   
   <!--sidebar start-->
   <div class="sidebar" style="
-    margin-top: 50px;
-">
+    margin-top: 50px;">
     <center>
-
-      <img src="https://storage.googleapis.com/ko_gae_bucket/logos/admin.png" class="profile_image" alt="">
+      <img src="https://storage.googleapis.com/ko_gae_bucket/logos/admin.png" class="profile_image" alt="" style="margin-top: 10px;">
       <h4 class="u" >Staff</h4>
       <p class="username">{{ user.username }}</p>
-
     </center>
 
     <a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
@@ -226,6 +249,14 @@
     <a href="/admin-category"><i class="fas fa-list-alt"></i><span>Category</span></a>
     <a href="/admin-policy"><i class="fab fa-product-hunt"></i><span>Policy</span></a>
     <a href="/admin-question"><i class="fas fa-question-circle"></i><span>Questions</span></a>
+    <div class="dropdown">
+      <a style="color: #ffffff;" ><i class="fas fa-file-pdf"></i><span>Customer forms</span></a>
+      <div class="dropdown-options">
+        <a href="/admin-customerforms">KYC </a>
+        <a href="#">Direct Debit</a>
+      </div>
+    </div>
+
     
 
 
@@ -259,7 +290,7 @@
         // Redirect the user to the login page
         window.location.href = '/adminlogin'; // Replace '/login' with your actual login page URL
     });
-</script>
+  </script>
 </body>
 
 </html>

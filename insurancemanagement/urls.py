@@ -57,6 +57,8 @@ urlpatterns = [
     path('reject-request/<int:pk>', views.disapprove_request_view,name='reject-request'),
 
     path('admin-question', views.admin_question_view,name='admin-question'),
+    path('admin-customerforms', views.admin_customerforms,name='admin_customerforms'),
+    
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),
 
 ]
