@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.conf import settings
-from .models import Customer, KYCform, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance
+from .models import Customer, KYCform, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance, IncomeProof, ResidenceProof, CopyOfOmang
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status')
@@ -24,6 +24,10 @@ class CustomerAdmin(admin.ModelAdmin):
 
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(KYCform)
+admin.site.register(IncomeProof)
+admin.site.register(ResidenceProof)
+admin.site.register(CopyOfOmang)
+
 admin.site.register(DirectDebitForm)
 admin.site.register(HomeownersCover)
 admin.site.register(ThirdPartyCarInsurance)

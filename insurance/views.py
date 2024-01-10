@@ -364,6 +364,26 @@ def admin_customerforms(request):
     context = {'customer_data': customer_data}
     return render(request, 'insurance/admin_customerforms.html', context)
 
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+from .models import Customer
+
+@require_POST
+def delete_selected(request):
+    customer_ids = request.POST.getlist('selected_items')
+
+    try:
+        customers_to_delete = Customer.objects.filter(id__in=customer_ids)
+        customers_to_delete.delete()
+        messages.success(request, 'Selected items deleted successfully.')
+    except Exception as e:
+        messages.error(request, f'Error deleting items: {e}')
+
+    return redirect('insurance/admin_customerforms.html')
+
+
+
 def update_question_view(request,pk):
     question = models.Question.objects.get(id=pk)
     questionForm=forms.QuestionForm(instance=question)

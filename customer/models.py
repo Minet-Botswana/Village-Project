@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from django.core.files.base import ContentFile
 import uuid
+from django.db import transaction
 
 
 
@@ -70,9 +71,7 @@ class KYCform(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        if self.kyc_form:
-            return self.kyc_form.url
-        return None
+        return self.kyc_form if self.kyc_form else None
    
     def save(self, *args, **kwargs):
         if self.kyc_form:
@@ -118,10 +117,9 @@ class CopyOfOmang(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        if self.copy_of_omang:
-            return self.copy_of_omang.url
-        return None
-   
+        return self.copy_of_omang if self.copy_of_omang else None
+    
+    @transaction.atomic
     def save(self, *args, **kwargs):
         if self.copy_of_omang:
             # Generate a unique filename for each upload
@@ -155,6 +153,9 @@ class CopyOfOmang(models.Model):
         except Exception as e:
             print("Failed to upload!")
             return None
+            
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Copy of Omang {self.id}"
 
 # Proof Of Residence 
 class ResidenceProof(models.Model):
@@ -167,9 +168,7 @@ class ResidenceProof(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        if self.residence_proof:
-            return self.residence_proof.url
-        return None
+        return self.residence_proof if self.residence_proof else None
    
     def save(self, *args, **kwargs):
         if self.residence_proof:
@@ -190,6 +189,9 @@ class ResidenceProof(models.Model):
         except Exception as e:
             print(f"Error savingproof of residence Form instance: {e}")
             
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Residence Proof {self.id}"
+            
     @staticmethod
     def upload_form(file, filename):
         try:
@@ -203,7 +205,10 @@ class ResidenceProof(models.Model):
             return blob.public_url
         except Exception as e:
             print("Failed to upload!")
-            return None       
+            return None
+        
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Residence Proof {self.id}"     
 
 #Proof of Income Model
 class IncomeProof(models.Model):
@@ -216,9 +221,7 @@ class IncomeProof(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        if self.income_proof:
-            return self.income_proof.url
-        return None
+        return self.income_proof if self.income_proof else None
    
     def save(self, *args, **kwargs):
         if self.income_proof:
@@ -253,6 +256,9 @@ class IncomeProof(models.Model):
         except Exception as e:
             print("Failed to upload!")
             return None  
+        
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Income Proof {self.id}"
 
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
