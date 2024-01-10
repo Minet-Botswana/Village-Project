@@ -111,9 +111,9 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Profile Picture</th>
-          <th>ID #</th>
-          <th>Address</th>
+          <th>Mobile</th>
+          <th>ID No.</th>
+          <th>Email</th>
           <th>Update</th>
           <th>Delete</th>
         </tr>
@@ -121,7 +121,7 @@
       {% for t in customers %}
       <tr>
         <td>{{ t.get_name }}</td>
-        <td><img src="{% static t.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
+        <td>{{ t.mobile }}</td>
         <td>{{ t.id_number }}</td>
         <td>{{ t.address }}</td>
         <td><a class="btn btn-primary btn-xs" href="{% url 'update-customer' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>

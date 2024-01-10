@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 
+from google.cloud import storage
+from storages.backends.gcloud import GoogleCloudStorage
+from django.conf import settings
+import mimetypes
+from django.utils import timezone
+
+from django.core.files.base import ContentFile
+import uuid
+from django.db import transaction
+
+
+
 class Customer(models.Model):
     GENDER_CHOICES = [
         ('M', 'Male'),
@@ -22,7 +34,7 @@ class Customer(models.Model):
     ]
     
     user=models.OneToOneField(User,on_delete=models.CASCADE)
-    profile_pic= models.ImageField(upload_to='profile_pic/Customer/',null=True,blank=True)
+    #profile_pic= models.TextField(null=True, blank=True)
     address = models.CharField(max_length=40)
     mobile = models.CharField(max_length=20,null=False)
     
@@ -48,6 +60,7 @@ class Customer(models.Model):
     def __str__(self):
         return self.user.first_name
     
+from urllib.parse import quote  
 class KYCform(models.Model):
     # Link to the authenticated customer
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='kyc_form', unique=True)
@@ -58,18 +71,194 @@ class KYCform(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        if self.kyc_form:
-            return self.kyc_form.url
-        return None
-
-    def __str__(self):
-        return f"KYC Form - {self.customer.username}"
-    
+        return self.kyc_form if self.kyc_form else None
+   
     def save(self, *args, **kwargs):
+        if self.kyc_form:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.kyc_form.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.kyc_form, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.kyc_form.name = uploaded_url
+            else:
+                print("Failed to upload KYC form to Google Cloud Storage.")
+        
         try:
             super().save(*args, **kwargs)
         except Exception as e:
             print(f"Error saving KYC Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/KYC/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
+        
+class CopyOfOmang(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='copy_of_omang', unique=True)
+    # Attachments
+    copy_of_omang = models.FileField(upload_to='Forms/CopyOfOmang/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    submission_date = models.DateField(auto_now_add=True)
+
+    def get_download_url(self):
+        return self.copy_of_omang if self.copy_of_omang else None
+    
+    @transaction.atomic
+    def save(self, *args, **kwargs):
+        if self.copy_of_omang:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.copy_of_omang.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.copy_of_omang, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.copy_of_omang.name = uploaded_url
+            else:
+                print("Failed to upload Copy Of Omang  form to Google Cloud Storage.")
+        
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving Copy of Omang Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/CopyOfOmang/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
+            
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Copy of Omang {self.id}"
+
+# Proof Of Residence 
+class ResidenceProof(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='residence_proof', unique=True)
+    # Attachments
+    residence_proof = models.FileField(upload_to='Forms/ResidenceProof/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    submission_date = models.DateField(auto_now_add=True)
+
+    def get_download_url(self):
+        return self.residence_proof if self.residence_proof else None
+   
+    def save(self, *args, **kwargs):
+        if self.residence_proof:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.residence_proof.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.residence_proof, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.residence_proof.name = uploaded_url
+            else:
+                print("Failed to upload proof of residence form to Google Cloud Storage.")
+        
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error savingproof of residence Form instance: {e}")
+            
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Residence Proof {self.id}"
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/ResidenceProof/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
+        
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Residence Proof {self.id}"     
+
+#Proof of Income Model
+class IncomeProof(models.Model):
+    # Link to the authenticated customer
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='income_proof', unique=True)
+    # Attachments
+    income_proof = models.FileField(upload_to='Forms/IncomeProof/', null=True, blank=True, validators=[
+        FileExtensionValidator(allowed_extensions=['pdf'])
+    ])
+    submission_date = models.DateField(auto_now_add=True)
+
+    def get_download_url(self):
+        return self.income_proof if self.income_proof else None
+   
+    def save(self, *args, **kwargs):
+        if self.income_proof:
+            # Generate a unique filename for each upload
+            filename = f"{uuid.uuid4()}/{self.income_proof.name}"
+            
+            # Upload the file to Google Cloud Storage
+            uploaded_url = self.upload_form(self.income_proof, filename)
+            
+            # Save the URL path in the model
+            if uploaded_url:
+                self.income_proof.name = uploaded_url
+            else:
+                print("Failed to upload proof of income form to Google Cloud Storage.")
+        
+        try:
+            super().save(*args, **kwargs)
+        except Exception as e:
+            print(f"Error saving proof of income Form instance: {e}")
+            
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/IncomeProof/' + filename)
+            #blob.upload_from_file(file)
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None  
+        
+    def __str__(self):
+        return f"{self.customer.user.get_full_name()} - Income Proof {self.id}"
 
 class DirectDebitForm(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='direct_debit_forms')
@@ -81,9 +270,6 @@ class DirectDebitForm(models.Model):
         if self.file_upload:
             return self.file_upload.url
         return None
-
-    def __str__(self):
-        return f"Direct Debit Form - {self.customer.get_name}"
     
     def save(self, *args, **kwargs):
         # Additional logic before saving, if needed
@@ -113,8 +299,6 @@ class HomeownersCover(models.Model):
             return self.title_deed.url
         return None
 
-    def __str__(self):
-        return f"Homeowners Cover - {self.customer.username}"
     
     def save(self, *args, **kwargs):
         try:
@@ -152,9 +336,6 @@ class ThirdPartyCarInsurance(models.Model):
         if self.blue_book:
             return self.blue_book.url
         return None
-
-    def __str__(self):
-        return f"Third Party Car Cover - {self.customer.username}"
     
     def save(self, *args, **kwargs):
         try:

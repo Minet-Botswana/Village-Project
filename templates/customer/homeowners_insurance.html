@@ -5,9 +5,11 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDV1Vw9jedE30w1SNV6nGsT4H8pO_qbhxQ&libraries=places" defer></script>
-        <script src=
-"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
-    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <!-- Add these lines to the head section of your HTML template -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 
 <style>
     body {
@@ -153,6 +155,10 @@
         <label for="{{ homeownersForm.geo_location.id_for_label }}">Geo Location</label>
         <input type="text" name="{{ homeownersForm.geo_location.name }}" id="{{ homeownersForm.geo_location.id }}" class="form-control" required>
         <!-- You may include a button to trigger Google Maps API for Geo Location here -->
+        <!-- Map container -->
+        <div id="map" style="height: 300px;"></div>
+            <!-- Geolocation input field -->
+            <input type="text" id="geolocation" name="geolocation" placeholder="Select location" />
     </div>
 
     <div class="form-group">
@@ -209,5 +215,69 @@
       }
     });
   </script>
+  <script>
+    var map = L.map('map').setView([0, 0], 2);  // Initial map view
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    var marker;
+
+    // Function to update the geolocation input field based on marker position
+    function updateGeolocationField(latlng) {
+        document.getElementById('geolocation').value = latlng.lat + ', ' + latlng.lng;
+    }
+
+    // Function to handle map click event
+    function onMapClick(e) {
+        if (marker) {
+            map.removeLayer(marker);  // Remove existing marker
+        }
+
+        marker = L.marker(e.latlng).addTo(map);  // Add new marker
+        updateGeolocationField(e.latlng);  // Update geolocation input field
+    }
+
+    // Attach the onMapClick function to the map click event
+    map.on('click', onMapClick);
+
+    // Initialize map if geolocation input field is already populated
+    var geolocationInput = document.getElementById('geolocation');
+    if (geolocationInput.value) {
+        var coordinates = geolocationInput.value.split(', ');
+        var initialLatLng = L.latLng(parseFloat(coordinates[0]), parseFloat(coordinates[1]));
+        marker = L.marker(initialLatLng).addTo(map);
+        map.setView(initialLatLng, 15);
+    }
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to both input fields
+        var outerInput = document.getElementById("{{ homeownersForm.geo_location.id }}");
+        var innerInput = document.getElementById("geolocation");
+
+        if (outerInput && innerInput) {
+            // Log the found elements for debugging
+            console.log("Outer Input:", outerInput);
+            console.log("Inner Input:", innerInput);
+
+            // Check if the elements are not null before adding the event listener
+            if (innerInput.addEventListener) {
+                // Listen for input changes on the inner input field
+                innerInput.addEventListener("input", function () {
+                    // Update the value of the outer input field
+                    outerInput.value = this.value;
+                });
+            } else {
+                console.error("AddEventListener is not supported. Check your browser compatibility.");
+            }
+        } else {
+            console.error("Could not find one or both of the input fields. Check the element IDs.");
+        }
+    });
+</script>
+
+
+
 
 {% endblock content %}

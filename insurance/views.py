@@ -24,7 +24,8 @@ from django.http import JsonResponse
 
 
 
-@login_required
+#@login_required
+@login_required(login_url='adminlogin')
 def custom_dashboard(request):
     user = request.user
     return render(request, 'insurance/adminbase.html', {'user': user})
@@ -44,6 +45,9 @@ def afterlogin_view(request):
         return redirect('customer/customer-dashboard')
     else:
         return redirect('admin-dashboard')
+    
+def logout_redirect(request):
+        return redirect('logout')
 
 
 
@@ -335,6 +339,50 @@ def disapprove_request_view(request,pk):
 def admin_question_view(request):
     questions = models.Question.objects.all()
     return render(request,'insurance/admin_question.html',{'questions':questions})
+
+from customer.models import Customer, KYCform, CopyOfOmang, ResidenceProof, IncomeProof
+
+def admin_customerforms(request):
+    # Fetch all customers and related documents
+    customers = Customer.objects.all()
+    
+    customer_data = []
+    for customer in customers:
+        kyc_form = KYCform.objects.filter(customer=customer).first()
+        copy_of_omang = CopyOfOmang.objects.filter(customer=customer).first()
+        residence_proof = ResidenceProof.objects.filter(customer=customer).first()
+        income_proof = IncomeProof.objects.filter(customer=customer).first()
+        
+        customer_data.append({
+            'customer': customer,
+            'kyc_form': kyc_form,
+            'copy_of_omang': copy_of_omang,
+            'residence_proof': residence_proof,
+            'income_proof': income_proof,
+        })
+    
+    context = {'customer_data': customer_data}
+    return render(request, 'insurance/admin_customerforms.html', context)
+
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+from .models import Customer
+
+@require_POST
+def delete_selected(request):
+    customer_ids = request.POST.getlist('selected_items')
+
+    try:
+        customers_to_delete = Customer.objects.filter(id__in=customer_ids)
+        customers_to_delete.delete()
+        messages.success(request, 'Selected items deleted successfully.')
+    except Exception as e:
+        messages.error(request, f'Error deleting items: {e}')
+
+    return redirect('insurance/admin_customerforms.html')
+
+
 
 def update_question_view(request,pk):
     question = models.Question.objects.get(id=pk)
