@@ -556,8 +556,8 @@ from .forms import HomeownersCoverForm
 from django.contrib.auth.decorators import login_required
 
 @login_required
-def update_homeowners_cover(request, cover_id):
-    homeowners_cover = get_object_or_404(HomeownersCover, id=cover_id)
+def update_homeowners_cover(request, id):
+    homeowners_cover = get_object_or_404(HomeownersCover, id=id)
 
     if request.method == 'POST':
         form = HomeownersCoverForm(request.POST, request.FILES, instance=homeowners_cover)
@@ -565,25 +565,23 @@ def update_homeowners_cover(request, cover_id):
             # Save the form to get the updated title_deed URL
             updated_cover = form.save(commit=False)
 
-            # Upload title_deed to Google Cloud Storage
-            if updated_cover.title_deed:
-                file_name = updated_cover.title_deed.name
-                file = updated_cover.title_deed.file
-                public_url = HomeownersCover.upload_form(file, file_name)
-
-                # Set the title_deed field to the Google Cloud Storage URL
+            # Check if a new title_deed file is provided
+            if 'title_deed' in request.FILES:
+                file = request.FILES['title_deed']
+                # Upload title_deed to Google Cloud Storage or other storage
+                public_url = HomeownersCover.upload_form(file, file.name)
+                # Set the title_deed field to the storage URL
                 updated_cover.title_deed.name = public_url
 
-            # Save the updated cover with the Google Cloud Storage URL
+            # Save the updated cover with the new title_deed URL
             updated_cover.save()
 
             # Redirect to a success page or display a success message
-            return redirect('success_page')  # Replace 'success_page' with the actual URL name
+            return redirect('customer:display_user_homeowners_covers')
     else:
         form = HomeownersCoverForm(instance=homeowners_cover)
 
     return render(request, 'customer/update_homeowners_cover.html', {'form': form, 'homeowners_cover': homeowners_cover})
-
 
 from django.contrib.auth import logout
 from django.shortcuts import redirect

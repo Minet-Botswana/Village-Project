@@ -75,12 +75,110 @@
             box-sizing: border-box;
         }
 
+
+
+        body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: 1rem;
+        font-weight: 400;
+        color: #212529;
+        text-align: left;
+        background-color: #f8f9fa; /* Set background color as needed */
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 50px 20px; /* Adjust padding as needed */
+    }
+
+    .form-card {
+        width: 90%; /* Adjust width as needed */
+        max-width: 800px; /* Set maximum width for responsiveness */
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
+        border-radius: 10px; /* Add border radius for rounded corners */
+    }
+
+    .form-header {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .h1, h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #e21a22;
+        border-color: #e21a22;
+    }
+
+    .btn-primary:hover {
+        color: #000000;
+        background-color: #ffffff;
+        border-color: #b91d23;
+    }
+    .page-title {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+    .change {
+      cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 40%;
+      width: 20px;
+      text-align: center;
+      padding: 5px;
+      margin-left: 8px;
+    }
+    .dark {
+      background-color: #222;
+      color: #e6e6e6;
+    }
+
+
     </style>
     <title>Your Homeowners Covers</title>
 </head>
 <body>
-    <h2>Your Homeowners Covers</h2>
 
+    
+    <div class="form-container">
+        <div class="card form-card">
+            <div class="form-header">
+                <h1>Update Homeowners Insurance Details</h1>
+            </div>
+            <div class="form-body">
     {% if homeowners_covers %}
         <ul>
             {% for homeowners_cover in homeowners_covers %}
@@ -97,7 +195,7 @@
                     
                     {% if homeowners_cover.title_deed %}
                         <p>Title Deed: Present</p>
-                        <a href="{{ homeowners_cover.get_download_url }}">Download Title Deed</a>
+                        <a href="{{ homeowners_cover.get_download_url }}">View Title Deed</a>
                     {% else %}
                         <p>Title Deed: Not Present</p>
                     {% endif %}
@@ -107,15 +205,17 @@
                     <!-- Edit Form -->
                     <div class="edit-form" id="editForm{{ homeowners_cover.id }}">
                         <br>
-                        <br>
-                        <p>FILL IN THE FIELDS BELOW TO EDIT YOUR DATA FROM THE FORM</p>
-                        <form method="post" action="{% url 'customer:update_homeowners_cover' homeowners_cover.id %}">
+                        <p style="text-align: center; font-size: 18px; color: #e21a22; font-weight: bold;">
+                             <span style="color: #e21a22; font-weight: bold;">Update</span> your information by filling in the fields below.
+                        </p>
+                        
+                        <form method="post" action="{% url 'customer:update_homeowners_cover' homeowners_cover.id %}" enctype="multipart/form-data" >
                             {% csrf_token %}
                             <label for="geoLocation">Geo-location</label>
-                            <input type="text" name="geoLocation" value="{{ homeowners_cover.geo_location }}" required>
+                            <input type="text" name="geo_location" value="{{ homeowners_cover.geo_location }}" required>
 
                             <label for="plotNumber">Plot Number</label>
-                            <input type="text" name="plotNumber" value="{{ homeowners_cover.plot_number }}" required>
+                            <input type="text" name="plot_number" value="{{ homeowners_cover.plot_number }}" required>
 
                             <label for="village">Village</label>
                             <input type="text" name="village" value="{{ homeowners_cover.village }}" required>
@@ -151,6 +251,9 @@
                 </li>
             {% endfor %}
         </ul>
+    </div>
+</div>
+</div>
     {% else %}
         <p class="no-covers">No homeowners covers found for your account.</p>
     {% endif %}
