@@ -136,7 +136,9 @@
                                 {% if homeowners_cover.title_deed %}
                                     <br>
                                     <label>Current Title Deed:</label>
-                                    <embed src="{{ STATIC_URL }}{{ homeowners_cover.title_deed.url }}" type="application/pdf" width="100%" height="500px">
+                                    <!--embed src="{{ homeowners_cover.title_deed}}" type="application/pdf" width="100%" height="500px"-->
+                                        <iframe src="{{ homeowners_cover.title_deed}}"
+                                           style="width:600px; height:500px;" frameborder=""></iframe>
 
                                 {% endif %}
                             </div>
