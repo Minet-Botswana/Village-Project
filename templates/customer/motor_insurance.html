@@ -181,65 +181,58 @@
             </form-->
             <!-- customer/forms.html -->
 
-<form method="POST" action="{% url 'customer:create_thirdpartycar_cover' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.make.id_for_label }}">Make</label>
-        <input type="text" name="{{ thirdpartycarForm.make.name }}" id="{{ thirdpartycarForm.make.id }}" class="form-control" required>
-        <!-- You may include a button to trigger Google Maps API for Geo Location here -->
-    </div>
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.model.id_for_label }}">Model</label>
-        <input type="text" name="{{ thirdpartycarForm.model.name }}" id="{{ thirdpartycarForm.model.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.year_of_manufacture.id_for_label }}">Year of Manufacture</label>
-        <input type="text" name="{{ thirdpartycarForm.year_of_manufacture.name }}" id="{{ thirdpartycarForm.year_of_manufacture.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.registration_number.id_for_label }}">Registration Number</label>
-        <input type="text" name="{{ thirdpartycarForm.registration_number.name }}" id="{{ thirdpartycarForm.registration_number.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.registered_owner.id_for_label }}">Registered Owner</label>
-        <input type="text" name="{{ thirdpartycarForm.registered_owner.name }}" id="{{ thirdpartycarForm.registered_owner.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.relationship_to_owner.id_for_label }}">Relationship to Owner</label>
-        <input type="text" name="{{ thirdpartycarForm.relationship_to_owner.name }}" id="{{ thirdpartycarForm.relationship_to_owner.id }}" class="form-control" required>
-    </div>
-
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.blue_book.id_for_label }}">Registration Book</label>
-        <input type="file" name="{{ thirdpartycarForm.blue_book.name }}" id="{{ thirdpartycarForm.blue_book.id }}" class="form-control" required>
-        {{ thirdpartycarForm.blue_book.errors }}
-    </div>
-
-    <!--div class="form-group">
-        <label for="{{ thirdpartycarForm.car_type.id_for_label }}"> Car Type (Import or Local)</label>
-        <input type="text" name="{{ thirdpartycarForm.car_type.name }}" id="{{ thirdpartycarForm.car_type.id }}" class="form-control">
-        {{ thirdpartycarForm.car_type.errors }}
-    </div-->
-    <div class="form-group">
-        <label for="{{ thirdpartycarForm.car_type.id_for_label }}">Car Type (Import or Local)</label>
-        <select name="{{ thirdpartycarForm.car_type.name }}" id="{{ thirdpartycarForm.car_type.id }}" class="form-control" required>
-            <option value=" ">Select car type</option>
-            <option value="Local">Local</option>
-            <option value="Import">Import</option>  
-        </select>
-        {{ thirdpartycarForm.car_type.errors }}
-    </div>
-    
-
-    <button type="submit" class="btn btn-primary">Submit Form</button>
-  </form>
-  <a href="/customer/display_user_thirdparty_covers/"> View and edit details</a>
+            <form method="POST" action="{% url 'customer:create_thirdpartycar_cover' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.make.id_for_label }}">Make</label>
+                    <input type="text" name="{{ thirdpartycarForm.make.name }}" id="{{ thirdpartycarForm.make.id }}" class="form-control" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.model.id_for_label }}">Model</label>
+                    <input type="text" name="{{ thirdpartycarForm.model.name }}" id="{{ thirdpartycarForm.model.id }}" class="form-control" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.year_of_manufacture.id_for_label }}">Year of Manufacture</label>
+                    <input type="number" name="{{ thirdpartycarForm.year_of_manufacture.name }}" id="{{ thirdpartycarForm.year_of_manufacture.id }}" class="form-control" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.registration_number.id_for_label }}">Registration Number</label>
+                    <input type="text" name="{{ thirdpartycarForm.registration_number.name }}" id="{{ thirdpartycarForm.registration_number.id }}" class="form-control" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.registered_owner.id_for_label }}">Registered Owner</label>
+                    <input type="text" name="{{ thirdpartycarForm.registered_owner.name }}" id="{{ thirdpartycarForm.registered_owner.id }}" class="form-control" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.relationship_to_owner.id_for_label }}">Relationship to Owner</label>
+                    <input type="text" name="{{ thirdpartycarForm.relationship_to_owner.name }}" id="{{ thirdpartycarForm.relationship_to_owner.id }}" class="form-control" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.blue_book.id_for_label }}">Registration Book</label>
+                    <input type="file" name="{{ thirdpartycarForm.blue_book.name }}" id="{{ thirdpartycarForm.blue_book.id }}" class="form-control" required>
+                    {{ thirdpartycarForm.blue_book.errors }}
+                </div>
+            
+                <div class="form-group">
+                    <label for="{{ thirdpartycarForm.car_type.id_for_label }}">Car Type (Import or Local)</label>
+                    <select name="{{ thirdpartycarForm.car_type.name }}" id="{{ thirdpartycarForm.car_type.id }}" class="form-control" required>
+                        <option value="" selected>Select car type</option>
+                        <option value="Local">Local</option>
+                        <option value="Import">Import</option>
+                    </select>
+                    {{ thirdpartycarForm.car_type.errors }}
+                </div>
+            
+                <button type="submit" class="btn btn-primary">Submit Form</button>
+              </form>
+              <a href="/customer/display_user_thirdparty_covers/" class="btn btn-secondary">View and Edit Details</a>
 
         </div>
     </div>

@@ -357,7 +357,7 @@ class ThirdPartyCarInsurance(models.Model):
     registration_number = models.CharField(max_length=50, blank=True, null=True)
     registered_owner = models.CharField(max_length=50, blank=True, null=True)
     # Attachments
-    blue_book = models.FileField(upload_to='Forms/ThirdPartyCarCover/', null=True, blank=True, validators=[
+    blue_book = models.FileField(max_length=255, null=True, blank=True, validators=[
         FileExtensionValidator(allowed_extensions=['pdf'])
     ])
     car_type = models.CharField(max_length=10, choices=CAR_TYPE_CHOICES, default='')

@@ -340,7 +340,7 @@ def admin_question_view(request):
     questions = models.Question.objects.all()
     return render(request,'insurance/admin_question.html',{'questions':questions})
 
-from customer.models import Customer, KYCform, CopyOfOmang, ResidenceProof, IncomeProof, HomeownersCover
+from customer.models import Customer, KYCform, CopyOfOmang, ResidenceProof, IncomeProof, HomeownersCover, ThirdPartyCarInsurance
 
 def admin_customerforms(request):
     # Fetch all customers and related documents
@@ -380,6 +380,23 @@ def admin_homeownersview(request):
     
     context = {'homeowners_data': homeowners_data}
     return render(request, 'insurance/admin_homeownersview.html', context)
+
+def admin_thirdpartyview(request):
+    # Fetch all customers and related documents
+    customers = Customer.objects.all()
+    
+    thirdparty_data = []
+    
+    for customer in customers:
+        thirdparty_cover = ThirdPartyCarInsurance.objects.filter(customer=customer).first()
+        
+        thirdparty_data.append({
+            'customer': customer,
+            'thirdparty_cover': thirdparty_cover,
+        })
+    
+    context = {'thirdparty_data': thirdparty_data}
+    return render(request, 'insurance/admin_thirdpartyview.html', context)
 
 
 from django.shortcuts import render, redirect

@@ -245,7 +245,8 @@ def create_homeowners_cover(request):
 
             homeowners_cover.customer = customer_instance
             homeowners_cover.save()
-
+            return redirect('customer:display_user_homeowners_covers')
+        
             print("Form data:", request.POST)  # Debugging line
             print("Saved homeowners_cover:", homeowners_cover.__dict__)  # Debugging line
 
@@ -272,6 +273,7 @@ def display_user_thirdparty_covers(request):
 
 from .forms import ThirdPartyCarInsuranceForm
 from django.shortcuts import get_object_or_404
+
 @login_required
 def create_thirdpartycar_cover(request):
     thirdpartycarForm = ThirdPartyCarInsuranceForm()
@@ -289,9 +291,10 @@ def create_thirdpartycar_cover(request):
 
             thirdpartycar_cover.customer = customer_instance
             thirdpartycar_cover.save()
-
             print("Form data:", request.POST)  # Debugging line
             print("Saved thirdpartycar_cover:", thirdpartycar_cover.__dict__)  # Debugging line
+            return redirect('customer:display_user_thirdparty_covers')
+
 
         else:
             print(thirdpartycarForm.errors)  # Print form errors for debugging
@@ -529,26 +532,29 @@ def update_thirdparty_cover(request, id):
     if request.method == 'POST':
         form = ThirdPartyCarInsuranceForm(request.POST, request.FILES, instance=thirdparty_cover)
         if form.is_valid():
-            # Save the form to get the updated title_deed URL
+            # Save the form to get the updated blue_book URL
             updated_cover = form.save(commit=False)
 
-            # Check if a new title_deed file is provided
-            if 'title_deed' in request.FILES:
-                file = request.FILES['title_deed']
-                # Upload title_deed to Google Cloud Storage or other storage
+            # Check if a new blue_book file is provided
+            if 'blue_book' in request.FILES:
+                file = request.FILES['blue_book']
+                # Upload blue_book to Google Cloud Storage or other storage
                 public_url = ThirdPartyCarInsurance.upload_form(file, file.name)
-                # Set the title_deed field to the storage URL
-                updated_cover.title_deed.name = public_url
+                # Set the blue_book field to the storage URL
+                updated_cover.blue_book.name = public_url
 
-            # Save the updated cover with the new title_deed URL
-            updated_cover.save()
+                # Save the updated cover with the new blue_book URL
+                updated_cover.save()
+                print("Updated Cover Data:", updated_cover.__dict__)
 
-            # Redirect to a success page or display a success message
-            return redirect('customer:display_user_thirdparty_covers')
+                # Redirect to a success page or display a success message 
+                return redirect('customer:display_user_thirdparty_covers')
     else:
         form = ThirdPartyCarInsuranceForm(instance=thirdparty_cover)
 
     return render(request, 'customer/update_thirdparty_cover.html', {'form': form, 'thirdparty_cover': thirdparty_cover})
+
+
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 

@@ -190,17 +190,12 @@
                     <p>Ward: {{ homeowners_cover.ward }}</p>
                     <p>District: {{ homeowners_cover.district }}</p>
                     <p>Financial Interest: {{ homeowners_cover.financial_interest }}</p>
-                    
-                    <!-- Add more fields as needed -->
-                    
                     {% if homeowners_cover.title_deed %}
                         <p>Title Deed: Present</p>
                         <a href="{{ homeowners_cover.get_download_url }}">View Title Deed</a>
                     {% else %}
                         <p>Title Deed: Not Present</p>
                     {% endif %}
-                    
-                    <!-- Add more conditional checks for other fields if needed -->
 
                     <!-- Edit Form -->
                     <div class="edit-form" id="editForm{{ homeowners_cover.id }}">
@@ -245,7 +240,8 @@
 
                             <!-- Add more fields as needed -->
 
-                            <button type="submit"> Update </button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+
                         </form>
                     </div>
                 </li>
