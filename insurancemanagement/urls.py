@@ -58,6 +58,7 @@ urlpatterns = [
 
     path('admin-question', views.admin_question_view,name='admin-question'),
     path('admin-customerforms', views.admin_customerforms,name='admin_customerforms'),
+    path('admin-homeownersview', views.admin_homeownersview,name='admin_homeownersview'),
     path('delete_selected', views.delete_selected, name='delete_selected'),
     
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),

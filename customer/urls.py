@@ -36,6 +36,8 @@ urlpatterns = [
     
     # Example URL pattern in urls.py with namespace
     path('display_user_homeowners_covers/', views.display_user_homeowners_covers, name='display_user_homeowners_covers'),
-    path('update_homeowners_cover/<int:id>/', views.update_homeowners_cover, name='update_homeowners_cover'),
+    path('display_user_thirdparty_covers/', views.display_user_thirdparty_covers, name='display_user_thirdparty_covers'),
+    path('update_thirdparty_cover/<int:id>/', views.update_thirdparty_cover, name='update_thirdparty_cover'),
+    path('update_thirdparty_cover/<int:id>/', views.update_thirdparty_cover, name='update_thirdparty_cover'),
 
 ]
