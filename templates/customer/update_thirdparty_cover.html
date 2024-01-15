@@ -168,7 +168,7 @@
 
 
     </style>
-    <title>Your Homeowners Covers</title>
+    <title>Your thirdparty Covers</title>
 </head>
 <body>
 
@@ -176,63 +176,69 @@
     <div class="form-container">
         <div class="card form-card">
             <div class="form-header">
-                <h1>Update Homeowners Insurance Details</h1>
+                <h1>Thirdparty Insurance Details</h1>
             </div>
             <div class="form-body">
-    {% if homeowners_covers %}
+    {% if thirdparty_covers %}
         <ul>
-            {% for homeowners_cover in homeowners_covers %}
+            {% for thirdparty_cover in thirdparty_covers %}
                 <li>
-                    <button class="edit-btn" onclick="toggleEditForm('{{ homeowners_cover.id }}')">Edit</button>
-                    <p>Geo-location: {{ homeowners_cover.geo_location }}</p>
-                    <p>Plot Number: {{ homeowners_cover.plot_number }}</p>
-                    <p>Village: {{ homeowners_cover.village }}</p>
-                    <p>Ward: {{ homeowners_cover.ward }}</p>
-                    <p>District: {{ homeowners_cover.district }}</p>
-                    <p>Financial Interest: {{ homeowners_cover.financial_interest }}</p>
-                    {% if homeowners_cover.title_deed %}
-                        <p>Title Deed: Present</p>
-                        <a href="{{ homeowners_cover.get_download_url }}">View Title Deed</a>
+                    <button class="edit-btn" onclick="toggleEditForm('{{ thirdparty_cover.id }}')">Edit</button>
+                    <p>Make: {{ thirdparty_cover.make }}</p>
+                    <p>Model: {{ thirdparty_cover.model }}</p>
+                    <p>Year: {{ thirdparty_cover.year_of_manufacture }}</p>
+                    <p>Reg. No: {{ thirdparty_cover.registration_number }}</p>
+                    <p>Relatonship to Owner: {{ thirdparty_cover.relationship_to_owner }}</p>
+                    <p>Car Type: {{ thirdparty_cover.car_type }}</p>
+                    {% if thirdparty_cover.blue_book %}
+                        <p>Registration Book: Present</p>
+                        <a href="{{ thirdparty_cover.get_download_url }}">View Registration Book</a>
                     {% else %}
-                        <p>Title Deed: Not Present</p>
+                        <p>Registration Book: Not Present</p>
                     {% endif %}
 
                     <!-- Edit Form -->
-                    <div class="edit-form" id="editForm{{ homeowners_cover.id }}">
+                    <div class="edit-form" id="editForm{{ thirdparty_cover.id }}">
                         <br>
                         <p style="text-align: center; font-size: 18px; color: #e21a22; font-weight: bold;">
                              <span style="color: #e21a22; font-weight: bold;">Update</span> your information by filling in the fields below.
                         </p>
                         
-                        <form method="post" action="{% url 'customer:update_homeowners_cover' homeowners_cover.id %}" enctype="multipart/form-data" >
+                        <form method="post" action="{% url 'customer:update_thirdparty_cover' thirdparty_cover.id %}" enctype="multipart/form-data" >
                             {% csrf_token %}
-                            <label for="geoLocation">Geo-location</label>
-                            <input type="text" name="geo_location" value="{{ homeowners_cover.geo_location }}" required>
+                            <label for="make">Make</label>
+                            <input type="text" name="make" value="{{ thirdparty_cover.make }}" required>
 
-                            <label for="plotNumber">Plot Number</label>
-                            <input type="text" name="plot_number" value="{{ homeowners_cover.plot_number }}" required>
+                            <label for="model">Model</label>
+                            <input type="text" name="model" value="{{ thirdparty_cover.model }}" required>
 
-                            <label for="village">Village</label>
-                            <input type="text" name="village" value="{{ homeowners_cover.village }}" required>
+                            <label for="year_of_manufacture">Year</label>
+                            <input type="text" name="year_of_manufacture" value="{{ thirdparty_cover.year_of_manufacture }}" required>
 
-                            <label for="ward">Ward</label>
-                            <input type="text" name="ward" value="{{ homeowners_cover.ward }}" required>
+                            <label for="registration_number">Reg. No.</label>
+                            <input type="text" name="registration_number" value="{{ thirdparty_cover.registration_number }}" required>
 
-                            <label for="district">District</label>
-                            <input type="text" name="district" value="{{ homeowners_cover.district }}" required>
+                            <label for="relationship_to_owner">Relatonship to Owner</label>
+                            <input type="text" name="relationship_to_owner" value="{{ thirdparty_cover.relationship_to_owner}}" required>
 
-                            <label for="financial_interest">Financial Interest</label>
-                            <input type="text" name="financial_interest" value="{{ homeowners_cover.financial_interest }}" required>
+                            <div class="form-group">
+                                <label for="{{ thirdpartycarForm.car_type.id_for_label }}">Car Type (Import or Local)</label>
+                                <select name="{{ thirdpartycarForm.car_type.name }}" id="{{ thirdpartycarForm.car_type.id }}" class="form-control" required>
+                                    <option value="" selected>Select car type</option>
+                                    <option value="Local">Local</option>
+                                    <option value="Import">Import</option>
+                                </select>
+                                {{ thirdpartycarForm.car_type.errors }}
+                            </div>
 
                             <div class="form-group col-md-12">
-                                <label for="title_deed">Title Deed</label>
-                                <input type="file" name="title_deed" value="{{ homeowners_cover.title_deed }}" accept=".pdf">
+                                <label for="blue_book">Registration Book</label>
+                                <input type="file" name="blue_book" value="{{ thirdparty_cover.blue_book }}" accept=".pdf">
                                 
-                                {% if homeowners_cover.title_deed %}
+                                {% if thirdparty_cover.blue_book %}
                                     <br>
-                                    <label>Current Title Deed:</label>
-                                    <!--embed src="{{ homeowners_cover.title_deed}}" type="application/pdf" width="100%" height="500px"-->
-                                        <iframe src="{{ homeowners_cover.title_deed}}"
+                                    <label>Current Registration Book:</label>
+                                        <iframe src="{{ thirdparty_cover.blue_book}}"
                                            style="width:600px; height:500px;" frameborder=""></iframe>
 
                                 {% endif %}
@@ -240,7 +246,7 @@
 
                             <!-- Add more fields as needed -->
 
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" style="color: #fff; background-color: #e21a22; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Update</button>
 
                         </form>
                     </div>
@@ -251,7 +257,7 @@
 </div>
 </div>
     {% else %}
-        <p class="no-covers">No homeowners covers found for your account.</p>
+        <p class="no-covers">No thirdparty covers found for your account.</p>
     {% endif %}
 
     <script>

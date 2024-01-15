@@ -276,6 +276,9 @@ class DirectDebitForm(models.Model):
         super().save(*args, **kwargs)
         # Additional logic after saving, if needed
 
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+
 class HomeownersCover(models.Model):
     # Link to the authenticated customer
     customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='homeowners_cover')
@@ -286,7 +289,7 @@ class HomeownersCover(models.Model):
     ward = models.CharField(max_length=50, blank=True, null=True)
     district = models.CharField(max_length=50, blank=True, null=True)
     # Attachments
-    title_deed = models.FileField(upload_to='Forms/HomeOwnersCover/', null=True, blank=True, validators=[
+    title_deed = models.FileField(max_length=255, null=True, blank=True, validators=[
         FileExtensionValidator(allowed_extensions=['pdf'])
     ])
     # Financial Interest
@@ -295,16 +298,45 @@ class HomeownersCover(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        if self.title_deed:
-            return self.title_deed.url
-        return None
+        return self.title_deed if self.title_deed else None
 
-    
     def save(self, *args, **kwargs):
         try:
+            # Ensure id is not set explicitly to None
+            if self.id is None:
+                self.id = None
+
             super().save(*args, **kwargs)
+
+            # Upload title_deed to Google Cloud Storage
+            if self.title_deed:
+                file_name = self.title_deed.name
+                file = self.title_deed.file
+                public_url = self.upload_form(file, file_name)
+
+                # Set the title_deed field to the Google Cloud Storage URL
+                self.title_deed.name = public_url
+                super().save(*args, **kwargs)
+        except ValidationError as e:
+            print(f"Validation error saving HomeownersCover instance: {e}")
         except Exception as e:
             print(f"Error saving HomeownersCover instance: {e}")
+
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/HomeOwnersCover/' + filename)
+
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None
 
 class ThirdPartyCarInsurance(models.Model):
     
@@ -325,20 +357,50 @@ class ThirdPartyCarInsurance(models.Model):
     registration_number = models.CharField(max_length=50, blank=True, null=True)
     registered_owner = models.CharField(max_length=50, blank=True, null=True)
     # Attachments
-    blue_book = models.FileField(upload_to='Forms/ThirdPartyCarCover/', null=True, blank=True, validators=[
+    blue_book = models.FileField(max_length=255, null=True, blank=True, validators=[
         FileExtensionValidator(allowed_extensions=['pdf'])
     ])
     car_type = models.CharField(max_length=10, choices=CAR_TYPE_CHOICES, default='')
     relationship_to_owner = models.TextField(blank=True, null=True)
     submission_date = models.DateField(auto_now_add=True)
-
+            
     def get_download_url(self):
-        if self.blue_book:
-            return self.blue_book.url
-        return None
-    
+        return self.blue_book if self.blue_book else None
+
     def save(self, *args, **kwargs):
         try:
+            # Ensure id is not set explicitly to None
+            if self.id is None:
+                self.id = None
+
             super().save(*args, **kwargs)
+
+            # Upload blue_book to Google Cloud Storage
+            if self.blue_book:
+                file_name = self.blue_book.name
+                file = self.blue_book.file
+                public_url = self.upload_form(file, file_name)
+
+                # Set the blue_book field to the Google Cloud Storage URL
+                self.blue_book.name = public_url
+                super().save(*args, **kwargs)
+        except ValidationError as e:
+            print(f"Validation error saving Third Party Cover instance: {e}")
         except Exception as e:
-            print(f"Error saving Third Party Car Cover instance: {e}")
+            print(f"Error saving Third Party Cover instance: {e}")
+
+    @staticmethod
+    def upload_form(file, filename):
+        try:
+            client = storage.Client()
+            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
+            blob = bucket.blob('Forms/ThirdPartyCarCover/' + filename)
+
+            # Set the content type based on the file extension
+            content_type, encoding = mimetypes.guess_type(filename)
+            blob.upload_from_file(file, content_type=content_type)
+
+            return blob.public_url
+        except Exception as e:
+            print("Failed to upload!")
+            return None

@@ -152,10 +152,10 @@
     .content {
       margin-left: 250px;
       background: url(https://storage.googleapis.com/ko_gae_bucket/media/pexels-kindel-media-7688374.jpg) no-repeat;
-      backdrop-filter: blur(100px); /* Adjust the blur radius as needed */
       background-color: #b9dce1;
       background-position: center;
       background-size: cover;
+      background-attachment: fixed; /* Add this line to fix the background image */
       height: 100vh;
       transition: 0.5s;
       font-family: "Titillium Web", sans-serif;
@@ -253,7 +253,8 @@
       <a style="color: #ffffff;" ><i class="fas fa-file-pdf"></i><span>Customer forms</span></a>
       <div class="dropdown-options">
         <a href="/admin-customerforms">KYC </a>
-        <a href="#">Direct Debit</a>
+        <a href="/admin-homeownersview"> Homeowners Forms</a>
+        <a href="/admin-thirdpartyview"> Third Party Forms</a>
       </div>
     </div>
 

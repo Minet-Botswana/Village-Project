@@ -152,14 +152,15 @@
 <form method="POST" action="{% url 'customer:create_homeowners_cover' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group">
-        <label for="{{ homeownersForm.geo_location.id_for_label }}">Geo Location</label>
-        <input type="text" name="{{ homeownersForm.geo_location.name }}" id="{{ homeownersForm.geo_location.id }}" class="form-control" required>
         <!-- You may include a button to trigger Google Maps API for Geo Location here -->
         <!-- Map container -->
         <div id="map" style="height: 300px;"></div>
             <!-- Geolocation input field -->
-            <input type="text" id="geolocation" name="geolocation" placeholder="Select location" />
+            <input type="text" id="geolocation" name="geolocation" placeholder="Select location on map" />
+            
     </div>
+    <label for="{{ homeownersForm.geo_location.id_for_label }}">Geo Location</label>
+            <input type="text" name="{{ homeownersForm.geo_location.name }}" id="{{ homeownersForm.geo_location.id }}" class="form-control" required placeholder="copy and paste coordinate from the location selected on the map above...">
 
     <div class="form-group">
         <label for="{{ homeownersForm.plot_number.id_for_label }}">Plot Number</label>
