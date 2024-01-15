@@ -245,7 +245,8 @@ def create_homeowners_cover(request):
 
             homeowners_cover.customer = customer_instance
             homeowners_cover.save()
-
+            return redirect('customer:display_user_homeowners_covers')
+        
             print("Form data:", request.POST)  # Debugging line
             print("Saved homeowners_cover:", homeowners_cover.__dict__)  # Debugging line
 
@@ -257,19 +258,22 @@ def create_homeowners_cover(request):
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import HomeownersCover
+from .models import HomeownersCover, ThirdPartyCarInsurance
 
 @login_required
 def display_user_homeowners_covers(request):
     homeowners_covers = HomeownersCover.objects.filter(customer__user=request.user)
     return render(request, 'customer/update_homeowners_cover.html', {'homeowners_covers': homeowners_covers})
 
-
-
+@login_required
+def display_user_thirdparty_covers(request):
+    thirdparty_covers = ThirdPartyCarInsurance.objects.filter(customer__user=request.user)
+    return render(request, 'customer/update_thirdparty_cover.html', {'thirdparty_covers': thirdparty_covers})
 
 
 from .forms import ThirdPartyCarInsuranceForm
 from django.shortcuts import get_object_or_404
+
 @login_required
 def create_thirdpartycar_cover(request):
     thirdpartycarForm = ThirdPartyCarInsuranceForm()
@@ -287,60 +291,17 @@ def create_thirdpartycar_cover(request):
 
             thirdpartycar_cover.customer = customer_instance
             thirdpartycar_cover.save()
-
             print("Form data:", request.POST)  # Debugging line
             print("Saved thirdpartycar_cover:", thirdpartycar_cover.__dict__)  # Debugging line
+            return redirect('customer:display_user_thirdparty_covers')
+
 
         else:
             print(thirdpartycarForm.errors)  # Print form errors for debugging
 
     return render(request, 'customer/motor_insurance.html', context=thirdpartycardict)
 
-'''
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .forms import KYCuploadForm
-from .models import KYCform, Customer
 
-def upload_kyc_form(request):
-    if request.method == 'POST':
-        form = KYCuploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Ensure the user is authenticated
-            if request.user.is_authenticated:
-                # Get or create the associated Customer instance for the user
-                customer, created = Customer.objects.get_or_create(user=request.user)
-
-                # Save the form data to the database
-                kyc_instance = form.save(commit=False)
-                kyc_instance.customer = customer  # Associate the KYC form with the Customer
-
-                # Upload the form to Google Cloud Storage
-                form_file = request.FILES['kyc_form']
-                filename = form_file.name
-                form_file_url = KYCform.upload_form(form_file, filename)
-
-                if form_file_url:
-                    # Save the Google Cloud Storage URL to the model instance
-                    kyc_instance.kyc_form = form_file_url
-                    kyc_instance.save()
-
-                    messages.success(request, 'KYC form uploaded successfully!')
-                    return redirect('customer:upload_kyc_form')
-
-                else:
-                    messages.error(request, 'Failed to upload KYC form.')
-            else:
-                messages.error(request, 'User is not authenticated.')
-
-        else:
-            messages.error(request, 'Form submission failed. Please check the form data.')
-
-    else:
-        form = KYCuploadForm()
-
-    return render(request, 'customer/client_forms.html', {'form': form})
-'''
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import KYCuploadForm, CopyOfOmangForm, ResidenceProofForm, IncomeProofForm
@@ -531,25 +492,67 @@ def upload_income_proof(request):
         'existing_income_proof': existing_income_proof,
     })
 
-# views.py
-
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import HomeownersCover
-from .forms import HomeownersCoverForm  # Assuming you have a form for your model
+from .forms import HomeownersCoverForm
+from django.contrib.auth.decorators import login_required
+
 @login_required
-def update_homeowners_cover(request, cover_id):
-    homeowners_cover = get_object_or_404(HomeownersCover, id=cover_id)
+def update_homeowners_cover(request, id):
+    homeowners_cover = get_object_or_404(HomeownersCover, id=id)
 
     if request.method == 'POST':
-        form = HomeownersCoverForm(request.POST, instance=homeowners_cover)
+        form = HomeownersCoverForm(request.POST, request.FILES, instance=homeowners_cover)
         if form.is_valid():
-            form.save()
+            # Save the form to get the updated title_deed URL
+            updated_cover = form.save(commit=False)
+
+            # Check if a new title_deed file is provided
+            if 'title_deed' in request.FILES:
+                file = request.FILES['title_deed']
+                # Upload title_deed to Google Cloud Storage or other storage
+                public_url = HomeownersCover.upload_form(file, file.name)
+                # Set the title_deed field to the storage URL
+                updated_cover.title_deed.name = public_url
+
+            # Save the updated cover with the new title_deed URL
+            updated_cover.save()
+
             # Redirect to a success page or display a success message
-            return redirect('success_page')  # Replace 'success_page' with the actual URL name
+            return redirect('customer:display_user_homeowners_covers')
     else:
         form = HomeownersCoverForm(instance=homeowners_cover)
 
     return render(request, 'customer/update_homeowners_cover.html', {'form': form, 'homeowners_cover': homeowners_cover})
+
+@login_required
+def update_thirdparty_cover(request, id):
+    thirdparty_cover = get_object_or_404(ThirdPartyCarInsurance, id=id)
+
+    if request.method == 'POST':
+        form = ThirdPartyCarInsuranceForm(request.POST, request.FILES, instance=thirdparty_cover)
+        if form.is_valid():
+            # Save the form to get the updated blue_book URL
+            updated_cover = form.save(commit=False)
+
+            # Check if a new blue_book file is provided
+            if 'blue_book' in request.FILES:
+                file = request.FILES['blue_book']
+                # Upload blue_book to Google Cloud Storage or other storage
+                public_url = ThirdPartyCarInsurance.upload_form(file, file.name)
+                # Set the blue_book field to the storage URL
+                updated_cover.blue_book.name = public_url
+
+                # Save the updated cover with the new blue_book URL
+                updated_cover.save()
+                print("Updated Cover Data:", updated_cover.__dict__)
+
+                # Redirect to a success page or display a success message 
+                return redirect('customer:display_user_thirdparty_covers')
+    else:
+        form = ThirdPartyCarInsuranceForm(instance=thirdparty_cover)
+
+    return render(request, 'customer/update_thirdparty_cover.html', {'form': form, 'thirdparty_cover': thirdparty_cover})
 
 
 from django.contrib.auth import logout
