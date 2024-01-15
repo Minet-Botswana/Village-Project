@@ -82,34 +82,3 @@ jobs:
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
-
-         Remote-database-update-job: # health check job for testing and code formatting check
-    runs-on: ubuntu-latest # os for running the job
-    needs: [setup-and-deploy-job]
-    steps:
-      - name: Set sql proxy
-        uses: mattes/gce-cloudsql-proxy-action@v1
-        with:
-          creds: ${{ secrets.SQL_PROXY_CREDENTIALS }}
-          instance: modular-embassy-327410:europe-west2:seipone-postgres
-      - name: Checkout code # checking our the code at current commit that triggers the workflow
-        uses: actions/checkout@v2
-      - name: Cache dependency # caching dependency will make our build faster.
-        uses: actions/cache@v2 # for more info checkout pip section documentation at https://github.com/actions/cache
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      - name: Setup python environment # setting python environment to 3.x
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8' # if you want multiple python version run just use matrix strategy in job config. See the documentation of GitHub Actions
-      - name: Check Python version # checking the python version to see if 3.x is installed.
-        run: python --version
-      - name: Install requirements # install application requirements
-        run: pip install -r requirements.txt
-      - name: Run Migrations # run migrations to create table in side car db container
-        run: python manage.py migrate
-      - name: Run Test # running tests
-        run: python manage.py test
