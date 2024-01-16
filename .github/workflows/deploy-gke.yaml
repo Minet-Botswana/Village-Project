@@ -39,7 +39,7 @@ jobs:
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@v0.2.1
       with:
-        cluster_name: kogae-cluster
+        cluster_name: clouddemo
         location: us-central1
         credentials: ${{ secrets.ACTIONS_WORKFLOW }}
 
@@ -57,6 +57,7 @@ jobs:
     - name: Publish
       run: |-
         gcloud auth configure-docker us-central1-docker.pkg.dev
+        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
         docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
 
     # Deploy sample image to the GKE cluster
