@@ -69,7 +69,7 @@ jobs:
       run: sed -i 's|CLOUDDEMO_IMAGE|${{ env.IMAGE_TAG }}|g' applications/clouddemo/netcore/deployment.yaml
 
     - name: Build Docker image
-      run: docker build --tag "${{ env.IMAGE_TAG }}" applications/clouddemo/netcore
+      run: docker build --tag "${{ env.IMAGE_TAG }}" -f applications/clouddemo/netcore/Dockerfile applications/clouddemo/netcore
 
     - name: Publish Docker image to Google Artifact Registry
       run: docker push "${{ env.IMAGE_TAG }}"
