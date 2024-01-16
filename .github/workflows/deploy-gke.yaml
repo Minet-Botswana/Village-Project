@@ -56,7 +56,11 @@ jobs:
     # Push the Docker image to Google Container Registry
     - name: Publish
       run: |-
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+        # Tag your local Docker image with the Artifact Registry repository information
+        docker tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" "us-central1-docker.pkg.dev/clouddemo/$IMAGE:$GITHUB_SHA"
+
+        # Push the Docker image to Artifact Registry
+        docker push "us-central1-docker.pkg.dev/clouddemo/$IMAGE:$GITHUB_SHA"
 
     # Deploy sample image to the GKE cluster
     - name: Deploy
