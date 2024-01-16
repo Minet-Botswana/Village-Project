@@ -47,17 +47,17 @@ jobs:
     - name: Build
       run: |-
         docker build \
-          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+          --tag "us-central1-docker.pkg.dev/clouddemo/$IMAGE:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
       working-directory: ${{ github.workspace }}
 
-    # Push the Docker image to Google Container Registry
+    # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
-        # Tag your local Docker image with the Artifact Registry repository information
-        docker tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" "us-central1-docker.pkg.dev/clouddemo/$IMAGE:$GITHUB_SHA"
+        # Authenticate with Google Cloud (make sure your service account has necessary permissions)
+        gcloud auth configure-docker us-central1-docker.pkg.dev
 
         # Push the Docker image to Artifact Registry
         docker push "us-central1-docker.pkg.dev/clouddemo/$IMAGE:$GITHUB_SHA"
