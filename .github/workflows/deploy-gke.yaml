@@ -1,4 +1,4 @@
-name: Deploy Development Backend
+name: Build and Deploy to GKE
 
 on:
   push:
@@ -18,45 +18,52 @@ env:
   IMAGE: kogae_deployment_image
 
 jobs:
-  setup-and-deploy-job:
-    name: Setup and Deploy
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    # Setup gcloud CLI
-    - uses: google-github-actions/setup-gcloud@v2
+    #
+    # Authenticate to Google Cloud using workload identity federation
+    #
+    - id: 'auth'
+      name: 'Obtain access token by using workload identity federation'
+      uses: 'google-github-actions/auth@v1'
       with:
-        service_account_key: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
-        project_id: xenon-petal-407313
+        create_credentials_file: true
+        token_format: access_token
+        workload_identity_provider: projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
+        service_account: github-actions-workflow@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
 
-    # Configure Docker to use the gcloud command-line tool as a credential
-    # helper for authentication
-    - run: |-
-        gcloud --quiet auth configure-docker
+    - name: Connect to Artifact Registry
+      run: |-
+        echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://${{ env.REPOSITORY_REGION }}-docker.pkg.dev
 
-    # Get the GKE credentials so we can deploy to the cluster
-    - uses: google-github-actions/get-gke-credentials@v0.2.1
+    - name: Connect to GKE
+      uses: google-github-actions/get-gke-credentials@v0
       with:
-        cluster_name: kogae-cluster
-        location: us-central1
-        credentials: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
+        cluster_name: ${{ env.CLUSTER }}
+        location: ${{ env.CLUSTER_ZONE }}
 
-    # Build the Docker image
-    - name: Build
+    #
+    # Build the .NET code
+    #
+    - name: Build solution
       run: |-
-        docker build \
-          --tag "gcr.io/$PROJECT_ID/$IMAGE:latest" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
-          .
+        dotnet publish applications/clouddemo/netcore/CloudDemo.MvcCore.sln \
+            --configuration Release \
+            --framework net6.0
 
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |-
-        docker push "gcr.io/$PROJECT_ID/$IMAGE:latest"
+    #
+    # Build the Docker image and push it to Artifact Registry
+    #
+    - name: Create image tag
+      run: echo "IMAGE_TAG=${{ env.REPOSITORY_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:$GITHUB_SHA" >> $GITHUB_ENV
 
     - name: Lock image version in deployment.yaml
       run: sed -i 's|CLOUDDEMO_IMAGE|${{ env.IMAGE_TAG }}|g' applications/clouddemo/netcore/deployment.yaml
