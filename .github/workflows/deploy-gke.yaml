@@ -43,18 +43,21 @@ jobs:
         location: us-central1
         credentials: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
 
-    - name: Create image tag
-      run: echo "IMAGE_TAG=${{ env.REPOSITORY_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:$GITHUB_SHA" >> $GITHUB_ENV
+    # Build the Docker image
+    - name: Build
+      run: |-
+        docker build \
+          --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+      working-directory: ${{ github.workspace }}
 
-    - name: Lock image version in deployment.yaml
-      run: sed -i 's|CLOUDDEMO_IMAGE|${{ env.IMAGE_TAG }}|g' applications/clouddemo/netcore/deployment.yaml
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |-
+        docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
-    - name: Build Docker image
-      run: docker build --tag "${{ env.IMAGE_TAG }}" applications/clouddemo/netcore
-
-    - name: Publish Docker image to Google Artifact Registry
-      run: docker push "${{ env.IMAGE_TAG }}"
-      
     # Deploy sample image to the GKE cluster
     - name: Deploy
       run: |-
