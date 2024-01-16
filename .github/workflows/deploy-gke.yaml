@@ -3,7 +3,7 @@ name: Deploy Development Backend
 on:
   push:
     branches:
-      - development
+      - Production
 
 env:
   PROJECT_ID: xenon-petal-407313
