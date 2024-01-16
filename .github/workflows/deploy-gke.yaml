@@ -26,7 +26,8 @@ jobs:
 
     steps:
     - name: Set Credentials File
-      run: echo "::set-env name=CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE::/home/runner/work/Village-Project/Village-Project/gha-creds-069d6dc1adfb6e37.json"
+      run: echo "CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=/home/runner/work/Village-Project/Village-Project/gha-creds-069d6dc1adfb6e37.json" >> $GITHUB_ENV
+
     - name: Checkout
       uses: actions/checkout@v3
 
