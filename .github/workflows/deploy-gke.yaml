@@ -56,10 +56,7 @@ jobs:
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
-        # Authenticate with Google Cloud (make sure your service account has necessary permissions)
         gcloud auth configure-docker us-central1-docker.pkg.dev
-
-        # Push the Docker image to Artifact Registry
         docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
 
     # Deploy sample image to the GKE cluster
