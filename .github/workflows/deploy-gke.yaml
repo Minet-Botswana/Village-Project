@@ -58,10 +58,18 @@ jobs:
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:latest"
 
-    # Deploy sample image to the GKE cluster
-    - name: Deploy
-      run: |-
-        kubectl apply -f path/to/deployment.yaml
-        kubectl set image deployment/$DEPLOYMENT_NAME backend-app=gcr.io/$PROJECT_ID/$IMAGE:latest
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
-        kubectl get services -o wide
+    - name: Lock image version in deployment.yaml
+      run: sed -i 's|CLOUDDEMO_IMAGE|${{ env.IMAGE_TAG }}|g' applications/clouddemo/netcore/deployment.yaml
+
+    - name: Build Docker image
+      run: docker build --tag "${{ env.IMAGE_TAG }}" -f applications/clouddemo/netcore/Dockerfile applications/clouddemo/netcore
+
+    - name: Publish Docker image to Google Artifact Registry
+      run: docker push "${{ env.IMAGE_TAG }}"
+
+    #
+    # Deploy to GKE
+    #
+    - name: Deploy to GKE
+      run: kubectl apply -f applications/clouddemo/netcore/deployment.yaml
+    
