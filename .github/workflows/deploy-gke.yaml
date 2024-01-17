@@ -14,7 +14,7 @@ env:
   CLUSTER_ZONE: us-central1
   REPOSITORY: clouddemo
   REPOSITORY_REGION: us-central1
-  GCP_SA_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY  }}
+  GCP_SA_KEY: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
   IMAGE: kogae_deployment_image
 
 jobs:
