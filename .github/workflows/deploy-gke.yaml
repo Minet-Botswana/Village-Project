@@ -58,6 +58,7 @@ jobs:
         echo "$GCR_KEY" > gcr-key.json
         gcloud auth activate-service-account --key-file=gcr-key.json
         gcloud auth configure-docker us-central1-docker.pkg.dev
+        docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image
       env:
         GCR_KEY: ${{ secrets.NEW_SA_KEY }}
 
