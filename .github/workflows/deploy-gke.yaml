@@ -54,7 +54,7 @@ jobs:
       working-directory: ${{ github.workspace }}
       
     - name: Docker Login
-      run: echo "November@06" | docker login -u lebaneaustin2373 --password-stdin us-central1-docker.pkg.dev
+      run: docker login -u lebaneaustin2373 -p November@06 us-central1-docker.pkg.dev
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
