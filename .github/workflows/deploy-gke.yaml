@@ -47,7 +47,7 @@ jobs:
     - name: Build
       run: |-
         docker build \
-          --tag "us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/$IMAGE:v1.0" \
+          --tag "gcr.io/xenon-petal-407313/kogae-image:v1.0" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
