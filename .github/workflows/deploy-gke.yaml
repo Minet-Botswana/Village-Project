@@ -55,6 +55,8 @@ jobs:
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
+        gcloud auth activate-service-account gcr.io
+        docker-credential-gcr configure-docker
         docker push gcr.io/xenon-petal-407313/kogae-image:v1.0
 
 
