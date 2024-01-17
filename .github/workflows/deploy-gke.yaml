@@ -8,14 +8,13 @@ on:
 env:
   PROJECT_ID: xenon-petal-407313
   PROJECT_NUMBER: 499085815913
-
+  DOCKER_PASSWORD: November@06
+  DOCKER_USER: lebaneaustin2373
   CLUSTER: kogae-cluster
   CLUSTER_ZONE: us-central1
-
   REPOSITORY: clouddemo
   REPOSITORY_REGION: us-central1
   GCP_SA_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY  }}
-
   IMAGE: kogae_deployment_image
 
 jobs:
@@ -55,7 +54,7 @@ jobs:
       working-directory: ${{ github.workspace }}
       
     - name: Docker Login
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} us-central1-docker.pkg.dev
+      run: docker login -u ${{ env.DOCKER_USERNAME }} -p ${{ env.DOCKER_PASSWORD }} us-central1-docker.pkg.dev
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
