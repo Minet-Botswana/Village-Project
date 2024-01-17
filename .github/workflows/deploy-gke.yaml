@@ -51,13 +51,12 @@ jobs:
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-      working-directory: ${{ github.workspace }}
     
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
         gcloud auth configure-docker us-central1-docker.pkg.dev
-        docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0 done
+        docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
 
 
     # Deploy sample image to the GKE cluster
