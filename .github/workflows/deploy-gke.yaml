@@ -29,8 +29,9 @@ jobs:
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v2
       with:
-        service_account_key: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
+        service_account_key: ${{ secrets.NEW_SA_KEY }}
         project_id: xenon-petal-407313
+        export_default_credentials: true
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
