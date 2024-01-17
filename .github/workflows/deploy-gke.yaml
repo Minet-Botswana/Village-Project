@@ -53,6 +53,9 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
       working-directory: ${{ github.workspace }}
+      
+    - name: Docker Login
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} us-central1-docker.pkg.dev
 
     # Push the Docker image to Google Artifact Registry
     - name: Publish
