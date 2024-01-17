@@ -57,7 +57,7 @@ jobs:
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
-        echo '$GCP_SA_KEY'  
+        echo $GCP_SA_KEY 
         echo $GCP_SA_KEY | gcloud auth activate-service-account --key-file=- --quiet
         docker login -u _json_key --password-stdin https://us-central1-docker.pkg.dev
         docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
