@@ -56,7 +56,6 @@ jobs:
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
-        gcloud auth login
         gcloud auth configure-docker us-central1-docker.pkg.dev
         docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/hello-app:v1
 
