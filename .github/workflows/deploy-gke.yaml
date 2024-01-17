@@ -58,8 +58,10 @@ jobs:
     - name: Publish
       run: |-
         gcloud auth configure-docker us-central1-docker.pkg.dev
-        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+      env:
+       GCP_SA_KEY: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
     # Deploy sample image to the GKE cluster
     - name: Deploy
