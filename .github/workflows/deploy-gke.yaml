@@ -14,7 +14,7 @@ env:
   CLUSTER_ZONE: us-central1
   REPOSITORY: clouddemo
   REPOSITORY_REGION: us-central1
-  GCP_SA_KEY: ${{ secrets.NEW_SA_KEY }}
+  GCP_SA_KEY: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
   IMAGE: kogae_deployment_image
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v2
       with:
-        service_account_key: ${{ secrets.NEW_SA_KEY }}
+        service_account_key: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
         project_id: xenon-petal-407313
         export_default_credentials: true
 
