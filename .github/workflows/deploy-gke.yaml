@@ -8,13 +8,13 @@ on:
 env:
   PROJECT_ID: xenon-petal-407313
   PROJECT_NUMBER: 499085815913
-
+  DOCKER_PASSWORD: November@06
+  DOCKER_USER: lebaneaustin2373
   CLUSTER: kogae-cluster
   CLUSTER_ZONE: us-central1
-
   REPOSITORY: clouddemo
   REPOSITORY_REGION: us-central1
-
+  GCP_SA_KEY: ${{ secrets.New_SA_KEY }}
   IMAGE: kogae_deployment_image
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v2
       with:
-        service_account_key: ${{ secrets.GKE_SERVICE_ACCOUNT_KEY }}
+        service_account_key: ${{ secrets.NEW_SA_KEY}}
         project_id: xenon-petal-407313
 
     # Configure Docker to use the gcloud command-line tool as a credential
@@ -41,29 +41,32 @@ jobs:
       with:
         cluster_name: kogae-cluster
         location: us-central1
-        credentials: ${{ secrets.ACTIONS_WORKFLOW }}
+        credentials: ${{ secrets.NEW_SA_KEY }}
 
     # Build the Docker image
     - name: Build
       run: |-
         docker build \
-          --tag "us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/$IMAGE:v1.0" \
+          --tag "us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-      working-directory: ${{ github.workspace }}
-
+    
     # Push the Docker image to Google Artifact Registry
     - name: Publish
       run: |-
+        echo "$GCR_KEY" > gcr-key.json
+        gcloud auth activate-service-account --key-file=gcr-key.json
         gcloud auth configure-docker us-central1-docker.pkg.dev
-        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
         docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+      env:
+        GCR_KEY: ${{ secrets.NEW_SA_KEY }}
+
 
     # Deploy sample image to the GKE cluster
     - name: Deploy
       run: |-
-        kubectl apply -f path/to/deployment.yaml
-        kubectl set image deployment/$DEPLOYMENT_NAME backend-app=gcr.io/$PROJECT_ID/$IMAGE:latest
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl apply -f deployment.yaml
+        kubectl set image deployment/kogae-deployed-app backend-app=us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+        kubectl rollout status deployment/kogae-deployed-app
         kubectl get services -o wide
