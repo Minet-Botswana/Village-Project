@@ -17,3 +17,17 @@ spec:
           image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
           ports:
             - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kogae-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: backend-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
