@@ -12,19 +12,14 @@ spec:
       labels:
         app: backend-app
     spec:
-      containers:
-      - name: backend-app
-        image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
-        ports:
-        - containerPort: 80
+    containers:
+    - name: backend-app
+      image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+    ports:
+            - containerPort: 80
 
-      - name: cloudsql-proxy
-        image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
-        command:
-          - "/cloud_sql_proxy"
-          - "--dir=~/cloudsql"
-          - "-instances=xenon-petal-407313:us-central1:production-database-postgre=tcp:5432"
-          - "-credential_file=/SQL_PROXY_CREDENTIALS.json"
+          
+
 ---
 apiVersion: v1
 kind: Service
@@ -35,6 +30,8 @@ spec:
   selector:
     app: backend-app
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+    
