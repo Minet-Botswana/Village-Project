@@ -15,8 +15,47 @@ spec:
       containers:
       - name: backend-app
         image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "0.5"
+          requests:
+            memory: "256Mi"
+            cpu: "0.25"
         ports:
         - containerPort: 80
+
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.16
+        command:
+        - "/cloud_sql_proxy"
+        - "--dir=/cloudsql"
+        - "-instances=xenon-petal-407313:us-central1:postgresql-database-new=tcp:5432"
+        - "-credential_file=/secrets/cloudsql/credentials.json"
+        resources: 
+          limits:
+            memory: "256Mi"
+            cpu: "0.1"
+          requests:
+            memory: "128Mi"
+            cpu: "0.05"
+        volumeMounts:
+        - name: cloudsql-oauth-credentials
+          mountPath: /secrets/cloudsql
+          readOnly: true
+        - name: ssl-certs
+          mountPath: /etc/ssl/certs
+        - name: cloudsql
+          mountPath: /cloudsql
+      volumes:
+      - name: cloudsql-oauth-credentials
+        secret:
+          secretName: cloudsql-oauth-credentials
+      - name: ssl-certs
+        hostPath:
+          path: /etc/ssl/certs
+      - name: cloudsql
+        emptyDir: {}
 
 ---
 apiVersion: v1
