@@ -80,7 +80,7 @@ jobs:
         uses: mattes/gce-cloudsql-proxy-action@v1
         with:
           creds: ${{ secrets.SQL_PROXY_CREDENTIALS }}
-          instance: xenon-petal-407313:us-central1:production-database-postgre
+          instance: xenon-petal-407313:us-central1:postgresql-database-new
 
       - name: Checkout code # checking our the code at current commit that triggers the workflow
         uses: actions/checkout@v2
