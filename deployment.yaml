@@ -32,7 +32,7 @@ spec:
         - "--dir=/cloudsql"
         - "-instances=xenon-petal-407313:us-central1:postgresql-database-new=tcp:5432"
         - "-credential_file=/secrets/cloudsql/credentials.json"
-        resources: 
+        resources:
           limits:
             memory: "256Mi"
             cpu: "0.1"
@@ -55,6 +55,7 @@ spec:
         emptyDir: {}
       - name: cloudsql
         emptyDir: {}
+
 
 ---
 apiVersion: v1
