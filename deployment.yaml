@@ -25,11 +25,11 @@ spec:
             value: production-kogae
         resources:
           limits:
-            memory: "512Mi"
-            cpu: "0.5"
+            memory: "2Gi"
+            cpu: "1"
           requests:
-            memory: "256Mi"
-            cpu: "0.25"
+            memory: "2Gi"
+            cpu: "1"
         ports:
         - containerPort: 80
 
@@ -46,8 +46,8 @@ spec:
             mountPath: /var/lib/postgresql/data
         resources:
           limits:
-            memory: "256Mi"
-            cpu: "0.1"
+            memory: "2Gi"
+            cpu: "1"
           requests:
             memory: "2Gi"
             cpu: "1"
