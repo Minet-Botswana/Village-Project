@@ -36,6 +36,8 @@ spec:
             value: November@06
           - name: DB_HOST
             value: /cloudsql/xenon-petal-407313:us-central1:postgresql-database-new
+          - name: DB_ENGINE
+            value: django.db.backends.postgresql
         ports:
           - containerPort: 5432
         volumeMounts:
