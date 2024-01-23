@@ -34,6 +34,8 @@ spec:
             value: Austin
           - name: POSTGRES_PASSWORD
             value: November@06
+          - name: DB_HOST
+            value: /cloudsql/xenon-petal-407313:us-central1:postgresql-database-new
         ports:
           - containerPort: 5432
         volumeMounts:
