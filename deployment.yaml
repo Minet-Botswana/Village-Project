@@ -12,9 +12,17 @@ spec:
       labels:
         app: backend-app
     spec:
+      serviceAccountName: kubernetes-ksa
       containers:
       - name: backend-app
         image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+        env:
+          - name: DB_USER
+            value: Austin
+          - name: DB_PASS
+            value: November@06
+          - name: DB_NAME
+            value: production-kogae
         resources:
           limits:
             memory: "512Mi"
@@ -25,21 +33,14 @@ spec:
         ports:
         - containerPort: 80
 
-      - name: postgresql
-        image: postgres:latest
-        env:
-          - name: POSTGRES_DB
-            value: production-kogae
-          - name: POSTGRES_USER
-            value: Austin
-          - name: POSTGRES_PASSWORD
-            value: November@06
-          - name: DB_HOST
-            value: /cloudsql/xenon-petal-407313:us-central1:postgresql-database-new
-          - name: DB_ENGINE
-            value: django.db.backends.postgresql
-        ports:
-          - containerPort: 5432
+      - name: cloud-sql-proxy
+        image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.2
+        args: 
+          - "--structured-logs"
+          - "--port=5432"
+          - "xenon-petal-407313:us-central1:postgresql-database-new"
+        securityContext: 
+          runAsNonRoot: true
         volumeMounts:
           - name: postgresql-storage
             mountPath: /var/lib/postgresql/data
@@ -48,8 +49,8 @@ spec:
             memory: "256Mi"
             cpu: "0.1"
           requests:
-            memory: "128Mi"
-            cpu: "0.05"
+            memory: "2Gi"
+            cpu: "1"
       volumes:
         - name: postgresql-storage
           emptyDir: {}
