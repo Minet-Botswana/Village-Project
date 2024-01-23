@@ -28,13 +28,6 @@ spec:
             value: November@06
           - name: DB_NAME
             value: production-kogae
-        resources:
-          limits:
-            memory: "2Gi"
-            cpu: "1"
-          requests:
-            memory: "2Gi"
-            cpu: "1"
         ports:
         - containerPort: 80
 
@@ -49,13 +42,6 @@ spec:
         volumeMounts:
           - name: postgresql-storage
             mountPath: /var/lib/postgresql/data
-        resources:
-          limits:
-            memory: "2Gi"
-            cpu: "1"
-          requests:
-            memory: "2Gi"
-            cpu: "1"
       volumes:
         - name: postgresql-storage
           emptyDir: {}
