@@ -3,10 +3,15 @@ kind: Deployment
 metadata:
   name: kogae-deployed-app
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: backend-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 120
   template:
     metadata:
       labels:
