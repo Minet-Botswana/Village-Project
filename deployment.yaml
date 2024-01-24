@@ -28,6 +28,10 @@ spec:
             value: November@06
           - name: DB_NAME
             value: production-kogae
+          - name: DB_HOST
+            value: us-central1:postgresql-database-new
+          - name: DB_ENGINE
+            value: django.db.backends.postgresql
         ports:
         - containerPort: 80
 
