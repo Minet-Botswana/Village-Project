@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'production-kogae'),
         'USER': os.environ.get('DB_USER', 'Austin'),
         'PASSWORD': os.environ.get('DB_PASS', 'November@06'),
-        'HOST': os.environ.get('DB_HOST', '104.197.117.79'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
