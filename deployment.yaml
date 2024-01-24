@@ -26,10 +26,10 @@ spec:
             value: Austin
           - name: DB_PASS
             value: November@06
-          - name: DB_NAME
+          - name: DB_NAMEs
             value: production-kogae
           - name: DB_HOST
-            value: us-central1:postgresql-database-new
+            value: 104.197.117.79
           - name: DB_ENGINE
             value: django.db.backends.postgresql
         ports:
