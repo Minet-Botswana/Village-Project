@@ -29,7 +29,7 @@ spec:
           - name: DB_NAME
             value: production-kogae
           - name: DB_HOST
-            value: 104.197.117.79
+            value: 127.0.0.1
           - name: DB_ENGINE
             value: django.db.backends.postgresql
         ports:

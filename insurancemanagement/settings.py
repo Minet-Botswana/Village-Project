@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'production-kogae'),
         'USER': os.environ.get('DB_USER', 'Austin'),
         'PASSWORD': os.environ.get('DB_PASS', 'November@06'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'HOST': os.environ.get('DB_HOST', '/cloudsql/xenon-petal-407313:us-central1:postgresql-database-new'),
         'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
