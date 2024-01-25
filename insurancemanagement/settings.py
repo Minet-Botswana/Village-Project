@@ -89,12 +89,12 @@ WSGI_APPLICATION = 'insurancemanagement.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DB_NAME', 'production-kogae'),
-        'USER': os.environ.get('DB_USER', 'Austin'),
-        'PASSWORD': os.environ.get('DB_PASS', 'November@06'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'production-kogae',
+        'USER': 'Austin',
+        'PASSWORD': 'November@06',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
