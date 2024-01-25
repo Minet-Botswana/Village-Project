@@ -41,6 +41,7 @@ spec:
           - "--structured-logs"
           - "--port=5432"
           - "xenon-petal-407313:us-central1:postgresql-database-new"
+          - "--credentials-file=SQL_PROXY_CREDENTIALS.json"
         securityContext: 
           runAsNonRoot: true
         volumeMounts:
