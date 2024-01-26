@@ -39,7 +39,7 @@ jobs:
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@v0.2.1
       with:
-        cluster_name: kogae-cluster
+        cluster_name: kogae-cluster2
         location: us-central1
         credentials: ${{ secrets.NEW_SA_KEY }}
 
