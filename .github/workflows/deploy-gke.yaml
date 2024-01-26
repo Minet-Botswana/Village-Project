@@ -10,7 +10,7 @@ env:
   PROJECT_NUMBER: 499085815913
   DOCKER_PASSWORD: November@06
   DOCKER_USER: lebaneaustin2373
-  CLUSTER: kogae-cluster
+  CLUSTER: kogae-cluster2
   CLUSTER_ZONE: us-central1
   REPOSITORY: clouddemo
   REPOSITORY_REGION: us-central1
