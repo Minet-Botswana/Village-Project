@@ -41,7 +41,7 @@ spec:
           - "--structured-logs"
           - "--port=5432"
           - "ko-gae-minet:europe-west1:production-database-2024"
-          - "--credentials-file=database.json"
+          - "--credentials-file=SQL_PROXY_CREDENTIALS.json"
         securityContext: 
           runAsNonRoot: true
         volumeMounts:
