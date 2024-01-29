@@ -10,7 +10,7 @@ env:
   PROJECT_NUMBER: 499085815913
   DOCKER_PASSWORD: November@06
   DOCKER_USER: lebaneaustin2373
-  CLUSTER: kogae-cluster2
+  CLUSTER: kogae-cluster
   CLUSTER_ZONE: us-central1
   REPOSITORY: clouddemo
   REPOSITORY_REGION: us-central1
@@ -39,7 +39,7 @@ jobs:
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@v0.2.1
       with:
-        cluster_name: kogae-cluster2
+        cluster_name: kogae-cluster
         location: us-central1
         credentials: ${{ secrets.NEW_SA_KEY }}
 
