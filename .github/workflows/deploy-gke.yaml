@@ -10,10 +10,10 @@ env:
   PROJECT_NUMBER: 499085815913
   DOCKER_PASSWORD: November@06
   DOCKER_USER: lebaneaustin2373
-  CLUSTER: kogae-cluster
-  CLUSTER_ZONE: us-central1
-  REPOSITORY: clouddemo
-  REPOSITORY_REGION: us-central1
+  CLUSTER: kogae-main-cluster
+  CLUSTER_ZONE: europe-west1
+  REPOSITORY: kogae-docker-repo
+  REPOSITORY_REGION: europe-west1
   GCP_SA_KEY: ${{ secrets.New_SA_KEY }}
   IMAGE: kogae_deployment_image
 
@@ -30,7 +30,7 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v2
       with:
         service_account_key: ${{ secrets.NEW_SA_KEY}}
-        project_id: xenon-petal-407313
+        project_id: ko-gae-minet
 
     # Configure Docker to use the gcloud command-line tool as a credential
     # helper for authentication
@@ -39,15 +39,15 @@ jobs:
     # Get the GKE credentials so we can deploy to the cluster
     - uses: google-github-actions/get-gke-credentials@v0.2.1
       with:
-        cluster_name: kogae-cluster
-        location: us-central1
+        cluster_name: kogae-main-cluster
+        location: europe-west1
         credentials: ${{ secrets.NEW_SA_KEY }}
 
     # Build the Docker image
     - name: Build Docker image
       run: |-
         docker build \
-          --tag "us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0" \
+          --tag "europe-west1-docker.pkg.dev/ko-gae-minet/kogae-docker-repo/kogae_deployment_image:v1.0" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -57,8 +57,8 @@ jobs:
       run: |-
         echo "$GCR_KEY" > gcr-key.json
         gcloud auth activate-service-account --key-file=gcr-key.json
-        gcloud auth configure-docker us-central1-docker.pkg.dev
-        docker push us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+        gcloud auth configure-docker europe-west1-docker.pkg.dev
+        docker push europe-west1-docker.pkg.dev/ko-gae-minet/kogae-docker-repo/kogae_deployment_image:v1.0
       env:
         GCR_KEY: ${{ secrets.NEW_SA_KEY }}
 
@@ -67,7 +67,7 @@ jobs:
     - name: Deploy image to GKE cluster
       run: |-
         kubectl apply -f deployment.yaml
-        kubectl set image deployment/kogae-deployed-app backend-app=us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+        kubectl set image deployment/kogae-deployed-app backend-app=europe-west1-docker.pkg.dev/ko-gae-minet/kogae-docker-repo/kogae_deployment_image:v1.0
         kubectl rollout status deployment/kogae-deployed-app
         kubectl get services -o wide
 

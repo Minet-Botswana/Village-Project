@@ -20,7 +20,7 @@ spec:
       serviceAccountName: kubernetes-ksa
       containers:
       - name: backend-app
-        image: us-central1-docker.pkg.dev/xenon-petal-407313/clouddemo/kogae_deployment_image:v1.0
+        image: europe-west1-docker.pkg.dev/ko-gae-minet/kogae-docker-repo/kogae_deployment_image:v1.0
         env:
           - name: DB_USER
             value: Austin
@@ -40,8 +40,8 @@ spec:
         args: 
           - "--structured-logs"
           - "--port=5432"
-          - "xenon-petal-407313:us-central1:postgresql-database-new"
-          - "--credentials-file=SQL_PROXY_CREDENTIALS.json"
+          - "ko-gae-minet:europe-west1:production-database-2024"
+          - "--credentials-file=database.json"
         securityContext: 
           runAsNonRoot: true
         volumeMounts:
