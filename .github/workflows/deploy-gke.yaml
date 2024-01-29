@@ -4,19 +4,7 @@ on:
   push:
     branches:
       - Production
-
-env:
-  PROJECT_ID: xenon-petal-407313
-  PROJECT_NUMBER: 499085815913
-  DOCKER_PASSWORD: November@06
-  DOCKER_USER: lebaneaustin2373
-  CLUSTER: kogae-main-cluster
-  CLUSTER_ZONE: europe-west1
-  REPOSITORY: kogae-docker-repo
-  REPOSITORY_REGION: europe-west1
-  GCP_SA_KEY: ${{ secrets.New_SA_KEY }}
-  IMAGE: kogae_deployment_image
-
+      
 jobs:
   setup-and-deploy-job:
     name: Setup and Deploy
