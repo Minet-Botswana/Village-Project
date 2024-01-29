@@ -20,17 +20,6 @@ spec:
       containers:
       - name: backend-app
         image: europe-west1-docker.pkg.dev/ko-gae-minet/kogae-docker-repo/kogae_deployment_image:v1.0
-        env:
-          - name: DB_USER
-            value: Austin
-          - name: DB_PASS
-            value: November@06
-          - name: DB_NAME
-            value: production-kogae
-          - name: DB_HOST
-            value: 127.0.0.1
-          - name: DB_ENGINE
-            value: django.db.backends.postgresql
         ports:
         - containerPort: 80
 
