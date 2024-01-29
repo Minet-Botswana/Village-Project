@@ -17,7 +17,6 @@ spec:
       labels:
         app: backend-app
     spec:
-      serviceAccountName: kubernetes-ksa
       containers:
       - name: backend-app
         image: europe-west1-docker.pkg.dev/ko-gae-minet/kogae-docker-repo/kogae_deployment_image:v1.0
@@ -34,22 +33,6 @@ spec:
             value: django.db.backends.postgresql
         ports:
         - containerPort: 80
-
-      - name: cloud-sql-proxy
-        image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.2
-        args: 
-          - "--structured-logs"
-          - "--port=5432"
-          - "ko-gae-minet:europe-west1:production-database-2024"
-          - "--credentials-file=SQL_PROXY_CREDENTIALS.json"
-        securityContext: 
-          runAsNonRoot: true
-        volumeMounts:
-          - name: postgresql-storage
-            mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: postgresql-storage
-          emptyDir: {}
 
 ---
 apiVersion: v1
