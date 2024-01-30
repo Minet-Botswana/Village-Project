@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'insurancemanagement.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'production-kogae',
+        'NAME': 'kogae-minet',
         'USER': 'Austin',
         'PASSWORD': 'November@06',
         'HOST': '127.0.0.1',
