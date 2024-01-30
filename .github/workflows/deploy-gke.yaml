@@ -35,7 +35,7 @@ jobs:
     - name: Build Docker image
       run: |-
         docker build \
-          --tag "us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:v1.0" \
+          --tag "us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:$GITHUB_SHA" \
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
@@ -46,7 +46,7 @@ jobs:
         echo "$GCR_KEY" > gcr-key.json
         gcloud auth activate-service-account --key-file=gcr-key.json
         gcloud auth configure-docker us-central1-docker.pkg.dev
-        docker push us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:v1.0
+        docker push us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:$GITHUB_SHA
       env:
         GCR_KEY: ${{ secrets.NEW_SA_KEY }}
 
@@ -55,7 +55,7 @@ jobs:
     - name: Deploy image to GKE cluster
       run: |-
         kubectl apply -f deployment.yaml
-        kubectl set image deployment/kogae-deployed-app backend-app=us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:v1.0
+        kubectl set image deployment/kogae-deployed-app backend-app=us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:$GITHUB_SHA
         kubectl rollout status deployment/kogae-deployed-app
         kubectl get services -o wide
 
