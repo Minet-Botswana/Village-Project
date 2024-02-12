@@ -236,7 +236,6 @@ def get_user_details_view(request, id_number):
                 'name': customer.user.get_full_name(),
                 'address': customer.address,
                 'mobile': customer.mobile,
-                'profile_pic': str(customer.profile_pic),
                 'id_number': customer.id_number,
                 'postal_address': customer.postal_address,
                 'physical_address': customer.physical_address,
@@ -437,11 +436,6 @@ def update_question_view(request,pk):
            
             return redirect('admin-question')
     return render(request,'insurance/update_question.html',{'questionForm':questionForm})
-
-
-
-
-
 
 
 def aboutus_view(request):
