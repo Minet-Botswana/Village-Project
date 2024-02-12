@@ -35,8 +35,8 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
-    "http://34.31.108.210:8080 ",
-    '*',
+    "http://localhost:8080",
+    "http://34.31.108.210:8080",
 ]
 
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'insurance',
     'customer',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'insurancemanagement.urls'
@@ -88,7 +90,8 @@ WSGI_APPLICATION = 'insurancemanagement.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+'''
+#Development Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -96,6 +99,18 @@ DATABASES = {
         'USER': 'Austin',
         'PASSWORD': 'November@06',
         'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+}
+'''
+#Local Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Local-Dev',
+        'USER': 'postgres',
+        'PASSWORD': 'November@06',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
