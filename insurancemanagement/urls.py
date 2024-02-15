@@ -7,6 +7,7 @@ from insurance.views import custom_dashboard, logout_redirect
 
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -63,6 +64,7 @@ urlpatterns = [
     path('delete_selected', views.delete_selected, name='delete_selected'),
     
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),
+    #path('reset-password/', auth_views.PasswordResetView.as_view(), name='reset-password'),
 
 ]
 
