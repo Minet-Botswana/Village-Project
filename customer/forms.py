@@ -9,7 +9,16 @@ class CustomerUserForm(forms.ModelForm):
         widgets = {
             'password': forms.PasswordInput()
         }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password'].required = False
 
+    def clean_password(self):
+        # Fetch the existing password
+        user = self.instance
+        return user.password
+                     
 class CustomerForm(forms.ModelForm):
     GENDER_CHOICES = [
         ('', 'Select Gender'),
