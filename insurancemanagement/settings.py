@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'insurance',
     'customer',
     'corsheaders',
+    'sweetify',
 ]
 
 MIDDLEWARE = [
@@ -87,10 +88,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'insurancemanagement.wsgi.application'
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+'''
 #Development Database
 DATABASES = {
     'default': {
@@ -114,7 +116,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

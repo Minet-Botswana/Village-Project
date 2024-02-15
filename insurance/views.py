@@ -78,39 +78,50 @@ def admin_view_customer_view(request):
     customers= CMODEL.Customer.objects.filter(user__groups__name='CUSTOMER')
     return render(request,'insurance/admin_view_customer.html',{'customers':customers})
 
+# In your views.py
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
+import sweetify
 
+from django.http import HttpResponseRedirect
 @login_required(login_url='adminlogin')
 def update_customer_view(request, pk):
-    customer = CMODEL.Customer.objects.get(id=pk)
+    print("Entering update_customer_view")
+    customer = CMODEL.Customer.objects.get(pk=pk)
     user = CMODEL.User.objects.get(id=customer.user_id)
 
     if request.method == 'POST':
-        userForm = CFORM.CustomerUserForm(request.POST, instance=user)
-        customerForm = CFORM.CustomerForm(request.POST, request.FILES, instance=customer)
+        print("Processing POST request")
+        # Exclude the password field from the POST data
+        post_data = request.POST.copy()
+        if 'password' in post_data:
+            del post_data['password']
+
+        userForm = CFORM.CustomerUserForm(post_data, instance=user)
+        customerForm = CFORM.CustomerForm(post_data, request.FILES, instance=customer)
 
         if userForm.is_valid() and customerForm.is_valid():
+            print("Forms are valid")
             user = userForm.save(commit=False)
-
-            # Check if password is present in the form
-            if 'password' in request.POST:
-                user.set_password(userForm.cleaned_data['password'])
             user.save()
-
-            # Check if profile_pic is empty in the form data
-            if not request.FILES.get('profile_pic'):
-                # If empty, set profile_pic to the current value from the database
-                customerForm.instance.profile_pic = customer.profile_pic
-
-            # Save the customer form
             customerForm.save()
-
-            return redirect('admin-view-customer')
+            print("Customer updated successfully")
+            messages.success(request, "User details updated successfully!")
+            return redirect(reverse('admin-view-customer') + '?customer_updated=True')
+        else:
+            print("User Form Errors:", userForm.errors)
+            print("Customer Form Errors:", customerForm.errors)
     else:
+        print("Rendering update form")
         userForm = CFORM.CustomerUserForm(instance=user)
         customerForm = CFORM.CustomerForm(instance=customer)
         
-    mydict = {'userForm': userForm, 'customerForm': customerForm}
+    mydict = {'userForm': userForm, 'customerForm': customerForm, 'customer': customer}
     return render(request, 'insurance/update_customer.html', context=mydict)
+
 
 
 @login_required(login_url='adminlogin')
@@ -119,9 +130,8 @@ def delete_customer_view(request,pk):
     user=User.objects.get(id=customer.user_id)
     user.delete()
     customer.delete()
+    messages.success(request, "User deleted successfully!")
     return HttpResponseRedirect('/admin-view-customer')
-
-
 
 def admin_category_view(request):
     return render(request,'insurance/admin_category.html')
