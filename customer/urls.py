@@ -13,6 +13,7 @@ urlpatterns = [
     path('customerlogin', LoginView.as_view(template_name='insurance/adminlogin.html'),name='customerlogin'),
 
     path('available-policies', views.available_policy_view,name='available-policies'),
+    path('available-thirdpartypolicies', views.available_thirdpartypolicy_view,name='available-thirdpartypolicies'),
     path('apply-policy', views.apply_policy_view,name='apply-policy'),
     path('apply-thirdparty', views.apply_thirdparty_view,name='apply-thirdparty'),
     path('apply/<int:pk>', views.apply_view,name='apply'),
