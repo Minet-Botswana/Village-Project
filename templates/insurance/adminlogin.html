@@ -6,7 +6,7 @@
 {% load widget_tweaks %}
 {% load static %}
 <link rel="icon" href="{% static 'image/favicon.ico' %}">
-<html lang="en" dir="ltr">
+<html-- lang="en" dir="ltr">
 
 <head>
 
@@ -137,6 +137,20 @@
                 grid-template-columns: auto;
             }
       }
+
+      .error-message {
+    animation: wobble 0.5s ease-in-out;
+  }
+
+  @keyframes wobble {
+    0% { transform: translateX(0%); }
+    15% { transform: translateX(-25%) rotate(-5deg); }
+    30% { transform: translateX(20%) rotate(3deg); }
+    45% { transform: translateX(-15%) rotate(-3deg); }
+    60% { transform: translateX(10%) rotate(2deg); }
+    75% { transform: translateX(-5%) rotate(-1deg); }
+    100% { transform: translateX(0%); }
+  }
     </style>
 
   {% include "insurance/navbar.html" %}
@@ -148,7 +162,7 @@
   </div-->
 </head>
 
-<body>
+<!--body>
 <div class="log-form">
   <h2 class="text-center">Login</h2>
   <br>
@@ -160,9 +174,31 @@
     <br>
     <button type="submit" class="login-btn">Login</button>
   </form>
-</div><!--end log form -->
-</body>
+</div>
 <footer>
   {% include "insurance/footer.html" %}
 </footer>
+</html-->
+<body>
+  <div class="log-form">
+    <h2 class="text-center">Login</h2>
+    <br>
+    {% if form.errors %}
+      <div class="alert alert-danger error-message">
+        Incorrect username or password. Please try again.
+      </div>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {% render_field form.username class="form-control" placeholder="Username" %}
+      <br>
+      {% render_field form.password class="form-control" placeholder="Password" %}
+      <br>
+      <button type="submit" class="login-btn">Login</button>
+    </form>
+  </div><!--end log form -->
+  <footer>
+    {% include "insurance/footer.html" %}
+  </footer>
+</body>
 </html>

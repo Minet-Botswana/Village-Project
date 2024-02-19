@@ -173,6 +173,29 @@
     display: inline-block; /* Ensures the border wraps around the text */
     font-family: "Titillium Web", sans-serif;
     }
+
+    .dropdown-options {
+      display: none;
+      position: absolute;
+      overflow: auto;
+      background-color:#fff;
+      border-radius:5px;
+      box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+      width: 80%;
+      background-color: #2e2e2e;
+      border-color: #c2e1b9;
+      margin-left: 20px;
+      font-size: 13px;
+    }
+
+    .dropdown:hover .dropdown-options {
+      display: block;
+      
+    }
+
+    .dropdown-options a {
+      display: block;
+    }
   </style>
 
 
@@ -215,14 +238,26 @@
     </center>
 
     <a href="/customer/customer-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+    <!--a href="/customer/apply-policy"><i class="fab fa-product-hunt"></i><span>Apply Policy</span></a-->
+
+    <div class="dropdown">
+      <a href="/customer/apply-policy"><i class="fab fa-product-hunt"></i><span>Apply for Policy</span></a>
+      <div class="dropdown-options">
+        <a href="/customer/apply-policy">Homeowners Cover </a>
+        <a href="/customer/apply-thirdparty">Thirdparty Cover</a>
+
+      </div>
+    </div>
+
     <a href="/customer/available-policies"><i class="fab fa-product-hunt"></i><span>Available  Policies</span></a>
-    <a href="/customer/apply-policy"><i class="fab fa-product-hunt"></i><span>Apply Policy</span></a>
-    <a href="/customer/history"><i class="fas fa-history"></i><span>History</span></a>
+
+
+    <a href="/customer/history"><i class="fas fa-history"></i><span>My Policies</span></a>
 
     <a href="/customer/forms"><i class="fas fa-file"></i><span>Forms</span></a>
     <a href="/#sets"><i class="fas fa-credit-card"></i><span>Payments</span></a>
     <a href="/customer/ask-question"><i class="fas fa-question-circle"></i><span>Ask Question</span></a>
-    <a href="/customer/question-history"><i class="fas fa-sync-alt"></i><span>Question History</span></a>
+    <a href="/customer/question-history"><i class="fas fa-sync-alt"></i><span>Question History</span></a>s
   </div>
   <!--sidebar end-->
 
