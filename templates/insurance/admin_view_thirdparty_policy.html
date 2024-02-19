@@ -1,0 +1,191 @@
+{% extends 'insurance/adminbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    .panel-primary>.panel-heading {
+      color: #fff;
+      background-color: #e21a22;
+      border-color: #333;
+    }
+
+    .modal {
+  z-index: 1050; /* Adjust the value as needed */
+}
+
+
+    .panel-heading h6 {
+      background-color: #e21a22 !important;
+      color: white !important;
+      border: 1px solid #e21a22!important;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+
+    /* Add the following styles for clickable rows */
+    
+    /* Style the Policy Number column */
+    .policy-number-col {
+      cursor: pointer;
+      color: #e21a22;
+      text-decoration: underline;
+    }
+
+    #dev-table {
+
+border-spacing: 0 !important; /* Set spacing between table cells to 0 */
+}
+
+.dataTables_wrapper .dataTables_length select {
+border: 1px solid #aaa;
+border-radius: 3px;
+padding: 5px;
+background-color: transparent;
+padding: 4px;
+margin-top: 4px;
+margin-left: 7px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+border: 1px solid #aaa;
+border-radius: 3px;
+padding: 5px;
+background-color: transparent;
+margin-left: 3px;
+margin-top: 4px;
+margin-right: 12px;
+}
+
+label {
+display: inline-block;
+margin-bottom: 5px;
+font-weight: bold;
+margin-left: 10px;
+}
+  </style>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- DataTables JS -->
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+  <!-- DataTables initialization script -->
+  <script>
+      $(document).ready(function() {
+          $('#dev-table').DataTable();
+      });
+  </script>
+</head>
+
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Policies</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+          <th>Policy No.</th>
+          <th>Risk</th>
+          <th> Category</th>
+          <th> Premium</th>
+          <th> Tenure</th>
+          <th> Creation Date</th>
+        </tr>
+      </thead>
+      {% for t in policies %}
+      <tr class="policy-row" data-toggle="modal" data-target="#policyModal{{ t.id }}">
+        <td class="policy-number-col">{{ t.policy_number }}</td>
+        <td>{{ t.policy_name }}</td>
+        <td>{{ t.category }}</td>
+        <td>{{ t.premium }}</td>
+        <td>{{ t.tenure }}</td>
+        <td>{{ t.creation_date }}</td>
+      </tr>
+
+      <!-- Modal for Policy Details -->
+      <div class="modal fade" id="policyModal{{ t.id }}" tabindex="-1" role="dialog" aria-labelledby="policyModalLabel{{ t.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="policyModalLabel{{ t.id }}">Policy Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Policy Number:</strong> {{ t.policy_number }}</p>
+              <p><strong>Risk: </strong>{{ t.policy_name }}</p>
+              <p><strong>Category: </strong>{{ t.category }}</p>
+              <p><strong>Premium:</strong> BWP{{ t.premium }}</p>
+              <p><strong>Tenure: </strong>{{ t.tenure }} Months</p>
+              <!--p>Creation Date: {{ t.creation_date }}</p-->
+              <p><strong>Insured ID: </strong>{{ t.insured_id }}</p>
+              <p><strong>Cover Start: </strong>{{ t.cover_start }}</p>
+              <p><strong>Cover End: </strong>{{ t.cover_end }}</p>
+          
+              <!-- Display customer details -->
+              {% if t.customer_details %}
+              <p><strong>Customer Name: </strong>{{ t.customer_details.user.first_name }} {{ t.customer_details.user.last_name }}</p>
+              <p><strong>Customer Mobile: </strong>{{ t.customer_details.mobile }}</p>
+              <p><strong>Customer Alternate Phone: </strong>{{ t.customer_details.alternate_phone}}</p>
+              <p><strong>Customer Email: </strong>{{ t.customer_details.address }}</p>
+              <p><strong>Customer ID Number: </strong>{{ t.customer_details.id_number }}</p>
+              <p><strong>Customer Work: </strong>{{ t.customer_details.occupation }}</p>
+              <p><strong>Customer Physical Address: </strong>{{ t.customer_details.physical_address}}</p>
+              <p><strong>Customer Postal Address: </strong>{{ t.customer_details.postal_address }}</p>
+              <p><strong>Customer Date of Birth: </strong>{{ t.customer_details.date_of_birth }}</p>
+              <p><strong>Customer Gender: </strong>{{ t.customer_details.gender }}</p>
+              <p><strong>Customer Marital Status: </strong>{{ t.customer_details.marital_status }}</p>
+              <!-- Add more customer details based on your model -->
+          {% endif %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<br><br><br><br><br><br>
+{% endblock content %}
+
+<script>
+  $(document).ready(function () {
+    // Enable Bootstrap tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Handle click on Policy Number to show the modal
+    $('.policy-number-col').click(function () {
+      var modalId = $(this).closest('tr').data('target');
+      $(modalId).modal('show');
+    });
+  });
+</script>

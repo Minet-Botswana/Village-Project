@@ -20,7 +20,6 @@ urlpatterns = [
     path('aboutus', views.aboutus_view),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
-
     
     path('adminlogin', LoginView.as_view(template_name='insurance/adminlogin.html'),name='adminlogin'),
     path('admin-dashboard', views.admin_dashboard_view,name='admin-dashboard'),
@@ -43,8 +42,10 @@ urlpatterns = [
 
     path('admin-policy', views.admin_policy_view,name='admin-policy'),
     path('admin-add-policy', views.admin_add_policy_view,name='admin-add-policy'),
+    path('admin-add-thirdparty-policy', views.admin_apply_thirdparty_view,name='admin-add-thirdparty-policy'),
     path('admin-get-user/<str:id_number>/', views.get_user_details_view,name='admin-get-user'),
     path('admin-view-policy', views.admin_view_policy_view,name='admin-view-policy'),
+    path('admin-view-thirdpartypolicy', views.admin_view_thirdpartypolicy_view,name='admin-view-thirdpartypolicy'),
     path('admin-update-policy', views.admin_update_policy_view,name='admin-update-policy'),
     path('update-policy/<int:pk>', views.update_policy_view,name='update-policy'),
     path('admin-delete-policy', views.admin_delete_policy_view,name='admin-delete-policy'),
