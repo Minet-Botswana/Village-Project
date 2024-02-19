@@ -24,6 +24,7 @@ from django.http import JsonResponse
 
 
 
+
 #@login_required
 @login_required(login_url='adminlogin')
 def custom_dashboard(request):
@@ -122,8 +123,6 @@ def update_customer_view(request, pk):
     mydict = {'userForm': userForm, 'customerForm': customerForm, 'customer': customer}
     return render(request, 'insurance/update_customer.html', context=mydict)
 
-
-
 @login_required(login_url='adminlogin')
 def delete_customer_view(request,pk):
     customer=CMODEL.Customer.objects.get(id=pk)
@@ -200,43 +199,89 @@ def generate_policy_number(policy):
     # For example, if you have it stored as an attribute of the Policy model:
     return policy.policy_number
 
+from .forms import PolicyForm, ThirdpartyPolicyForm
+
 def admin_add_policy_view(request):
     policyForm = PolicyForm()
+    print("Request method:", request.method)
     if request.method == 'POST':
         policyForm = PolicyForm(request.POST)
+        print("Policy Form:", policyForm)
         if policyForm.is_valid():
-            id_number = request.POST.get('id_number')  # Get the ID number from the form
+            print("Form is valid")
+            id_number = request.POST.get('id_number')
+            print("ID Number:", id_number)
             category_id = request.POST.get('category')
+            print("Category ID:", category_id)
             category = Category.objects.get(id=category_id)
-
-            # Get the existing Customer based on the provided ID number
+            print("Category:", category)
             try:
-                customer = Customer.objects.get(id_number=id_number)
-            except Customer.DoesNotExist:
-                # Handle the case where the customer with the provided ID number doesn't exist
-                # display an error message or take appropriate action
+                customer = models.Customer.objects.get(id_number=id_number)
+                print("Customer:", customer)
+            except models.Customer.DoesNotExist:
+                print('Customer with ID number', id_number, 'does not exist')
                 return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
 
             policy = policyForm.save(commit=False)
+            print("Policy before assignment:", policy)
             policy.category = category
-            policy.insured = customer  # Link the policy to the Customer
-            
+            policy.insured = customer
             policy.cover_start = policyForm.cleaned_data['cover_start']
             policy.tenure = policyForm.cleaned_data['tenure']
+            policy.cover_end = add_months(policy.cover_start, policy.tenure)
+            print("Policy after assignment:", policy)
 
-            # Calculate and set cover_end based on cover_start and tenure
-            if policy.cover_start and policy.tenure:
-                policy.cover_end = add_months(policy.cover_start, policy.tenure)
-                
-            # Save the policy to get the auto-generated policy_number
+            # Save the policy
             policy.save()
-            
+            messages.success(request, "Cover created Successfully!")
+            print("Policy successfully saved!")
             print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
 
             return redirect('admin-view-policy')
 
     return render(request, 'insurance/admin_add_policy.html', {'policyForm': policyForm})
+
+def admin_apply_thirdparty_view(request):
+    thirdpartypolicyForm = ThirdpartyPolicyForm()
+    print("Request method:", request.method)
+    if request.method == 'POST':
+        thirdpartypolicyForm = ThirdpartyPolicyForm(request.POST)
+        print("Policy Form:", thirdpartypolicyForm)
+        if thirdpartypolicyForm.is_valid():
+            print("Form is valid")
+            id_number = request.POST.get('id_number')
+            print("ID Number:", id_number)
+            category_id = request.POST.get('category')
+            print("Category ID:", category_id)
+            category = Category.objects.get(id=category_id)
+            print("Category:", category)
+            try:
+                customer = models.Customer.objects.get(id_number=id_number)
+                print("Customer:", customer)
+            except models.Customer.DoesNotExist:
+                print('Customer with ID number', id_number, 'does not exist')
+                return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
+
+            policy = thirdpartypolicyForm.save(commit=False)
+            print("Policy before assignment:", policy)
+            policy.category = category
+            policy.insured = customer
+            policy.cover_start = thirdpartypolicyForm.cleaned_data['cover_start']
+            policy.tenure = thirdpartypolicyForm.cleaned_data['tenure']
+            policy.cover_end = add_months(policy.cover_start, policy.tenure)
+            print("Policy after assignment:", policy)
+
+            # Save the policy
+            policy.save()
+            messages.success(request, "Cover created Successfully!")
+            print("Policy successfully saved!")
+            print("Policy Number:", policy.policy_number)
+            print("Cover End:", policy.cover_end)
+
+            return redirect('admin-view-policy')
+
+    return render(request, 'insurance/admin_add_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
 
 def get_user_details_view(request, id_number):
     if request.method == 'GET':
@@ -267,6 +312,21 @@ def get_user_details_view(request, id_number):
 
 def admin_view_policy_view(request):
     policies = models.Policy.objects.all()
+    
+    # Fetch customer details for each policy based on insured_id
+    customers = Customer.objects.filter(id_number__in=[policy.insured_id for policy in policies])
+
+    # Create a dictionary to map customer id_numbers to customer details
+    customer_details = {customer.id_number: customer for customer in customers}
+
+    # Add customer details to each policy
+    for policy in policies:
+        policy.customer_details = customer_details.get(policy.insured_id)
+        
+    return render(request,'insurance/admin_view_policy.html',{'policies':policies})
+
+def admin_view_thirdpartypolicy_view(request):
+    policies = models.ThirdpartyPolicy.objects.all()
     
     # Fetch customer details for each policy based on insured_id
     customers = Customer.objects.filter(id_number__in=[policy.insured_id for policy in policies])

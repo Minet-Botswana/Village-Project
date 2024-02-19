@@ -90,6 +90,7 @@ def is_customer(user):
 def customer_dashboard_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
     policies = Policy.objects.filter(insured__id_number=customer.id_number)
+    thirdpartypolicy = ThirdpartyPolicy.objects.filter(insured__id_number=customer.id_number)
     dict={
         'customer':models.Customer.objects.get(user_id=request.user.id),
         'available_policy':CMODEL.Policy.objects.all().count(),
@@ -97,6 +98,7 @@ def customer_dashboard_view(request):
         'total_category':CMODEL.Category.objects.all().count(),
         'total_question':CMODEL.Question.objects.all().filter(customer=models.Customer.objects.get(user_id=request.user.id)).count(),
         'policies': policies,
+        'thirdpartypolicy':thirdpartypolicy,
     }
     return render(request,'customer/customer_dashboard.html',context=dict)
 
@@ -113,6 +115,17 @@ def available_policy_view(request):
     print("Number of policies:", policies.count())  # Debug statement
 
     return render(request, 'customer/available_policies.html', {'policies': policies, 'customer': customer})
+
+from insurance.models import ThirdpartyPolicy
+
+def available_thirdpartypolicy_view(request):
+    # Assuming the user is logged in
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    # Filter policies based on the customer's id_number
+    policies = ThirdpartyPolicy.objects.filter(insured__id_number=customer.id_number)
+    print("Number of policies:", policies.count())  # Debug statement
+
+    return render(request, 'customer/available_thirdpartypolicies.html', {'policies': policies, 'customer': customer})
 
 def add_months(start_date, months):
     # Function to add months to a date
