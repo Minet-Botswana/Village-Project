@@ -463,3 +463,20 @@ def contactus_view(request):
             return render(request, 'insurance/contactussuccess.html')
     return render(request, 'insurance/contactus.html', {'form':sub})
 
+
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('afterlogin')  # Redirect to the home page after successful login
+        else:
+            messages.error(request, 'Incorrect username or password.')
+            return render(request, 'login.html')
+    else:
+        return render(request, 'login.html')

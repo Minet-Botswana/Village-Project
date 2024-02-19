@@ -17,13 +17,45 @@ class Policy(models.Model):
     category= models.ForeignKey('Category', on_delete=models.CASCADE)
     insured = models.ForeignKey(Customer, on_delete=models.CASCADE, to_field='id_number', null=True, related_name='policies')
     policy_name=models.CharField(max_length=205)
-    sum_assurance=models.PositiveIntegerField()
-    premium=models.PositiveIntegerField()
+    sum_assurance = models.DecimalField(max_digits=10, decimal_places=2)
+    premium = models.DecimalField(max_digits=10, decimal_places=2)
     tenure=models.PositiveIntegerField()
     creation_date =models.DateField(auto_now=True)
     cover_start = models.DateField(null=True)  # New field for cover start date
     cover_end = models.DateField(null=True) 
     policy_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    expiry_date = models.DateField(null=True) 
+    
+    def __str__(self):
+        return self.policy_name
+    
+    def save(self, *args, **kwargs):
+        if not self.policy_number:
+            while True:
+                # Generate a random alphanumeric string for the policy number
+                random_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+                # Assign the policy number using the desired format
+                potential_policy_number = f"INS-{self.cover_start.year}-{random_string}"
+
+                # Check if the generated policy number is unique
+                if not Policy.objects.filter(policy_number=potential_policy_number).exists():
+                    self.policy_number = potential_policy_number
+                    break
+
+        super().save(*args, **kwargs)
+
+class ThirdpartyPolicy(models.Model):
+    category= models.ForeignKey('Category', on_delete=models.CASCADE)
+    insured = models.ForeignKey(Customer, on_delete=models.CASCADE, to_field='id_number', null=True, related_name='thirdparty_policies')
+    policy_name=models.CharField(max_length=205)
+    #sum_assurance = models.DecimalField(max_digits=10, decimal_places=2)
+    premium = models.DecimalField(max_digits=10, decimal_places=2)
+    tenure=models.PositiveIntegerField()
+    creation_date =models.DateField(auto_now=True)
+    cover_start = models.DateField(null=True)  # New field for cover start date
+    cover_end = models.DateField(null=True) 
+    policy_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    expiry_date = models.DateField(null=True) 
     
     def __str__(self):
         return self.policy_name
