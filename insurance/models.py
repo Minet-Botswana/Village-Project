@@ -8,7 +8,7 @@ class CustomModelName(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) # instead of user_id = IntegerField()
 
 class Category(models.Model):
-    category_name =models.CharField(max_length=20)
+    category_name =models.CharField(max_length=2)
     creation_date =models.DateField(auto_now=True)
     def __str__(self):
         return self.category_name
@@ -23,7 +23,7 @@ class Policy(models.Model):
     creation_date =models.DateField(auto_now=True)
     cover_start = models.DateField(null=True)  # New field for cover start date
     cover_end = models.DateField(null=True) 
-    policy_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    policy_number = models.CharField(max_length=21, unique=True, blank=True, null=True)
     expiry_date = models.DateField(null=True) 
     
     def __str__(self):
@@ -49,12 +49,12 @@ class ThirdpartyPolicy(models.Model):
     insured = models.ForeignKey(Customer, on_delete=models.CASCADE, to_field='id_number', null=True, related_name='thirdparty_policies')
     policy_name=models.CharField(max_length=205)
     #sum_assurance = models.DecimalField(max_digits=10, decimal_places=2)
-    premium = models.DecimalField(max_digits=10, decimal_places=2)
+    premium = models.DecimalField(max_digits=11, decimal_places=2)
     tenure=models.PositiveIntegerField()
     creation_date =models.DateField(auto_now=True)
     cover_start = models.DateField(null=True)  # New field for cover start date
     cover_end = models.DateField(null=True) 
-    policy_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    policy_number = models.CharField(max_length=21, unique=True, blank=True, null=True)
     expiry_date = models.DateField(null=True) 
     
     def __str__(self):
@@ -78,8 +78,29 @@ class ThirdpartyPolicy(models.Model):
 class PolicyRecord(models.Model):
     customer= models.ForeignKey(Customer, on_delete=models.CASCADE)
     Policy= models.ForeignKey(Policy, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100,default='Pending')
+    status = models.CharField(max_length=101,default='Pending')
     creation_date =models.DateField(auto_now=True)
+    
+    @property
+    def cover_start(self):
+        return self.Policy.cover_start 
+    
+    @property
+    def cover_end(self):
+        return self.Policy.cover_end  
+    
+    @property
+    def tenure(self):
+        return self.Policy.tenure
+    
+    def __str__(self):
+        return f"{self.customer} - {self.Policy} - {self.status}"
+
+class ThirdpartyPolicyRecord(models.Model):
+    thirdpartycustomer= models.ForeignKey(Customer, on_delete=models.CASCADE)
+    thirdpartypolicy= models.ForeignKey(ThirdpartyPolicy, null=True, on_delete=models.CASCADE)
+    thirdpartystatus = models.CharField(max_length=101,default='Pending')
+    thirdpartycreation_date =models.DateField(auto_now=True)
     
     @property
     def cover_start(self):
