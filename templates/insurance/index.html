@@ -1072,6 +1072,14 @@ transition: var(--transition);
   grid-row: 1 / 2;
 }
 
+.features-banner {
+  display: none; /* Hide all images by default */
+}
+
+.features-banner img {
+  width: 100%; /* Ensure images fill their container */
+}
+
 
 
 /**
@@ -1316,7 +1324,13 @@ transition: var(--transition);
           <div class="features-wrapper">
 
             <figure class="features-banner">
-              <img src="https://storage.googleapis.com/ko_gae_bucket/logos/homepage.jpg" alt="illustration art">
+              <img src="https://storage.googleapis.com/ko_gae_bucket/media/Minet%20Holiday%20Artworks%202-11.jpg" alt="Illustration 1">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/ko_gae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Illustration 2">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/ko_gae_bucket/media/Minet%20Holiday%20Artworks%202-09.jpg" alt="Illustration 3">
             </figure>
 
             <div class="features-content">
@@ -1365,7 +1379,13 @@ transition: var(--transition);
           <div class="features-wrapper">
 
             <figure class="features-banner">
-              <img src="https://storage.googleapis.com/ko_gae_bucket/logos/homepage.jpg" alt="illustration art">
+              <img src="https://storage.googleapis.com/ko_gae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Illustration 4">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/ko_gae_bucket/media/Minet%20Holiday%20Artworks%202-03.jpg" alt="Illustration 5">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/ko_gae_bucket/media/Minet%20Holiday%20Artworks%202-01.jpg" alt="Illustration 6">
             </figure>
 
             <div class="features-content">
@@ -1690,25 +1710,25 @@ transition: var(--transition);
           <ul class="social-list">
 
             <li>
-              <a href="https://www.facebook.com/MinetBotswana/" class="social-link">
+              <a href="https://www.facebook.com/MinetBotswana/" title="Facebook" class="social-link">
                 <ion-icon name="logo-facebook"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="https://twitter.com/minet_botswana?lang=en" class="social-link">
+              <a href="https://twitter.com/minet_botswana?lang=en" title="Twitter" class="social-link">
                 <ion-icon name="logo-twitter"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="https://www.instagram.com/minet_botswana_holdings/" class="social-link">
+              <a href="https://www.instagram.com/minet_botswana_holdings/" title="instagram" class="social-link">
                 <ion-icon name="logo-instagram"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="https://www.linkedin.com/company/minet-bw/mycompany/" class="social-link">
+              <a href="https://www.linkedin.com/company/minet-bw/mycompany/" title="linkedin" class="social-link">
                 <ion-icon name="logo-linkedin"></ion-icon>
               </a>
             </li>
@@ -1816,6 +1836,23 @@ transition: var(--transition);
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script>
+    // JavaScript to implement the slideshow functionality
+    let slideIndex = 0;
+      showSlides();
+
+    function showSlides() {
+      let i;
+      const slides = document.getElementsByClassName("features-banner");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  // Hide all images
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}  // Reset index if exceeds number of slides
+      slides[slideIndex-1].style.display = "block";  // Display current slide
+      setTimeout(showSlides, 3000); // Change image every 2 seconds
+    }
+  </script>
 
 </body>
 

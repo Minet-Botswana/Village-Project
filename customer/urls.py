@@ -17,7 +17,9 @@ urlpatterns = [
     path('apply-policy', views.apply_policy_view,name='apply-policy'),
     path('apply-thirdparty', views.apply_thirdparty_view,name='apply-thirdparty'),
     path('apply/<int:pk>', views.apply_view,name='apply'),
+    path('apply-thirdparty/<int:pk>', views.thirdpartyapply_view,name='apply'),
     path('history', views.history_view,name='history'),
+    path('thirdpartyhistory', views.thirdpartyhistory_view,name='history'),
 
     path('ask-question', views.ask_question_view,name='ask-question'),
     path('question-history', views.question_history_view,name='question-history'),
