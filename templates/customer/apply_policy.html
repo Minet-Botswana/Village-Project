@@ -112,55 +112,57 @@
     <h2 style="text-align:center; color:#e21a22; font-family: 
     'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
     -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-    sans-serif; font-size: 20px; background-color: rgb(255, 255, 255);">ADD POLICY</h2>
+    sans-serif; font-size: 20px; background-color: rgb(255, 255, 255);">Add Homeowners Cover</h2>
 
     <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
       {% csrf_token %}
-      <div class="form-group">
-          <label for="id_number">ID Number</label>
-          <input type="text" name="id_number" id="id_number" class="form-control" placeholder="Enter ID Number" required>
+        <div class="form-group">
+            <label for="id_number">ID Number</label>
+            <input type="text" name="id_number" id="id_number" class="form-control" placeholder="Enter ID Number" required>
   
-          <label for="category">Cover Category</label>
-          <select name="category" id="category" class="form-control" required>
-            <option value="" selected disabled>Select Cover Category</option>
-            <option value="2" disabled>Long Term Cover</option>
-            <option value="3">Short Term Cover</option>
-          </select>
+            <label for="category">Cover Category</label>
+               <select name="category" id="category" class="form-control" required>
+                   <option value="" selected disabled>Select Cover Category</option>
+                   <option value="2" disabled>Long Term Cover</option>
+                   <option value="3">Short Term Cover</option>
+                </select>
   
-          <label for="policy_name">Risk</label>
-          <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
+            <label for="policy_name">Risk</label>
+            <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
   
-          <label for="sum_assurance">Value</label>
-          <input type="text" name="sum_assurance" id="sum_assurance" class="form-control" placeholder="Value" required required oninput="calculatePremium()">
+            <label for="sum_assurance">Value</label>
+            <input type="text" name="sum_assurance" id="sum_assurance" class="form-control" placeholder="Value" required required oninput="calculatePremium()">
   
-          <label for="premium">Premium</label>
-          <input type="text" name="premium" id="premium" class="form-control" placeholder="Premium" required readonly>
+            <label for="premium">Premium</label>
+            <input type="text" name="premium" id="premium" class="form-control" placeholder="Premium" required readonly>
   
-          <label for="cover_start">Cover Start:</label>
-          <input type="date" name="cover_start" id="cover_start" class="form-control" required>
+            <label for="cover_start">Cover Start:</label>
+            <input type="date" name="cover_start" id="cover_start" class="form-control" required>
   
-          <!--label for="tenure">Tenure (in months):</label>
-          <input type="number" name="tenure" id="tenure" class="form-control" placeholder="Tenure (in months)" required-->
+            <!--label for="tenure">Tenure (in months):</label>
+            <input type="number" name="tenure" id="tenure" class="form-control" placeholder="Tenure (in months)" required-->
 
-          <label for="tenure">Tenure (in months):</label>
-          <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+            <label for="tenure">Tenure (in months):</label>
+            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
 
   
-          <div>
-            <label for="id_expiry_date">Expiry Date:</label>
-            <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
-        </div>        
+            <div>
+               <label for="id_expiry_date">Expiry Date:</label>
+               <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
+            </div>        
 
-          <!-- Display the automatically calculated cover_end -->
-          <div>
-            <label for="id_cover_end">Renewal Date:</label>
-            <input type="text" name="cover_end" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
+            <!-- Display the automatically calculated cover_end -->
+            <div>
+               <label for="id_cover_end">Renewal Date:</label>
+               <input type="text" name="cover_end" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
+            </div>
         </div>
-      </div>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
-          View Policy
-      </button>
-      <button type="submit" class="btn btn-primary" style="background-color: #e21a22;">Create Policy</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
+           View Policy
+        </button>
+        <button type="submit" class="btn btn-primary" style="background-color: #e21a22;">
+            Create Policy
+        </button>
     </form>
   
     <br><br><br><br>

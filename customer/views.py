@@ -190,41 +190,27 @@ from datetime import timedelta
 
 def apply_policy_view(request):
     policyForm = PolicyForm()
-    print("Request method:", request.method)
     if request.method == 'POST':
         policyForm = PolicyForm(request.POST)
-        print("Policy Form:", policyForm)
         if policyForm.is_valid():
-            print("Form is valid")
             id_number = request.POST.get('id_number')
-            print("ID Number:", id_number)
             category_id = request.POST.get('category')
-            print("Category ID:", category_id)
             category = Category.objects.get(id=category_id)
-            print("Category:", category)
             try:
                 customer = models.Customer.objects.get(id_number=id_number)
-                print("Customer:", customer)
             except models.Customer.DoesNotExist:
-                print('Customer with ID number', id_number, 'does not exist')
                 return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
 
             policy = policyForm.save(commit=False)
-            print("Policy before assignment:", policy)
             policy.category = category
             policy.insured = customer
             policy.cover_start = policyForm.cleaned_data['cover_start']
             policy.tenure = policyForm.cleaned_data['tenure']
             policy.cover_end = add_months(policy.cover_start, policy.tenure)
-            print("Policy after assignment:", policy)
 
             # Save the policy
             policy.save()
             messages.success(request, "Cover created Successfully!")
-            print("Policy successfully saved!")
-            print("Policy Number:", policy.policy_number)
-            print("Cover End:", policy.cover_end)
-
             return redirect('customer:available-policies')
 
     return render(request, 'customer/apply_policy.html', {'policyForm': policyForm})
@@ -239,10 +225,24 @@ def apply_view(request,pk):
     policyrecord.save()
     return redirect('customer:history')
 
+def thirdpartyapply_view(request,pk):
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    policy = CMODEL.ThirdpartyPolicy.objects.get(id=pk)
+    policyrecord = CMODEL.ThirdpartyPolicyRecord()
+    policyrecord.policy = policy
+    policyrecord.customer = customer
+    policyrecord.save()
+    return redirect('customer:thirdpartyhistory')
+
 def history_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
     policies = CMODEL.PolicyRecord.objects.all().filter(customer=customer)
     return render(request,'customer/history.html',{'policies':policies,'customer':customer})
+
+def thirdpartyhistory_view(request):
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    policies = CMODEL.ThirdpartyPolicyRecord.objects.all().filter(customer=customer)
+    return render(request,'customer/thirdpartyhistory.html',{'policies':policies,'customer':customer})
 
 def ask_question_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)

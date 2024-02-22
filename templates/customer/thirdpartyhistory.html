@@ -29,6 +29,7 @@
     .row {
       margin: 100px;
     }
+
        label #sidebar_btn {
       z-index: 1;
       color: #fff;
@@ -42,71 +43,37 @@
       transition: 0.5s;
       transition-property: color;
     }
-    .alert-messages {
-    background-color: rgb(7, 253, 7);
-    color: #721c24;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-  }
-  .messages {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .messages li {
-    margin-bottom: 5px;
-  }
   </style>
 </head>
-<br>
-{% if messages %}
-<div class="alert-messages">
-    <ul class="messages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-            {{ message }}
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-<br>
-
+<br><br>
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h6 class="panel-title">My Listed Thirdparty Motor Cover Policies</h6>
+      <h6 class="panel-title">My Thirdparty Policies</h6>
     </div>
     <table class="table table-hover" id="dev-table">
       <thead>
         <tr>
-        <th>Policy No.</th>
-        <th>Risk</th>
-        <th> Category</th>
-        <th> Premium</th>
-        <th> Tenure</th>
-        <th> Creation Date</th>
-        <th> Apply</th>
+        <!--th>Policy No.</th-->
+          <th>Risk</th>
+
+          <th> Applied Date</th>
+          <th> Status</th>
           
         </tr>
       </thead>
       {% for t in policies %}
       <tr>
-        <td> {{t.policy_number }}</td>
-        <td> {{t.policy_name}}</td>
-        <td> {{t.category}}</td>
-        <td> {{t.premium}}</td>
-        <td> {{t.tenure}}</td>
+        <!--td> {{ t.policy_number }}</td-->
+        <td> {{t.Policy}}</td>
+
         <td>{{t.creation_date}}</td>
-        <td><a class="btn btn-danger btn-xs" href="{% url 'customer:apply' t.id  %}">Apply</a></td>
+        <td>{{t.status}}</td>
       </tr>
       {% endfor %}
     </table>
   </div>
 </div>
 
-<br>
-
-<br><br><br><br><br>
+<br><br><br><br><br><br>
 {% endblock content %}

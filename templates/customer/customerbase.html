@@ -252,7 +252,27 @@
     <!--a href="/customer/available-policies"><i class="fab fa-product-hunt"></i><span>Homeowners Policies</span></a>
     <a href="/customer/available-thirdpartypolicies"><i class="fab fa-product-hunt"></i><span>Third Party Policies</span></a-->
     
-    <a href="/customer/history"><i class="fas fa-history"></i><span>My Policies</span></a>
+      <a onclick="selectPolicy()" style="text-decoration: none;color:white; cursor:pointer;">
+        <i class="fas fa-history"></i><span>My Policies</span>
+    </a>
+    
+    <script>
+        function selectPolicy() {
+            var policyType = prompt("Please select the policy type:\n1. Homeowners Policy\n2. Third Party Policy");
+            
+            if (policyType === "1") {
+                window.location.href = "/customer/history?type=homeowners";
+            } else if (policyType === "2") {
+                window.location.href = "/customer/thirdpartyhistory?type=thirdparty";
+            } else {
+                alert("Invalid input. Please select 1 or 2.");
+            }
+        }
+    </script>
+    
+
+
+
     <a href="/customer/forms"><i class="fas fa-file"></i><span>Forms</span></a>
     <a href="/#sets"><i class="fas fa-credit-card"></i><span>Payments</span></a>
     <a href="/customer/ask-question"><i class="fas fa-question-circle"></i><span>Ask Question</span></a>
