@@ -54,6 +54,7 @@ background-color: transparent;
 margin-left: 3px;
 margin-top: 4px;
 margin-right: 12px;
+
 }
 
 label {
@@ -66,6 +67,8 @@ margin-left: 10px;
 tr.policy-row {
   cursor: pointer !important;
 }
+
+
 </style>
 
   <!-- DataTables CSS -->
@@ -73,7 +76,8 @@ tr.policy-row {
 
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+  
+  
   <!-- Bootstrap JavaScript -->
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
@@ -92,7 +96,7 @@ tr.policy-row {
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h6 class="panel-title">Homeowners Policy Holder Record</h6>
+      <h6 class="panel-title">Third Party Policy Holder Record</h6>
     </div>
     <table class="table table-hover" id="dev-table">
       <thead>
@@ -100,32 +104,30 @@ tr.policy-row {
           <th>Policy No.</th>
           <th>Policy Name</th>
           <th>Customer Name</th>
-          <th>Applied Date</th>
+          <th>Effective Date</th>
           <th>Status</th>
           <th class="text-right">Action</th>
         </tr>
       </thead>
       {% for t in policyrecords %}
-      <tr>
-        <td data-toggle="modal" data-target="#expiryModal{{ t.id }}"> {{ t.Policy.policy_number }}</td>
-        <td> {{t.Policy}}</td>
-        <td> {{t.customer}}</td> 
-        <td>{{t.creation_date}}</td>
-        <td>{{t.status}}</td>
-
-                    {% if t.status == 'Pending' %}
-                <td class="text-right">
-                    <button class="btn btn-primary badge-pill" style="width: 120px;"><a  style="text-decoration: none;color: white;" href="{% url 'approve-request' t.id  %}">Approve</a> </button>
-                    <button class="btn btn-danger badge-pill" style="width: 80px;"><a  style="text-decoration: none;color: white;" href="{% url 'reject-request' t.id  %}">Reject</a> </button>
-                </td>              
-
-                {% else %}
-                <td class="text-right">
-                <span style="color:red;font-size:20px;" class="label success">{{t.status}}</span></td>
-                
-
-                {% endif %}
+      <tr data-toggle="modal" data-target="#expiryModal{{ t.id }}">
+        <td>{{t.thirdpartypolicy.policy_number }}</td>
+        <td>{{t.thirdpartypolicy}}</td>
+        <td>{{t.thirdpartycustomer}}</td>
+        <td>{{t.thirdpartycreation_date}}</td>
+        <td>{{t.thirdpartystatus}}</td>
+        {% if t.thirdpartystatus == 'Pending' %}
+        <td class="text-right">
+          <button class="btn btn-primary badge-pill" style="width: 80px;"><a  style="text-decoration: none;color: white;" href="{% url 'approve-thirdpartyrequest' t.id  %}">Approve</a> </button>
+          <button class="btn btn-danger badge-pill" style="width: 60px;"><a  style="text-decoration: none;color: white;" href="{% url 'reject-thirdpartyrequest' t.id  %}">Reject</a> </button>
+        </td>
+        {% else %}
+        <td class="text-right">
+          <span style="color:red;font-size:14px;" class="label success">{{t.thirdpartystatus}}</span>
+        </td>
+        {% endif %}
       </tr>
+      
       <!-- Modal for Expiry Date -->
       <div class="modal fade" id="expiryModal{{ t.id }}" tabindex="-1" role="dialog" aria-labelledby="expiryModalLabel{{ t.id }}" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -137,15 +139,15 @@ tr.policy-row {
               </button>
             </div>
             <div class="modal-body">
-              <p><strong>Policy Number:</strong> {{ t.Policy.policy_number }}</p>
-              <p><strong>Risk:</strong> {{ t.Policy.policy_name }}</p>
-              <p><strong>Category:</strong> {{ t.Policy.category }}</p>
-              <p><strong>Premium:</strong> BWP{{ t.Policy.premium }}</p>
-              <p><strong>Tenure:</strong> {{ t.Policy.tenure }} Months</p>
-              <p><strong>Creation Date:</strong> {{ t.Policy.creation_date }}</p>
-              <p><strong>Effective Date Start:</strong> {{ t.Policy.cover_start }}</p>
-             <p><strong>Expiry Date:</strong> {{ t.Policy.expiry_date }}</p>
-             <p><strong>Renewal Date:</strong> {{ t.Policy.cover_end }}</p>
+              <p><strong>Policy Number:</strong> {{ t.thirdpartypolicy.policy_number }}</p>
+              <p><strong>Risk:</strong> {{ t.thirdpartypolicy.policy_name }}</p>
+              <p><strong>Category:</strong> {{ t.thirdpartypolicy.category }}</p>
+              <p><strong>Premium:</strong> BWP{{ t.thirdpartypolicy.premium }}</p>
+              <p><strong>Tenure:</strong> {{ t.thirdpartypolicy.tenure }} Months</p>
+              <p><strong>Creation Date:</strong> {{ t.thirdpartypolicy.creation_date }}</p>
+              <p><strong>Cover Start:</strong> {{ t.thirdpartypolicy.cover_start }}</p>
+             <p><strong>Cover End:</strong> {{ t.thirdpartypolicy.cover_end }}</p>
+             <p><strong>Expiry Date:</strong> {{ t.thirdpartypolicy.expiry_date }}</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -161,12 +163,11 @@ tr.policy-row {
 <script>
   $(document).ready(function () {
     // Handle click on row to show the expiry date modal
-    $('td[data-toggle="modal"]').click(function () {
+    $('tr[data-toggle="modal"]').click(function () {
       var modalId = $(this).data('target');
       $(modalId).modal('show');
     });
   });
 </script>
 
-<br><br><br><br><br><br>
 {% endblock content %}
