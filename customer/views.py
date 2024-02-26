@@ -153,6 +153,13 @@ def apply_thirdparty_view(request):
         print("Policy Form:", thirdpartypolicyForm)
         if thirdpartypolicyForm.is_valid():
             print("Form is valid")
+            
+            # Check for form validation errors
+            if not thirdpartypolicyForm.is_valid():
+               print("Form errors:", thirdpartypolicyForm.errors)
+               # Here you can render the form again with errors if you want
+               return render(request, 'customer/apply_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
+        
             id_number = request.POST.get('id_number')
             print("ID Number:", id_number)
             category_id = request.POST.get('category')
@@ -190,6 +197,7 @@ from datetime import timedelta
 
 def apply_policy_view(request):
     policyForm = PolicyForm()
+    print("Request method:", request.method)
     if request.method == 'POST':
         policyForm = PolicyForm(request.POST)
         if policyForm.is_valid():
@@ -215,7 +223,7 @@ def apply_policy_view(request):
 
     return render(request, 'customer/apply_policy.html', {'policyForm': policyForm})
 
-
+'''
 def apply_view(request,pk):
     customer = models.Customer.objects.get(user_id=request.user.id)
     policy = CMODEL.Policy.objects.get(id=pk)
@@ -224,13 +232,24 @@ def apply_view(request,pk):
     policyrecord.customer = customer
     policyrecord.save()
     return redirect('customer:history')
+'''
+def apply_view(request, pk):
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    policy = CMODEL.Policy.objects.get(id=pk)
+    policyrecord = CMODEL.PolicyRecord()
+    policyrecord.Policy = policy
+    policyrecord.customer = customer
+    policyrecord.save()
+    return redirect('customer:history')
+
+
 
 def thirdpartyapply_view(request,pk):
     customer = models.Customer.objects.get(user_id=request.user.id)
     policy = CMODEL.ThirdpartyPolicy.objects.get(id=pk)
     policyrecord = CMODEL.ThirdpartyPolicyRecord()
-    policyrecord.policy = policy
-    policyrecord.customer = customer
+    policyrecord.thirdpartypolicy = policy
+    policyrecord.thirdpartycustomer = customer
     policyrecord.save()
     return redirect('customer:thirdpartyhistory')
 
@@ -241,7 +260,7 @@ def history_view(request):
 
 def thirdpartyhistory_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
-    policies = CMODEL.ThirdpartyPolicyRecord.objects.all().filter(customer=customer)
+    policies = CMODEL.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer)
     return render(request,'customer/thirdpartyhistory.html',{'policies':policies,'customer':customer})
 
 def ask_question_view(request):
