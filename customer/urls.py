@@ -16,10 +16,10 @@ urlpatterns = [
     path('available-thirdpartypolicies', views.available_thirdpartypolicy_view,name='available-thirdpartypolicies'),
     path('apply-policy', views.apply_policy_view,name='apply-policy'),
     path('apply-thirdparty', views.apply_thirdparty_view,name='apply-thirdparty'),
-    path('apply/<int:pk>', views.apply_view,name='apply'),
-    path('apply-thirdparty/<int:pk>', views.thirdpartyapply_view,name='apply'),
+    path('apply-homeowners/<int:pk>', views.apply_view,name='apply-homeowners'),
+    path('apply-thirdparty/<int:pk>', views.thirdpartyapply_view,name='apply-thirdparty'),
     path('history', views.history_view,name='history'),
-    path('thirdpartyhistory', views.thirdpartyhistory_view,name='history'),
+    path('thirdpartyhistory/', views.thirdpartyhistory_view,name='thirdpartyhistory'),
 
     path('ask-question', views.ask_question_view,name='ask-question'),
     path('question-history', views.question_history_view,name='question-history'),

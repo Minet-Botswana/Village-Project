@@ -8,7 +8,7 @@ class CustomModelName(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) # instead of user_id = IntegerField()
 
 class Category(models.Model):
-    category_name =models.CharField(max_length=2)
+    category_name =models.CharField(max_length=20)
     creation_date =models.DateField(auto_now=True)
     def __str__(self):
         return self.category_name
@@ -104,18 +104,18 @@ class ThirdpartyPolicyRecord(models.Model):
     
     @property
     def cover_start(self):
-        return self.Policy.cover_start 
+        return self.thirdpartypolicy.cover_start 
     
     @property
     def cover_end(self):
-        return self.Policy.cover_end  
+        return self.thirdpartypolicy.cover_end  
     
     @property
     def tenure(self):
-        return self.Policy.tenure
+        return self.thirdpartypolicy.tenure
     
     def __str__(self):
-        return f"{self.customer} - {self.Policy} - {self.status}"
+        return f"{self.thirdpartycustomer} - {self.thirdpartypolicy} - {self.thirdpartystatus}"
 
 class Question(models.Model):
     customer= models.ForeignKey(Customer, on_delete=models.CASCADE)

@@ -101,7 +101,7 @@
         <td> {{t.premium}}</td>
         <td> {{t.tenure}}</td>
         <td>{{t.creation_date}}</td>
-        <td><a class="btn btn-danger btn-xs" href="{% url 'customer:apply' t.id  %}">Apply</a></td>
+        <td><a class="btn btn-danger btn-xs" href="{% url 'customer:apply-homeowners' t.id  %}">Apply Homeowners</a></td>
       </tr>
       {% endfor %}
     </table>

@@ -63,12 +63,17 @@ def admin_dashboard_view(request):
     dict={
         'total_user':CMODEL.Customer.objects.all().count(),
         'total_policy':models.Policy.objects.all().count(),
+        'total_thirdpartypolicy':models.ThirdpartyPolicy.objects.all().count(),
         'total_category':models.Category.objects.all().count(),
         'total_question':models.Question.objects.all().count(),
         'total_policy_holder':models.PolicyRecord.objects.all().count(),
         'approved_policy_holder':models.PolicyRecord.objects.all().filter(status='Approved').count(),
         'disapproved_policy_holder':models.PolicyRecord.objects.all().filter(status='Disapproved').count(),
         'waiting_policy_holder':models.PolicyRecord.objects.all().filter(status='Pending').count(),
+        'total_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().count(),
+        'approved_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Approved').count(),
+        'disapproved_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Disapproved').count(),
+        'waiting_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Pending').count(),
     }
     return render(request,'insurance/admin_dashboard.html',context=dict)
 
@@ -338,8 +343,23 @@ def admin_view_thirdpartypolicy_view(request):
     for policy in policies:
         policy.customer_details = customer_details.get(policy.insured_id)
         
-    return render(request,'insurance/admin_view_policy.html',{'policies':policies})
+    return render(request,'insurance/admin_view_thirdpartypolicy.html',{'policies':policies})
+'''
+def admin_view_thirdpartypolicy_view(request):
+    policies = models.ThirdpartyPolicy.objects.all()
+    
+    # Fetch customer details for each policy based on insured_id
+    customers = Customer.objects.filter(id_number__in=[policy.insured_id for policy in policies])
 
+    # Create a dictionary to map customer id_numbers to customer details
+    customer_details = {customer.id_number: customer for customer in customers}
+
+    # Add customer details to each policy
+    for policy in policies:
+        policy.customer_details = customer_details.get(policy.insured_id)
+        
+    return render(request,'insurance/admin_view_policy.html',{'policies':policies})
+'''
 
 
 def admin_update_policy_view(request):
@@ -377,20 +397,38 @@ def delete_policy_view(request,pk):
     return redirect('admin-delete-policy')
 
 def admin_view_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all()
+    #policyrecords = models.PolicyRecord.objects.all()
+    policyrecords = models.PolicyRecord.objects.select_related('Policy').all()
     return render(request,'insurance/admin_view_policy_holder.html',{'policyrecords':policyrecords})
+
+def admin_view_thirdpartypolicy_holder_view(request):
+    #policyrecords = models.ThirdpartyPolicyRecord.objects.all()
+    policyrecords = models.ThirdpartyPolicyRecord.objects.select_related('thirdpartypolicy').all()
+    return render(request,'insurance/admin_view_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
 
 def admin_view_approved_policy_holder_view(request):
     policyrecords = models.PolicyRecord.objects.all().filter(status='Approved')
     return render(request,'insurance/admin_view_approved_policy_holder.html',{'policyrecords':policyrecords})
 
+def admin_view_approved_thirdpartypolicy_holder_view(request):
+    policyrecords = models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Approved')
+    return render(request,'insurance/admin_view_approved_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
+
 def admin_view_disapproved_policy_holder_view(request):
     policyrecords = models.PolicyRecord.objects.all().filter(status='Disapproved')
     return render(request,'insurance/admin_view_disapproved_policy_holder.html',{'policyrecords':policyrecords})
 
+def admin_view_disapproved_thirdpartypolicy_holder_view(request):
+    policyrecords = models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Disapproved')
+    return render(request,'insurance/admin_view_disapproved_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
+
 def admin_view_waiting_policy_holder_view(request):
     policyrecords = models.PolicyRecord.objects.all().filter(status='Pending')
     return render(request,'insurance/admin_view_waiting_policy_holder.html',{'policyrecords':policyrecords})
+
+def admin_view_waiting_thirdpartypolicy_holder_view(request):
+    policyrecords = models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Pending')
+    return render(request,'insurance/admin_view_waiting_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
 
 def approve_request_view(request,pk):
     policyrecords = models.PolicyRecord.objects.get(id=pk)
@@ -403,6 +441,18 @@ def disapprove_request_view(request,pk):
     policyrecords.status='Disapproved'
     policyrecords.save()
     return redirect('admin-view-policy-holder')
+
+def approve_thirdpartyrequest_view(request,pk):
+    policyrecords = models.ThirdpartyPolicyRecord.objects.get(id=pk)
+    policyrecords.thirdpartystatus='Approved'
+    policyrecords.save()
+    return redirect('admin-view-thirdpartypolicy-holder')
+
+def disapprove_thirdpartyrequest_view(request,pk):
+    policyrecords = models.ThirdpartyPolicyRecord.objects.get(id=pk)
+    policyrecords.thirdpartystatus='Disapproved'
+    policyrecords.save()
+    return redirect('admin-view-thirdpartypolicy-holder')
 
 
 def admin_question_view(request):
