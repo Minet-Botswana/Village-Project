@@ -1,77 +1,44 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>login</title>
-
-{% load widget_tweaks %}
-{% load static %}
-<link rel="icon" href="{% static 'image/favicon.ico' %}">
-<html-- lang="en" dir="ltr">
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    {% load widget_tweaks %}
+    {% load static %}
+    <link rel="icon" href="{% static 'image/favicon.ico' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Additional custom CSS styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fafafa; /* Fallback color */
+            background-image: url('https://storage.googleapis.com/ko_gae_bucket/media/Bakground-image-login.jpg'); /* Add the path to your abstract art image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-  <style media="screen">
-    @import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,300,600);
-    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Koulen&family=Lato&family=Nunito&family=Playfair+Display:ital@1&family=Prata&family=Raleway:ital,wght@1,100&family=Roboto&family=Roboto+Condensed&family=Teko&display=swap');
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+        }
 
-      *{box-sizing:border-box;}
+        .card-title {
+            font-weight: bold;
+            color: #333;
+        }
 
-      body {
-        font-family: "Titillium Web", sans-serif;
-        background:url(http://farm8.staticflickr.com/7064/6858179818_5d652f531c_h.jpg) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-      }
-      
-      h2 {
-        width: 100%;
-        color: #201d0b; /* Replace var(--blue) with the actual color value */
-        font-family: "Titillium Web", sans-serif;
-        font-size: 1.35em;
-        display: block;
-        background: #e21a22;
-        text-transform: uppercase;
-        padding: .75em 1em .75em 1.5em;
-        box-shadow: inset 0px 1px 1px rgba(255, 255, 255, 0.95);
-        border: 1px solid #262626;
-        text-shadow: 0px 1px 1px #262626; 
-        margin: 0;
-        font-weight: 20; 
-      }
-
-      .log-form {
-        width: 30%;
-        min-width: 320px;
-        background: #ffffff;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        border-radius: 2px;
-        -webkit-transform: translate(-50%,-50%);
-        -moz-transform: translate(-50%,-50%);
-        -o-transform: translate(-50%,-50%);
-        -ms-transform: translate(-50%,-50%);
-        transform: translate(-50%,-50%);
-        box-shadow: 0px 2px 5px rgba(223, 4, 4, 0.987);
-
-        
-    }
-
-      input {
-          display: block;
-          margin: auto auto;
-          width: 50%;
-          margin-bottom: 8em;
-          padding: .5em 0;
-          border: none;
-          border-bottom: 1px solid #eaeaea;
-          padding-bottom: 1.25em;
-          color: #757575;
-          &:focus {
-            outline: none;
-          }
+        .form-group label {
+            font-weight: bold;
+            color: #555;
         }
 
         .login-btn{
@@ -94,6 +61,7 @@
           text-transform: lowercase;
         }
 
+
         .login-btn:hover{
           transition : 497ms;
           padding: 10px 36px;
@@ -104,41 +72,18 @@
           border-radius: 30px;
         }
 
-      form {
-          display: block;
-          width: 100%;
-          padding: 2em;
+
+        .forgot-password-link {
+            color: #1900ff;
+            font-size: 14px;
         }
 
-      .logo {
-        position: absolute;
-        top: 40px; /* Adjust the vertical position for the logo */
-        left: 0px; /* Adjust the horizontal position for the logo */
-        padding: 50px;
-      }
-
-      .navbar {
-        position: relative;
-      }
-
-      .logo-header {
-        background-color: #ffffff; /* Background color for the logo-header */
-        padding: 0px; /* Adjust padding as needed to add for another header */
-        text-align: center;
-      }
-
-      @media only screen and (max-width: 900px) {
-            .row {
-                grid-template-columns: auto auto;
-            }
+        .forgot-password-link:hover {
+            text-decoration: underline;
+            color: #555;
         }
-        @media only screen and (max-width: 6px) {
-            .row {
-                grid-template-columns: auto;
-            }
-      }
 
-      .error-message {
+        .error-message {
     animation: wobble 0.5s ease-in-out;
   }
 
@@ -153,52 +98,58 @@
   }
     </style>
 
-  {% include "insurance/navbar.html" %}
-  <!-- Logo Header 
-  <div class="logo-header">
-    <div class="logo">
-      <img src="{% static 'image/Minet1.png' %}" alt="Logo" width="100">
-    </div>
-  </div-->
-</head>
+    {% include "insurance/navbar.html"%}
 
-<!--body>
-<div class="log-form">
-  <h2 class="text-center">Login</h2>
-  <br>
-  <form method="post">
-    {% csrf_token %}
-    {% render_field form.username class="form-control" placeholder="Username" %}
-    <br>
-    {% render_field form.password class="form-control" placeholder="Password" %}
-    <br>
-    <button type="submit" class="login-btn">Login</button>
-  </form>
-</div>
-<footer>
-  {% include "insurance/footer.html" %}
-</footer>
-</html-->
+</head>
 <body>
-  <div class="log-form">
-    <h2 class="text-center">Login</h2>
-    <br>
-    {% if form.errors %}
-      <div class="alert alert-danger error-message">
-        Incorrect username or password. Please try again.
-      </div>
-    {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      {% render_field form.username class="form-control" placeholder="Username" %}
-      <br>
-      {% render_field form.password class="form-control" placeholder="Password" %}
-      <br>
-      <button type="submit" class="login-btn">Login</button>
-    </form>
-  </div><!--end log form -->
-  <footer>
-    {% include "insurance/footer.html" %}
-  </footer>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Login</h2>
+                    {% if form.errors %}
+                        <div class="alert alert-danger error-message" role="alert">
+                            Incorrect username or password. Please try again.
+                        </div>
+                    {% endif %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username"  id="username">username</label>
+                            {% render_field form.username class="form-control" placeholder="Enter your username" %}
+                        </div>
+                        <div class="form-group">
+                            <label for="password">password</label>
+                            <div class="input-group">
+                                {% render_field form.password class="form-control" placeholder="Enter your password" %}
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <input id="checkbox" type="checkbox" onclick="togglePasswordVisibility()">
+                                        <label class="form-check-label ml-2" for="checkbox">Show</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="login-btn">Login</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'customer:password_reset' %}" class="forgot-password-link" >Forgot Password?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("id_password");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+</script>
 </body>
 </html>

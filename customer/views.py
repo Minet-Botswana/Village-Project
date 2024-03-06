@@ -18,7 +18,20 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from datetime import timedelta, date
 import calendar
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
+from django.contrib.auth.views import LoginView
 
+class PasswordResetConfirmViewCustom(auth_views.PasswordResetConfirmView):
+    template_name = 'forgot_password.html'  # Your custom template for password reset confirmation
+    success_url = reverse_lazy('password_reset_complete')  # URL to redirect after password reset confirmation
+    
+    
+class MyLoginView(LoginView):
+    def form_invalid(self, form):
+        print("Invalid login attempt")
+        print(form.errors)
+        return super().form_invalid(form)
 
 def customerclick_view(request):
     if request.user.is_authenticated:
@@ -44,6 +57,7 @@ def customer_signup_view(request):
             my_customer_group[0].user_set.add(user)
         return HttpResponseRedirect('customerlogin')
     return render(request,'customer/customersignup.html',context=mydict)
+'''
 '''
 def customer_signup_view(request):
     user_form = forms.CustomerUserForm()
@@ -77,11 +91,122 @@ def customer_signup_view(request):
             return HttpResponseRedirect('customerlogin')
 
     return render(request, 'customer/customersignup.html', context=mydict)
+'''
+from django.contrib.auth.models import User
+from django.contrib import messages
+''''
+def customer_signup_view(request):
+    print("Entering customer_signup_view function")  # Print when entering the function
+    user_form = forms.CustomerUserForm()
+    customer_form = forms.CustomerForm()
+    mydict = {'userForm': user_form, 'customerForm': customer_form}
+
+    if request.method == 'POST':
+        print("Processing POST request")
+        user_form = forms.CustomerUserForm(request.POST)
+        customer_form = forms.CustomerForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and customer_form.is_valid():
+            print("Forms are valid")
+            username = user_form.cleaned_data['username']
+            if User.objects.filter(username=username).exists():
+                print("Username already exists")
+                messages.error(request, 'Username already taken. Please choose a different one.')
+            else:
+                print("Username is unique. Proceeding with registration.")
+                user = user_form.save()
+                user.set_password(user.password)
+                user.save()
+
+                customer = customer_form.save(commit=False)
+                customer.user = user
+
+                # Upload profile picture
+                profile_pic = request.FILES.get('profile_pic')
+                if profile_pic:
+                    pro_pic_url = models.Customer.upload_image(profile_pic, profile_pic.name)
+                    customer.profile_pic = pro_pic_url
+                customer.save()
+                # Add user to CUSTOMER group
+                my_customer_group = Group.objects.get_or_create(name='CUSTOMER')
+                my_customer_group[0].user_set.add(user)
+
+                print("Registration successful. Redirecting to login page.")
+                return HttpResponseRedirect('customerlogin')
+        else:
+            print("Forms are not valid")
+            print("User form errors:", user_form.errors)
+            print("Customer form errors:", customer_form.errors)           
+            # Add messages to context
+            mydict['messages'] = messages.get_messages(request)
+            mydict['user_form_errors'] = user_form.errors
+            mydict['customer_form_errors'] = customer_form.errors
+            print(messages.get_messages(request))
+    return render(request, 'customer/customersignup.html', context=mydict)
+'''
+
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from . import forms, models
+
+def customer_signup_view(request):
+    
+    print("Entering customer_signup_view function")  # Print when entering the function
+    user_form = forms.CustomerUserForm()
+    customer_form = forms.CustomerForm()
+    mydict = {'userForm': user_form, 'customerForm': customer_form}
+
+    if request.method == 'POST':
+        print("Processing POST request")
+        user_form = forms.CustomerUserForm(request.POST)
+        customer_form = forms.CustomerForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and customer_form.is_valid():
+            print("Forms are valid")
+            username = user_form.cleaned_data['username']
+            if User.objects.filter(username=username).exists():
+                print("Username already exists")
+                messages.error(request, 'Username already taken. Please choose a different one.')
+            else:
+                print("Username is unique. Proceeding with registration.")
+                user = user_form.save()
+                password = user_form.cleaned_data['password']
+                user.set_password(password)
+                user.save()
+
+                customer = customer_form.save(commit=False)
+                customer.user = user
+
+                # Upload profile picture
+                profile_pic = request.FILES.get('profile_pic')
+                if profile_pic:
+                    pro_pic_url = models.Customer.upload_image(profile_pic, profile_pic.name)
+                    customer.profile_pic = pro_pic_url
+                customer.save()
+                # Add user to CUSTOMER group
+                my_customer_group = Group.objects.get_or_create(name='CUSTOMER')
+                my_customer_group[0].user_set.add(user)
+
+                print("Registration successful. Redirecting to login page.")
+                print("Hashed Password:", user.password)  # Print hashed password before saving
+                return HttpResponseRedirect('customerlogin')
+        else:
+            print("Forms are not valid")
+            print("User form errors:", user_form.errors)
+            print("Customer form errors:", customer_form.errors)           
+            # Add messages to context
+            mydict['messages'] = messages.get_messages(request)
+            mydict['user_form_errors'] = user_form.errors
+            mydict['customer_form_errors'] = customer_form.errors
+            print(messages.get_messages(request))
+    return render(request, 'customer/customersignup.html', context=mydict)
+
 
 
 def success_page(request):
     return render(request, 'customer/success_page.html')  # Use the actual template path
-
 
 def is_customer(user):
     return user.groups.filter(name='CUSTOMER').exists()
@@ -189,7 +314,7 @@ def apply_thirdparty_view(request):
             print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
 
-            return redirect('customer:available-policies')
+            return redirect('customer:available-thirdpartypolicies')
 
     return render(request, 'customer/apply_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
 
