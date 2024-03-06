@@ -157,7 +157,7 @@
             <label for="policy_name">Risk</label>
             <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
   
-            <label for="sum_assurance">Value</label>
+            <label for="sum_assurance">Sum Insured (Replacement Value)</label>
             <input type="text" name="sum_assurance" id="sum_assurance" class="form-control" placeholder="Value" required required oninput="calculatePremium()">
   
             <label for="premium">Premium</label>
@@ -169,10 +169,6 @@
             <!--label for="tenure">Tenure (in months):</label>
             <input type="number" name="tenure" id="tenure" class="form-control" placeholder="Tenure (in months)" required-->
 
-            <label for="tenure">Tenure (in months):</label>
-            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
-
-  
             <div>
                <label for="id_expiry_date">Expiry Date:</label>
                <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
@@ -183,6 +179,11 @@
                <label for="id_cover_end">Renewal Date:</label>
                <input type="text" name="cover_end" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
             </div>
+
+            
+            <label for="tenure">Tenure (in months):</label>
+            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+
         </div>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
            View Policy
