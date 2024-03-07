@@ -92,7 +92,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-'''
+
 #Development Database
 DATABASES = {
     'default': {
@@ -116,7 +116,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
