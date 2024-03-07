@@ -104,7 +104,7 @@
       <div class="col-md-4 col-xl-3">
         <div class="card bg-c-green order-card">
           <div class="card-block">
-            <h6 class="m-b-20"><a href="#" onclick="selectPolicy()" style="text-decoration: none;color:white;">View policies</a> </h6>
+            <h6 class="m-b-20"><a href="#" onclick="viewPolicy()" style="text-decoration: none;color:white;">View policies</a> </h6>
             <h2 class="text-right"><i class="fas fa-plus f-left"></i></h2>    
           </div>
         </div>
@@ -198,15 +198,15 @@
 
 <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 <script>
-  function selectPolicy() {
+  function viewPolicy() {
     var policyType = prompt("Please select the policy type:\n1. Homeowners Policy\n2. Third Party Policy");
     
     if (policyType === "1") {
       // Redirect or perform action for Homeowners Policy
-      window.location.href = "admin-add-policy?type=homeowners";
+      window.location.href = "admin-view-policy?type=homeowners";
     } else if (policyType === "2") {
       // Redirect or perform action for Third Party Policy
-      window.location.href = "admin-add-thirdparty-policy?type=thirdparty";
+      window.location.href = "admin-view-thirdpartypolicy?type=thirdparty";
     } else {
       alert("Invalid input. Please select 1 or 2.");
     }
@@ -218,10 +218,10 @@
       
       if (policyType === "1") {
         // Redirect or perform action for Homeowners Policy
-        window.location.href = "admin-view-policy?type=homeowners";
+        window.location.href = "admin-add-policy?type=homeowners";
       } else if (policyType === "2") {
         // Redirect or perform action for Third Party Policy
-        window.location.href = "admin-view-thirdpartypolicy?type=thirdparty";
+        window.location.href = "admin-add-thirdparty-policy?type=thirdparty";
       } else {
         alert("Invalid input. Please select 1 or 2.");
       }

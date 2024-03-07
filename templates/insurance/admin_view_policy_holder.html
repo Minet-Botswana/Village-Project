@@ -3,6 +3,12 @@
 {%load static%}
 
 <head>
+  <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -66,6 +72,7 @@ margin-left: 10px;
 tr.policy-row {
   cursor: pointer !important;
 }
+
 </style>
 
   <!-- DataTables CSS -->
@@ -89,6 +96,25 @@ tr.policy-row {
   
 </head>
 <br><br>
+
+{% if success_message %}
+<div class="alert alert-success">
+    {{ success_message }}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="alert-messages">
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<br>
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -121,7 +147,7 @@ tr.policy-row {
 
                 {% else %}
                 <td class="text-right">
-                <span style="color:red;font-size:20px;" class="label success">{{t.status}}</span></td>
+                <span style="color:red;font-size:16px;" class="label success">{{t.status}}</span></td>
                 
 
                 {% endif %}
@@ -131,21 +157,42 @@ tr.policy-row {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="expiryModalLabel{{ t.id }}">Policy Details</h5>
+              <h5 class="modal-title" id="expiryModalLabel{{ t.id }}">Policy and Customer Details</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
+              <!-- Policy details -->
+              <p style="color: #e21a22; font-size: medium;"><strong>Policy Details Details</strong></p>
+              <hr>
               <p><strong>Policy Number:</strong> {{ t.Policy.policy_number }}</p>
               <p><strong>Risk:</strong> {{ t.Policy.policy_name }}</p>
               <p><strong>Category:</strong> {{ t.Policy.category }}</p>
               <p><strong>Premium:</strong> BWP{{ t.Policy.premium }}</p>
               <p><strong>Tenure:</strong> {{ t.Policy.tenure }} Months</p>
-              <p><strong>Creation Date:</strong> {{ t.Policy.creation_date }}</p>
-              <p><strong>Effective Date Start:</strong> {{ t.Policy.cover_start }}</p>
-             <p><strong>Expiry Date:</strong> {{ t.Policy.expiry_date }}</p>
-             <p><strong>Renewal Date:</strong> {{ t.Policy.cover_end }}</p>
+              <p><strong>Effective Date:</strong> {{ t.Policy.cover_start }}</p>
+              <p><strong>Expiry Date:</strong> {{ t.Policy.expiry_date }}</p>
+              <p><strong>Renewal Date:</strong> {{ t.Policy.cover_end }}</p>
+              
+              <!-- Customer details -->
+
+              <hr>
+              <p style="color: #e21a22; font-size: medium;"><strong>Customer Details</strong></p>
+              <hr>
+              {% for userrecord in userrecords %}
+                <p><strong>Customer Name:</strong> {{ userrecord.user.first_name }} {{ userrecord.user.last_name }}</p>
+                <p><strong>Customer Mobile:</strong> {{ userrecord.mobile }}</p>
+                <p><strong>Customer Alternate Phone:</strong> {{ userrecord.alternate_phone }}</p>
+                <p><strong>Customer Email:</strong> {{ userrecord.address }}</p>
+                <p><strong>Customer ID Number:</strong> {{ userrecord.id_number }}</p>
+                <p><strong>Customer Work:</strong> {{ userrecord.occupation }}</p>
+                <p><strong>Customer Physical Address:</strong> {{ userrecord.physical_address }}</p>
+                <p><strong>Customer Postal Address:</strong> {{ userrecord.postal_address }}</p>
+                <p><strong>Customer Date of Birth:</strong> {{ userrecord.date_of_birth }}</p>
+                <p><strong>Customer Gender:</strong> {{ userrecord.gender }}</p>
+                <p><strong>Customer Marital Status:</strong> {{ userrecord.marital_status }}</p>
+              {% endfor %}
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

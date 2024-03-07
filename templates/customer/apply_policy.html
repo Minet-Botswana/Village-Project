@@ -59,9 +59,9 @@
   
 </div>
 
-<div class="container">
+<!--div class="container"-->
   <!-- Add the following paragraph to display the page route -->
-  <div class="row">
+  <!--div class="row">
       <div class="col-md-12">
           <h1 class="breadcrumb" style=" font-size: 18px; font-family: 
             'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
@@ -83,7 +83,34 @@
           </p>
       </div>
   </div>
-</div>
+</div-->
+
+<div class="container">
+    <!-- Add the following paragraph to display the page route -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="breadcrumb" style="font-size: 18px; font-family: 
+              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+              sans-serif; color: #e21a22; margin-top: 42px;"
+            >
+            Home Owners Insurance
+            </h1>
+        </div>
+        <div class="col-md-12">
+            <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
+            'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+            -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+            sans-serif; color: #e21a22;" >
+               Complete our streamlined Know Your Customer Application (eKYC) Form effortlessly to initiate a secure and compliant onboarding process.
+                At Minet Botswana, we value your time and prioritize the confidentiality of your information. By submitting this form, 
+                you contribute to a smooth verification process, ensuring a seamless and trustworthy customer experience. Thank you for choosing 
+                Minet Botswana for your services – where simplicity meets security.
+            </p>
+        </div>
+    </div>
+  </div>
+  
 
 <body>
 
@@ -114,7 +141,7 @@
     -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
     sans-serif; font-size: 20px; background-color: rgb(255, 255, 255);">Add Homeowners Cover</h2>
 
-    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
+    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;"  action="{% url 'customer:apply-policy' %}">
       {% csrf_token %}
         <div class="form-group">
             <label for="id_number">ID Number</label>
@@ -130,22 +157,18 @@
             <label for="policy_name">Risk</label>
             <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
   
-            <label for="sum_assurance">Value</label>
+            <label for="sum_assurance">Sum Insured (Replacement Value)</label>
             <input type="text" name="sum_assurance" id="sum_assurance" class="form-control" placeholder="Value" required required oninput="calculatePremium()">
   
             <label for="premium">Premium</label>
             <input type="text" name="premium" id="premium" class="form-control" placeholder="Premium" required readonly>
   
-            <label for="cover_start">Cover Start:</label>
+            <label for="cover_start">Effective Date:</label>
             <input type="date" name="cover_start" id="cover_start" class="form-control" required>
   
             <!--label for="tenure">Tenure (in months):</label>
             <input type="number" name="tenure" id="tenure" class="form-control" placeholder="Tenure (in months)" required-->
 
-            <label for="tenure">Tenure (in months):</label>
-            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
-
-  
             <div>
                <label for="id_expiry_date">Expiry Date:</label>
                <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
@@ -156,6 +179,11 @@
                <label for="id_cover_end">Renewal Date:</label>
                <input type="text" name="cover_end" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
             </div>
+
+            
+            <label for="tenure">Tenure (in months):</label>
+            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+
         </div>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
            View Policy
@@ -259,7 +287,7 @@
             "<p>Risk: " + policyName + "</p>" +
             "<p>Value: P" + sumAssurance + "</p>" +
             "<p>Premium: P" + premium + "</p>" +
-            "<p>Cover Start: " + coverStart + "</p>" +
+            "<p>Effective Date: " + coverStart + "</p>" +
             "<p>Tenure: " + tenure + "</p>" +
             "<p>Renewal Date: " + formattedRenewalDate + "</p>" +
             "<p>Expiry Date: " + formattedExpiryDate + "</p>";

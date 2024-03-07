@@ -20,11 +20,6 @@ from customer.models import Customer
 from .models import Category
 from django.http import JsonResponse
 
-
-
-
-
-
 #@login_required
 @login_required(login_url='adminlogin')
 def custom_dashboard(request):
@@ -48,7 +43,7 @@ def afterlogin_view(request):
         return redirect('admin-dashboard')
     
 def logout_redirect(request):
-        return redirect('logout')
+        return redirect('adminlogin')
 
 
 
@@ -283,8 +278,7 @@ def admin_apply_thirdparty_view(request):
             print("Policy successfully saved!")
             print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
-
-            return redirect('admin-view-policy')
+        return redirect('admin-view-thirdpartypolicy')
 
     return render(request, 'insurance/admin_add_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
 
@@ -303,13 +297,11 @@ def get_user_details_view(request, id_number):
                 'alternate_phone': customer.alternate_phone,
                 'date_of_birth': customer.date_of_birth,
                 'gender': customer.gender,
-                'marital_status': customer.marital_status
-                
+                'marital_status': customer.marital_status         
             }
             return JsonResponse({'success': True, 'user': user_details})
         except models.Customer.DoesNotExist:
             return JsonResponse({'success': False, 'error_message': 'Customer not found'})
-
     return JsonResponse({'success': False, 'error_message': 'Invalid request method'})
 
 
@@ -398,8 +390,9 @@ def delete_policy_view(request,pk):
 
 def admin_view_policy_holder_view(request):
     #policyrecords = models.PolicyRecord.objects.all()
+    userrecords = models.Customer.objects.all()
     policyrecords = models.PolicyRecord.objects.select_related('Policy').all()
-    return render(request,'insurance/admin_view_policy_holder.html',{'policyrecords':policyrecords})
+    return render(request,'insurance/admin_view_policy_holder.html',{'policyrecords':policyrecords, 'userrecords':userrecords})
 
 def admin_view_thirdpartypolicy_holder_view(request):
     #policyrecords = models.ThirdpartyPolicyRecord.objects.all()

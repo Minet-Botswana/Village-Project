@@ -135,10 +135,6 @@
             <input type="date" name="cover_start" id="cover_start" class="form-control" required>
     
   
-            <label for="tenure">Tenure (in months):</label>
-            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
-  
-    
             <div>
               <label for="id_expiry_date">Expiry Date:</label>
               <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
@@ -148,6 +144,11 @@
               <label for="id_cover_end">Renewal Date:</label>
               <input type="text" name="renewal_date" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
             </div>
+
+            
+            <label for="tenure">Tenure (in months):</label>
+            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+  
         </div>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
             View Policy
