@@ -92,7 +92,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
+'''
 #Development Database
 DATABASES = {
     'default': {
@@ -116,7 +116,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -188,8 +188,8 @@ credentials, project_id = google.auth.default()
 
 # Google Cloud Storage credentials THE REAL ONES HERE
 #GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.join(BASE_DIR, 'credentials.json'))
-GS_PROJECT_ID = 'xenon-petal-407313'
-GS_BUCKET_NAME = 'ko_gae_bucket'
+GS_PROJECT_ID = 'kogae-minet'
+GS_BUCKET_NAME = 'kogae_bucket'
 GS_DEFAULT_ACL = 'publicRead'
 UPLOAD_ROOT = 'media/uploads'
 GS_FILE_OVERWRITE = 'False'
@@ -197,11 +197,11 @@ GS_FILE_OVERWRITE = 'False'
 # Media files settings
 #MEDIA_ROOT = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'https://storage.googleapis.com/ko_gae_bucket/media/'
+MEDIA_URL = 'https://storage.googleapis.com/kogae_bucket/media/'
 
 # Static files (CSS, JavaScript, images) settings
-STATIC_URL = 'https://storage.googleapis.com/ko_gae_bucket/static/'
-GS_STATIC_BUCKET_NAME = "ko_gae_bucket"
+STATIC_URL = 'https://storage.googleapis.com/kogae_bucket/static/'
+GS_STATIC_BUCKET_NAME = "kogae_bucket"
 
 #DEFAULT_FILE_STORAGE = 'gcloud.GoogleCloudMediaFileStorage'
 #STATICFILES_STORAGE = 'gcloud.GoogleCloudStaticFileStorage'
@@ -217,26 +217,63 @@ STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 
 LOGIN_REDIRECT_URL='/afterlogin'
-LOGOUT_REDIRECT_URL = "/"  # 
+LOGOUT_REDIRECT_URL = "/adminlogin"  # 
 
 #for contact us give your gmail id and password
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'from@gmail.com' # this email will be used to send emails
-EMAIL_HOST_PASSWORD = 'xyz' # host email password required
+EMAIL_HOST_USER = 'austinglebane@gmail.com' # this email will be used to send emails
+EMAIL_HOST_PASSWORD = 'oiyt kzox qzwc qrvd' # host email password required
 # now sign in with your host gmail account in your browser
 # open following link and turn it ON
 # https://myaccount.google.com/lesssecureapps
 # otherwise you will get SMTPAuthenticationError at /contactus
 # this process is required because google blocks apps authentication by default
-EMAIL_RECEIVING_USER = ['to@gmail.com'] # email on which you will receive messages sent from website
+EMAIL_RECEIVING_USER = ['austinglebane@gmail.com'] # email on which you will receive messages sent from website
 
 SESSION_COOKIE_AGE = 1800  # 30 minutes
 SESSION_SAVE_EVERY_REQUEST = True # update the session expiration time every time a request is made, ensuring that the session doesn't expire as long as the user is active
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True # log users out when they close their browser
 
+''''
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'goitsemang.lebane@minet.co.bw' # this email will be used to send emails
+EMAIL_HOST_PASSWORD = 'November@062024' # host email password required
+# now sign in with your host gmail account in your browser
+# open following link and turn it ON
+# https://myaccount.google.com/lesssecureapps
+# otherwise you will get SMTPAuthenticationError at /contactus
+# this process is required because google blocks apps authentication by default
+EMAIL_RECEIVING_USER = ['goitsemang.lebane@minet.co.bw'] # email on which you will receive messages sent from website
+'''
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'customer': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 
 # Administrators Login settings

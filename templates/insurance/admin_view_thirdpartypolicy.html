@@ -79,6 +79,22 @@ margin-bottom: 5px;
 font-weight: bold;
 margin-left: 10px;
 }
+
+.alert-messages {
+    background-color: rgb(7, 253, 7);
+    color: #721c24;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  .messages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .messages li {
+    margin-bottom: 5px;
+  }
   </style>
 
   <!-- DataTables CSS -->
@@ -99,6 +115,25 @@ margin-left: 10px;
 </head>
 
 <br><br>
+
+{% if success_message %}
+<div class="alert alert-success">
+    {{ success_message }}
+</div>
+{% endif %}
+
+{% if messages %}
+<div class="alert-messages">
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">

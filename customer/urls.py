@@ -3,6 +3,8 @@ from . import views
 from django.contrib.auth.views import LoginView
 from .views import client_forms
 from .views import update_homeowners_cover
+from django.contrib.auth import views as auth_views
+from .views import PasswordResetConfirmViewCustom
 
 app_name = 'customer'
 
@@ -43,5 +45,10 @@ urlpatterns = [
     path('display_user_thirdparty_covers/', views.display_user_thirdparty_covers, name='display_user_thirdparty_covers'),
     path('update_homeowners_cover/<int:id>/', views.update_homeowners_cover, name='update_homeowners_cover'),
     path('update_thirdparty_cover/<int:id>/', views.update_thirdparty_cover, name='update_thirdparty_cover'),
+    
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset_done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password_reset_confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 ]
