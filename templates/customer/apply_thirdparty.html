@@ -27,11 +27,12 @@
         border-bottom: 1px solid #ddd;
         padding: 15px;
         text-align: center;
+        font-size: small;
     }
 
     /* Style the modal title */
     #policyModal .modal-title {
-        font-size: 2.5em;
+        font-size: 1.5em;
     }
 
     /* Style the modal body */
@@ -54,37 +55,38 @@
     /* Style the content inside the modal body */
     #policyDetails p {
         margin-bottom: 10px;
+        font-size: 15px; /* Change the font size as needed */
+        background-color: #f0f0f0; /* Light gray background color */
+        padding: 5px 10px; /* Add padding for better visual appearance */
+        color: #000; /* Black font color */
     }
+
+    /* Style the horizontal rule beneath the title */
+#policyModal hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc; /* Color of the line */
+    margin: 15px 0; /* Adjust margin as needed */
+}
     </style>
 </head>
 
+<h1 class="breadcrumb" style="font-size: 18px; font-family: 
+'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+-apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+sans-serif; color: #e21a22; margin-top: 42px;"
+>
+Thirdparty Insurance
+</h1>
 
+<p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
+'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+-apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+sans-serif; color: #e21a22;" >
+   Complete our Thirdparty Cover Application Form for a smooth, secure onboarding process. 
+   Your confidentiality is a priority at Minet Botswana. Thank you for choosing us, where simplicity meets security..
+</p>
 
-<div class="container">
-  <!-- Add the following paragraph to display the page route -->
-  <div class="row">
-      <div class="col-md-12">
-          <h1 class="breadcrumb" style=" font-size: 18px; font-family: 
-            'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-            -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-            sans-serif; color: #e21a22; margin-top: 42px;"
-          >
-          Third Party Cover
-          </h1>
-      </div>
-      <div class="col-md-12">
-          <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
-          'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-          -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-          sans-serif; color: #e21a22;" >
-             Complete our streamlined Know Your Customer Application (eKYC) Form effortlessly to initiate a secure and compliant onboarding process.
-              At Minet Botswana, we value your time and prioritize the confidentiality of your information. By submitting this form, 
-              you contribute to a smooth verification process, ensuring a seamless and trustworthy customer experience. Thank you for choosing 
-              Minet Botswana for your services – where simplicity meets security.
-          </p>
-      </div>
-  </div>
-</div>
 
 <body>
 
@@ -94,7 +96,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="policyModalLabel">Policy Details</h5>
+                    <h5 class="modal-title" id="policyModalLabel">Coverage Overview</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -245,7 +247,9 @@
           }
   
           // Create the HTML content for the modal
-          var modalContent = "<p>Insured (ID): " + idNumber + "</p>" +
+          var modalContent = 
+              "<h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px '>Cover Details</h4>" +
+              "<p>Insured (ID): " + idNumber + "</p>" +
               "<p>Cover Category: " + category + "</p>" +
               "<p>Risk: " + policyName + "</p>" +
               //"<p>Value: P" + sumAssurance + "</p>" +
@@ -267,7 +271,11 @@
               method: 'GET',
               success: function (data) {
                   if (data.success) {
-                      var customerDetails = "<p>Insured (Name): " + data.user.name + "</p>" +
+                      var customerDetails = 
+                          "<hr>" +
+                          "<h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px '>Client Details</h4>" +
+                          "<hr>" +
+                          "<p>Insured (Name): " + data.user.name + "</p>" +
                           "<p>Email: " + data.user.address + "</p>" +
                           "<p>Mobile: " + data.user.mobile + "</p>" +
                           "<p>ID Number: " + data.user.id_number + "</p>" +
