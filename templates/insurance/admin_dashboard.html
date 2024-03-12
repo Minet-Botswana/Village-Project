@@ -61,9 +61,10 @@
         font-size: 26px;
       }
       .text-right {
-        font-size:28px;
-        font-family: "Titillium Web", sans-serif;
+        font-size:20px;
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
         color: #fff;
+        margin-bottom: 0px;
       }
   
       .f-left {
@@ -79,7 +80,8 @@
       }
 
       body {
-        font-size: 13.7px; /* Adjust the value as needed */
+        font-size: 13px; /* Adjust the value as needed */
+        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
       }
       .username {
             font-size: 14px;
@@ -91,6 +93,20 @@
     </style>
   </head>
 
+  <div class="container">
+    <!-- Add the following paragraph to display the page route -->
+    <div class="row">
+        <div class="col-md-12">
+            <p class="breadcrumb" style="font-size: 14px; font-family: 
+              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+              sans-serif; color: #000000;"
+            >
+              <strong>Home / Dashboards / Dashboard</strong>
+            </p>
+        </div>
+    </div>
+  </div>
 
   <div class="container">
 
@@ -101,52 +117,74 @@
           <div class="card-block">
             <h6 class="m-b-20"> <a href="admin-view-customer" style="text-decoration: none;color:white;">Total Registered User</a> </h6>
             <h2 class="text-right"><i  class="fas fa-users f-left"></i><span>{{total_user}}</span></h2>
-            
           </div>
         </div>
       </div>
+  
+     
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="admin-question" style="text-decoration: none;color:white;">Total Question</a></h6>
+            <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>            
+          </div>
+        </div>
+      </div> 
+
+      
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="admin-view-category" style="text-decoration: none;color:white;">Listed Categories</a></h6>
+           <h2 class="text-right"><i class="fas fa-list-alt f-left"></i><span>{{total_category}}</span></h2>           
+          </div>
+        </div>
+      </div>
+    </div>
+
+      
+  </div>
+
+
+
+  <div class="container">
+    <!-- Add the following paragraph to display the page route -->
+    <div class="row">
+        <div class="col-md-12">
+            <p class="breadcrumb" style="font-size: 14px; font-family: 
+              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+              sans-serif; color: #000000;"
+            >
+              <strong>Home / Dashboards/ Home Owners Policy Dashboard</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- Your existing content goes here -->
+
+</div>
+
+
+  <div class="container">
+
+    
+    <div class="row">
   
       <div class="col-md-4 col-xl-3">
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-policy" style="text-decoration: none;color:white;">Listed Policies</a> </h6>
             <h2 class="text-right"><i class="fab fa-product-hunt f-left"></i><span>{{total_policy}}</span></h2>
-            
-          </div>
-        </div>
-      </div>
-  
-      <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
-          <div class="card-block">
-            <h6 class="m-b-20"><a href="admin-view-category" style="text-decoration: none;color:white;">Listed Categories</a></h6>
-           <h2 class="text-right"><i class="fas fa-list-alt f-left"></i><span>{{total_category}}</span></h2>
-            
-          </div>
-        </div>
-      </div>
-  
-      <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
-          <div class="card-block">
-            <h6 class="m-b-20"><a href="admin-question" style="text-decoration: none;color:white;">Total Question</a></h6>
-            <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>
-            
           </div>
         </div>
       </div>
 
-      
-    </div>
-
-    <br>
-    <div class="row">
       <div class="col-md-4 col-xl-3">
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"> <a href="admin-view-policy-holder" style="text-decoration: none;color:white;">Total Applied Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-cog f-left"></i><span>{{total_policy_holder}}</span></h2>
-            
           </div>
         </div>
       </div>
@@ -155,8 +193,7 @@
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-approved-policy-holder" style="text-decoration: none;color:white;">Approved Policy Holder</a> </h6>
-            <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>{{approved_policy_holder}}</span></h2>
-            
+            <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>{{approved_policy_holder}}</span></h2> 
           </div>
         </div>
       </div>
@@ -166,31 +203,105 @@
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-disapproved-policy-holder" style="text-decoration: none;color:white;">Disapproved Policy Holder</a></h6>
            <h2 class="text-right"><i class="fas fa-user-times f-left"></i><span>{{disapproved_policy_holder}}</span></h2>
-            
           </div>
         </div>
       </div>
+
+
+    </div>
+
+
+    <div class="row">
   
       <div class="col-md-4 col-xl-3">
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-waiting-policy-holder" style="text-decoration: none;color:white;">Policy Holder Waiting For Approval</a></h6>
             <h2 class="text-right"><i class="fas fa-user-clock f-left"></i><span>{{waiting_policy_holder}}</span></h2>
-            
           </div>
         </div>
       </div>
 
       
-    </div>
+  </div>
 
   
 
   </div>
+  <div class="container">
+    <!-- Add the following paragraph to display the page route -->
+    <div class="row">
+        <div class="col-md-12">
+            <p class="breadcrumb" style="font-size: 14px; font-family: 
+              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+              sans-serif; color: #000000;"
+            >
+              <strong>Home / Dashboards / Third Party Policies Dashboard</strong>
+            </p>
+        </div>
+    </div>
+  </div>
 
+  <div class="container">
 
-<br><br><br><br><br><br>
+    
+    <div class="row">
+  
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="admin-view-thirdpartypolicy" style="text-decoration: none;color:white;">Listed Policies</a> </h6>
+            <h2 class="text-right"><i class="fab fa-product-hunt f-left"></i><span>{{total_thirdpartypolicy}}</span></h2>
+          </div>
+        </div>
+      </div>
 
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"> <a href="admin-view-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Total Applied Policy Holder</a> </h6>
+            <h2 class="text-right"><i class="fas fa-user-cog f-left"></i><span>{{total_thirdpartypolicy_holder}}</span></h2>
+          </div>
+        </div>
+      </div>
+
+           
+  
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="admin-view-approved-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Approved Policy Holder</a> </h6>
+            <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>{{approved_thirdpartypolicy_holder}}</span></h2> 
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="admin-view-disapproved-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Disapproved Policy Holder</a></h6>
+           <h2 class="text-right"><i class="fas fa-user-times f-left"></i><span>{{disapproved_thirdpartypolicy_holder}}</span></h2>
+          </div>
+        </div>
+      </div>
+  
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="admin-view-waiting-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Policy Holder Waiting For Approval</a></h6>
+            <h2 class="text-right"><i class="fas fa-user-clock f-left"></i><span>{{waiting_thirdpartypolicy_holder}}</span></h2>
+          </div>
+        </div>
+      </div>
+
+      
+  </div>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 
 

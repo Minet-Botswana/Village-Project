@@ -1,0 +1,92 @@
+name: Deploy Development Backend
+
+on:
+  push:
+    branches:
+      - Production
+      
+jobs:
+  setup-and-deploy-job:
+    name: Setup and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@v2
+      with:
+        service_account_key: ${{ secrets.NEW_SA_KEY}}
+        project_id: kogae-minet
+
+    # Configure Docker to use the gcloud command-line tool as a credential
+    # helper for authentication
+    - run: |-
+        gcloud --quiet auth configure-docker
+    # Get the GKE credentials so we can deploy to the cluster
+    - uses: google-github-actions/get-gke-credentials@v0.2.1
+      with:
+        cluster_name: kogae-cluster
+        location: us-central1
+        credentials: ${{ secrets.NEW_SA_KEY }}
+
+    # Build the Docker image
+    - name: Build Docker image
+      run: |-
+        docker build \
+          --tag "us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    
+    # Push the Docker image to Google Artifact Registry
+    - name: Publish Docker image to Google Artifact Registry
+      run: |-
+        echo "$GCR_KEY" > gcr-key.json
+        gcloud auth activate-service-account --key-file=gcr-key.json
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+        docker push us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:$GITHUB_SHA
+      env:
+        GCR_KEY: ${{ secrets.NEW_SA_KEY }}
+
+
+    # Deploy sample image to the GKE cluster
+    - name: Deploy image to GKE cluster
+      run: |-
+        kubectl apply -f deployment.yaml
+        kubectl set image deployment/kogae-deployed-app backend-app=us-central1-docker.pkg.dev/kogae-minet/kogae-repository/kogae_deployment_image:$GITHUB_SHA
+        kubectl rollout status deployment/kogae-deployed-app
+        kubectl get services -o wide
+
+  Remote-database-update-job: # health check job for testing and code formatting check
+    runs-on: ubuntu-latest # os for running the job
+    needs: [setup-and-deploy-job]
+    steps:
+      - name: Set sql proxy
+        uses: mattes/gce-cloudsql-proxy-action@v1
+        with:
+          creds: ${{ secrets.SQL_PROXY_CREDENTIALS }}
+          instance: kogae-minet:us-central1:production-minet
+      - name: Checkout code # checking our the code at current commit that triggers the workflow
+        uses: actions/checkout@v2
+      - name: Cache dependency # caching dependency will make our build faster.
+        uses: actions/cache@v2 # for more info checkout pip section documentation at https://github.com/actions/cache
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Setup python environment # setting python environment to 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10' # if you want multiple python version run just use matrix strategy in job config. See the documentation of GitHub Actions
+      - name: Check Python version # checking the python version to see if 3.x is installed.
+        run: python --version
+      - name: Install requirements # install application requirements
+        run: pip install -r requirements.txt
+      - name: Run Migrations # run migrations to create table in side car db container
+        run: python manage.py migrate
+      - name: Run Test # running tests
+        run: python manage.py test
+

@@ -29,7 +29,57 @@
     .row {
       margin: 100px;
     }
+
+    #dev-table {
+
+border-spacing: 0 !important; /* Set spacing between table cells to 0 */
+}
+
+.dataTables_wrapper .dataTables_length select {
+border: 1px solid #aaa;
+border-radius: 3px;
+padding: 5px;
+background-color: transparent;
+padding: 4px;
+margin-top: 4px;
+margin-left: 7px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+border: 1px solid #aaa;
+border-radius: 3px;
+padding: 5px;
+background-color: transparent;
+margin-left: 3px;
+margin-top: 4px;
+margin-right: 12px;
+}
+
+label {
+display: inline-block;
+margin-bottom: 5px;
+font-weight: bold;
+margin-left: 10px;
+}
   </style>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- DataTables JS -->
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+  <!-- DataTables initialization script -->
+  <script>
+      $(document).ready(function() {
+          $('#dev-table').DataTable();
+      });
+  </script>
+
+
 </head>
 <br><br>
 <div class="container">

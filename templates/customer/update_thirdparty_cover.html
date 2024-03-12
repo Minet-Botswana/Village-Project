@@ -1,0 +1,273 @@
+<!-- user_homeowners_covers.html -->
+{% extends 'customer/customerbase.html' %}
+{% load static %}
+{% block content %}
+<!-- user_homeowners_covers.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            padding: 15px;
+            position: relative;
+        }
+
+        p {
+            margin: 0;
+            padding: 5px 0;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .no-covers {
+            color: #999;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .edit-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .edit-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+
+
+        body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: 1rem;
+        font-weight: 400;
+        color: #212529;
+        text-align: left;
+        background-color: #f8f9fa; /* Set background color as needed */
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 50px 20px; /* Adjust padding as needed */
+    }
+
+    .form-card {
+        width: 90%; /* Adjust width as needed */
+        max-width: 800px; /* Set maximum width for responsiveness */
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
+        border-radius: 10px; /* Add border radius for rounded corners */
+    }
+
+    .form-header {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .h1, h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #e21a22;
+        border-color: #e21a22;
+    }
+
+    .btn-primary:hover {
+        color: #000000;
+        background-color: #ffffff;
+        border-color: #b91d23;
+    }
+    .page-title {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+    .change {
+      cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 40%;
+      width: 20px;
+      text-align: center;
+      padding: 5px;
+      margin-left: 8px;
+    }
+    .dark {
+      background-color: #222;
+      color: #e6e6e6;
+    }
+
+
+    </style>
+    <title>Your thirdparty Covers</title>
+</head>
+<body>
+
+    
+    <div class="form-container">
+        <div class="card form-card">
+            <div class="form-header">
+                <h1>Thirdparty Insurance Details</h1>
+            </div>
+            <div class="form-body">
+    {% if thirdparty_covers %}
+        <ul>
+            {% for thirdparty_cover in thirdparty_covers %}
+                <li>
+                    <button class="edit-btn" onclick="toggleEditForm('{{ thirdparty_cover.id }}')">Edit</button>
+                    <p>Make: {{ thirdparty_cover.make }}</p>
+                    <p>Model: {{ thirdparty_cover.model }}</p>
+                    <p>Year: {{ thirdparty_cover.year_of_manufacture }}</p>
+                    <p>Reg. No: {{ thirdparty_cover.registration_number }}</p>
+                    <p>Relatonship to Owner: {{ thirdparty_cover.relationship_to_owner }}</p>
+                    <p>Car Type: {{ thirdparty_cover.car_type }}</p>
+                    {% if thirdparty_cover.blue_book %}
+                        <p>Registration Book: Present</p>
+                        <a href="{{ thirdparty_cover.get_download_url }}">View Registration Book</a>
+                    {% else %}
+                        <p>Registration Book: Not Present</p>
+                    {% endif %}
+
+                    <!-- Edit Form -->
+                    <div class="edit-form" id="editForm{{ thirdparty_cover.id }}">
+                        <br>
+                        <p style="text-align: center; font-size: 18px; color: #e21a22; font-weight: bold;">
+                             <span style="color: #e21a22; font-weight: bold;">Update</span> your information by filling in the fields below.
+                        </p>
+                        
+                        <form method="post" action="{% url 'customer:update_thirdparty_cover' thirdparty_cover.id %}" enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            <label for="make">Make</label>
+                            <input type="text" name="make" value="{{ thirdparty_cover.make }}" required>
+
+                            <label for="model">Model</label>
+                            <input type="text" name="model" value="{{ thirdparty_cover.model }}" required>
+
+                            <label for="year_of_manufacture">Year</label>
+                            <input type="text" name="year_of_manufacture" value="{{ thirdparty_cover.year_of_manufacture }}" required>
+
+                            <label for="registration_number">Reg. No.</label>
+                            <input type="text" name="registration_number" value="{{ thirdparty_cover.registration_number }}" required>
+
+                            <label for="relationship_to_owner">Relatonship to Owner</label>
+                            <input type="text" name="relationship_to_owner" value="{{ thirdparty_cover.relationship_to_owner}}" required>
+
+                            <div class="form-group">
+                                <label for="{{ thirdpartycarForm.car_type.id_for_label }}">Car Type (Import or Local)</label>
+                                <select name="{{ thirdpartycarForm.car_type.name }}" id="{{ thirdpartycarForm.car_type.id }}" class="form-control" required>
+                                    <option value="" selected>Select car type</option>
+                                    <option value="Local">Local</option>
+                                    <option value="Import">Import</option>
+                                </select>
+                                {{ thirdpartycarForm.car_type.errors }}
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label for="blue_book">Registration Book</label>
+                                <input type="file" name="blue_book" value="{{ thirdparty_cover.blue_book }}" accept=".pdf">
+                                
+                                {% if thirdparty_cover.blue_book %}
+                                    <br>
+                                    <label>Current Registration Book:</label>
+                                        <iframe src="{{ thirdparty_cover.blue_book}}"
+                                           style="width:600px; height:500px;" frameborder=""></iframe>
+
+                                {% endif %}
+                            </div>
+
+                            <!-- Add more fields as needed -->
+
+                            <button type="submit" style="color: #fff; background-color: #e21a22; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Update</button>
+
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</div>
+    {% else %}
+        <p class="no-covers">No thirdparty covers found for your account.</p>
+    {% endif %}
+
+    <script>
+        function toggleEditForm(coverId) {
+            const form = document.getElementById(`editForm${coverId}`);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+
+</body>
+</html>
+
+{% endblock content %}

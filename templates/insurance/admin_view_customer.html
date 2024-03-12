@@ -3,62 +3,169 @@
 {% load static %}
 
 <!-- Move the head content to the base template if it's not already there -->
-<head>
+{% block extra_head %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% endblock extra_head %}
 
-  <style media="screen">
-    a:link {
-      text-decoration: none;
-    }
-    h6 {
-      text-align: center;
-      font-family: "Titillium Web", sans-serif;
-    }
-    .panel-heading h6 {
-      background-color: #e21a22 !important;
-      color: white !important; /* Adjust text color for better visibility */
-      border: 1px solid #e21a22!important;
-    }
-    .btn-primary {
+<!-- Add SweetAlert library -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<!-- Add DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- Add DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<style media="screen">
+  a:link {
+    text-decoration: none;
+  }
+  h6 {
+    text-align: center;
+    font-family: "Titillium Web", sans-serif;
+  }
+  .panel-heading h6 {
+    background-color: #e21a22 !important;
+    color: white !important; /* Adjust text color for better visibility */
+    border: 1px solid #e21a22!important;
+  }
+  .btn-primary {
     color: #fff;
     background-color: #e21a22;
     border-color: #e21a22;
-}
-.btn-danger {
+  }
+  .content {
+    margin-left: 250px;
+    background-color: #fff;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    transition: 0.5s;
+    font-family: "Titillium Web", sans-serif;
+    font-size: small;
+  }
+  .btn-danger {
     color: #fff;
     background-color: #e21a22;
     border-color: #e21a22;
-}
-    .panel-primary>.panel-heading {
+  }
+  .panel-primary>.panel-heading {
     color: #fff;
     background-color: #e21a22;
     border-color: #333;
   }
+  .table-container {
+    margin-top: 2px; /* Adjust margin as needed */
+  }
+  .row {
+    margin: 10px;
+  }
+  label #sidebar_btn {
+    z-index: 1;
+    color: #fff;
+    position: fixed;
+    cursor: pointer;
+    left: 300px;
+    padding-left: 60px;
+    margin-top:15px;
+    font-size: 20px;
+    font-family: "Titillium Web", sans-serif;
+    transition: 0.5s;
+    transition-property: color;
+  }
+  .breadcrumb {
+    font-size: 14px;
+    font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+    color: #e21a22;
+  }
+  #dev-table {
+    border-spacing: 0 !important; /* Set spacing between table cells to 0 */
+  }
+  .dataTables_wrapper .dataTables_length select {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent;
+    padding: 4px;
+    margin-top: 4px;
+    margin-left: 7px;
+  }
+  .dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent;
+    margin-left: 3px;
+    margin-top: 4px;
+    margin-right: 12px;
+  }
+  label {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  .alert-messages {
+    background-color: rgb(7, 253, 7);
+    color: #721c24;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  .messages {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .messages li {
+    margin-bottom: 5px;
+  }
+</style>
 
-    .row {
-      margin: 10px;
-    }
-    label #sidebar_btn {
-      z-index: 1;
-      color: #fff;
-      position: fixed;
-      cursor: pointer;
-      left: 300px;
-      padding-left: 60px;
-      margin-top:15px;
-      font-size: 20px;
-      font-family: "Titillium Web", sans-serif;
-      
-      transition: 0.5s;
-      transition-property: color;
-    }
-  </style>
-</head>
+<!-- DataTables initialization script -->
+<script>
+    $(document).ready(function() {
+        $('#dev-table').DataTable();
+    });
 
-<br><br>
-<div class="container">
+    // Function to confirm deletion using SweetAlert
+    function confirmDelete(url) {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this user!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                window.location.href = url; // Redirect to delete URL if confirmed
+            } else {
+                swal("User deletion canceled!");
+            }
+        });
+    }
+</script>
+
+<div class="container-fluid">
+  <!-- Add the following paragraph to display the page route -->
+  <div class="row">
+    <div class="col-md-12">
+      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
+        Home / Clients
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- DJANGO MESSAGES FOR WRITING MESSAGES HERE-->
+<br>
+
+
+<div class="table-responsive container-fluid">
   <div class="panel panel-primary panel-default">
     <div class="panel-heading">
       <h6 class="panel-title">Clients</h6>
@@ -67,9 +174,9 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Profile Picture</th>
           <th>Mobile</th>
-          <th>Address</th>
+          <th>ID No.</th>
+          <th>Email</th>
           <th>Update</th>
           <th>Delete</th>
         </tr>
@@ -77,16 +184,15 @@
       {% for t in customers %}
       <tr>
         <td>{{ t.get_name }}</td>
-        <td><img src="{% static t.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
         <td>{{ t.mobile }}</td>
+        <td>{{ t.id_number }}</td>
         <td>{{ t.address }}</td>
         <td><a class="btn btn-primary btn-xs" href="{% url 'update-customer' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
-        <td><a class="btn btn-danger btn-xs" href="{% url 'delete-customer' t.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+        <td><button class="btn btn-danger btn-xs" onclick="confirmDelete('{% url 'delete-customer' t.id  %}')"><span class="glyphicon glyphicon-trash"></span></button></td>
       </tr>
       {% endfor %}
+     
     </table>
   </div>
 </div>
-
-<br><br><br><br><br><br>
 {% endblock content %}

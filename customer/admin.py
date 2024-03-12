@@ -2,19 +2,33 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.conf import settings
-from .models import Customer
+from .models import Customer, KYCform, DirectDebitForm, HomeownersCover, ThirdPartyCarInsurance, IncomeProof, ResidenceProof, CopyOfOmang
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone',  'display_profile_pic')
+    list_display = ('get_name', 'address', 'mobile', 'id_number', 'postal_address', 'physical_address', 'occupation', 'alternate_phone', 'gender', 'date_of_birth', 'marital_status')
 
+    def get_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"
+    '''
     def display_profile_pic(self, obj):
         if obj.profile_pic:
-            image_url = '{}{}'.format(settings.STATIC_URL, obj.profile_pic.url)
+            image_url = '{}{}'.format(settings.STATIC_URL, obj.profile_pic)
             return format_html('<img src="{}" style="max-width: 100px; max-height: 100px;" />', image_url)
         else:
             return 'No Image'
+    '''
 
-    display_profile_pic.allow_tags = True
-    display_profile_pic.short_description = 'Profile Picture'
+    get_name.short_description = 'Name'
+    #display_profile_pic.allow_tags = True
+    #display_profile_pic.short_description = 'Profile Picture'
 
 admin.site.register(Customer, CustomerAdmin)
+admin.site.register(KYCform)
+admin.site.register(IncomeProof)
+admin.site.register(ResidenceProof)
+admin.site.register(CopyOfOmang)
+
+admin.site.register(DirectDebitForm)
+admin.site.register(HomeownersCover)
+admin.site.register(ThirdPartyCarInsurance)
+

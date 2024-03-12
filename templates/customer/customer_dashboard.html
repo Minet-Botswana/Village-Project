@@ -26,7 +26,7 @@
       }
   
       .bg-c-green {
-        background:#e21a22;
+        background:#5a4142;
       }
   
       .bg-c-yellow {
@@ -42,7 +42,6 @@
         
         -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
         box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        border: 1px solid black;
         margin-bottom: 30px;
         -webkit-transition: all 0.3s ease-in-out;
         transition: all 0.3s ease-in-out;
@@ -52,9 +51,6 @@
         padding: 25px;
       }
   
-      .order-card i {
-        font-size: 26px;
-      }
   
       .f-left {
         float: left;
@@ -67,23 +63,46 @@
       left: 0px;
       right: 0px;
     }
-    </style>
+
+    .order-card {
+      color: rgb(255, 255, 255);
+      position: relative;
+    }
+
+    .order-card i {
+      position: absolute;
+      bottom: 20px; /* Adjust as needed */
+      left: 25px; /* Adjust as needed */
+      font-size: 26px;
+    }
+  </style>
   </head>
 
 
   <div class="container">
     <div class="row">
-      <div class="col-md-4 col-xl-3">
+
+      <div class="col-md-4 col-xl-4">
         <div class="card bg-c-green order-card">
           <div class="card-block">
-            <h6 class="m-b-20"> <a href="apply-policy" style="text-decoration: none;color:white;">Available Policy</a> </h6>
-            <h2 class="text-right"><i  class="fab fa-product-hunt f-left"></i><span>{{available_policy}}</span></h2>
+            <h6 class="m-b-20"> <a href="available-policies" style="text-decoration: none;color:white;">My Homeowners Covers</a> </h6>
+            <h2 class="text-right"><i  class="fab fa-product-hunt f-left"></i><span>{{ policies.count }}</span></h2>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-4">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"> <a href="available-thirdpartypolicies" style="text-decoration: none;color:white;">My Thirdparty Motor Covers</a> </h6>
+            <h2 class="text-right"><i  class="fab fa-product-hunt f-left"></i><span>{{ thirdpartypolicy.count }}</span></h2>
             
           </div>
         </div>
       </div>
   
-      <div class="col-md-4 col-xl-3">
+      <div class="col-md-4 col-xl-4">
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="history" style="text-decoration: none;color:white;">Applied Policy</a> </h6>
@@ -93,7 +112,7 @@
         </div>
       </div>
   
-      <div class="col-md-4 col-xl-3">
+      <!--div class="col-md-4 col-xl-3">
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="/" style="text-decoration: none;color:white;">Policy Categories</a></h6>
@@ -101,9 +120,9 @@
             
           </div>
         </div>
-      </div>
+      </div-->
   
-      <div class="col-md-4 col-xl-3">
+      <div class="col-md-4 col-xl-4">
         <div class="card bg-c-green order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="question-history" style="text-decoration: none;color:white;">Total Question Asked</a></h6>
@@ -113,10 +132,19 @@
         </div>
       </div>
 
+      <!--div class="col-md-4 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-block">
+            <h6 class="m-b-20"><a href="/" style="text-decoration: none;color:white;">Policy Categories</a></h6>
+           <h2 class="text-right"><i class="fas fa-list-alt f-left"></i><span>{{total_category}}</span></h2>
+            
+          </div>
+        </div>
+      </div-->
+
       
     </div>
   </div>
-
 
 <br><br><br><br><br><br><br><br><br><br>
 

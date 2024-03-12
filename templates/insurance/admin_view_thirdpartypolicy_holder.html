@@ -1,0 +1,172 @@
+{% extends 'insurance/adminbase.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    .panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #e21a22;
+    border-color: #333;
+  }
+  .panel-heading h6 {
+      background-color: #e21a22 !important;
+      color: white !important; /* Adjust text color for better visibility */
+      border: 1px solid #e21a22!important;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+
+    #dev-table {
+
+border-spacing: 0 !important; /* Set spacing between table cells to 0 */
+}
+
+.dataTables_wrapper .dataTables_length select {
+border: 1px solid #aaa;
+border-radius: 3px;
+padding: 5px;
+background-color: transparent;
+padding: 4px;
+margin-top: 4px;
+margin-left: 7px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+border: 1px solid #aaa;
+border-radius: 3px;
+padding: 5px;
+background-color: transparent;
+margin-left: 3px;
+margin-top: 4px;
+margin-right: 12px;
+
+}
+
+label {
+display: inline-block;
+margin-bottom: 5px;
+font-weight: bold;
+margin-left: 10px;
+}
+
+tr.policy-row {
+  cursor: pointer !important;
+}
+
+
+</style>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  
+  <!-- Bootstrap JavaScript -->
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+  <!-- DataTables JS -->
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+  <!-- DataTables initialization script -->
+  <script>
+      $(document).ready(function() {
+          $('#dev-table').DataTable();
+      });
+  </script>
+  
+</head>
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Third Party Policy Holder Record</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+          <th>Policy No.</th>
+          <th>Policy Name</th>
+          <th>Customer Name</th>
+          <th>Effective Date</th>
+          <th>Status</th>
+          <th class="text-right">Action</th>
+        </tr>
+      </thead>
+      {% for t in policyrecords %}
+      <tr data-toggle="modal" data-target="#expiryModal{{ t.id }}">
+        <td>{{t.thirdpartypolicy.policy_number }}</td>
+        <td>{{t.thirdpartypolicy}}</td>
+        <td>{{t.thirdpartycustomer}}</td>
+        <td>{{t.thirdpartycreation_date}}</td>
+        <td>{{t.thirdpartystatus}}</td>
+        {% if t.thirdpartystatus == 'Pending' %}
+        <td class="text-right">
+          <button class="btn btn-primary badge-pill" style="width: 80px;"><a  style="text-decoration: none;color: white;" href="{% url 'approve-thirdpartyrequest' t.id  %}">Approve</a> </button>
+          <button class="btn btn-danger badge-pill" style="width: 60px;"><a  style="text-decoration: none;color: white;" href="{% url 'reject-thirdpartyrequest' t.id  %}">Reject</a> </button>
+        </td>
+        {% else %}
+        <td class="text-right">
+          <span style="color:red;font-size:14px;" class="label success">{{t.thirdpartystatus}}</span>
+        </td>
+        {% endif %}
+      </tr>
+
+      <!-- Modal for Expiry Date -->
+      <div class="modal fade" id="expiryModal{{ t.id }}" tabindex="-1" role="dialog" aria-labelledby="expiryModalLabel{{ t.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="expiryModalLabel{{ t.id }}">Policy Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Policy Number:</strong> {{ t.thirdpartypolicy.policy_number }}</p>
+              <p><strong>Risk:</strong> {{ t.thirdpartypolicy.policy_name }}</p>
+              <p><strong>Category:</strong> {{ t.thirdpartypolicy.category }}</p>
+              <p><strong>Premium:</strong> BWP{{ t.thirdpartypolicy.premium }}</p>
+              <p><strong>Tenure:</strong> {{ t.thirdpartypolicy.tenure }} Months</p>
+              <p><strong>Cover Start:</strong> {{ t.thirdpartypolicy.cover_start }}</p>
+             <p><strong>Cover End:</strong> {{ t.thirdpartypolicy.cover_end }}</p>
+             <p><strong>Expiry Date:</strong> {{ t.thirdpartypolicy.expiry_date }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    // Handle click on row to show the expiry date modal
+    $('tr[data-toggle="modal"]').click(function () {
+      var modalId = $(this).data('target');
+      $(modalId).modal('show');
+    });
+  });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,284 @@
+{% extends 'customer/customerbase.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDV1Vw9jedE30w1SNV6nGsT4H8pO_qbhxQ&libraries=places" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <!-- Add these lines to the head section of your HTML template -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+<style>
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: 1rem;
+        font-weight: 400;
+        color: #212529;
+        text-align: left;
+        background-color: #f8f9fa; /* Set background color as needed */
+    }
+
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 50px 20px; /* Adjust padding as needed */
+    }
+
+    .form-card {
+        width: 90%; /* Adjust width as needed */
+        max-width: 800px; /* Set maximum width for responsiveness */
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
+        border-radius: 10px; /* Add border radius for rounded corners */
+    }
+
+    .form-header {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .h1, h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #e21a22;
+        border-color: #e21a22;
+    }
+
+    .btn-primary:hover {
+        color: #000000;
+        background-color: #ffffff;
+        border-color: #b91d23;
+    }
+    .page-title {
+        background-color: #e21a22;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+    .change {
+      cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 40%;
+      width: 20px;
+      text-align: center;
+      padding: 5px;
+      margin-left: 8px;
+    }
+    .dark {
+      background-color: #222;
+      color: #e6e6e6;
+    }
+
+</style>
+
+<div class="container">
+    <!-- Add the following paragraph to display the page route -->
+    <div class="row">
+        <div class="col-md-12">
+            <p class="breadcrumb" style="font-size: 14px; font-family: 
+              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+              sans-serif; color: #e21a22;"
+            >
+              Home / Forms / Home Owners Insurance Form Application
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add the following paragraph to display the page route -->
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="breadcrumb" style=" font-size: 18px; font-family: 
+                  'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                  -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                  sans-serif; color: #e21a22; margin-top: 42px;"
+                >
+                Home Owners Insurance
+                </h1>
+            </div>
+            <div class="col-md-12">
+                <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
+                'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
+                sans-serif; color: #e21a22;" >
+                   Complete our streamlined Know Your Customer Application (eKYC) Form effortlessly to initiate a secure and compliant onboarding process.
+                    At Minet Botswana, we value your time and prioritize the confidentiality of your information. By submitting this form, 
+                    you contribute to a smooth verification process, ensuring a seamless and trustworthy customer experience. Thank you for choosing 
+                    Minet Botswana for your services – where simplicity meets security.
+                </p>
+            </div>
+        </div>
+    </div>
+
+<div class="form-container">
+    <div class="card form-card">
+        <div class="form-header">
+            <h1>Insurance Application Form</h1>
+        </div>
+        <div class="form-body">
+<form method="POST" action="{% url 'customer:create_homeowners_cover' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <!-- You may include a button to trigger Google Maps API for Geo Location here -->
+        <!-- Map container -->
+        <div id="map" style="height: 300px;"></div>
+            <!-- Geolocation input field -->
+            <input type="text" id="geolocation" name="geolocation" placeholder="Select location on map" />
+            
+    </div>
+    <label for="{{ homeownersForm.geo_location.id_for_label }}">Geo Location</label>
+            <input type="text" name="{{ homeownersForm.geo_location.name }}" id="{{ homeownersForm.geo_location.id }}" class="form-control" required placeholder="copy and paste coordinate from the location selected on the map above...">
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.plot_number.id_for_label }}">Plot Number</label>
+        <input type="text" name="{{ homeownersForm.plot_number.name }}" id="{{ homeownersForm.plot_number.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.ward.id_for_label }}">Ward/Kgotla</label>
+        <input type="text" name="{{ homeownersForm.ward.name }}" id="{{ homeownersForm.ward.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.village.id_for_label }}">Village</label>
+        <input type="text" name="{{ homeownersForm.village.name }}" id="{{ homeownersForm.village.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.district.id_for_label }}">District</label>
+        <input type="text" name="{{ homeownersForm.district.name }}" id="{{ homeownersForm.district.id }}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.title_deed.id_for_label }}">Attachments (e.g., Title Deed)</label>
+        <input type="file" name="{{ homeownersForm.title_deed.name }}" id="{{ homeownersForm.title_deed.id }}" class="form-control" required>
+        {{ homeownersForm.title_deed.errors }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ homeownersForm.financial_interest.id_for_label }}">Financial Interest (Optional)</label>
+        <input type="text" name="{{ homeownersForm.financial_interest.name }}" id="{{ homeownersForm.financial_interest.id }}" class="form-control">
+        {{ homeownersForm.financial_interest.errors }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Form</button>
+</form>
+<a href="/customer/display_user_homeowners_covers/"> View and edit details</a>
+
+        </div>
+    </div>
+</div>
+<div class="mode">
+    Dark mode:
+    <span class="change">OFF</span>
+  </div>
+<script>
+    $(".change").on("click", function () {
+      if ($("body").hasClass("dark")) {
+        $("body").removeClass("dark");
+        $(".change").text("OFF");
+      } else {
+        $("body").addClass("dark");
+        $(".change").text("ON");
+      }
+    });
+  </script>
+  <script>
+    var map = L.map('map').setView([0, 0], 2);  // Initial map view
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    var marker;
+
+    // Function to update the geolocation input field based on marker position
+    function updateGeolocationField(latlng) {
+        document.getElementById('geolocation').value = latlng.lat + ', ' + latlng.lng;
+    }
+
+    // Function to handle map click event
+    function onMapClick(e) {
+        if (marker) {
+            map.removeLayer(marker);  // Remove existing marker
+        }
+
+        marker = L.marker(e.latlng).addTo(map);  // Add new marker
+        updateGeolocationField(e.latlng);  // Update geolocation input field
+    }
+
+    // Attach the onMapClick function to the map click event
+    map.on('click', onMapClick);
+
+    // Initialize map if geolocation input field is already populated
+    var geolocationInput = document.getElementById('geolocation');
+    if (geolocationInput.value) {
+        var coordinates = geolocationInput.value.split(', ');
+        var initialLatLng = L.latLng(parseFloat(coordinates[0]), parseFloat(coordinates[1]));
+        marker = L.marker(initialLatLng).addTo(map);
+        map.setView(initialLatLng, 15);
+    }
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to both input fields
+        var outerInput = document.getElementById("{{ homeownersForm.geo_location.id }}");
+        var innerInput = document.getElementById("geolocation");
+
+        if (outerInput && innerInput) {
+            // Log the found elements for debugging
+            console.log("Outer Input:", outerInput);
+            console.log("Inner Input:", innerInput);
+
+            // Check if the elements are not null before adding the event listener
+            if (innerInput.addEventListener) {
+                // Listen for input changes on the inner input field
+                innerInput.addEventListener("input", function () {
+                    // Update the value of the outer input field
+                    outerInput.value = this.value;
+                });
+            } else {
+                console.error("AddEventListener is not supported. Check your browser compatibility.");
+            }
+        } else {
+            console.error("Could not find one or both of the input fields. Check the element IDs.");
+        }
+    });
+</script>
+
+
+
+
+{% endblock content %}

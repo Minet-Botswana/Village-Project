@@ -9,13 +9,13 @@
 <title>Minet - Village Project</title>
 
 {% load static %}
-<link rel="icon" href="{% static 'image/favicon.ico' %}">
+<link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  href="https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;900&family=Quicksand:wght@400;500;600;700&display=swap"
-  rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <style>
@@ -1072,6 +1072,14 @@ transition: var(--transition);
   grid-row: 1 / 2;
 }
 
+.features-banner {
+  display: none; /* Hide all images by default */
+}
+
+.features-banner img {
+  width: 100%; /* Ensure images fill their container */
+}
+
 
 
 /**
@@ -1153,7 +1161,8 @@ transition: var(--transition);
 }
 </style>
 <head>
-  <link rel="icon" src="{% static 'image/favicon.ico' %}">
+  <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+
    {% include "insurance/navbar.html" %}
   </head>
 
@@ -1184,7 +1193,7 @@ transition: var(--transition);
           </div>
 
           <figure class="hero-banner">
-            <img src="./static/image/MinetHero.png" alt="Hero image">
+            <img src="https://storage.googleapis.com/kogae_bucket/logos/MinetHero.png" alt="Hero image">
           </figure>
 
         </div>
@@ -1213,7 +1222,7 @@ transition: var(--transition);
               We know your time is valuable. Our streamlined processes and user-friendly platform make obtaining and managing your short-term insurance hassle-free. Get the coverage you need without the unnecessary complexity.
             </p>
 
-            <button class="btn btn-outline">Learn More</button>
+            <!--button class="btn btn-outline">Learn More</button-->
 
           </div>
 
@@ -1315,7 +1324,13 @@ transition: var(--transition);
           <div class="features-wrapper">
 
             <figure class="features-banner">
-              <img src="./static/image/homepage.jpg" alt="illustration art">
+              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Illustration 1">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Illustration 2">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Illustration 3">
             </figure>
 
             <div class="features-content">
@@ -1364,7 +1379,13 @@ transition: var(--transition);
           <div class="features-wrapper">
 
             <figure class="features-banner">
-              <img src="./static/image/homepage.jpg" alt="illustration art">
+              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-01.jpg" alt="Illustration 4">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-01.jpg" alt="Illustration 5">
+            </figure>
+            <figure class="features-banner">
+              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Illustration 6">
             </figure>
 
             <div class="features-content">
@@ -1678,36 +1699,36 @@ transition: var(--transition);
         <div class="footer-brand">
 
           <a href="#" class="logo">
-            <img src="./static/image/MinetLogoBlack.png" alt="Landio logo">
+            <img src="https://storage.googleapis.com/kogae_bucket/logos/minetwhite1.png"  style="width: 90%;" alt="Landio logo">
           </a>
 
-          <p class="footer-text">
+          <!--p class="footer-text">
             Cras ultricies mi eu turpis sit hendrerit fringilla vestibulum ante ipsum primis in faucibus ultrices
             posuere cubilia.
-          </p>
+          </p-->
 
           <ul class="social-list">
 
             <li>
-              <a href="https://www.facebook.com/MinetBotswana/" class="social-link">
+              <a href="https://www.facebook.com/MinetBotswana/" title="Facebook" class="social-link">
                 <ion-icon name="logo-facebook"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="https://twitter.com/minet_botswana?lang=en" class="social-link">
+              <a href="https://twitter.com/minet_botswana?lang=en" title="Twitter" class="social-link">
                 <ion-icon name="logo-twitter"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="https://www.instagram.com/minet_botswana_holdings/" class="social-link">
+              <a href="https://www.instagram.com/minet_botswana_holdings/" title="instagram" class="social-link">
                 <ion-icon name="logo-instagram"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="https://www.linkedin.com/company/minet-bw/mycompany/" class="social-link">
+              <a href="https://www.linkedin.com/company/minet-bw/mycompany/" title="linkedin" class="social-link">
                 <ion-icon name="logo-linkedin"></ion-icon>
               </a>
             </li>
@@ -1806,27 +1827,32 @@ transition: var(--transition);
     <div class="footer-bottom">
       <div class="container">
         <p class="copyright">
-          &copy; 2023 <a href="">Minet Botswana Holdings</a>. All Right Reserved
+          &copy; 2024 <a href="">Minet Botswana Holdings</a>. All Right Reserved
         </p>
       </div>
+      
     </div>
-
   </footer>
 
-
-
-
-
-  <!-- 
-    - custom js link
-  -->
-  <script src="./assets/js/script.js"></script>
-
-  <!-- 
-    - ionicon link
-  -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script>
+    // JavaScript to implement the slideshow functionality
+    let slideIndex = 0;
+      showSlides();
+
+    function showSlides() {
+      let i;
+      const slides = document.getElementsByClassName("features-banner");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  // Hide all images
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {slideIndex = 1}  // Reset index if exceeds number of slides
+      slides[slideIndex-1].style.display = "block";  // Display current slide
+      setTimeout(showSlides, 3000); // Change image every 2 seconds
+    }
+  </script>
 
 </body>
 

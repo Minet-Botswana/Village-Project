@@ -30,7 +30,14 @@ SECRET_KEY = 'ls@!_(edqp*xy76kvbsst$07at(v^li*2&ew!^$8o(@wa6@a+$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost:8080",
+    "http://34.31.108.210:8080",
+]
 
 
 # Application definition
@@ -46,6 +53,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'insurance',
     'customer',
+    'corsheaders',
+    'sweetify',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'insurancemanagement.urls'
@@ -78,20 +88,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'insurancemanagement.wsgi.application'
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+#Development Database
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'kogae-minet',
+        'USER': 'Austin',
+        'PASSWORD': 'November@06',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+'''
+#Local Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'LocalDev2',
+        'USER': 'postgres',
+        'PASSWORD': 'November@06',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -136,28 +161,119 @@ LOGIN_URL = '/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+
+#STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Adjust the path as needed
+
+#MEDIA_URL = '/media/'  # Ensure it starts and ends with a forward slash
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'static')  # You may need to adjust this path based on your project structure
 
 
-STATICFILES_DIRS=[
-STATIC_DIR,
-]
+#STATICFILES_DIRS=[
+#STATIC_DIR,
+#]
+
+# for media in the bucket
+import google.auth
+from google.oauth2 import service_account
+from google.cloud import storage
+
+# FINAL TESTING TO GOOGLE CLOUD BUCKET WHICH WILL WORK IN JESUS'S NAME
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+os.environ['DJANGO_SETTINGS_MODULE'] = 'insurancemanagement.settings'
+
+# Use application default credentials
+credentials, project_id = google.auth.default()
+
+
+# Google Cloud Storage credentials THE REAL ONES HERE
+#GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.join(BASE_DIR, 'credentials.json'))
+GS_PROJECT_ID = 'kogae-minet'
+GS_BUCKET_NAME = 'kogae_bucket'
+GS_DEFAULT_ACL = 'publicRead'
+UPLOAD_ROOT = 'media/uploads'
+GS_FILE_OVERWRITE = 'False'
+
+# Media files settings
+#MEDIA_ROOT = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'https://storage.googleapis.com/kogae_bucket/media/'
+
+# Static files (CSS, JavaScript, images) settings
+STATIC_URL = 'https://storage.googleapis.com/kogae_bucket/static/'
+GS_STATIC_BUCKET_NAME = "kogae_bucket"
+
+#DEFAULT_FILE_STORAGE = 'gcloud.GoogleCloudMediaFileStorage'
+#STATICFILES_STORAGE = 'gcloud.GoogleCloudStaticFileStorage'
+
+# settings.py
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
 
 LOGIN_REDIRECT_URL='/afterlogin'
+LOGOUT_REDIRECT_URL = "/adminlogin"  # 
 
 #for contact us give your gmail id and password
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'from@gmail.com' # this email will be used to send emails
-EMAIL_HOST_PASSWORD = 'xyz' # host email password required
+EMAIL_HOST_USER = 'austinglebane@gmail.com' # this email will be used to send emails
+EMAIL_HOST_PASSWORD = 'oiyt kzox qzwc qrvd' # host email password required
 # now sign in with your host gmail account in your browser
 # open following link and turn it ON
 # https://myaccount.google.com/lesssecureapps
 # otherwise you will get SMTPAuthenticationError at /contactus
 # this process is required because google blocks apps authentication by default
-EMAIL_RECEIVING_USER = ['to@gmail.com'] # email on which you will receive messages sent from website
+EMAIL_RECEIVING_USER = ['austinglebane@gmail.com'] # email on which you will receive messages sent from website
+
+SESSION_COOKIE_AGE = 1800  # 30 minutes
+SESSION_SAVE_EVERY_REQUEST = True # update the session expiration time every time a request is made, ensuring that the session doesn't expire as long as the user is active
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True # log users out when they close their browser
+
+''''
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'goitsemang.lebane@minet.co.bw' # this email will be used to send emails
+EMAIL_HOST_PASSWORD = 'November@062024' # host email password required
+# now sign in with your host gmail account in your browser
+# open following link and turn it ON
+# https://myaccount.google.com/lesssecureapps
+# otherwise you will get SMTPAuthenticationError at /contactus
+# this process is required because google blocks apps authentication by default
+EMAIL_RECEIVING_USER = ['goitsemang.lebane@minet.co.bw'] # email on which you will receive messages sent from website
+'''
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'customer': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 
 # Administrators Login settings
@@ -173,10 +289,10 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Botswana",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "\image\Minet2.png",
+    "site_logo": "logos/Minet2.png",
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": "\image\Minet2.png",
+    "login_logo": "logos/Minet2.png",
 
     # Logo to use for login form in dark themes (defaults to login_logo)
     "login_logo_dark": None,
