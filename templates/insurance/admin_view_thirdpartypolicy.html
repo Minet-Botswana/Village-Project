@@ -170,7 +170,8 @@ margin-left: 10px;
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="padding: 5px 10px; font-size: smaller;">
+              <h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px '>Policy Details</h4>
               <p><strong>Policy Number:</strong> {{ t.policy_number }}</p>
               <p><strong>Risk: </strong>{{ t.policy_name }}</p>
               <p><strong>Category: </strong>{{ t.category }}</p>
@@ -183,6 +184,9 @@ margin-left: 10px;
           
               <!-- Display customer details -->
               {% if t.customer_details %}
+              <hr>
+              <h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px '>Client Details</h4>
+              <hr>
               <p><strong>Customer Name: </strong>{{ t.customer_details.user.first_name }} {{ t.customer_details.user.last_name }}</p>
               <p><strong>Customer Mobile: </strong>{{ t.customer_details.mobile }}</p>
               <p><strong>Customer Alternate Phone: </strong>{{ t.customer_details.alternate_phone}}</p>
