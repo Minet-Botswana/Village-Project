@@ -12,6 +12,8 @@ class Category(models.Model):
     creation_date =models.DateField(auto_now=True)
     def __str__(self):
         return self.category_name
+    class Meta:
+        verbose_name_plural = "Categories"
 
 class Policy(models.Model):
     category= models.ForeignKey('Category', on_delete=models.CASCADE)
@@ -28,6 +30,8 @@ class Policy(models.Model):
     
     def __str__(self):
         return self.policy_name
+    class Meta:
+        verbose_name_plural = "Policies"
     
     def save(self, *args, **kwargs):
         if not self.policy_number:
@@ -59,6 +63,8 @@ class ThirdpartyPolicy(models.Model):
     
     def __str__(self):
         return self.policy_name
+    class Meta:
+        verbose_name_plural = "Thirdparty Policies"
     
     def save(self, *args, **kwargs):
         if not self.policy_number:

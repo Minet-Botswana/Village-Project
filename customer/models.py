@@ -72,6 +72,11 @@ class KYCform(models.Model):
 
     def get_download_url(self):
         return self.kyc_form if self.kyc_form else None
+    
+    def __str__(self):
+        return f"KYC Form for {self.customer}"  # Assuming the customer model has a field like 'name'
+    class Meta:
+        verbose_name_plural = "KYC Forms"
    
     def save(self, *args, **kwargs):
         if self.kyc_form:
