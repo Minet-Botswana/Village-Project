@@ -122,6 +122,7 @@
   .messages li {
     margin-bottom: 5px;
   }
+  
 </style>
 
 <!-- DataTables initialization script -->
@@ -161,6 +162,9 @@
 
 </div>
 
+<!-- Add Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <!-- DJANGO MESSAGES FOR WRITING MESSAGES HERE-->
 <br>
 
@@ -195,4 +199,161 @@
     </table>
   </div>
 </div>
+
+<!-- Add Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid">
+  <!-- Add the following paragraph to display the page route -->
+  <div class="row">
+    <div class="col-md-12">
+      <p class="breadcrumb" style="font-size: 16px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
+        Demographic Overview Analysis
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Pie chart container -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
+        Demographic Breakdown by Genders
+      </p>
+      <div class="text-center">
+        <span class="badge" style="background-color: #FF6384;">Other</span>
+        <span class="badge" style="background-color: #36A2EB;">Male</span>
+        <span class="badge" style="background-color: #4ad122;">Female</span>
+      </div>
+      <div class="pie-chart-container">
+        <!-- Add canvas element for the pie chart with reduced dimensions -->
+        <canvas id="genderPieChart" width="300" height="300"></canvas>
+      </div>
+      </div>
+
+    <!-- Bar chart container -->
+    <div class="col-md-6">
+      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
+        Marital Status Distribution
+      </p>
+      <div class="text-center">
+        <span class="badge" style="background-color: #FF6384;">Married</span>
+        <span class="badge" style="background-color: #36A2EB;">Divorced</span>
+        <span class="badge" style="background-color: #FFCE56;">Single</span>
+        <span class="badge" style="background-color: #000000;">Widowed</span>
+      </div>
+      <div class="bar-chart-container">
+        <!-- Add canvas element for the bar chart with reduced dimensions -->
+        <canvas id="maritalStatusBarChart" width="300" height="300"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get gender distribution data from Django view
+  var genderData = {{ gender_percentage_json|safe }};
+
+  // Extract labels and data for the pie chart
+  var labels = Object.keys(genderData);
+  var data = Object.values(genderData);
+
+  // Set colors for different genders
+  var colors = ['#FF6384', '#36A2EB', '#FFCE56']; // You can customize colors as needed
+
+  // Initialize pie chart
+  var ctxPie = document.getElementById('genderPieChart').getContext('2d');
+  var pieChart = new Chart(ctxPie, {
+    type: 'pie',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // Set to false to allow specifying custom dimensions
+      legend: {
+        display: true,
+        position: 'left' // Position of the legend
+      },
+      layout: {
+        padding: {
+          left: 2,
+          right: 10,
+          top: 10,
+          bottom: 10
+        }
+      },
+      // Adjust the size of the pie chart
+      elements: {
+        arc: {
+          borderWidth: 0
+        }
+      },
+      // Set the radius of the pie chart
+      radius: '90%'
+    }
+  });
+
+  // Get marital status distribution data from Django view
+  var maritalStatusData = {{ marital_status_counts_json|safe }};
+
+  // Extract labels and data for the bar chart
+  var labels = Object.keys(maritalStatusData);
+  var data = Object.values(maritalStatusData);
+
+  // Set colors for the bar chart
+  var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#000000']; // You can customize colors as needed
+
+  // Initialize bar chart
+  var ctxBar = document.getElementById('maritalStatusBarChart').getContext('2d');
+  var barChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // Set to false to allow specifying custom dimensions
+      legend: {
+        display: false // Hide legend for bar chart
+      },
+      layout: {
+        padding: {
+          left: 10,
+          right: 10,
+          top: 10,
+          bottom: 10
+        }
+      },
+      // Set the scales for x and y axes
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false // Hide grid lines for x axis
+          },
+          ticks: {
+            beginAtZero: true // Start y axis at zero
+          }
+        }],
+        yAxes: [{
+          gridLines: {
+            display: false // Hide grid lines for y axis
+          }
+        }]
+      }
+    }
+  });
+</script>
+
+
+
 {% endblock content %}
