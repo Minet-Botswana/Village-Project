@@ -72,12 +72,48 @@ def admin_dashboard_view(request):
     }
     return render(request,'insurance/admin_dashboard.html',context=dict)
 
-
-
+'''
+from django.db.models import Count
 @login_required(login_url='adminlogin')
 def admin_view_customer_view(request):
     customers= CMODEL.Customer.objects.filter(user__groups__name='CUSTOMER')
     return render(request,'insurance/admin_view_customer.html',{'customers':customers})
+'''
+import json
+from django.db.models import Count
+from .models import Customer
+@login_required(login_url='adminlogin')
+def admin_view_customer_view(request):
+    customers = Customer.objects.filter(user__groups__name='CUSTOMER')
+
+    # Count the number of users for each gender
+    gender_distribution = customers.values('gender').annotate(count=Count('gender'))
+    # Count the number of customers for each marital status
+    marital_status_distribution = customers.values('marital_status').annotate(count=Count('marital_status'))
+
+    total_users = customers.count()
+    total_customers = customers.count()
+
+    # Calculate the percentage of each gender category
+    gender_percentage = {}
+    for entry in gender_distribution:
+        gender_percentage[entry['gender']] = (entry['count'] / total_users) * 100
+
+    # Serialize gender_percentage dictionary to JSON
+    gender_percentage_json = json.dumps(gender_percentage)
+    
+    # Extract marital status counts
+    marital_status_counts = {}
+    for entry in marital_status_distribution:
+        marital_status_counts[entry['marital_status']] = entry['count']
+        
+    # Serialize marital_status_counts dictionary to JSON
+    marital_status_counts_json = json.dumps(marital_status_counts)
+    print("Marital Status Counts:", marital_status_counts)
+    print("gender_percentage", gender_percentage_json)
+
+    return render(request, 'insurance/admin_view_customer.html', {'customers': customers, 'gender_percentage_json': gender_percentage_json,'marital_status_counts_json': marital_status_counts_json})
+
 
 # In your views.py
 from django.contrib.auth.hashers import make_password
