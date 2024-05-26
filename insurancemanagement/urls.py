@@ -19,6 +19,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='insurance/logout.html'), name='logout'),
     path('logout-redirect/', views.logout_redirect, name='logout_redirect'),
     path('aboutus', views.aboutus_view),
+    path('benefits', views.benefits, name='benefits'),
+    path('covers', views.covers, name='covers'),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
     
@@ -80,6 +82,7 @@ urlpatterns = [
     
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),
     #path('reset-password/', auth_views.PasswordResetView.as_view(), name='reset-password'),
+    
 
 ]
 

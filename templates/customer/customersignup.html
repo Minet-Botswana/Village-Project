@@ -59,7 +59,7 @@
     <br><br><br>
 
 
-    <h3 class="title" style="text-align: center;color: red;">CLIENT SIGNUP</h3>
+    <h3 class="title" style="text-align: center;color: red;">Client Details</h3>
 
 {% if user_form_errors %}
   <div class="alert-messages">
@@ -89,7 +89,7 @@
 
 <div id="username-error-message" style="color: red; text-align: center;"></div>
 
-    <form method="POST" autocomplete="off" enctype="multipart/form-data">
+    <form method="POST" autocomplete="off" enctype="multipart/form-data" style="border-radius: 1%; background-color: rgb(237, 236, 236);">
       {% csrf_token %}
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -255,8 +255,42 @@
           {% render_field customerForm.profile_pic|attr:'required:true' class="form-control" placeholder="" %}
       </div-->     
       </div>
-      <button type="submit" class="btn btn-primary">Sign Up</button>
+
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="termsCheck" required>
+        <label class="form-check-label" for="termsCheck">
+          I agree to the <a href="#" data-toggle="modal" data-target="#termsModal">Terms and Conditions</a>
+        </label>
+      </div>
+      
+      <button type="submit" class="btn btn-primary" id="signupBtn" disabled>Submit Details</button>
+
     </form>
+
+    <!-- Terms and Conditions Modal -->
+<div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Insert your terms and conditions content here -->
+        <p><strong>Information Collection:</strong> By submitting your details for our insurance services, you agree to provide accurate and complete information about yourself, including personal details, contact information, and any other data required for insurance purposes.</p>
+       <p><strong>Data Protection:</strong> We are committed to protecting your privacy and securing your personal information. Any data collected from you will be used solely for the purpose of providing insurance services and will not be shared with third parties without your consent, except as required by law.</p>
+       <p><strong>Accuracy of Information:</strong>Accuracy of Information: It is your responsibility to ensure that all information provided to us is accurate and up-to-date. Any inaccuracies or omissions may affect the coverage and validity of your insurance policy.</p>
+       <p><strong>Use of Information:</strong> We may use the information collected from you to assess your insurance needs, process claims, communicate with you regarding your policy, and improve our services. By agreeing to these terms, you consent to the use of your information for these purposes.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- JAVASCRIPT SCRIPTS FOR MORE FUNCTIONALITIES -->
 
@@ -404,6 +438,34 @@
     });
   });
 </script>
+
+<script>
+  // Ensure jQuery and Bootstrap scripts are loaded
+  $(document).ready(function(){
+    // Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>
+
+<script>
+  $(document).ready(function(){
+    // Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Listen for changes in the terms checkbox
+    $('#termsCheck').on('change', function() {
+      // Check if the checkbox is checked
+      if ($(this).is(':checked')) {
+        // Enable the signup button
+        $('#signupBtn').prop('disabled', false);
+      } else {
+        // Disable the signup button
+        $('#signupBtn').prop('disabled', true);
+      }
+    });
+  });
+</script>
+
 
 
 

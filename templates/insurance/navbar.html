@@ -24,17 +24,16 @@
       padding: 0px 0; /* Adjust the height vertical of the navbar */
     }
     .navbar-dark .navbar-nav .nav-link {
-    color: #e21a22 !important;
-    margin-right: 2% !important; 
-}
-.navbar-dark .navbar-nav .nav-link:hover {
-    color: #ffffff !important;
-    background-color: #e21a22 !important;
-    margin-right: 2% !important; 
-}
-
+      color: #e21a22 !important;
+      margin-right: 2% !important; 
+    }
+    .navbar-dark .navbar-nav .nav-link:hover {
+      color: #ffffff !important;
+      background-color: #e21a22 !important;
+      margin-right: 2% !important; 
+    }
     .navbar-nav a {
-        color: #e21a22;
+      color: #e21a22;
     }
     .navbar-brand {
       font-size: 15px; /* Increase the font size */
@@ -45,19 +44,26 @@
       margin: auto;
     }
     .dropdown-item {
-    background-color:#ffffff ;
-    color: #e21a22; /* Set the text color to white or any suitable color for contrast */
-    padding: 10px 20px; /* Adjust padding as needed */
-    text-decoration: none; /* Remove the default underline */
-    display: block; /* Ensure each item is displayed as a block element */
-  }
-  
+      background-color: #ffffff;
+      color: #e21a22; /* Set the text color to white or any suitable color for contrast */
+      padding: 10px 20px; /* Adjust padding as needed */
+      text-decoration: none; /* Remove the default underline */
+      display: block; /* Ensure each item is displayed as a block element */
+    }
+    .dropdown-item:hover {
+      background-color: #e21a22; /* Change the background color on hover if desired */
+      color: #ffffff;
+    }
+    .custom-navbar-nav {
+      padding:0; /* Adjust the padding as needed */
+      display: flex;
+      justify-content: center;
+      background-color: beige;
+      width: 100%;
 
-  .dropdown-item:hover {
-    background-color: #e21a22; /* Change the background color on hover if desired */
-    color: #ffffff;
-  }
+    }
   </style>
+  
 
 <body>
   <div class="bs-example">
@@ -76,7 +82,7 @@
   
     
 
-      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse" title="Select a Portal">
+      <!--button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse" title="Select a Portal">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -93,12 +99,21 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <!--div class="navbar-nav">
-          <a href="/aboutus" class="nav-item nav-link">BENEFITS</a>
-          <a href="/contactus" class="nav-item nav-link">CONDITIONS</a>
         </div-->
+      
+        <div class="navbar-nav custom-navbar-nav" style="font-size: 62%; background-color: beige;">
+          <a href="/" class="nav-item nav-link">HOME</a>
+          <a href="/benefits" class="nav-item nav-link">BENEFITS</a>
+          <a href="/customer/customerclick" class="nav-item nav-link">CLIENT INFORMATION</a>
+          <a href="/contactus" class="nav-item nav-link">HOMEOWNERS PROPOSAL FORM</a>
+          <a href="/aboutus" class="nav-item nav-link">THIRDPARTY PROPOSAL FORM</a>
+          <a href="/covers" class="nav-item nav-link">COVERS</a>
+          <a href="/contactus" class="nav-item nav-link">eKYC</a>
+          <a href="/contactus" class="nav-item nav-link">CLAIMS</a>
+          <a href="/contactus" class="nav-item nav-link">CONTACT US</a>
+          <a href="/customer/customerlogin" class="nav-item nav-link">LOGIN</a>
+        </div>
+        
       </div>
     </nav>
   </div>

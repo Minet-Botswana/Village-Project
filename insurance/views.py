@@ -619,3 +619,11 @@ def login_view(request):
             return render(request, 'login.html')
     else:
         return render(request, 'login.html')
+    
+from django.shortcuts import render
+
+def benefits(request):
+    return render(request, 'insurance/benefits.html')
+
+def covers(request):
+    return render(request, 'insurance/covers.html')
