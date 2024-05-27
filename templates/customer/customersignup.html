@@ -89,7 +89,7 @@
 
 <div id="username-error-message" style="color: red; text-align: center;"></div>
 
-    <form method="POST" autocomplete="off" enctype="multipart/form-data" style="border-radius: 1%; background-color: rgb(237, 236, 236);">
+    <form id="myForm" method="POST" autocomplete="off" enctype="multipart/form-data" style="border-radius: 1%; background-color: rgb(237, 236, 236);">
       {% csrf_token %}
       <div class="form-row">
         <div class="form-group col-md-6">
@@ -448,27 +448,54 @@
 </script>
 
 <script>
-  $(document).ready(function(){
-    // Initialize tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-
-    // Listen for changes in the terms checkbox
-    $('#termsCheck').on('change', function() {
-      // Check if the checkbox is checked
-      if ($(this).is(':checked')) {
-        // Enable the signup button
-        $('#signupBtn').prop('disabled', false);
-      } else {
-        // Disable the signup button
-        $('#signupBtn').prop('disabled', true);
-      }
+  $(document).ready(function() {
+    $('#termsCheck').change(function() {
+      $('#signupBtn').prop('disabled', !this.checked);
     });
   });
 </script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Select the form element
+    const form = document.getElementById("myForm");
 
+    // Add event listener for form submission
+    form.addEventListener("submit", function(event) {
+      // Prevent the form from submitting immediately
+      event.preventDefault();
 
+      // Log all form data
+      const formData = new FormData(form);
+      for (const pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
 
+      // Use AJAX to submit the form data
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", form.action);
+      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            // Form submitted successfully
+            console.log(xhr.responseText);
+            // Clear all form fields
+            form.reset();
+            // Display success message
+            alert("Form submitted successfully!");
+          } else {
+            // Error handling
+            console.error("Error:", xhr.statusText);
+            // Display error message if needed
+            // alert("Form submission failed!");
+          }
+        }
+      };
+      xhr.send(formData);
+    });
+  });
+</script>
 
     {% include "insurance/footer.html" %}
   </body>

@@ -231,7 +231,7 @@ def customer_dashboard_view(request):
     #customer = models.Customer.objects.get(user_id=request.user.id)
     #policies = CMODEL.Policy.objects.all()
     #return render(request,'customer/apply_policy.html',{'policies':policies,'customer':customer})
-
+@login_required(login_url='/customer/customerlogin')
 def available_policy_view(request):
     # Assuming the user is logged in
     customer = models.Customer.objects.get(user_id=request.user.id)
@@ -242,7 +242,7 @@ def available_policy_view(request):
     return render(request, 'customer/available_policies.html', {'policies': policies, 'customer': customer})
 
 from insurance.models import ThirdpartyPolicy
-
+@login_required(login_url='/customer/customerlogin')
 def available_thirdpartypolicy_view(request):
     # Assuming the user is logged in
     customer = models.Customer.objects.get(user_id=request.user.id)
@@ -270,6 +270,7 @@ def generate_policy_number(policy):
 from insurance.forms import PolicyForm, ThirdpartyPolicyForm
 from insurance.models import Category
 
+@login_required(login_url='/customer/customerlogin')
 def apply_thirdparty_view(request):
     thirdpartypolicyForm = ThirdpartyPolicyForm()
     print("Request method:", request.method)
@@ -319,7 +320,7 @@ def apply_thirdparty_view(request):
     return render(request, 'customer/apply_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
 
 from datetime import timedelta
-
+@login_required(login_url='/customer/customerlogin')
 def apply_policy_view(request):
     policyForm = PolicyForm()
     print("Request method:", request.method)
@@ -412,7 +413,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def client_forms(request):
     user = request.user
     customer = user.customer
@@ -432,7 +433,7 @@ from .forms import HomeownersCoverForm
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def create_homeowners_cover(request):
     homeownersForm = HomeownersCoverForm()
     homeownersdict = {'homeownersForm': homeownersForm}
@@ -464,12 +465,12 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import HomeownersCover, ThirdPartyCarInsurance
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def display_user_homeowners_covers(request):
     homeowners_covers = HomeownersCover.objects.filter(customer__user=request.user)
     return render(request, 'customer/update_homeowners_cover.html', {'homeowners_covers': homeowners_covers})
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def display_user_thirdparty_covers(request):
     thirdparty_covers = ThirdPartyCarInsurance.objects.filter(customer__user=request.user)
     return render(request, 'customer/update_thirdparty_cover.html', {'thirdparty_covers': thirdparty_covers})
@@ -478,7 +479,7 @@ def display_user_thirdparty_covers(request):
 from .forms import ThirdPartyCarInsuranceForm
 from django.shortcuts import get_object_or_404
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def create_thirdpartycar_cover(request):
     thirdpartycarForm = ThirdPartyCarInsuranceForm()
     thirdpartycardict = {'thirdpartycarForm': thirdpartycarForm}
@@ -510,7 +511,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import KYCuploadForm, CopyOfOmangForm, ResidenceProofForm, IncomeProofForm
 from .models import KYCform, Customer, CopyOfOmang, ResidenceProof, IncomeProof
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def upload_kyc_form(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
@@ -557,7 +558,7 @@ def upload_kyc_form(request):
     })
     
 #Omang View
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def upload_copy_of_omang(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
@@ -604,7 +605,7 @@ def upload_copy_of_omang(request):
     })
     
 #Proof of Residence Proof
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def upload_residence_proof(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
@@ -650,7 +651,7 @@ def upload_residence_proof(request):
         'existing_residence_proof': existing_residence_proof,
     })
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def upload_income_proof(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
@@ -701,7 +702,7 @@ from .models import HomeownersCover
 from .forms import HomeownersCoverForm
 from django.contrib.auth.decorators import login_required
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def update_homeowners_cover(request, id):
     homeowners_cover = get_object_or_404(HomeownersCover, id=id)
 
@@ -729,7 +730,7 @@ def update_homeowners_cover(request, id):
 
     return render(request, 'customer/update_homeowners_cover.html', {'form': form, 'homeowners_cover': homeowners_cover})
 
-@login_required
+@login_required(login_url='/customer/customerlogin')
 def update_thirdparty_cover(request, id):
     thirdparty_cover = get_object_or_404(ThirdPartyCarInsurance, id=id)
 

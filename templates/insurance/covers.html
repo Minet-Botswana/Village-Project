@@ -1,1484 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Minet - Village Project</title>
+    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600&display=swap');
 
-<title>Minet - Village Project</title>
+        * {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0; 
+            padding: 0;
+            box-sizing: border-box;
+            outline: none; 
+            border: none;
+            text-decoration: none;
+            text-transform: capitalize;
+            transition: all .2s linear;
+        }
 
-{% load static %}
-<link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+        body {
+            background-color: #dc143c22;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 100px 20px;
+        }
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        .container .heading {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #334;
+        }
+
+        .container .box-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .container .box {
+            background-color: #eceaea;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container .box .image {
+            margin-bottom: 20px;
+            overflow: hidden;
+            border-radius: 5px;
+            flex-grow: 1;
+            display: flex;
+        }
+
+        .container .box .image img {
+            width: 100%;
+            object-fit: cover;
+            flex-grow: 1;
+        }
+
+        .container .box:hover .image img {
+            transform: scale(1.1);
+        }
+
+        .container .content {
+            text-align: left;
+        }
+
+        .container .content h3 {
+            font-size: 18px;
+            color: #334;
+        }
+
+        .container .content p {
+            font-size: 15px;
+            color: #777;
+            line-height: 2;
+            padding: 15px 0;
+        }
+
+        .container .content .btn {
+            display: inline-block;
+            padding: 10px 30px;
+            border: 1px solid rgb(0, 0, 248);
+            color: rgb(0, 0, 255);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .container .content .btn:hover {
+            background-color: crimson;
+            border-color: crimson;
+            color: #fff;
+        }
+
+        .container .icons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #334;
+        }
+
+        .container .icons span {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .container .icons span i {
+            color: crimson;
+            padding-right: 5px;
+        }
+
+        #load-more {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 13px 30px;
+            border: 1px solid #334;
+            color: #334;
+            font-size: 16px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        #load-more:hover {
+            background-color: crimson;
+            border-color: crimson;
+            color: #fff;
+        }
+
+        @media (max-width: 450px) {
+            .container .heading {
+                font-size: 25px;
+            }
+
+            .container .box-container {
+                grid-template-columns: 1fr;
+            }
+
+            .container .box .image {
+                height: 200px;
+            }
+
+            .container .content p {
+                font-size: 12px;
+            }
+
+            .container .icons span {
+                font-size: 12px;
+            }
+        }
+
+        /* Popup modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
-<style>
-
-/*-----------------------------------*\
-  #CUSTOM PROPERTY
-\*-----------------------------------*/
-
-:root {
-
-/**
- * colors
- */
-
---raisin-black-2: hsl(245, 16%, 16%);
---raisin-black-1: hsl(244, 17%, 19%);
---majorelle-blue: hsl(245, 67%, 59%);
---ghost-white-1: hsl(240, 100%, 99%);
---ghost-white-2: hsl(228, 50%, 96%);
---white-opacity: hsla(0, 0%, 100%, 0.5);
---independence: hsl(245, 17%, 27%);
---lavender-web: hsl(247, 69%, 95%);
---eerie-black: hsl(210, 11%, 15%);
---cool-gray: hsl(244, 17%, 61%);
---sapphire: hsl(211, 100%, 35%);
---white: hsl(0, 0%, 100%);
-
-/**
- * typography
- */
---ff-quicksand: "Quicksand", sans-serif;
---ff-mulish: "Mulish", sans-serif;
-
---fs-1: 36px;
---fs-2: 28px;
---fs-3: 20px;
---fs-4: 17px;
---fs-5: 16px;
---fs-6: 15px;
---fs-7: 14px;
-
---fw-500: 500;
---fw-600: 600;
---fw-700: 700;
-
-/**
- * transition
- */
-
---transition: 0.25s ease;
-
-/**
- * spacing
- */
-
---section-padding: 80px;
-
-}
-
-
-
-
-
-/*-----------------------------------*\
-#RESET
-\*-----------------------------------*/
-
-*, *::before, *::after {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
-
-li { list-style: none; }
-
-a { text-decoration: none; }
-
-a,
-img,
-span,
-input,
-label,
-button,
-ion-icon,
-textarea { display: block; }
-
-button {
-border: none;
-background: none;
-font: inherit;
-cursor: pointer;
-}
-
-input,
-textarea {
-border: none;
-font: inherit;
-width: 100%;
-}
-
-html {
-font-family: var(--ff-quicksand);
-scroll-behavior: smooth;
-}
-
-body { background: var(--white); }
-
-
-
-
-
-/*-----------------------------------*\
-#REUSED STYLE
-\*-----------------------------------*/
-
-.container { padding-inline: 15px; }
-
-.h1,
-.h2,
-.h3 {
-color: var(--independence);
-font-family: var(--ff-mulish);
-line-height: 1.2;
-}
-
-.h1 { font-size: var(--fs-1); }
-
-.h2 { font-size: var(--fs-2); }
-
-.h3 { font-size: var(--fs-3); }
-
-.btn {
-font-size: var(--fs-6);
-font-weight: var(--fw-700);
-padding: 15px 30px;
-border-radius: 4px;
-transition: var(--transition);
-}
-
-.btn:is(:hover, :focus) { transform: translateY(-2px); }
-
-.btn-primary {
-background: var(--majorelle-blue);
-color: var(--white);
-}
-
-.btn-primary:is(:hover, :focus) {
---majorelle-blue: hsl(245, 67%, 55%);
-box-shadow: 0 3px 10px hsla(245, 67%, 59%, 0.5);
-}
-
-.btn-outline { 
-border: 1px solid var(--majorelle-blue);
-color: var(--majorelle-blue);
-}
-
-.btn-outline:is(:hover, :focus) {
-background: var(--majorelle-blue);
-color: var(--white);
-box-shadow: 0 3px 10px hsla(245, 67%, 59%, 0.5);
-}
-
-.btn-secondary {
-background: hsla(245, 67%, 59%, 0.15);
-color: var(--majorelle-blue);
-}
-
-.section-title { text-align: center; }
-
-.section-text {
-color: var(--cool-gray);
-font-size: var(--fs-6);
-line-height: 1.7;
-text-align: center;
-}
-
-.navbar-dark .navbar-toggler-icon {
-  background-color: #000000; /* Set the background color of the toggle button */
-  size: 2px;
-}
-
-  .navbar-dark .navbar-toggler:focus,
-  .navbar-dark .navbar-toggler:hover {
-    background-color: #e21a22; /* Set the background color on hover or focus */
-  }
-
-        .navbar-dark .navbar-toggler {
-            border-color: #ffffff; /* Set the border color of the toggle button */
-        }
-
-        .navbar-dark .navbar-toggler-icon:focus,
-        .navbar-dark .navbar-toggler-icon:hover {
-            background-color: #e21a22; /* Set the background color of the toggle button icon on hover or focus */
-        }
-
-
-        @import url("https://fonts.googleapis.com/css?family=Montserrat:700");
-
-/* ANIMATIONS ON THE BACKGROUND FOR THE AWESOME FEATURES PART*/
-.features {
-  background-color: #e21a22;
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  font-family: "Montserrat", sans-serif;
-}
-
-.hero__title {
-  color: #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 50px;
-  z-index: 1;
-}
-
-.cube {
-  position: absolute;
-  top: 80vh;
-  left: 45vw;
-  width: 10px;
-  height: 10px;
-  border: solid 1px #e21a22;
-  transform-origin: top left;
-  transform: scale(0) rotate(0deg) translate(-50%, -50%);
-  -webkit-animation: cube 12s ease-in forwards infinite;
-          animation: cube 12s ease-in forwards infinite;
-}
-.cube:nth-child(2n) {
-  border-color: #e21a22;
-}
-.cube:nth-child(2) {
-  -webkit-animation-delay: 2s;
-          animation-delay: 2s;
-  left: 25vw;
-  top: 40vh;
-}
-.cube:nth-child(3) {
-  -webkit-animation-delay: 4s;
-          animation-delay: 4s;
-  left: 75vw;
-  top: 50vh;
-}
-.cube:nth-child(4) {
-  -webkit-animation-delay: 6s;
-          animation-delay: 6s;
-  left: 90vw;
-  top: 10vh;
-}
-.cube:nth-child(5) {
-  -webkit-animation-delay: 8s;
-          animation-delay: 8s;
-  left: 10vw;
-  top: 85vh;
-}
-.cube:nth-child(6) {
-  -webkit-animation-delay: 10s;
-          animation-delay: 10s;
-  left: 50vw;
-  top: 10vh;
-}
-
-@-webkit-keyframes cube {
-  from {
-    transform: scale(0) rotate(0deg) translate(-50%, -50%);
-    opacity: 1;
-  }
-  to {
-    transform: scale(20) rotate(960deg) translate(-50%, -50%);
-    opacity: 0;
-  }
-}
-
-@keyframes cube {
-  from {
-    transform: scale(0) rotate(0deg) translate(-50%, -50%);
-    opacity: 1;
-  }
-  to {
-    transform: scale(20) rotate(960deg) translate(-50%, -50%);
-    opacity: 0;
-  }
-}
-
-
-/*TEST FOR RESPONSIVENESS OF FEATURES*/
-
-
-
-
-/*-----------------------------------*\
-#HEADER
-\*-----------------------------------*/
-
-.header {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-background: var(--white);
-padding-block: 20px;
-box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05);
-height: 65px;
-overflow: hidden;
-transition: 0.5s ease-in-out;
-z-index: 4;
-}
-
-.header.active { height: 330px; }
-
-.header .container {
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-
-.menu-toggle-btn { font-size: 60px; }
-
-.header.active {
-visibility: visible;
-opacity: 1;
-}
-
-.header-action-link {
-color: var(--cool-gray);
-font-size: var(--fs-6);
-font-family: var(--ff-mulish);
-padding-block: 8px;
-}
-
-:is(.header-action-link):is(:hover, :focus) { color: var(--majorelle-blue); }
-
-
-
-
-
-/*-----------------------------------*\
-#HERO
-\*-----------------------------------*/
-
-.hero {
-  padding: 156px 0 var(--section-padding);
-  background: #e21a22;
-  /* border-bottom: 0.6px dotted#e21a22; Adjust color and thickness as needed */ 
-  border-bottom: ridge rgba(49, 52, 2, 0.6);
-}
-
-.hero-content { margin-bottom: 80px; }
-
-.hero-title { margin-bottom: 25px; color: #fff; font-family: "Titillium Web", sans-serif; font-size: 84px;}
-
-.hero-text {
-color: #fff;
-font-size: var(--fs-4);
-font-weight: var(--fw-500);
-line-height: 1.8;
-margin-bottom: 40px;
-font-family: "Titillium Web", sans-serif;
-}
-
-.form-text {
-color: #fff;
-font-weight: var(--fw-500);
-line-height: 1.8;
-margin-bottom: 20px;
-font-family: "Titillium Web", sans-serif;
-font-size: 25px;
-}
-
-.form-text span {
-display: inline-block;
-color: #fff !important; 
-font-size: 20px;
-}
-
-.email-field {
-background: var(--ghost-white-2);
-padding: 17px 20px;
-border-radius: 8px;
-margin-bottom: 20px;
-}
-
-.email-field:focus { outline-color: var(--majorelle-blue); }
-
-.hero .btn-primary { margin-inline: auto; }
-
-.hero-banner img { width: 100%; }
-
-
-
-
-
-/*-----------------------------------*\
-#ABOUT
-\*-----------------------------------*/
-
-.about { padding-block: var(--section-padding); }
-
-.about-content { margin-bottom: 30px; }
-
-.about-icon {
-width: 60px;
-height: 60px;
-background: var(--lavender-web);
-display: grid;
-place-items: center;
-color: #e21a22;
-font-size: 40px;
-border-radius: 4px;
-margin-bottom: 20px;
-}
-
-.about-title { margin-bottom: 10px; font-family: "Titillium Web", sans-serif;}
-
-.about-text {
-color: var(--cool-gray);
-font-weight: var(--fw-500);
-line-height: 1.8;
-margin-bottom: 20px;
-font-family: "Titillium Web", sans-serif;
-}
-
-.about-list {
-display: grid;
-gap: 20px;
-}
-
-.about-card {
-padding: 20px;
-text-align: center;
-box-shadow: 0 3px 12px hsla(233, 77%, 10%, 0.06);
-border-radius: 4px;
-transition: var(--transition);
-}
-
-.about-card:hover {
-background: #e21a22;
-transform: translateY(-5px);
-box-shadow: 0 5px 18px hsla(245, 100%, 10%, 0.4);
-}
-
-.about-card .card-icon {
-width: 60px;
-height: 60px;
-background: var(--lavender-web);
-display: grid;
-place-items: center;
-color: #e21a22;
-font-size: 28px;
-border-radius: 50%;
-margin-inline: auto;
-margin-bottom: 20px;
-transition: var(--transition);
-}
-
-.about-card:hover .card-icon {
-background: hsla(0, 0%, 100%, 0.15);
-color: var(--white);
-box-shadow: 0 0 0 8px hsla(0, 0%, 100%, 0.05);
-}
-
-.about-card .card-title {
-margin-bottom: 10px;
-transition: var(--transition);
-}
-
-.about-card:hover .card-title { color: var(--white); }
-
-.about-card .card-text {
-color: var(--cool-gray);
-font-size: var(--fs-6);
-font-weight: var(--fw-500);
-line-height: 1.8;
-transition: var(--transition);
-}
-
-.about-card:hover .card-text { color: hsla(0, 0%, 100%, 0.5); }
-
-
-
-
-
-/*-----------------------------------*\
-#FEATURES
-\*-----------------------------------*/
-
-.features {
-padding-block: var(--section-padding);
-background: #000000;
-height: 100%;
-}
-@media only screen and (max-width: 768px) {
-  /* For mobile phones: */
-  .features {
-    height: 100%;
-  }
-}
-
-.features .section-title { margin-bottom: 15px; color: #e21a22; }
-
-.features .section-text { margin-bottom: 60px; color: #fff; }
-
-.features-wrapper:not(:last-child) { margin-bottom: 80px; color: #fff; }
-
-.features-banner { margin-bottom: 35px; color: #fff;}
-
-.features-banner img { width: 100%; color: #fff; }
-
-.features-content-subtitle {
-display: flex;
-align-items: center;
-gap: 10px;
-font-size: var(--fs-5);
-color: #e21a22;
-font-family: "Titillium Web", sans-serif;
-margin-bottom: 20px;
-}
-
-.features-content-subtitle ion-icon {
-color: #e21a22;
-font-size: 20px;
-}
-
-.features-content-title {
-font-size: var(--fs-2);
-font-family: var(--ff-mulish);
-color: #e21a22;
-font-family: "Titillium Web", sans-serif;
-font-weight: var(--fw-600);
-margin-bottom: 25px;
-}
-
-.features-content-title strong { font-weight: var(--fw-700); }
-
-.features-content-text {
-font-size: var(--fs-6);
-color: var(--cool-gray);
-font-family: "Titillium Web", sans-serif;
-line-height: 1.7;
-margin-bottom: 25px;
-}
-
-.features-list { margin-bottom: 40px; }
-
-.features-list-item {
-display: flex;
-align-items: flex-start;
-gap: 5px;
-font-size: var(--fs-5);
-color: var(--cool-gray);
-font-family: "Titillium Web", sans-serif;
-margin-bottom: 10px;
-}
-
-.features-list-item ion-icon { font-size: 23px; }
-
-.features-list-item p { width: calc(100% - 28px); }
-
-.features-wrapper:last-child {
-display: flex;
-flex-direction: column-reverse;
-}
-
-.btn-group {
-display: flex;
-flex-wrap: wrap;
-justify-content: flex-start;
-align-items: flex-start;
-gap: 10px;
-}
-
-
-
-
-
-/*-----------------------------------*\
-#BLOG
-\*-----------------------------------*/
-
-.blog { padding-block: var(--section-padding); }
-
-.blog .section-title { margin-bottom: 20px; }
-
-.blog .section-text { margin-bottom: 40px; }
-
-.blog-list {
-display: grid;
-gap: 30px;
-}
-
-.blog-banner { margin-bottom: 20px; }
-
-.blog-banner img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-border-radius: 4px;
-}
-
-.blog-meta {
-display: flex;
-justify-content: flex-start;
-align-items: center;
-gap: 20px;
-font-size: var(--fs-6);
-text-transform: uppercase;
-color: var(--cool-gray);
-margin-bottom: 10px;
-}
-
-.blog-meta span {
-display: flex;
-align-items: center;
-gap: 5px;
-}
-
-.blog-title {
-font-size: var(--fs-3);
-color: var(--independence);
-}
-
-.blog-text {
-color: var(--cool-gray);
-font-size: var(--fs-6);
-line-height: 1.7;
-margin-bottom: 15px;
-}
-
-.blog-link-btn {
-display: flex;
-align-items: center;
-gap: 5px;
-color: var(--majorelle-blue);
-font-weight: var(--fw-600);
-}
-
-.blog-link-btn:is(:hover, :focus) { color: var(--sapphire); }
-
-
-
-
-
-/*-----------------------------------*\
-#CONTACT
-\*-----------------------------------*/
-
-.contact {
-padding-block: var(--section-padding);
-background: var(--ghost-white-1);
-}
-
-.contact .section-title { margin-bottom: 15px; }
-
-.contact .section-text { margin-bottom: 60px; }
-
-.contact-form { margin-bottom: 50px; }
-
-.input-wrapper { margin-bottom: 20px; }
-
-.contact label {
-color: var(--independence);
-font-weight: var(--fw-500);
-margin-bottom: 10px;
-}
-
-.contact .input-field {
-background: transparent;
-color: var(--independence);
-font-size: var(--fs-7);
-padding: 10px 15px;
-border: 1px solid hsla(244, 17%, 67%, 0.3);
-border-radius: 4px;
-}
-
-.contact .input-field:focus {
-outline: none;
-background: var(--ghost-white-2);
-}
-
-.contact .input-field::placeholder { color: var(--cool-gray); }
-
-textarea.input-field {
-margin-bottom: 20px;
-resize: vertical;
-min-height: 50px;
-height: 100px;
-max-height: 200px;
-}
-
-.contact .btn-primary {
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 10px;
-}
-
-.contact .btn-primary ion-icon { --ionicon-stroke-width: 40px; }
-
-.contact-list li:not(:last-child) { margin-bottom: 25px; }
-
-.contact-link {
-color: var(--cool-gray);
-font-weight: var(--fw-500);
-display: flex;
-justify-content: flex-start;
-align-items: flex-start;
-gap: 5px;
-}
-
-.contact-link ion-icon {
-font-size: 20px;
---ionicon-stroke-width: 30px;
-}
-
-.contact-link :is(span, address) { width: calc(100% - 25px); }
-
-.contact-link address { font-style: normal; }
-
-
-
-
-
-/*-----------------------------------*\
-#FOOTER
-\*-----------------------------------*/
-
-footer {
-background: #000000;
-color: var(--white-opacity);
-font-weight: var(--fw-500);
-}
-
-.footer-top { padding-block: var(--section-padding); }
-
-.footer-brand { margin-bottom: 60px; }
-
-footer .logo { margin-bottom: 25px; }
-
-.footer-text {
-font-size: var(--fs-6);
-line-height: 1.8;
-margin-bottom: 25px;
-}
-
-.social-list {
-display: flex;
-justify-content: flex-start;
-align-items: center;
-gap: 20px;
-}
-
-.social-link {
-color: var(--white-opacity);
-font-size: 25px;
-transition: var(--transition);
-}
-
-.social-link:is(:hover, :focus) { color: #e21a22; }
-
-.footer-link-box {
-display: grid;
-gap: 50px;
-}
-
-.footer-list li:first-child { margin-bottom: 20px; }
-
-.footer-item-title {
-color: var(--white);
-font-family: var(--ff-mulish);
-font-weight: var(--fw-700);
-}
-
-.footer-link {
-color: var(--white-opacity);
-font-size: var(--fs-6);
-transition: var(--transition);
-padding-block: 10px;
-}
-
-.footer-link:is(:hover, :focus) {
-color: #e21a22;
-transform: translateX(5px);
-}
-
-.footer-bottom {
-background: #e21a22;
-padding-block: 20px;
-text-align: center;
-}
-
-.copyright a {
-display: inline-block;
-color: var(--white-opacity);
-transition: var(--transition);
-}
-
-.copyright a:is(:hover, :focus) { color: var(--white); }
-
-
-
-
-
-/*-----------------------------------*\
-#MEDIA QUERIES
-\*-----------------------------------*/
-
-/**
-* responsive for larger than 450px screen
-*/
-
-@media (min-width: 450px) {
-
-/**
- * HERO
- */
-
-.hero-form { position: relative; }
-
-.email-field {
-  margin-bottom: 0;
-  padding-right: 155px;
-}
-
-.hero .btn-primary {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  padding-block: 12.5px;
-}
-
-
-
-/**
- * ABOUT
- */
-
-.about-card .card-text {
-  max-width: 300px;
-  margin-inline: auto;
-}
-
-}
-
-
-
-
-
-/**
-* responsive for larger than 576px screen
-*/
-
-@media (min-width: 576px) {
-
-/**
- * CUSTOM PROPERTY
- */
-
-:root {
-
-  /**
-   * typography
-   */
-
-  --fs-1: 52px;
-
-}
-
-
-
-/**
- * REUSED STYLE
- */
-
-.container {
-  max-width: 525px;
-  margin-inline: auto;
-}
-
-.section-text {
-  max-width: 460px;
-  margin-inline: auto;
-  margin-bottom: 80px;
-}
-
-}
-
-
-
-
-
-/**
-* responsive for larger than 768px screen
-*/
-
-@media (min-width: 768px) {
-
-/**
- * REUSED STYLE
- */
-
-.container { max-width: 720px; }
-
-.section-text { max-width: 645px; }
-
-
-
-/**
- * HERO
- */
-
-.hero :is(.hero-text, .form-text, .hero-form) { max-width: 520px; }
-
-.hero-banner {
-  max-width: 700px;
-  margin-inline: auto;
-}
-/* Adjust the min-width value based on your desired breakpoint */
-@media screen and (min-width: 1200px) {
-  .hero-banner {
-    max-width: 100%; /* Set it to 100% to take the full width of the container */
-  }
-}
-
-
-
-/**
- * ABOUT
- */
-
-.about-list { grid-template-columns: 1fr 1fr; }
-
-
-
-/**
- * CONTACT
- */
-
-.contact-form .wrapper-flex {
-  display: flex;
-  gap: 30px;
-}
-
-.wrapper-flex .input-wrapper { width: 50%; }
-
-
-
-/**
- * FOOTER
- */
-
-.footer-link-box { grid-template-columns: repeat(3, 1fr); }
-
-}
-
-
-
-
-
-/**
-* responsive for larger than 992px screen
-*/
-
-@media (min-width: 992px) {
-
-/**
- * REUSED STYLE
- */
-
-.container { max-width: 950px; }
-
-.section-text { max-width: 450px; }
-
-
-
-/**
- * HEADER
- */
-
-.header {
-  overflow: visible;
-  padding-block: 0;
-  height: unset;
-}
-
-.header.active { height: unset; }
-
-.menu-toggle-btn { display: none; }
-
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-
-
-/*
- * HERO
- */
-
-.hero .container {
-  display: grid;
-  grid-template-columns: 4 5fr;
-  align-items: center;
-  gap: 60px;
-  justify-items: center;
-}
-
-.hero-content { margin-bottom: 0; }
-
-
-
-/**
- * ABOUT
- */
-
-.about .container {
-  display: flex;
-  align-items: center;
-  gap: 50px;
-}
-
-.about-content {
-  margin-bottom: 0;
-  width: 40%;
-}
-
-.about-list {
-  gap: 30px;
-  padding-bottom: 50px;
-}
-
-.about-list li:nth-child(odd) { transform: translateY(50px); }
-
-
-
-/**
- * FEATURES
- */
-
-.features-wrapper {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 90px;
-}
-
-.features-wrapper:not(:last-child) { margin-bottom: 100px; }
-
-.features-wrapper:last-child .features-banner {
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
-}
-
-.features-banner {
-  display: none; /* Hide all images by default */
-}
-
-.features-banner img {
-  width: 100%; /* Ensure images fill their container */
-}
-
-
-
-/**
- * BLOG
- */
-
-.blog-list { grid-template-columns: repeat(3, 1fr); }
-
-.blog .section-text { margin-bottom: 50px; }
-
-
-
-/**
- * CONTACT
- */
-
-.contact-wrapper {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 80px;
-  align-items: center;
-}
-
-.contact-form { margin-bottom: 0; }
-
-
-
-/**
- * FOOTER
- */
-
-.footer-top .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 50px;
-}
-
-.footer-brand {
-  margin-bottom: 0;
-  max-width: 300px;
-}
-
-.footer-list { width: 140px; }
-
-}
-
-
-/**
-* responsive for larger than 1200px screen
-*/
-
-@media (min-width: 1200px) {
-
-/**
- * REUSED STYLE
- */
-
-.container { max-width: 1150px; }
-
-
-
-/**
- * HERO
- */
-
-.hero .container { gap: 15px; }
-
-
-
-/**
- * FOOTER
- */
-
-.footer-link-box { margin-right: 40px; }
-
-.footer-list { width: 170px; }
-
-}
-</style>
-<head>
-  <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
-
-   {% include "insurance/navbar.html" %}
-  </head>
-
-
 <body>
-
-
-  <main>
-    <article>
-      <!-- 
-        - FEATURES
-      -->
-
-      <section class="features" id="features">
-        <div class="container">
-          <div class="cube"></div>
-  <div class="cube"></div>
-  <div class="cube"></div>
-  <div class="cube"></div>
-  <div class="cube"></div>
-  <div class="cube"></div>
-
-          <h2 class="h2 section-title" style="padding-top: 10%;">Awesome Features</h2>
-
-          <!--p class="section-text">
-            Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis eligendi
-            cumque.
-          </p-->
-
-          <div class="features-wrapper">
-
-            <figure class="features-banner">
-              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Illustration 1">
-            </figure>
-            <figure class="features-banner">
-              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Illustration 2">
-            </figure>
-            <figure class="features-banner">
-              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Illustration 3">
-            </figure>
-
-            <div class="features-content">
-
-              <!--p class="features-content-subtitle">
-                <ion-icon name="sparkles"></ion-icon>
-
-                <span>CREATIVE FEATURES</span>
-              </p-->
-
-              <h3 class="features-content-title">
-                <strong> Online Payments for Policies</strong>
-              </h3>
-
-              <p class="features-content-text">
-                Say goodbye to the inconvenience of traditional payment methods! We've streamlined the process to empower you with the ease of online payments. 
-                Now, securing your short-term insurance policy is just a click away.
-              </p>
-
-              <ul class="features-list">
-
-                <li class="features-list-item">
-                  <ion-icon name="layers-outline"></ion-icon>
-
-                  <p>Enjoy the flexibility to pay from the comfort of your home, office, or anywhere with an internet connection. </p>
-                </li>
-
-                <li class="features-list-item">
-                  <ion-icon name="megaphone-outline"></ion-icon>
-
-                  <p>Fast, secure, and convenient – because your time is valuable.</p>
-                </li>
-
-              </ul>
-
-              <!--div class="btn-group">
-                <button class="btn btn-primary">Read More</button>
-
-                <button class="btn btn-secondary">Buy Now</button>
-              </div-->
-
-            </div>
-
-          </div>
-
-          <div class="features-wrapper">
-
-            <figure class="features-banner">
-              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-01.jpg" alt="Illustration 4">
-            </figure>
-            <figure class="features-banner">
-              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-01.jpg" alt="Illustration 5">
-            </figure>
-            <figure class="features-banner">
-              <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Illustration 6">
-            </figure>
-
-            <div class="features-content">
-
-              <!--p class="features-content-subtitle">
-                <ion-icon name="sparkles"></ion-icon>
-
-                <span>CREATIVE FEATURES</span>
-              </p-->
-
-              <h3 class="features-content-title">
-                <strong>eKYC at Your Convenience</strong>
-              </h3>
-
-              <p class="features-content-text">
-                We understand that your time is precious, and convenience is key. Introducing our cutting-edge eKYC (Electronic Know Your Customer) feature 
-                – a revolutionary way to complete the KYC process wherever you are! No more lengthy paperwork or tiresome visits. With our seamless eKYC, 
-                verifying your identity is now as simple as a few taps on your device. Experience the future of insurance with hassle-free, on-the-go KYC.
-              </p>
-
-              <ul class="features-list">
-
-                <li class="features-list-item">
-                  <ion-icon name="rocket-outline"></ion-icon>
-
-                  <p>Verification Made Virtually Effortless – Your Identity, Your Way.</p>
-                </li>
-
-                <li class="features-list-item">
-                  <ion-icon name="wifi-outline"></ion-icon>
-
-                  <p>KYC Redefined: Easy, Quick, Anywhere You Are.</p>
-                </li>
-
-              </ul>
-
-              <!--div class="btn-group">
-                <button class="btn btn-primary">Read More</button>
-
-                <button class="btn btn-secondary">Buy Now</button>
-              </div-->
-
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-    </article>
-  </main>
-
-
-
-
-
-  <!-- 
-    - FOOTER
-  -->
-
-  <footer>
-
-    <div class="footer-top">
-      <div class="container">
-
-        <div class="footer-brand">
-
-          <a href="#" class="logo">
-            <img src="https://storage.googleapis.com/kogae_bucket/logos/minetwhite1.png"  style="width: 90%;" alt="Landio logo">
-          </a>
-
-          <!--p class="footer-text">
-            Cras ultricies mi eu turpis sit hendrerit fringilla vestibulum ante ipsum primis in faucibus ultrices
-            posuere cubilia.
-          </p-->
-
-          <ul class="social-list">
-
-            <li>
-              <a href="https://www.facebook.com/MinetBotswana/" title="Facebook" class="social-link">
-                <ion-icon name="logo-facebook"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="https://twitter.com/minet_botswana?lang=en" title="Twitter" class="social-link">
-                <ion-icon name="logo-twitter"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="https://www.instagram.com/minet_botswana_holdings/" title="instagram" class="social-link">
-                <ion-icon name="logo-instagram"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="https://www.linkedin.com/company/minet-bw/mycompany/" title="linkedin" class="social-link">
-                <ion-icon name="logo-linkedin"></ion-icon>
-              </a>
-            </li>
-
-          </ul>
-
-        </div>
-
-        <div class="footer-link-box">
-
-          <ul class="footer-list">
-
-            <li>
-              <p class="footer-item-title">ABOUT US</p>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Works</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Strategy</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Releases</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Press</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Mission</a>
-            </li>
-
-          </ul>
-
-          <ul class="footer-list">
-
-            <li>
-              <p class="footer-item-title">CUSTOMERS</p>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Tranding</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Popular</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Customers</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Features</a>
-            </li>
-
-          </ul>
-
-          <ul class="footer-list">
-
-            <li>
-              <p class="footer-item-title">SUPPORT</p>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Developers</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Support</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Customer Service</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Get Started</a>
-            </li>
-
-            <li>
-              <a href="#" class="footer-link">Guide</a>
-            </li>
-
-          </ul>
-
-        </div>
-
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="container">
-        <p class="copyright">
-          &copy; 2024 <a href="">Minet Botswana Holdings</a>. All Right Reserved
+    {% include "insurance/navbar.html" %}
+    <div class="container">
+        <p class="heading" style="font-size: 20px; background-color: #e21a22; width: 20%; align-items: center; text-align: center; padding: 10px; color: white; margin: 0 auto;">
+            Available Covers
         </p>
-      </div>
-      
+        <br>
+        <div class="box-container">
+            <div class="box">
+                <div class="image">
+                    <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Home Owners Insurance">
+                </div>
+                <div class="content">
+                    <h3>HOUSEOWNERS INSURANCE COVER</h3>
+                    <p><strong>What is Homeowners Comprehensive Insurance?</strong> 
+                    <br>
+                        Homeowners comprehensive insurance is an extensive type of property insurance that provides coverage for your home and its contents against a wide 
+                        range of risks. It offers protection not only for the physical structure of your home but also for personal belongings, liability, and additional 
+                        living expenses in case your home becomes uninhabitable due to a covered event.</p>
+                    <button class="btn" onclick="openModal('modal1')">Read More</button>
+                    <!-- Modal for product 1 -->
+                    <div id="modal1" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('modal1')">&times;</span>
+                            <h2>HOUSEOWNERS INSURANCE COVER - More Information</h2>
+                            <p>The Ford Mustang GT features a standard electronic line locker and, with the manual transmission, launch control. With 435 horsepower, this thing is a burnout and quarter-mile machine. Sync 3 is so much better than the last generation of Ford's infotainment. The new rear suspension and convertible top make this very comfortable tourer.</p>
+                        </div>
+                    </div>
+                    <div class="icons">
+                        <span>2024</span>
+                        <span>Minet Botswana</span>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="image">
+                    <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Third Party Insurance Cover">
+                </div>
+                <div class="content">
+                    <h3>THIRD PARTY COMPREHENSIVE INSURANCE COVER</h3>
+                    <p><strong>What is Third-Party Motor Insurance?</strong> <br>
+                        Third-party motor insurance is a type of car insurance policy that covers the insured's legal liability for damages caused to a third party. This is the most basic form of car insurance and is mandatory in many countries for all vehicle owners. It provides financial protection if you are held responsible for causing injury or property damage to others in an accident.</p>
+                    <button class="btn" onclick="openModal('modal2')">Read More</button>
+                    <!-- Modal for product 2 -->
+                    <div id="modal2" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('modal2')">&times;</span>
+                            <h2>THIRD PARTY MOTOR INSURANCE COVER</h2>
+                            <p>The Ford Mustang GT features a standard electronic line locker and, with the manual transmission, launch control. With 435 horsepower, this thing is a burnout and quarter-mile machine. Sync 3 is so much better than the last generation of Ford's infotainment. The new rear suspension and convertible top make this very comfortable tourer.</p>
+                        </div>
+                    </div>
+                    <div class="icons">
+                        <span>2024</span>
+                        <span>Minet Botswana</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </footer>
 
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script>
-    // JavaScript to implement the slideshow functionality
-    let slideIndex = 0;
-      showSlides();
+    <script>
+        // Function to open modal
+        function openModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "block";
+        }
 
-    function showSlides() {
-      let i;
-      const slides = document.getElementsByClassName("features-banner");
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  // Hide all images
-      }
-      slideIndex++;
-      if (slideIndex > slides.length) {slideIndex = 1}  // Reset index if exceeds number of slides
-      slides[slideIndex-1].style.display = "block";  // Display current slide
-      setTimeout(showSlides, 3000); // Change image every 2 seconds
-    }
-  </script>
+        // Function to close modal
+        function closeModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "none";
+        }
 
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            var modals = document.getElementsByClassName('modal');
+            for (var i = 0; i < modals.length; i++) {
+                var modal = modals[i];
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+    </script>
 </body>
-
 </html>
