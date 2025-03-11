@@ -162,53 +162,58 @@ LOGIN_URL = '/'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
-#STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Adjust the path as needed
+# Base directory of your project
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-#MEDIA_URL = '/media/'  # Ensure it starts and ends with a forward slash
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'static')  # You may need to adjust this path based on your project structure
+STATIC_URL = '/static/'
 
+# This is where the collected static files will be stored when you run collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Use this only in production for collectstatic
 
-#STATICFILES_DIRS=[
-#STATIC_DIR,
-#]
+# Directories to search for static files in development
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Static folder at the root of the project
+]
+
+MEDIA_URL = '/media/'  # URL for user-uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Adjust based on where you want to store media files
 
 # for media in the bucket
-import google.auth
-from google.oauth2 import service_account
-from google.cloud import storage
+#import google.auth
+#from google.oauth2 import service_account
+#from google.cloud import storage
 
 # FINAL TESTING TO GOOGLE CLOUD BUCKET WHICH WILL WORK IN JESUS'S NAME
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
-os.environ['DJANGO_SETTINGS_MODULE'] = 'insurancemanagement.settings'
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'insurancemanagement.settings'
 
 # Use application default credentials
-credentials, project_id = google.auth.default()
+#credentials, project_id = google.auth.default()
 
 
 # Google Cloud Storage credentials THE REAL ONES HERE
 #GS_CREDENTIALS = service_account.Credentials.from_service_account_file(os.path.join(BASE_DIR, 'credentials.json'))
-GS_PROJECT_ID = 'kogae-minet'
-GS_BUCKET_NAME = 'kogae_bucket'
-GS_DEFAULT_ACL = 'publicRead'
-UPLOAD_ROOT = 'media/uploads'
-GS_FILE_OVERWRITE = 'False'
+#GS_PROJECT_ID = 'kogae-minet'
+#GS_BUCKET_NAME = 'kogae_bucket'
+#GS_DEFAULT_ACL = 'publicRead'
+#UPLOAD_ROOT = 'media/uploads'
+#GS_FILE_OVERWRITE = 'False'
 
 # Media files settings
 #MEDIA_ROOT = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'https://storage.googleapis.com/kogae_bucket/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_URL = 'https://storage.googleapis.com/kogae_bucket/media/'
 
 # Static files (CSS, JavaScript, images) settings
-STATIC_URL = 'https://storage.googleapis.com/kogae_bucket/static/'
-GS_STATIC_BUCKET_NAME = "kogae_bucket"
+#STATIC_URL = 'https://storage.googleapis.com/kogae_bucket/static/'
+# GS_STATIC_BUCKET_NAME = "kogae_bucket"
 
 #DEFAULT_FILE_STORAGE = 'gcloud.GoogleCloudMediaFileStorage'
 #STATICFILES_STORAGE = 'gcloud.GoogleCloudStaticFileStorage'
 
 # settings.py
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+#DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+#STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 
 

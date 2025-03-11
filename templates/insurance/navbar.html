@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <html lang="en">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Minet - eKYC Portal</title>
   {% load static %}
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -13,109 +12,106 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <style type="text/css">
-    .bs-example {
-      margin: 0px;
-      color: #e21a22;
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
     }
-    .bg-dark {
-      background-color: #212529!important;
-    }
+
     .navbar {
-      padding: 0px 0; /* Adjust the height vertical of the navbar */
+      padding: 5px 0; /* Uniform padding on top and bottom */
+      padding-left: 15px;
+      align-items: flex-start;
+      flex-direction: row-reverse;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 0 auto; /* Center navbar horizontally */
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 9999;
     }
-    .navbar-dark .navbar-nav .nav-link {
-      color: #e21a22 !important;
-      margin-right: 2% !important; 
-    }
-    .navbar-dark .navbar-nav .nav-link:hover {
-      color: #ffffff !important;
-      background-color: #e21a22 !important;
-      margin-right: 2% !important; 
-    }
-    .navbar-nav a {
-      color: #e21a22;
-    }
+
     .navbar-brand {
-      font-size: 15px; /* Increase the font size */
-      font-family: monospace;
+      font-size: 14px;
+      font-weight: bold;
+      color: #00e4a742;
+      margin-left: 20px;
     }
-    .centered-dropdown {
-      text-align: center;
-      margin: auto;
+
+    .navbar-nav .nav-link {
+      color: #e21a22;
+      font-size: 11px;
+      margin-right: 15px;
+      text-transform: uppercase;
+      font-weight: 500;
     }
-    .dropdown-item {
-      background-color: #ffffff;
-      color: #e21a22; /* Set the text color to white or any suitable color for contrast */
-      padding: 10px 20px; /* Adjust padding as needed */
-      text-decoration: none; /* Remove the default underline */
-      display: block; /* Ensure each item is displayed as a block element */
+
+    .navbar-nav .nav-link:hover {
+      color: #fff !important;
+      background-color: #e82525;
+      border-radius: 4px;
+      padding: 8px 15px;
     }
-    .dropdown-item:hover {
-      background-color: #e21a22; /* Change the background color on hover if desired */
-      color: #ffffff;
-    }
-    .custom-navbar-nav {
-      padding:0; /* Adjust the padding as needed */
+
+    .navbar-nav {
       display: flex;
       justify-content: center;
-      background-color: beige;
-      width: 100%;
-
     }
-  </style>
-  
 
-<body>
-  <div class="bs-example">
-    <nav 
-      class="navbar navbar-expand-md  navbar-dark fixed-top" 
-      style="background-color: rgb(255, 255, 255);"
-    >
-    <!--a style="color: #e21a22; text-decoration: none; margin-left: 10px;" href="/">
-      <img src="https://storage.googleapis.com/ko_gae_bucket/logos/Minet-Logo-2.png" alt="Minet eKYC Compliance Image" >
-      <br />
-    </a-->
-    <a style="color: #e21a22; text-decoration: none; margin-left: 10px; margin-top: 10px;" href="/">
-      <img src="https://storage.googleapis.com/kogae_bucket/logos/Minetlogo.png" alt="Minet eKYC Compliance Image" width="250" href="/">
-      <br />
-  </a>
-  
     
 
-      <!--button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse" title="Select a Portal">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    @media (max-width: 768px) {
+      .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
 
-      <div class="collapse navbar-collapse justify-content-center" id="navbarCollapse" style="margin-left: -280px !important;">
-        <div class="navbar-nav">
-          <div class="centered-dropdown ">
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="userTypeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Portals
-              </button>
-              <div class="dropdown-menu" aria-labelledby="userTypeDropdown">
-                <a class="dropdown-item" href="/customer/customerclick">Client Portal</a>
-                <a class="dropdown-item" href="/adminlogin">Staff Portal</a>
-              </div>
-            </div>
-          </div>
-        </div-->
-      
-        <div class="navbar-nav custom-navbar-nav" style="font-size: 70%; background-color: beige;">
-          <a href="/" class="nav-item nav-link">HOME</a>
-          <a href="/benefits" class="nav-item nav-link">BENEFITS & FEATURES</a>
-          <a href="/covers" class="nav-item nav-link">COVERS</a>
-          <a href="/customer/customerclick" class="nav-item nav-link">CLIENT INFORMATION</a>
-          <a href="/customer/forms" class="nav-item nav-link">eKYC & POLICY APPLICATION</a>
-          <a href="/customer/form/homeowners_insurance.html/" class="nav-item nav-link">HOMEOWNERS PROPOSAL FORM</a>
-          <a href="/customer/apply-thirdparty" class="nav-item nav-link">THIRDPARTY PROPOSAL FORM</a>
-          <a href="/contactus" class="nav-item nav-link">CLAIMS</a>
-          <a href="/contactus" class="nav-item nav-link">CONTACT US</a>
-          <a href="/customer/customerlogin" class="nav-item nav-link">LOGIN</a>
-        </div>
-        
-      </div>
-    </nav>
-  </div>
+    /* Adding padding to the content below the navbar */
+    .content {
+      padding-top: 80px; /* Ensure content is not hidden behind the navbar */
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-md navbar-light">
+    <img src="{% static 'image/minetbryte.png' %}" alt="Logo" style="width: 200px; height: auto; " />
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a href="/" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="/covers" class="nav-link">Covers</a>
+        </li>
+        <li class="nav-item">
+          <a href="/customer/customerclick" class="nav-link">Your Information</a>
+        </li>
+        <li class="nav-item">
+          <a href="/customer/forms" class="nav-link">eKYC & Policy Application</a>
+        </li>
+        <li class="nav-item">
+          <a href="/customer/form/homeowners_insurance" class="nav-link">Homeowners Proposal Form</a>
+        </li>
+        <li class="nav-item">
+          <a href="/customer/apply-thirdparty" class="nav-link">Third Party Proposal Form</a>
+        </li>
+        <li class="nav-item">
+          <a href="/contactus" class="nav-link">Claims</a>
+        </li>
+        <li class="nav-item">
+          <a href="/customer/customerlogin" class="nav-link">Login</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
 </body>
 </html>

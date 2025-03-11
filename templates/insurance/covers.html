@@ -8,261 +8,346 @@
     <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600&display=swap');
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
+    <style>
         * {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0; 
+            margin: 0;
             padding: 0;
             box-sizing: border-box;
-            outline: none; 
-            border: none;
-            text-decoration: none;
-            text-transform: capitalize;
-            transition: all .2s linear;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: #dc143c22;
+            background-color: #06546e; /* Light blue background for the page */
+            color: #333;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 100%;
+            border-radius: 2%;
+            margin: 100px;
+            padding: 60px 20px;
+        }
+
+        .heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
             text-align: center;
-            padding: 100px 20px;
+            color: #dc143c;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
         }
 
-        .container .heading {
-            font-size: 40px;
-            margin-bottom: 20px;
-            color: #334;
+        .heading::after {
+            content: '';
+            display: block;
+            width: 60%;
+            height: 4px;
+            background: #dc143c;
+            margin: 10px auto 0;
+            border-radius: 2px;
         }
 
-        .container .box-container {
+        .box-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
-        .container .box {
-            background-color: #eceaea;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container .box .image {
-            margin-bottom: 20px;
+        .box {
+            background: #fff;
+            border-radius: 12px;
             overflow: hidden;
-            border-radius: 5px;
-            flex-grow: 1;
-            display: flex;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .container .box .image img {
-            width: 100%;
-            object-fit: cover;
-            flex-grow: 1;
+        /* Different colors for each card */
+        .box:nth-child(1) {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
         }
 
-        .container .box:hover .image img {
-            transform: scale(1.1);
+        .box:nth-child(2) {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
         }
 
-        .container .content {
-            text-align: left;
+        .box:hover {
+            transform: translateY(-20px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
-        .container .content h3 {
-            font-size: 18px;
-            color: #334;
+        .box .content {
+            padding: 25px;
+            color: #333; /* Dark text for readability */
         }
 
-        .container .content p {
-            font-size: 15px;
-            color: #777;
-            line-height: 2;
-            padding: 15px 0;
+        .box h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 15px;
         }
 
-        .container .content .btn {
-            display: inline-block;
-            padding: 10px 30px;
-            border: 1px solid rgb(0, 0, 248);
-            color: rgb(0, 0, 255);
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .container .content .btn:hover {
-            background-color: crimson;
-            border-color: crimson;
-            color: #fff;
-        }
-
-        .container .icons {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #334;
-        }
-
-        .container .icons span {
+        .box p {
             font-size: 14px;
-            color: #777;
+            color: #555;
+            margin-bottom: 20px;
         }
 
-        .container .icons span i {
-            color: crimson;
-            padding-right: 5px;
+        .box ul {
+            list-style: none;
+            padding-left: 20px;
         }
 
-        #load-more {
-            margin-top: 20px;
-            display: inline-block;
-            padding: 13px 30px;
-            border: 1px solid #334;
-            color: #334;
+        .box ul li {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .box ul li::before {
+            content: '•';
+            color: #dc143c;
             font-size: 16px;
-            background-color: #fff;
-            cursor: pointer;
+            position: absolute;
+            left: -15px;
+            top: 0;
         }
 
-        #load-more:hover {
-            background-color: crimson;
-            border-color: crimson;
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #dc143c;
             color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
         }
 
-        @media (max-width: 450px) {
-            .container .heading {
-                font-size: 25px;
-            }
-
-            .container .box-container {
-                grid-template-columns: 1fr;
-            }
-
-            .container .box .image {
-                height: 200px;
-            }
-
-            .container .content p {
-                font-size: 12px;
-            }
-
-            .container .icons span {
-                font-size: 12px;
-            }
+        .btn:hover {
+            background: #3633ee;
         }
 
-        /* Popup modal styles */
+        .icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3); /* Lighter border for contrast */
+            margin-top: 20px;
+        }
+
+        .icons span {
+            font-size: 12px;
+            color: #fff; /* White text for better contrast on colored cards */
+        }
+
+        .icons span i {
+            color: #fff; /* White icons for better contrast */
+            margin-right: 5px;
+        }
+
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
-            z-index: 999;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
             max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
             max-height: 80vh;
             overflow-y: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .close {
             color: #aaa;
             float: right;
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
         }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        .close:hover {
+            color: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .heading {
+                font-size: 28px;
+            }
+
+            .box-container {
+                grid-template-columns: 1fr;
+            }
+
+            .box h3 {
+                font-size: 20px;
+            }
+
+            .box p {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
     {% include "insurance/navbar.html" %}
-    <div class="container">
-        <p class="heading" style="font-size: 20px; background-color: #e21a22; width: 20%; align-items: center; text-align: center; padding: 10px; color: white; margin: 0 auto;">
-            Available Covers
-        </p>
-        <br>
+    <div class="container" style="background-color: #b113150e;">
+        <h1 class="heading">Available Covers</h1>
         <div class="box-container">
             <div class="box">
-                <div class="image">
-                    <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-10.jpg" alt="Home Owners Insurance">
-                </div>
                 <div class="content">
                     <h3>HOUSEOWNERS INSURANCE COVER</h3>
-                    <p><strong>What is Homeowners Comprehensive Insurance?</strong> 
-                    <br>
-                        Homeowners comprehensive insurance is an extensive type of property insurance that provides coverage for your home and its contents against a wide 
-                        range of risks. It offers protection not only for the physical structure of your home but also for personal belongings, liability, and additional 
-                        living expenses in case your home becomes uninhabitable due to a covered event.</p>
+                    <p><strong>Definitions</strong></p>
+                    <ul>
+                        <li><strong>Risk Location:</strong> Address shown on the schedule.</li>
+                        <li><strong>Home / Buildings:</strong> Main residence and outbuildings at the address of buildings and includes:
+                            <ul style="font-size: 13px;">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a) Garages and fixed carports. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b) Home offices. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c) Tool sheds. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; d) Domestic workers’ living quarters. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; e) Walls, metal palisades, gates and fences but not hedges. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; f) Fixtures and fittings, including built-in furniture and fitted carpets. <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c) Security systems affixed to the home. <br>
+                            </ul>
+                        </li>
+                        <li><strong>Standard construction only:</strong> The policy excludes thatch roofs and non-standard buildings.</li>
+                    </ul>
                     <button class="btn" onclick="openModal('modal1')">Read More</button>
-                    <!-- Modal for product 1 -->
-                    <div id="modal1" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeModal('modal1')">&times;</span>
-                            <h2>HOUSEOWNERS INSURANCE COVER - More Information</h2>
-                            <p>The Ford Mustang GT features a standard electronic line locker and, with the manual transmission, launch control. With 435 horsepower, this thing is a burnout and quarter-mile machine. Sync 3 is so much better than the last generation of Ford's infotainment. The new rear suspension and convertible top make this very comfortable tourer.</p>
-                        </div>
-                    </div>
-                    <div class="icons">
-                        <span>2024</span>
-                        <span>Minet Botswana</span>
-                    </div>
+                </div>
+                <div class="icons">
+                    <span>2024</span>
+                    <span>Minet Botswana</span>
                 </div>
             </div>
             <div class="box">
-                <div class="image">
-                    <img src="https://storage.googleapis.com/kogae_bucket/media/Minet%20Holiday%20Artworks%202-08.jpg" alt="Third Party Insurance Cover">
-                </div>
                 <div class="content">
-                    <h3>THIRD PARTY COMPREHENSIVE INSURANCE COVER</h3>
-                    <p><strong>What is Third-Party Motor Insurance?</strong> <br>
-                        Third-party motor insurance is a type of car insurance policy that covers the insured's legal liability for damages caused to a third party. This is the most basic form of car insurance and is mandatory in many countries for all vehicle owners. It provides financial protection if you are held responsible for causing injury or property damage to others in an accident.</p>
+                    <h3>THIRD PARTY INSURANCE COVER</h3>
+                    <p><strong>Liability Coverage (Defined Events)</strong></p>
+                    <ol>
+                        <li>Any amount that the insured becomes legally liable to pay arising from the use of the vehicle insured in respect of:
+                            <ul class="nested-list">
+                                <li>Injury which shall mean accidental death of or bodily injury to any person.</li>
+                                <li>Damage which shall mean accidental loss of or damage to property.</li>
+                            </ul>
+                        </li>
+                        <li>Costs and expenses incurred with the company’s prior written consent.</li>
+                        <li>While the vehicle is being used for the purpose of towing (other than for rewards) any other vehicle or trailer (including liability in connection with the towed vehicle or trailer) but the company shall not be liable for damage to the towed vehicle or trailer or to property in or on such vehicle or trailer.</li>
+                    </ol>
                     <button class="btn" onclick="openModal('modal2')">Read More</button>
-                    <!-- Modal for product 2 -->
-                    <div id="modal2" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeModal('modal2')">&times;</span>
-                            <h2>THIRD PARTY MOTOR INSURANCE COVER</h2>
-                            <p>The Ford Mustang GT features a standard electronic line locker and, with the manual transmission, launch control. With 435 horsepower, this thing is a burnout and quarter-mile machine. Sync 3 is so much better than the last generation of Ford's infotainment. The new rear suspension and convertible top make this very comfortable tourer.</p>
-                        </div>
-                    </div>
-                    <div class="icons">
-                        <span>2024</span>
-                        <span>Minet Botswana</span>
-                    </div>
+                </div>
+                <div class="icons">
+                    <span>2024</span>
+                    <span>Minet Botswana</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h5 style="background-color: #8B4513; color: #fff; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 10px;">
+                HOMEOWNERS INSURANCE COVER
+            </h5>
+            <hr style="border: 0; height: 2px; background-color: #8B4513; margin-bottom: 20px;">
+            <p><strong>Perils Covered</strong></p>
+            <ul>
+                <li>Fire, lightning, or explosion.</li>
+                <li>Storm, wind, water, flood, hail.</li>
+                <li>Impact by trees following storm, wind, water, floods.</li>
+            </ul>
+            <p><strong>Automatic Extensions</strong></p>
+            <ul>
+                <li>Bereavement expenses: Max P5000 (any one person), P20 000 (any one event) for insured events only.</li>
+                <li>House contents: Max P 10 000 (any one incident), up to P20, 000 (any one period) following an insured event at the insured premises.</li>
+                <li>Special alterations after disability: Max P20,000 for special alterations to the home caused by an accident that happened during the term of this policy.</li>
+                <li>Fire-fighting charges.</li>
+                <li>Removal of rubble and wreckage.</li>
+            </ul>
+            <p><strong>General Conditions specific to the buildings cover</strong></p>
+            <ul>
+                <li>Cover property for replacement value.</li>
+                <li>Average condition applies or under-insurance.</li>
+                <li>We pay the lender first (financial interest).</li>
+                <li>Inflationary increases to property sums insureds.</li>
+                <li>Tenant’s behavior.</li>
+                <li>Business use conditions*.</li>
+            </ul>
+            <p><strong>Events/Items Not Covered</strong></p>
+            <ul>
+                <li>Undamaged items (refer to the wording).</li>
+                <li>Loss or damage not covered caused by:
+                    <ul>
+                        <li>Any process involving the use of water.</li>
+                        <li>Theft, attempted theft, and malicious damage.</li>
+                        <li>Movement of the land supporting the residence.</li>
+                        <li>An event at an unoccupied home unoccupied for 30 consecutive days.</li>
+                        <li>Arising from or during demolition, alteration, construction, cleaning, renovation, repair or similar.</li>
+                        <li>Faulty design or workmanship.</li>
+                        <li>Any loss or damage caused to the Private Residence not being maintained.</li>
+                        <li>Loss or damage caused by deliberate power cuts or load shedding.</li>
+                        <li>Pre-existing damages to your residence.</li>
+                        <li>Loss, damage, injury or Liability caused deliberately by You.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <h5 style="background-color: #8B4513; color: #fff; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 10px;">
+                THIRDPARTY ONLY INSURANCE COVER
+            </h5>
+            <hr style="border: 0; height: 2px; background-color: #8B4513; margin-bottom: 20px;">
+            <p><strong>Indemnity under the Policy</strong></p>
+            <ul>
+                <li>Costs you are liable for.</li>
+                <li>Legal costs of the other person that you are liable for.</li>
+                <li>Costs you incur with our written consent to settle or defend a claim against you.</li>
+            </ul>
+            <p><em>Indemnity is limited to the amount of P500,000.00 at the time of the event. This amount applies to any single event, or to any series of events that result from the same incident.</em></p>
+            <p><strong>Exclusions</strong></p>
+            <ul>
+                <li>Accident / incident occurred before the policy inception date.</li>
+                <li>Injuries to certain individuals (i.e. passengers in trailers or caravans, passengers outside the cab at the time of the event).</li>
+                <li>Injuries to the insured, family members, or employees under certain conditions.</li>
+                <li>Damage to properties.</li>
+                <li>Compensation under motor vehicle insurance legislation.</li>
+                <li>Any claim arising out of contractual liability.</li>
+            </ul>
         </div>
     </div>
 
@@ -270,7 +355,7 @@
         // Function to open modal
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
-            modal.style.display = "block";
+            modal.style.display = "flex";
         }
 
         // Function to close modal

@@ -3,35 +3,118 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Feedback Form</title>
+    <link rel="stylesheet" href="{% static 'path/to/bootstrap.min.css' %}">
+    <!-- Link to Material Icons font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h3.alert-success {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px; /* Add some margin between form fields */
+        }
+        .form-group h3 {
+            margin: 0; /* Remove margin around form field labels */
+            font-size: 1rem;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: 100%; /* Make form fields take full width of container */
+            padding: 10px; /* Add padding to form fields for better spacing */
+            border: 1px solid #ccc; /* Add border for better visibility */
+            border-radius: 5px; /* Add border-radius for rounded corners */
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+        .contact-list {
+            list-style-type: none; /* Remove default list style */
+            padding: 0; /* Remove default padding */
+        }
+        .contact-list li {
+            margin-bottom: 10px; /* Add margin between contact list items */
+            display: flex; /* Use flexbox for better alignment */
+            align-items: center; /* Align items vertically */
+        }
+        .contact-link {
+            text-decoration: none; /* Remove underline from links */
+            color: #333; /* Set link color */
+            display: flex; /* Use flexbox for better alignment */
+            align-items: center; /* Align items vertically */
+        }
+        .contact-link i {
+            margin-right: 10px; /* Add margin between icon and text */
+        }
+        .contact-link address {
+            margin: 0; /* Remove margin for address tag */
+        }
+    </style>
 </head>
 
 <body>
-
-  {% include "insurance/navbar.html" %}
-  <br><br>
-
-  <center>
-    <h3 class='alert alert-success'>Send Us Your Valuable Feedback !</h3>
-
-    <form method="POST" autocomplete="off">
-      <!-- Very Important csrf Token -->
-      {% csrf_token %}
-      <div class="form-group">
-        <p>
-        <h3>{{ form.as_p }}</h3>
-        </p>
-        <br>
-        <input type="submit" value="Send Message" class='btn btn-primary btn-lg'>
-      </div>
-    </form>
-  </center>
-
-  {% include "insurance/footer.html" %}
+    {% include "insurance/navbar.html" %}
+    <div class="container">
+        <h3 class='alert alert-success text-center'>Send Us Your Valuable Feedback!</h3>
+        <form method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group">
+                <h3>{{ form.as_p }}</h3>
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" value="Send Message" class='btn btn-primary btn-lg'>
+            </div>
+        </form>
+        
+        <!-- Contact List -->
+        <ul class="contact-list">
+            <li>
+                <a href="mailto:info@minet.co.bw" class="contact-link">
+                    <i class="material-icons">mail_outline</i>
+                    <span>info@minet.co.bw</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.minet.com/botswana/" class="contact-link">
+                    <i class="material-icons">public</i>
+                    <span>www.minet.com</span>
+                </a>
+            </li>
+            <li>
+                <a href="tel:+2673617300" class="contact-link">
+                    <i class="material-icons">phone</i>
+                    <span>(+267) 3617300</span>
+                </a>
+            </li>
+            <li>
+                <div class="contact-link">
+                    <i class="material-icons">schedule</i>
+                    <span>08:00 AM - 04:30 PM</span>
+                </div>
+            </li>
+            <li>
+                <a href="https://maps.app.goo.gl/sRJnDfMqSe6cAxTr9" class="contact-link">
+                    <i class="material-icons">location_on</i>
+                    <address>Plot 50368, Gaborone Business Park, Showgrounds</address>
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% include "insurance/footer.html" %}
 </body>
 
 </html>
