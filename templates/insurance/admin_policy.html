@@ -22,22 +22,24 @@
       }
   
       .bg-c-blue {
-        background: #04868f;
+        background: linear-gradient(to right, #373b44, #4286f4) !important;
+        color: #fff;
       }
   
       .bg-c-green {
-        background: #e21a22;
-        font-family: "Titillium Web", sans-serif;
+        background: linear-gradient(to right, #0a504a, #38ef7d) !important;
+        color: #fff;
       }
   
       .bg-c-yellow {
-        background: #F56565;
+        background: linear-gradient(to right, #a86008, #ffba56) !important;
+    color: #fff;
       }
   
       .bg-c-pink {
-        background: #663a30;
+        background: linear-gradient(to right, #493240, #f09) !important;
+        color: #fff;
       }
-  
   
       .card {
         
@@ -68,6 +70,38 @@
       left: 0px;
       right: 0px;
     }
+
+    .h6, h6 {
+    font-size: 0.80rem !important;
+}
+
+    /* Card Styling */
+.policy-card {
+    position: relative;
+    background: url('https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Add overlay to improve text readability */
+.policy-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+}
+
+/* Make sure text stays above overlay */
+.policy-card .card-block {
+    position: relative;
+    z-index: 2;
+}
     </style>
   </head>
 
@@ -102,7 +136,7 @@
         </div>
       </div-->
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="#" onclick="viewPolicy()" style="text-decoration: none;color:white;">View policies</a> </h6>
             <h2 class="text-right"><i class="fas fa-plus f-left"></i></h2>    
@@ -118,7 +152,7 @@
         </div>
       </div-->
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-yellow order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="#" onclick="selectPolicy()" style="text-decoration: none;color:white;">Create a policy</a> </h6>
             <h2 class="text-right"><i class="fas fa-plus f-left"></i></h2>    
@@ -127,7 +161,7 @@
       </div>
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-pink order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-update-policy" style="text-decoration: none;color:white;">Update Policy</a> </h6>
             <h2 class="text-right"><i class="fas fa-edit f-left"></i></h2>    
@@ -136,7 +170,7 @@
       </div>
 
             <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-blue order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-delete-policy" style="text-decoration: none;color:white;">Delete Policy</a> </h6>
             <h2 class="text-right"><i class="fas fa-trash f-left"></i></h2>    
@@ -150,7 +184,7 @@
 
     <div class="row">
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-pink order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"> <a href="admin-view-policy-holder" style="text-decoration: none;color:white;">Total Applied Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-cog f-left"></i><span>{{total_policy_holder}}</span></h2>
@@ -160,7 +194,7 @@
       </div>
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-blue order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-approved-policy-holder" style="text-decoration: none;color:white;">Approved Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>{{approved_policy_holder}}</span></h2>
@@ -170,7 +204,7 @@
       </div>
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-yellow order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-disapproved-policy-holder" style="text-decoration: none;color:white;">Disapproved Policy Holder</a></h6>
            <h2 class="text-right"><i class="fas fa-user-times f-left"></i><span>{{disapproved_policy_holder}}</span></h2>
@@ -180,7 +214,7 @@
       </div>
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-waiting-policy-holder" style="text-decoration: none;color:white;">Policy Holder Waiting For Approval</a></h6>
             <h2 class="text-right"><i class="fas fa-user-clock f-left"></i><span>{{waiting_policy_holder}}</span></h2>
