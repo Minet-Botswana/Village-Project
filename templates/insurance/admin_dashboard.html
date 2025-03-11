@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
 
-
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,7 +12,9 @@
     <link href="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
     <style type="text/css">
+      
 
       a:link {
         text-decoration: none;
@@ -23,34 +25,32 @@
       }
   
       .bg-c-blue {
-        background: rgb(87, 201, 11);
+        background: linear-gradient(to right, #373b44, #4286f4) !important;
+        color: #fff;
       }
   
       .bg-c-green {
-        background:#e21a22;
-        border-radius: 0px;
-        box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-        -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-        -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+        background: linear-gradient(to right, #0a504a, #38ef7d) !important;
+        color: #fff;
         
       }
   
       .bg-c-yellow {
-        background: #F56565;
+        background: linear-gradient(to right, #a86008, #ffba56) !important;
+    color: #fff;
       }
   
       .bg-c-pink {
-        background: #e21a22;
+        background: linear-gradient(to right, #493240, #f09) !important;
+        color: #fff;
       }
   
-      .card {
-        
-        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        border: 1px solid black;
-        margin-bottom: 30px;
-        -webkit-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
+      .card { background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90,97,105,0.1), 0 0.9375rem 1.40625rem rgba(90,97,105,0.1), 0 0.25rem 0.53125rem rgba(90,97,105,0.12), 0 0.125rem 0.1875rem rgba
       }
   
       .card .card-block {
@@ -79,10 +79,9 @@
       right: 0px;
       }
 
-      body {
-        font-size: 13px; /* Adjust the value as needed */
-        font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
-      }
+      .h6, h6 {
+    font-size: 0.80rem !important;
+}
       .username {
             font-size: 14px;
       }
@@ -90,9 +89,38 @@
             font-size: 1px; /* Adjust the value as needed */
         }
 
-    </style>
-  </head>
+        /* Card Styling */
+.policy-card {
+    position: relative;
+    background: url('https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+}
 
+/* Add overlay to improve text readability */
+.policy-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+}
+
+/* Make sure text stays above overlay */
+.policy-card .card-block {
+    position: relative;
+    z-index: 2;
+}
+
+</style>
+
+</head>
+<body>
   <div class="container">
     <!-- Add the following paragraph to display the page route -->
     <div class="row">
@@ -109,34 +137,41 @@
   </div>
 
   <div class="container">
-
-    
     <div class="row">
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-blue order-card ">
           <div class="card-block">
             <h6 class="m-b-20"> <a href="admin-view-customer" style="text-decoration: none;color:white;">Total Registered User</a> </h6>
             <h2 class="text-right"><i  class="fas fa-users f-left"></i><span>{{total_user}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
   
      
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card policy-card">
           <div class="card-block">
-            <h6 class="m-b-20"><a href="admin-question" style="text-decoration: none;color:white;">Total Question</a></h6>
-            <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>            
+            <h6 class="m-b-"><a href="admin-question" style="text-decoration: none;color:white;">Total Question</a></h6>
+            <h2 class="text-right"><i class="fas fa-question-circle f-left"></i><span>{{total_question}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>            
           </div>
         </div>
       </div> 
 
       
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-yellow order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-category" style="text-decoration: none;color:white;">Listed Categories</a></h6>
-           <h2 class="text-right"><i class="fas fa-list-alt f-left"></i><span>{{total_category}}</span></h2>           
+           <h2 class="text-right"><i class="fas fa-list-alt f-left"></i><span>{{total_category}}</span></h2>
+           <div class="progress mt-3 " data-height="8" style="height: 1px;">
+            <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+        </div>           
           </div>
         </div>
       </div>
@@ -172,37 +207,49 @@
     <div class="row">
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-policy" style="text-decoration: none;color:white;">Listed Policies</a> </h6>
             <h2 class="text-right"><i class="fab fa-product-hunt f-left"></i><span>{{total_policy}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-blue order-card">
           <div class="card-block">
             <h6 class="m-b-20"> <a href="admin-view-policy-holder" style="text-decoration: none;color:white;">Total Applied Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-cog f-left"></i><span>{{total_policy_holder}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-yellow order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-approved-policy-holder" style="text-decoration: none;color:white;">Approved Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>{{approved_policy_holder}}</span></h2> 
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-pink order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-disapproved-policy-holder" style="text-decoration: none;color:white;">Disapproved Policy Holder</a></h6>
            <h2 class="text-right"><i class="fas fa-user-times f-left"></i><span>{{disapproved_policy_holder}}</span></h2>
+           <div class="progress mt-3 " data-height="8" style="height: 1px;">
+            <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+        </div>
           </div>
         </div>
       </div>
@@ -214,10 +261,13 @@
     <div class="row">
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-waiting-policy-holder" style="text-decoration: none;color:white;">Policy Holder Waiting For Approval</a></h6>
             <h2 class="text-right"><i class="fas fa-user-clock f-left"></i><span>{{waiting_policy_holder}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
@@ -249,19 +299,25 @@
     <div class="row">
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-pink order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-thirdpartypolicy" style="text-decoration: none;color:white;">Listed Policies</a> </h6>
             <h2 class="text-right"><i class="fab fa-product-hunt f-left"></i><span>{{total_thirdpartypolicy}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-blue order-card">
           <div class="card-block">
             <h6 class="m-b-20"> <a href="admin-view-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Total Applied Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-cog f-left"></i><span>{{total_thirdpartypolicy_holder}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
@@ -269,19 +325,25 @@
            
   
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card policy-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-approved-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Approved Policy Holder</a> </h6>
             <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>{{approved_thirdpartypolicy_holder}}</span></h2> 
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-yellow order-card">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-disapproved-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Disapproved Policy Holder</a></h6>
            <h2 class="text-right"><i class="fas fa-user-times f-left"></i><span>{{disapproved_thirdpartypolicy_holder}}</span></h2>
+           <div class="progress mt-3 " data-height="8" style="height: 1px;">
+            <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+        </div>
           </div>
         </div>
       </div>
@@ -292,10 +354,13 @@
     <div class="row">
 
       <div class="col-md-4 col-xl-3">
-        <div class="card bg-c-green order-card">
+        <div class="card bg-c-green order-card ">
           <div class="card-block">
             <h6 class="m-b-20"><a href="admin-view-waiting-thirdpartypolicy-holder" style="text-decoration: none;color:white;">Policy Holder Waiting For Approval</a></h6>
             <h2 class="text-right"><i class="fas fa-user-clock f-left"></i><span>{{waiting_thirdpartypolicy_holder}}</span></h2>
+            <div class="progress mt-3 " data-height="8" style="height: 1px;">
+              <div class="progress-bar l-bg-cyan" role="progressbar" data-width="100%" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%;"></div>
+          </div>
           </div>
         </div>
       </div>
@@ -303,6 +368,6 @@
       
   </div>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-
-
+</body>
+</html>
 {% endblock content %}

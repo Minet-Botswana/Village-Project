@@ -1,297 +1,568 @@
 <!DOCTYPE html>
 {% load static %}
+
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8">
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Boxicons CSS -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <title>Staff Home Dash</title>
 
   <style media="screen">
-    a:link {
-      text-decoration: none;
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    :root {
+      --white-color: #fff;
+      --blue-color: #4070f4;
+      --grey-color: #707070;
+      --grey-color-light: #aaa;
     }
 
     body {
+      background-color: #011d3a;
+      transition: all 0.5s ease;
       margin: 0;
       padding: 0;
-      font-family: "Titillium Web", sans-serif;
       overflow: auto;
     }
 
-    header {
+    body.dark {
+      background-color: #333;
+    }
+
+    body.dark {
+      --white-color: #333;
+      --blue-color: #fff;
+      --grey-color: #f2f2f2;
+      --grey-color-light: #aaa;
+    }
+
+    /* navbar */
+    .navbar {
       position: fixed;
-      background: #e21a22;
-      padding: 20px;
+      top: 0;
       width: 100%;
-      z-index: 1;
-    }
-
-    .left_area h3 {
-      color: #fff;
-      margin: 0px;
-      text-transform: uppercase;
-      font-size: 22px;
-      font-weight: 900;
-    }
-
-    .left_area span {
-      color: #19B3D3;
-    }
-
-    .logout_btn {
-      padding: 5px;
-      background: #1a1919;
-      text-decoration: none;
-      float: right;
-      margin-top: -30px;
-      margin-right: 40px;
-      border-radius: 20px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
-      transition: 0.5s;
-      font-family: "Titillium Web", sans-serif;
-
-    }
-
-    .logout_btn:hover {
-      background: #fff;
-      color: #e21a22;
-      font-family: "Titillium Web", sans-serif;
-    }
-
-    .sidebar {
-      background: #2e2e2e;
-      margin-top: 70px;
-      padding-top: 30px;
-      position: fixed;
       left: 0;
-      width: 250px;
-      height: 100%;
-      transition: 0.5s;
-      transition-property: left;
-      overflow-y: auto; /* Enable vertical scrolling */
+      background-color: var(--white-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      z-index: 1000;
+      box-shadow: 0 0 2px var(--grey-color-light);
+      overflow-y: auto;
+      /* Enable vertical scrolling */
     }
 
-    .sidebar .profile_image {
-      width: 60px;
-      height: 60px;
-      border-radius: 100px;
-      margin-bottom: 10px;
+    .logo_item {
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--blue-color);
     }
 
-    .sidebar h4 {
-      color: #ccc;
-      margin-top: 0;
-      margin-bottom: 20px;
+    .navbar img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
     }
 
-    .sidebar a {
-      color: #ffffff;
-      display: block;
+    .search_bar {
+      height: 47px;
+      max-width: 430px;
       width: 100%;
-      line-height: 53px;
-      text-decoration: none;
-      padding-left: 40px;
-      box-sizing: border-box;
-      transition: 0.5s;
-      font-family: "Titillium Web", sans-serif;
-
     }
 
-    .sidebar a:hover {
-      background: #e21a22;
-      color: #fff;
+    .search_bar input {
+      height: 100%;
+      width: 100%;
+      border-radius: 25px;
+      font-size: 18px;
+      outline: none;
+      background-color: var(--white-color);
+      color: var(--grey-color);
+      border: 1px solid var(--grey-color-light);
+      padding: 0 20px;
     }
 
-    .sidebar i {
-      padding-right: 10px;
+    .navbar_content {
+      display: flex;
+      align-items: center;
+      column-gap: 25px;
     }
 
-    label #sidebar_btn {
-      z-index: 1;
-      color: #ffffff;
-      position: fixed;
+    .navbar_content i {
       cursor: pointer;
-      left: 190px;
-      padding-left: 30px;
       font-size: 20px;
-      margin: 5px 0;
-      transition: 0.5s;
-      transition-property: color;
-      margin-top: 17px;
+      color: var(--grey-color);
     }
 
-    label #sidebar_btn:hover {
-      color: #000000;
+    /* sidebar */
+    .sidebar {
+      background-color: var(--white-color);
+      width: 260px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      padding: 80px 20px;
+      z-index: 100;
+      overflow-y: scroll;
+      box-shadow: 0 0 1px var(--grey-color-light);
+      transition: all 0.5s ease;
     }
 
-    #check:checked~.sidebar {
-      left: -190px;
-    }
-
-    #check:checked~.sidebar a span {
-      display: none;
-    }
-
-    #check:checked~.sidebar a {
-      font-size: 20px;
-      margin-left: 170px;
+    .sidebar.close {
+      padding: 60px 0;
       width: 80px;
     }
 
-    .logo-image {
-    margin-top: -4px;
-    width: 150px; /* Set the width as per your design */
-    height: auto; /* Maintain the aspect ratio */
-    border: 2px solid #ccc; /* Add a border if desired */
-    border-radius: 5px; /* Optional: Add rounded corners */
-    /* Add more styles as needed */
-  }
-
-    .content {
-      margin-left: 250px;
-      
-      background-color: #b9dce1;
-      background-position: center;
-      background-size: cover;
-      background-attachment: fixed; /* Add this line to fix the background image */
-      height: 100vh;
-      transition: 0.5s;
-      font-family: "Titillium Web", sans-serif;
-      font-size: large;
-    }
-
-    #check:checked~.content {
-      margin-left: 60px;
-    }
-
-    #check {
+    .sidebar::-webkit-scrollbar {
       display: none;
     }
 
-    .username {
-      color: white;
-      /* Add any additional styling as needed */
-      border: 2px solid red;
-      margin-top: -10px;
-      border-radius: 20%; /* Make it circular */
-      padding: 8px; /* Adjust the padding as needed */
-      display: inline-block; /* Ensures the border wraps around the text */
-      font-family: "Titillium Web", sans-serif;
-      background-color: #000000;
+    .menu_content {
+      position: relative;
     }
 
-    .dropdown-options {
-      display: none;
+    .menu_title {
+      margin: 15px 0;
+      padding: 0 20px;
+      font-size: 18px;
+    }
+
+    .sidebar.close .menu_title {
+      padding: 6px 30px;
+    }
+
+    .menu_title::before {
+      color: var(--grey-color);
+      white-space: nowrap;
+    }
+
+    .menu_dahsboard::before {
+      content: "Dashboard";
+    }
+
+    .menu_editor::before {
+      content: "Insurance";
+    }
+
+    .menu_setting::before {
+      content: "Setting";
+    }
+
+    .sidebar.close .menu_title::before {
+      content: "";
       position: absolute;
-      overflow: auto;
-      background-color:#fff;
-      border-radius:5px;
-      box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
-      width: 80%;
-      background-color: #2e2e2e;
-      border-color: #c2e1b9;
-      margin-left: 20px;
-      font-size: 13px;
+      height: 2px;
+      width: 18px;
+      border-radius: 12px;
+      background: var(--grey-color-light);
     }
 
-    .dropdown:hover .dropdown-options {
+    .menu_items {
+      padding: 0;
+      list-style: none;
+    }
+
+    .navlink_icon {
+      position: relative;
+      font-size: 22px;
+      min-width: 50px;
+      line-height: 40px;
+      display: inline-block;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .navlink_icon::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: calc(100% + 100px);
+      left: -20px;
+    }
+
+    .navlink_icon:hover {
+      background: var(--blue-color);
+    }
+
+    .sidebar .nav_link {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 4px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--grey-color);
+      white-space: nowrap;
+    }
+
+    .sidebar.close .navlink {
+      display: none;
+    }
+
+    .nav_link:hover {
+      color: var(--white-color);
+      background: var(--blue-color);
+    }
+
+    .sidebar.close .nav_link:hover {
+      background: var(--white-color);
+    }
+
+    .submenu_item {
+      cursor: pointer;
+    }
+
+    .submenu {
+      display: none;
+    }
+
+    .submenu_item .arrow-left {
+      position: absolute;
+      right: 10px;
+      display: inline-block;
+      margin-right: auto;
+    }
+
+    .sidebar.close .submenu {
+      display: none;
+    }
+
+    .show_submenu~.submenu {
       display: block;
-      
     }
 
-    .dropdown-options a {
-      display: block;
+    .show_submenu .arrow-left {
+      transform: rotate(90deg);
     }
-  
-    </style>
 
+    .submenu .sublink {
+      padding: 15px 15px 15px 52px;
+    }
 
+    .bottom_content {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      width: 260px;
+      cursor: pointer;
+      transition: all 0.5s ease;
+    }
+
+    .bottom {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      left: 0;
+      justify-content: space-around;
+      padding: 18px 0;
+      text-align: center;
+      width: 100%;
+      color: var(--grey-color);
+      border-top: 1px solid var(--grey-color-light);
+      background-color: var(--white-color);
+    }
+
+    .bottom i {
+      font-size: 20px;
+    }
+
+    .bottom span {
+      font-size: 18px;
+    }
+
+    .sidebar.close .bottom_content {
+      width: 50px;
+      left: 15px;
+    }
+
+    .sidebar.close .bottom span {
+      display: none;
+    }
+
+    .sidebar.hoverable .collapse_sidebar {
+      display: none;
+    }
+
+    #sidebarOpen {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      #sidebarOpen {
+        font-size: 25px;
+        display: block;
+        margin-right: 10px;
+        cursor: pointer;
+        color: var(--grey-color);
+      }
+
+      .sidebar.close {
+        left: -100%;
+      }
+
+      .search_bar {
+        display: none;
+      }
+
+      .sidebar.close .bottom_content {
+        left: -100%;
+      }
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 260px;
+      transition: margin-left 0.5s ease;
+    }
+
+    .sidebar.close~.main-content {
+      margin-left: 80px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+      }
+
+      .sidebar.close~.main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
 </head>
 
 <body>
-
-  <input type="checkbox" id="check">
-  <!--header area start-->
-  <header style="padding-top: 0px;">
-    <label for="check">
-      <i class="fas fa-bars" id="sidebar_btn"></i>
-    </label>
-    <div class="left_area">
-      <img src="static/image/minetbryte.png" alt="about" style="width: 150px; height: auto; background-color: white; border-radius: 18px;" />
+  <!-- navbar -->
+  <nav class="navbar">
+    <div class="logo_item">
+      <i class="bx bx-menu" id="sidebarOpen"></i>
+      <img src="static/image/minetbryte.png" alt="about" style="width: 200px; height: auto;  border-radius: 0px;"></i>
     </div>
-    <!--div class="right_area">
-      <a href="{% url 'logout' %}" id="logoutBtn" class="logout_btn">Logout</a>
-    </div-->
-    <div class="right_area">
+    <div class="search_bar">
+      <input type="text" placeholder="Search" />
+    </div>
+    <div class="navbar_content">
+      <i class="bi bi-grid"></i>
+      <i class='bx bx-sun' id="darkLight"></i>
+      <i class='bx bx-bell'></i>
       <form action="{% url 'logout' %}" method="post" id="logoutForm">
-          {% csrf_token %}
-          <button type="submit" class="logout_btn">Logout</button>
+        {% csrf_token %}
+        <button type="submit" class="logout_btn">Logout</button>
       </form>
     </div>
-  
-  </header>
-  <!--header area end-->
-  
-  <!--sidebar start-->
-  <div class="sidebar" style="
-    margin-top: 50px;">
-    <center>
-      <img src="static/image/admin.png" alt="about" style="margin-top: 10px; width: 35%;" />
+  </nav>
+  <!-- sidebar -->
+  <nav class="sidebar">
+    <div class="menu_content">
+      <div href="#" class="nav_link submenu_item">
+        <span class="navlink">Staff</span>
+      </div>
 
-      <h4 class="u" >Staff</h4>
-      <p class="username">{{ user.username }}</p>
-    </center>
+      <div href="#" class="nav_link submenu_item">
+        <p class="username">{{ user.username }}</p>
+      </div>
 
-    <a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-    <a href="/admin-view-customer"><i class="fas fa-users"></i><span>Clients</span></a>
-    <a href="/admin-category"><i class="fas fa-list-alt"></i><span>Policy Types</span></a>
-    <a href="/admin-policy"><i class="fab fa-product-hunt"></i><span>Policies</span></a>
-    <a href="/admin-question"><i class="fas fa-question-circle"></i><span>Questions</span></a>
-    <div class="dropdown">
-      <a style="color: #ffffff;" ><i class="fas fa-file-pdf"></i><span>Customer forms</span></a>
-      <div class="dropdown-options">
-        <a href="/admin-customerforms">KYC </a>
-        <a href="/admin-homeownersview"> Homeowners Forms</a>
-        <a href="/admin-thirdpartyview"> Third Party Forms</a>
+      <ul class="menu_items">
+        <div class="menu_title menu_dahsboard"></div>
+        <li class="item">
+          <a href="/admin-dashboard" class="nav_link">
+            <span class="navlink_icon">
+              <i class="bx bx-home-alt"></i>
+            </span>
+            <span class="navlink">Home</span>
+          </a>
+        </li>
+        <li class="item">
+          <div href="#" class="nav_link submenu_item">
+            <span class="navlink_icon">
+              <i class='bx bxs-file'></i>
+            </span>
+            <span class="navlink">Client Forms</span>
+            <i class="bx bx-chevron-right arrow-left"></i>
+          </div>
+          <ul class="menu_items submenu">
+            <a href="/admin-customerforms" class="nav_link sublink">KYC</a>
+            <a href="/admin-homeownersview" class="nav_link sublink">Homeowners</a>
+            <a href="/admin-thirdpartyview" class="nav_link sublink">Thirdparty</a>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="menu_items">
+        <div class="menu_title menu_editor"></div>
+        <li class="item">
+          <a href="/admin-category" class="nav_link">
+            <span class="navlink_icon">
+              <i class='bx bx-check-shield'></i>
+            </span>
+            <span class="navlink">Policy Types</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="/admin-policy" class="nav_link">
+            <span class="navlink_icon">
+              <i class='bx bxs-parking'></i>
+            </span>
+            <span class="navlink">Policies</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="/admin-question" class="nav_link">
+            <span class="navlink_icon">
+              <i class='bx bx-question-mark'></i>
+            </span>
+            <span class="navlink">Inquiries</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#" class="nav_link">
+            <span class="navlink_icon">
+              <i class="bx bx-cloud-upload"></i>
+            </span>
+            <span class="navlink">Upload new</span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="menu_items">
+        <div class="menu_title menu_setting"></div>
+        <li class="item">
+          <a href="#" class="nav_link">
+            <span class="navlink_icon">
+              <i class="bx bx-flag"></i>
+            </span>
+            <span class="navlink">Notice board</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#" class="nav_link">
+            <span class="navlink_icon">
+              <i class="bx bx-medal"></i>
+            </span>
+            <span class="navlink">Award</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#" class="nav_link">
+            <span class="navlink_icon">
+              <i class="bx bx-cog"></i>
+            </span>
+            <span class="navlink">Setting</span>
+          </a>
+        </li>
+        <li class="item">
+          <a href="#" class="nav_link">
+            <span class="navlink_icon">
+              <i class="bx bx-layer"></i>
+            </span>
+            <span class="navlink">Features</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Sidebar Open / Close -->
+      <div class="bottom_content">
+        <div class="bottom expand_sidebar">
+          <span> Expand</span>
+          <i class='bx bx-log-in'></i>
+        </div>
+        <div class="bottom collapse_sidebar">
+          <span> Collapse</span>
+          <i class='bx bx-log-out'></i>
+        </div>
       </div>
     </div>
+  </nav>
 
-    
-
-
-  </div>
-  <!--sidebar end-->
-
-
-  <!--content start-->
-  <div class="content">
-    <br><br><br><br><br>
+  <!-- Main Content -->
+  <div class="main-content">
     {% block content %}
-
     {% endblock content %}
-
-
-    <br><br><br>
- 
   </div>
-  <!--content end-->
+
+  <!-- JavaScript -->
   <script>
-    // JavaScript
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-        // Simulate the logout process on the client side
-        // In a real-world scenario, you would make an AJAX/Fetch request to the server-side logout endpoint
+    const body = document.querySelector("body");
+    const darkLight = document.querySelector("#darkLight");
+    const sidebar = document.querySelector(".sidebar");
+    const submenuItems = document.querySelectorAll(".submenu_item");
+    const sidebarOpen = document.querySelector("#sidebarOpen");
+    const sidebarClose = document.querySelector(".collapse_sidebar");
+    const sidebarExpand = document.querySelector(".expand_sidebar");
+    const mainContent = document.querySelector(".main-content");
 
-        // Clear any client-side tokens, cookies, or local storage if necessary
-
-        // For demonstration purposes, let's clear a hypothetical token stored in localStorage
-        localStorage.removeItem('userToken');
-
-        // Redirect the user to the login page
-        window.location.href = '/adminlogin'; // Replace '/login' with your actual login page URL
+    sidebarOpen.addEventListener("click", () => {
+      sidebar.classList.toggle("close");
+      mainContent.classList.toggle("sidebar-closed");
     });
+
+    sidebarClose.addEventListener("click", () => {
+      sidebar.classList.add("close", "hoverable");
+      mainContent.classList.add("sidebar-closed");
+    });
+
+    sidebarExpand.addEventListener("click", () => {
+      sidebar.classList.remove("close", "hoverable");
+      mainContent.classList.remove("sidebar-closed");
+    });
+
+    sidebar.addEventListener("mouseenter", () => {
+      if (sidebar.classList.contains("hoverable")) {
+        sidebar.classList.remove("close");
+        mainContent.classList.remove("sidebar-closed");
+      }
+    });
+
+    sidebar.addEventListener("mouseleave", () => {
+      if (sidebar.classList.contains("hoverable")) {
+        sidebar.classList.add("close");
+        mainContent.classList.add("sidebar-closed");
+      }
+    });
+
+    darkLight.addEventListener("click", () => {
+      body.classList.toggle("dark");
+      if (body.classList.contains("dark")) {
+        darkLight.classList.replace("bx-sun", "bx-moon");
+      } else {
+        darkLight.classList.replace("bx-moon", "bx-sun");
+      }
+    });
+
+    submenuItems.forEach((item, index) => {
+      item.addEventListener("click", () => {
+        item.classList.toggle("show_submenu");
+        submenuItems.forEach((item2, index2) => {
+          if (index !== index2) {
+            item2.classList.remove("show_submenu");
+          }
+        });
+      });
+    });
+
+    if (window.innerWidth < 768) {
+      sidebar.classList.add("close");
+      mainContent.classList.add("sidebar-closed");
+    } else {
+      sidebar.classList.remove("close");
+      mainContent.classList.remove("sidebar-closed");
+    }
   </script>
 </body>
 
