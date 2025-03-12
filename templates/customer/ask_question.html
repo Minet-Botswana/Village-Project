@@ -1,47 +1,92 @@
 {% extends 'customer/customerbase.html' %}
 {% load widget_tweaks %}
 {% block content %}
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-       <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  a:link {
-        text-decoration: none;
-      }
-       label #sidebar_btn {
-      z-index: 1;
-      color: #fff;
-      position: fixed;
-      cursor: pointer;
-      left: 300px;
-      padding-left: 60px;
-      margin-top:15px;
-      font-size: 20px;
-      
-      transition: 0.5s;
-      transition-property: color;
-    }
-  </style>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1f1c2c, #928DAB);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .glass-container {
+            background: rgba(235, 145, 145, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-ask {
+            width: 100%;
+            background: linear-gradient(90deg, #ff4b5c, #ff6b81);
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: 0.3s ease;
+        }
+
+        .btn-ask:hover {
+            background: linear-gradient(90deg, #ff6b81, #ff4b5c);
+            transform: scale(1.05);
+        }
+    </style>
 </head>
-<h2 style="text-align:center; color:#e21a22;">ASK QUESTION</h2>
-<form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;">
-    {%csrf_token%}
-    <div class="form-group">
-      <label for="course_name">Problem</label>
-      {% render_field questionForm.description class="form-control" placeholder="Describe your problem here" %}
 
+<div class="glass-container">
+    <h2>Have an Inquiry?</h2>
+    <form method="POST" autocomplete="off">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="course_name">Describe Your Problem</label>
+            {% render_field questionForm.description class="form-control" placeholder="Describe your problem here..." %}
+        </div>
+        <button type="submit" class="btn btn-ask">ASK</button>
+    </form>
+</div>
 
-    </div>
-    
-    
-
-    <button type="submit" class="btn btn-primary" style="background-color: #e21a22;">ASK</button>
-  </form>
-<br><br><br><br>
 {% endblock content %}
