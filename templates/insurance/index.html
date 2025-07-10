@@ -23,6 +23,8 @@
   --text-light: #767268;
   --white: #ffffff;
   --max-width: 1200px;
+  --border-radius: 10px;
+  --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -31,10 +33,70 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  line-height: 1.6;
+}
+
 .section__container {
   max-width: var(--max-width);
   margin: auto;
-  padding: 5rem 1rem;
+  padding: 4rem 1rem;
+}
+
+/* Additional styling for feature boxes */
+.feature-box {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+  transform: translateY(-5px);
+}
+
+.feature-box strong {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+/* Improved image styling */
+.rounded-img {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease;
+}
+
+.rounded-img:hover {
+  transform: scale(1.02);
+}
+
+/* Icon container styling */
+.icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  color: var(--primary-color);
+  background-color: var(--primary-color-light);
+  border-radius: 50%;
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
+}
+
+.icon-container:hover {
+  color: var(--white);
+  background-color: var(--primary-color);
+  transform: rotateY(180deg);
 }
 
 .section__header {
@@ -77,20 +139,25 @@ body {
 header {
   background-image: linear-gradient(
       to right,
-      rgba(18, 172, 142, 0.9),
+      rgba(201, 6, 6, 0.9),
       rgba(18, 172, 142, 0.7)
     ),
-    url(" static/image/homepage.jpg");
+    url(" static/image/MinetHero.png");
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .nav__container {
-  padding: 2rem 1rem;
+  padding: 1.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .nav__logo {
@@ -109,11 +176,14 @@ header {
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  transition: all 0.3s ease;
 }
 
 .link a {
   padding: 0.5rem;
   color: var(--primary-color-light);
+  transition: color 0.3s ease;
+  font-weight: 500;
 }
 
 .link a:hover {
@@ -123,64 +193,30 @@ header {
 .header__container {
   display: flex;
   align-items: center;
-  gap: 5rem;
+  gap: 3rem;
+  flex: 1;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
 }
 
-.header__container h1 {
+.header__content {
+  flex: 1;
+}
+
+.header__content h3 {
   margin-bottom: 1rem;
   max-width: 800px;
-  font-size: 1.9rem;
-  line-height: 4rem;
+  font-size: 2rem;
+  line-height: 1.4;
   color: var(--white);
 }
 
-.header__container p {
+.header__content p {
   margin-bottom: 2rem;
   max-width: 600px;
   color: var(--primary-color-light);
-}
-
-.header__form {
-  width: 100%;
-  max-width: 350px;
-}
-
-.header__form form {
-  display: grid;
-  gap: 1rem;
-  padding: 2rem;
-  background-color: var(--white);
-  border-radius: 10px;
-  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
-}
-
-.header__form input {
-  padding: 1rem;
-  outline: none;
-  border: none;
-  font-size: 1rem;
-  color: var(--primary-color);
-  background-color: var(--primary-color-light);
-  border-radius: 5px;
-}
-
-.header__form input::placeholder {
-  color: var(--primary-color);
-}
-
-.form__btn {
-  background-color: var(--primary-color);
-  transition: 0.3s;
-}
-
-.form__btn:hover {
-  background-color: var(--primary-color-dark);
-}
-
-.header__form h4 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .service__header {
@@ -527,42 +563,134 @@ header {
   }
 }
 
-@media (width < 780px) {
+/* Mobile menu styles */
+.mobile__menu {
+  display: none;
+  font-size: 1.5rem;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.header__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.whatsapp-btn {
+  background-color: #25D366;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Tablet styles */
+@media (max-width: 992px) {
+  .footer__container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .about__image img,
+  .why__image img {
+    max-width: 100%;
+  }
+  
+  .service__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 780px) {
   .nav__links {
     display: none;
+  }
+  
+  .mobile__menu {
+    display: block;
+  }
+  
+  .nav__links.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 100;
   }
 
   .header__container {
     flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .header__content h3 {
+    font-size: 1.6rem;
+    line-height: 2.5rem;
+  }
+  
+  .header__buttons {
+    justify-content: center;
+  }
+  
+  .about__container,
+  .why__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .about__image {
+    grid-area: 1/1/2/2;
+  }
+  
+  .why__grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .why__grid span {
+    margin: 0 auto;
   }
 }
 
-@media (width < 600px) {
-  .service__header {
+@media (max-width: 600px) {
+  .nav__container img {
+    width: 150px;
+  }
+  
+  .service__header,
+  .doctors__header {
     flex-direction: column;
     text-align: center;
   }
 
-  .service__grid {
+  .service__grid,
+  .doctors__grid {
     grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
   }
 
   .why__grid {
     column-gap: 1rem;
   }
 
-  .doctors__header {
-    flex-direction: column;
-    text-align: center;
+  .footer__container {
+    grid-template-columns: 1fr;
   }
-
-  .doctors__grid {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
+  
   .footer__bar__content {
     flex-direction: column;
     gap: 1rem;
+  }
+  
+  .section__container {
+    padding: 3rem 1rem;
   }
 }
   </style>
@@ -573,17 +701,20 @@ header {
     <header>
       <nav class="section__container nav__container">
         <!--div class="nav__logo">Ko<span>Gae</span></div-->
-        <img src="static/image/minetbryte.png" alt="about" style="width: 300px; height: auto; background-color: white; border-radius: 18px;" />
+        <img src="static/image/minetbryte.png" alt="Minet Bryte Logo" style="width: 200px; height: auto; background-color: white; border-radius: 7px;" />
         <ul class="nav__links">
          <li class="link"><a href="/" class="nav-item nav-link">Home</a>
           <li class="link"><a href="#about">Benefits</a></li>
           <li class="link"><a href="/covers">Covers</a></li>
-          <li class="link"><a href="#pages">Pages</a></li>
-          <li class="link"><a href="#blog">Blog</a></li>
+          <li class="link"><a href="/customer/customerclick">Your Information</a></li>
+          <li class="link"><a href="#blog">Claims</a></li>
         </ul>
         <button class="btn">
-          <a href="/customer/customerlogin" >Login</a>
+          <a href="/customer/customerlogin">Login</a>
         </button>
+        <div class="mobile__menu">
+          <i class="ri-menu-line"></i>
+        </div>
       </nav>
       <div class="section__container header__container" id="home">
         <div class="header__content">
@@ -592,185 +723,85 @@ header {
             Discover how KoGae Village Product offers personalized insurance plans designed specifically for homeowners in villages. 
             Benefit from expert advice, seamless claims processing, and exceptional coverage that safeguards your home and peace of mind.
           </p>
-          <a href="https://wa.me/+26778299555" target="_blank">
-            <button class="btn whatsapp-btn">
-              <i class="fa fa-whatsapp"></i> Chat on WhatsApp
-            </button>
-          </a>
-          
-        </div>
-        <div class="header__form">
-          <div class="header__form">
-            <form action="https://formspree.io/f/mdkeoaoy" method="POST">
-                <h4>Get A Quote Now!</h4>
-                <input type="text" name="First Name" placeholder="First Name" required />
-                <input type="text" name="Last Name" placeholder="Last Name" required />
-                <input type="number" name="Value of Property (BWP)" placeholder="Value of Property (BWP)" required />
-                <input type="text" name="Phone No." placeholder="Phone No." required />
-                <input type="email" name="_replyto" placeholder="Your Email" required />
-                <button class="btn form__btn" type="submit">Get Quote</button>
-            </form>
-        </div>
+          <div class="header__buttons">
+            <a href="/customer/customerlogin" class="btn">Get Started</a>
+            <a href="https://wa.me/+26778299555" target="_blank" class="btn whatsapp-btn">
+              <i class="ri-whatsapp-line"></i> Chat on WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </header>
 
-    <!--section-- class="section__container service__container" id="service">
-      <div class="service__header">
-        <div class="service__header__content">
-          <h2 class="section__header">Our Special service</h2>
-          <p>
-            Beyond simply providing medical care, our commitment lies in
-            delivering unparalleled service tailored to your unique needs.
-          </p>
-        </div>
-        <button class="service__btn">Ask A Service</button>
-      </div>
-      <div class="service__grid">
-        <div class="service__card">
-          <span><i class="ri-microscope-line"></i></span>
-          <h4>Laboratory Test</h4>
-          <p>
-            Accurate Diagnostics, Swift Results: Experience top-notch Laboratory
-            Testing at our facility.
-          </p>
-          <a href="#">Learn More</a>
-        </div>
-        <div class="service__card">
-          <span><i class="ri-mental-health-line"></i></span>
-          <h4>Health Check</h4>
-          <p>
-            Our thorough assessments and expert evaluations help you stay
-            proactive about your health.
-          </p>
-          <a href="#">Learn More</a>
-        </div>
-        <div class="service__card">
-          <span><i class="ri-hospital-line"></i></span>
-          <h4>General Dentistry</h4>
-          <p>
-            Experience comprehensive oral care with Dentistry. Trust us to keep
-            your smile healthy and bright.
-          </p>
-          <a href="#">Learn More</a>
-        </div>
-      </div>
-    </section-->
     <section class="section__container about__container" id="about">
       <div class="about__content">
-        <h2 class="section__header">Awesome Features</h2>
-        <p><strong>eKYC at Your Convenience</strong></p>
-        <p>
-          We understand that your time is precious, and convenience is key. Introducing our cutting-edge eKYC (Electronic Know Your Customer) feature 
-          – a revolutionary way to complete the KYC process wherever you are! No more lengthy paperwork or tiresome visits. With our seamless eKYC, 
-          verifying your identity is now as simple as a few taps on your device. Experience the future of insurance with hassle-free, on-the-go KYC.
-        </p>
-        <p><strong>Online Policy Application</strong></p>
-        <p>
-          Offers a seamless online platform where users can easily apply for insurance policies through a self-service portal. 
-          This feature enables customers to access the service anytime, anywhere, eliminating the need for physical visits. 
-          Users can submit applications, get instant quotes, customize their policies, upload required documents, and make secure payments all in one place.
-        </p>
-        <p>
+        <h2 class="section__header">KoGae Village Protection Features</h2>
+        <div class="feature-box">
+          <p><strong>eKYC at Your Convenience</strong></p>
+          <p>
+            We understand that your time is precious, and convenience is key. Our cutting-edge eKYC (Electronic Know Your Customer) feature 
+            allows you to complete the verification process wherever you are! No more lengthy paperwork or tiresome visits. With our seamless eKYC, 
+            verifying your identity is now as simple as a few taps on your device.
+          </p>
+        </div>
+        
+        <div class="feature-box">
+          <p><strong>Online Policy Application</strong></p>
+          <p>
+            Access our seamless online platform where you can easily apply for insurance policies through a self-service portal. 
+            This feature enables you to access the service anytime, anywhere, eliminating the need for physical visits. 
+            Submit applications, customize your policies, upload required documents, and make secure payments all in one place.
+          </p>
+        </div>
+        
+        <div class="feature-box">
+          <p><strong>Village-Focused Protection</strong></p>
+          <p>
+            Our KoGae product is specifically designed for village homeowners, with coverage options that address the unique needs and challenges 
+            of village properties. Protect your home with insurance that truly understands your community.
+          </p>
+        </div>
       </div>
       <div class="about__image">
-        <img src="static/image/about1.jpg" alt="about" />
-
+        <img src="static/image/about1.jpg" alt="Village home protection" class="rounded-img" />
       </div>
     </section>
 
     <section class="section__container why__container" id="blog">
       <div class="why__image">
-        <img src="static/image/about1.jpg" alt="about" />
+        <img src="static/image/about1.jpg" alt="Insurance benefits" class="rounded-img" />
       </div>
       <div class="why__content">
         <h2 class="section__header">Why Choose Us</h2>
         <p>
-          We know your time is valuable. Our streamlined processes and user-friendly platform make obtaining and managing your short-term insurance hassle-free. 
+          We know your time is valuable. Our streamlined processes and user-friendly platform make obtaining and managing your village home insurance hassle-free. 
           Get the coverage you need without the unnecessary complexity.
         </p>
         <div class="why__grid">
-          <span><i class="ri-hand-heart-line"></i></span>
+          <span class="icon-container"><i class="ri-hand-heart-line"></i></span>
           <div>
             <h4>Easy To Use</h4>
             <p>
-              Intuitive Interface: Navigate through your insurance journey with ease, making managing policies, claims, and updates a breeze.
+              Navigate through your insurance journey with ease, making managing policies, claims, and updates a breeze with our intuitive interface.
             </p>
           </div>
-          <span><i class="ri-truck-line"></i></span>
+          <span class="icon-container"><i class="ri-shield-check-line"></i></span>
           <div>
             <h4>Customer-Centric Approach</h4>
             <p>
-              Satisfaction Guarantee: Your satisfaction is our priority. We go the extra mile to ensure you're not just covered but delighted with our service
+              Your satisfaction is our priority. We go the extra mile to ensure you're not just covered but delighted with our service.
             </p>
           </div>
-          <span><i class="ri-hospital-line"></i></span>
+          <span class="icon-container"><i class="ri-building-line"></i></span>
           <div>
             <h4>Trusted Partnerships</h4>
             <p>
-              Reputable Providers: Benefit from our strong relationships with industry-leading insurance providers, ensuring you have access to reliable and trustworthy coverage.
+              Benefit from our strong relationships with industry-leading insurance providers, ensuring you have access to reliable and trustworthy coverage.
             </p>
           </div>
         </div>
       </div>
     </section>
-
-    <!--section-- class="section__container doctors__container" id="pages">
-      <div class="doctors__header">
-        <div class="doctors__header__content">
-          <h2 class="section__header">Our Special Doctors</h2>
-          <p>
-            We take pride in our exceptional team of doctors, each a specialist
-            in their respective fields.
-          </p>
-        </div>
-        <div class="doctors__nav">
-          <span><i class="ri-arrow-left-line"></i></span>
-          <span><i class="ri-arrow-right-line"></i></span>
-        </div>
-      </div>
-      <div class="doctors__grid">
-        <div class="doctors__card">
-          <div class="doctors__card__image">
-            <img src="assets/doctor-1.jpg" alt="doctor" />
-            <div class="doctors__socials">
-              <span><i class="ri-instagram-line"></i></span>
-              <span><i class="ri-facebook-fill"></i></span>
-              <span><i class="ri-heart-fill"></i></span>
-              <span><i class="ri-twitter-fill"></i></span>
-            </div>
-          </div>
-          <h4>Dr. Emily Smith</h4>
-          <p>Cardiologist</p>
-        </div>
-        <div class="doctors__card">
-          <div class="doctors__card__image">
-            <img src="assets/doctor-2.jpg" alt="doctor" />
-            <div class="doctors__socials">
-              <span><i class="ri-instagram-line"></i></span>
-              <span><i class="ri-facebook-fill"></i></span>
-              <span><i class="ri-heart-fill"></i></span>
-              <span><i class="ri-twitter-fill"></i></span>
-            </div>
-          </div>
-          <h4>Dr. James Anderson</h4>
-          <p>Neurosurgeon</p>
-        </div>
-        <div class="doctors__card">
-          <div class="doctors__card__image">
-            <img src="assets/doctor-3.jpg" alt="doctor" />
-            <div class="doctors__socials">
-              <span><i class="ri-instagram-line"></i></span>
-              <span><i class="ri-facebook-fill"></i></span>
-              <span><i class="ri-heart-fill"></i></span>
-              <span><i class="ri-twitter-fill"></i></span>
-            </div>
-          </div>
-          <h4>Dr. Michael Lee</h4>
-          <p>Dermatologist</p>
-        </div>
-      </div>
-    </section-->
 
     <footer class="footer">
       <div class="section__container footer__container">
@@ -783,22 +814,7 @@ header {
             From unexpected risks to everyday security, trust us to keep your home and loved ones covered every step of the way.
           </p>
         </div>
-        <!--div class="footer__col">
-          <h4>About Us</h4>
-          <p>Home</p>
-          <p>About Us</p>
-          <p>Work With Us</p>
-          <p>Our Blog</p>
-          <p>Terms & Conditions</p>
-        </div-->
-        <!--div class="footer__col">
-          <h4>Services</h4>
-          <p>Search Terms</p>
-          <p>Advance Search</p>
-          <p>Privacy Policy</p>
-          <p>Suppliers</p>
-          <p>Our Stores</p>
-        </div-->
+      
         <div class="footer__col">
           <h4>Contact Us</h4>
           <p>
@@ -821,5 +837,40 @@ header {
         </div>
       </div>
     </footer>
+
+    <script>
+      // Mobile menu functionality
+      const mobileMenu = document.querySelector('.mobile__menu');
+      const navLinks = document.querySelector('.nav__links');
+      
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+          
+          // Change icon based on menu state
+          const icon = mobileMenu.querySelector('i');
+          if (navLinks.classList.contains('active')) {
+            icon.classList.remove('ri-menu-line');
+            icon.classList.add('ri-close-line');
+          } else {
+            icon.classList.remove('ri-close-line');
+            icon.classList.add('ri-menu-line');
+          }
+        });
+      }
+      
+      // Close mobile menu when clicking a nav link
+      const links = document.querySelectorAll('.nav__links li a');
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.remove('ri-close-line');
+            icon.classList.add('ri-menu-line');
+          }
+        });
+      });
+    </script>
   </body>
 </html>

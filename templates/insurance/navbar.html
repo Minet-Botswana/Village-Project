@@ -1,117 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Minet - eKYC Portal</title>
-  {% load static %}
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% load static %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <style type="text/css">
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
+<style>
+  :root {
+    --primary-color: #12ac8e;
+    --secondary-color: #fb923c;
+    --white: #ffffff;
+    --dark: #1e293b;
+    --light-gray: #f1f5f9;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .kogae-navbar {
+    padding: 0.75rem 1rem;
+    background-color: var(--white);
+    box-shadow: var(--shadow);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1030;
+    transition: all 0.3s ease;
+  }
+  
+  .kogae-navbar-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .kogae-navbar-brand {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+  }
+  
+  .kogae-navbar-logo {
+    max-height: 40px;
+    width: auto;
+  }
+  
+  .kogae-navbar-links {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-left: auto;
+  }
+  
+  .kogae-navbar-item {
+    margin: 0 0.5rem;
+  }
+  
+  .kogae-navbar-link {
+    color: var(--dark);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  .kogae-navbar-link:hover,
+  .kogae-navbar-link:focus {
+    color: var(--white);
+    background-color: var(--primary-color);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+  
+  .kogae-navbar-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--dark);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+  
+  /* Mobile Navigation */
+  @media (max-width: 768px) {
+    .kogae-navbar-container {
+      justify-content: space-between;
     }
-
-    .navbar {
-      padding: 5px 0; /* Uniform padding on top and bottom */
-      padding-left: 15px;
-      align-items: flex-start;
-      flex-direction: row-reverse;
-      background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin: 0 auto; /* Center navbar horizontally */
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 9999;
-    }
-
-    .navbar-brand {
-      font-size: 14px;
-      font-weight: bold;
-      color: #00e4a742;
-      margin-left: 20px;
-    }
-
-    .navbar-nav .nav-link {
-      color: #e21a22;
-      font-size: 11px;
-      margin-right: 15px;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .navbar-nav .nav-link:hover {
-      color: #fff !important;
-      background-color: #e82525;
-      border-radius: 4px;
-      padding: 8px 15px;
-    }
-
-    .navbar-nav {
-      display: flex;
-      justify-content: center;
-    }
-
     
-
-    @media (max-width: 768px) {
-      .navbar-nav {
-        flex-direction: column;
-        align-items: center;
-      }
+    .kogae-navbar-links {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background-color: var(--white);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin: 0;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 1029;
     }
-
-    /* Adding padding to the content below the navbar */
-    .content {
-      padding-top: 80px; /* Ensure content is not hidden behind the navbar */
+    
+    .kogae-navbar-links.show {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
     }
-  </style>
-</head>
-<body>
+    
+    .kogae-navbar-item {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+    
+    .kogae-navbar-link {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem;
+    }
+    
+    .kogae-navbar-toggle {
+      display: block;
+      margin-left: auto;
+      order: 2;
+    }
+  }
+</style>
 
-  <nav class="navbar navbar-expand-md navbar-light">
-    <img src="{% static 'image/minetbryte.png' %}" alt="Logo" style="width: 200px; height: auto; " />
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a href="/" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
-          <a href="/covers" class="nav-link">Covers</a>
-        </li>
-        <li class="nav-item">
-          <a href="/customer/customerclick" class="nav-link">Your Information</a>
-        </li>
-        <li class="nav-item">
-          <a href="/customer/forms" class="nav-link">eKYC & Policy Application</a>
-        </li>
-        <li class="nav-item">
-          <a href="/customer/form/homeowners_insurance" class="nav-link">Homeowners Proposal Form</a>
-        </li>
-        <li class="nav-item">
-          <a href="/customer/apply-thirdparty" class="nav-link">Third Party Proposal Form</a>
-        </li>
-        <li class="nav-item">
-          <a href="/contactus" class="nav-link">Claims</a>
-        </li>
-        <li class="nav-item">
-          <a href="/customer/customerlogin" class="nav-link">Login</a>
-        </li>
-      </ul>
+<!-- Navigation Bar -->
+<nav class="kogae-navbar">
+  <div class="kogae-navbar-container">
+    <div class="kogae-navbar-brand">
+      <img src="{% static 'image/minetbryte.png' %}" alt="Minet Logo" class="kogae-navbar-logo">
     </div>
-  </nav>
+    
+    <button class="kogae-navbar-toggle" id="navbar-toggle" aria-label="Toggle Navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <ul class="kogae-navbar-links" id="navbar-links">
+      <li class="kogae-navbar-item">
+        <a href="/" class="kogae-navbar-link">Home</a>
+      </li>
+      <li class="kogae-navbar-item">
+        <a href="/covers" class="kogae-navbar-link">Covers</a>
+      </li>
+      <li class="kogae-navbar-item">
+        <a href="/customer/customerclick" class="kogae-navbar-link">Your Information</a>
+      </li>
+      <li class="kogae-navbar-item">
+        <a href="/contactus" class="kogae-navbar-link">Claims</a>
+      </li>
+      <li class="kogae-navbar-item">
+        <a href="/customer/customerlogin" class="kogae-navbar-link">Login</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-</body>
-</html>
+<script>
+  // Mobile menu toggle functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarLinks = document.getElementById('navbar-links');
+    
+    navbarToggle.addEventListener('click', function() {
+      navbarLinks.classList.toggle('show');
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const isClickInsideNav = navbarToggle.contains(event.target) || 
+                              navbarLinks.contains(event.target);
+      
+      if (!isClickInsideNav && navbarLinks.classList.contains('show')) {
+        navbarLinks.classList.remove('show');
+      }
+    });
+  });
+</script>
