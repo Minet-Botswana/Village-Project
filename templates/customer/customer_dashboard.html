@@ -25,17 +25,17 @@
   .dashboard-title {
     color: var(--dark);
     font-weight: 600;
-    margin-bottom: 2rem;
-    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
     text-align: center;
     font-family: 'Poppins', sans-serif;
   }
   
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
   
   .dashboard-card {
@@ -72,20 +72,20 @@
   }
   
   .dashboard-card-body {
-    padding: 2rem;
+    padding: 1.25rem;
     position: relative;
     z-index: 2;
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 140px;
+    min-height: 100px;
   }
   
   .dashboard-card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
     line-height: 1.3;
   }
   
@@ -101,8 +101,8 @@
   }
   
   .dashboard-card-value {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 1.8rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -110,7 +110,7 @@
   }
   
   .dashboard-card-icon {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     opacity: 0.8;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
   }
@@ -119,55 +119,56 @@
   .welcome-section {
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     border-radius: var(--card-radius);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
     text-align: center;
     border: 1px solid rgba(224, 224, 224, 0.3);
   }
   
   .welcome-text {
     color: var(--dark);
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
   }
   
   .welcome-subtitle {
     color: var(--secondary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   
   /* Quick actions section */
   .quick-actions {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
   
   .quick-actions-title {
     color: var(--dark);
     font-weight: 600;
     margin-bottom: 1rem;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
   
   .action-buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
   }
   
   .action-btn {
     background: white;
     border: 2px solid var(--primary);
     color: var(--primary);
-    padding: 1rem;
+    padding: 0.75rem;
     border-radius: var(--card-radius);
     text-decoration: none;
     text-align: center;
     transition: all var(--transition-speed) ease;
     font-weight: 500;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
   
   .action-btn:hover {
@@ -180,70 +181,76 @@
   /* Responsive design */
   @media (max-width: 768px) {
     .dashboard-container {
-      padding: 1rem;
+      padding: 0.75rem;
     }
     
     .dashboard-title {
-      font-size: 1.6rem;
-      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
     }
     
     .stats-grid {
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 0.75rem;
     }
     
     .dashboard-card-body {
-      padding: 1.5rem;
-      min-height: 120px;
+      padding: 1rem;
+      min-height: 90px;
     }
     
     .dashboard-card-title {
-      font-size: 1rem;
+      font-size: 0.85rem;
     }
     
     .dashboard-card-value {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
     
     .dashboard-card-icon {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
     
     .action-buttons {
       grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      padding: 0.6rem;
+      font-size: 0.85rem;
     }
   }
   
   @media (max-width: 480px) {
     .dashboard-container {
-      padding: 0.75rem;
+      padding: 0.5rem;
     }
     
     .dashboard-title {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
     }
     
     .dashboard-card-body {
-      padding: 1.25rem;
-      min-height: 100px;
+      padding: 0.875rem;
+      min-height: 80px;
     }
     
     .dashboard-card-title {
-      font-size: 0.9rem;
-      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
     }
     
     .dashboard-card-value {
-      font-size: 1.8rem;
+      font-size: 1.3rem;
     }
     
     .dashboard-card-icon {
-      font-size: 1.8rem;
+      font-size: 1.3rem;
     }
     
     .welcome-section {
-      padding: 1rem;
+      padding: 0.75rem;
     }
     
     .welcome-text {
@@ -271,7 +278,7 @@
 <div class="dashboard-container">
   <!-- Welcome Section -->
   <div class="welcome-section">
-    <div class="welcome-text">Welcome back, <strong>{{ user.username }}</strong>!</div>
+    <div class="welcome-text">Welcome back, <strong>{{ user.last_name }} {{ user.first_name }}</strong>!</div>
     <div class="welcome-subtitle">Here's your insurance overview</div>
   </div>
 
