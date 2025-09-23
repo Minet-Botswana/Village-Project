@@ -216,6 +216,45 @@
             border-bottom: none;
         }
         
+        /* Success Modal Styling */
+        .modal-content {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .modal-header {
+            padding: 1.5rem 2rem 1rem;
+            border-bottom: none;
+        }
+        
+        .modal-body {
+            padding: 1rem 2rem 2rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 2rem 2rem;
+            border-top: none;
+        }
+        
+        #successModal .modal-content {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+        }
+        
+        #successModal .btn-primary {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border: none;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        #successModal .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
         /* Enhanced mobile responsive styles */
         @media (max-width: 768px) {
             .signup-container {
@@ -474,6 +513,40 @@
   </div>
 </div>
 
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: 2px solid var(--success); background-color: #f0fdf4;">
+        <h5 class="modal-title" id="successModalLabel" style="color: var(--success); font-weight: 600;">
+          <i class="fas fa-check-circle me-2"></i>Registration Successful!
+        </h5>
+      </div>
+      <div class="modal-body text-center" style="padding: 2rem;">
+        <div class="mb-3">
+          <i class="fas fa-check-circle" style="font-size: 4rem; color: var(--success);"></i>
+        </div>
+        <h4 style="color: var(--success); margin-bottom: 1rem;">Welcome to KoGae Insurance!</h4>
+        <p class="lead" style="color: var(--dark-text);">Your registration has been completed successfully.</p>
+        <p style="color: var(--light-text);">You can now use your username and password to log in to your account and access all our insurance services.</p>
+        <div class="mt-4">
+          <p><strong>Next Steps:</strong></p>
+          <ul class="list-unstyled" style="color: var(--dark-text);">
+            <li><i class="fas fa-arrow-right me-2" style="color: var(--primary);"></i>You will be redirected to the login page</li>
+            <li><i class="fas fa-arrow-right me-2" style="color: var(--primary);"></i>Use your username and password to sign in</li>
+            <li><i class="fas fa-arrow-right me-2" style="color: var(--primary);"></i>Explore your customer dashboard</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: center; border-top: none;">
+        <button type="button" class="btn btn-primary btn-lg" id="goToLogin" style="min-width: 200px;">
+          <i class="fas fa-sign-in-alt me-2"></i>Go to Login Page
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- JAVASCRIPT SCRIPTS FOR MORE FUNCTIONALITIES -->
 
@@ -619,35 +692,203 @@
     };
     
     // Select the form element
-    const form = document.querySelector("form");
+    const form = document.getElementById("myForm");
+    const submitBtn = document.getElementById("signupBtn");
 
     // Add event listener for form submission
     form.addEventListener("submit", function(event) {
-      // Prevent the form from submitting immediately
+      // Prevent the form from submitting normally
       event.preventDefault();
 
-      // Log all form data
-      const formData = new FormData(form);
-      for (const pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
+      // Client-side validation before submitting
+      let validationErrors = [];
+      
+      // Check required fields
+      const requiredFields = [
+        { name: 'first_name', label: 'First Name' },
+        { name: 'last_name', label: 'Last Name' },
+        { name: 'username', label: 'Username' },
+        { name: 'password', label: 'Password' },
+        { name: 'confirm_password', label: 'Confirm Password' },
+        { name: 'gender', label: 'Gender' },
+        { name: 'date_of_birth', label: 'Date of Birth' },
+        { name: 'marital_status', label: 'Marital Status' },
+        { name: 'id_type', label: 'ID Type' },
+        { name: 'id_number', label: 'ID Number' },
+        { name: 'mobile', label: 'Mobile' },
+        { name: 'address', label: 'Email Address' },
+        { name: 'occupation', label: 'Occupation' },
+        { name: 'physical_address', label: 'Physical Address' },
+        { name: 'postal_address', label: 'Postal Address' }
+      ];
+      
+      requiredFields.forEach(field => {
+        const input = form.querySelector(`[name="${field.name}"]`);
+        if (input && (!input.value || input.value.trim() === '')) {
+          validationErrors.push(`${field.label} is required.`);
+        }
+      });
+      
+      // Check password confirmation
+      const password = form.querySelector('[name="password"]').value;
+      const confirmPassword = form.querySelector('[name="confirm_password"]').value;
+      if (password !== confirmPassword) {
+        validationErrors.push('Passwords do not match.');
+      }
+      
+      // Check password length
+      if (password && password.length < 8) {
+        validationErrors.push('Password must be at least 8 characters long.');
+      }
+      
+      // Check mobile number format (8 digits)
+      const mobile = form.querySelector('[name="mobile"]').value;
+      if (mobile && !/^\d{8}$/.test(mobile)) {
+        validationErrors.push('Mobile number must be exactly 8 digits.');
+      }
+      
+      // Check email format
+      const email = form.querySelector('[name="address"]').value;
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        validationErrors.push('Please enter a valid email address.');
+      }
+      
+      // Check terms agreement
+      const termsCheck = form.querySelector('#termsCheck');
+      if (!termsCheck.checked) {
+        validationErrors.push('You must agree to the Terms and Conditions.');
+      }
+      
+      // If there are validation errors, display them and stop submission
+      if (validationErrors.length > 0) {
+        // Clear any existing error displays
+        document.querySelectorAll('.alert-messages').forEach(el => el.remove());
+        
+        // Create error messages container
+        let errorHtml = '<div class="alert-messages"><ul class="messages">';
+        validationErrors.forEach(error => {
+          errorHtml += `<li>${error}</li>`;
+        });
+        errorHtml += '</ul></div>';
+        
+        // Insert error messages at the top of the form
+        const formCard = document.querySelector('.form-card');
+        formCard.insertAdjacentHTML('afterbegin', errorHtml);
+        
+        // Scroll to top to show errors
+        document.querySelector('.signup-container').scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+        
+        return; // Stop here, don't submit the form
       }
 
-      // Use AJAX to submit the form data
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", form.action);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            // Form submitted successfully
-            console.log(xhr.responseText);
-          } else {
-            // Error handling
-            console.error("Error:", xhr.statusText);
+      // If validation passes, proceed with form submission
+      // Disable submit button to prevent multiple submissions
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+
+      // Create FormData object
+      const formData = new FormData(form);
+
+      // Use fetch API to submit the form data
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Success: Show success modal
+          console.log('Registration successful!');
+          
+          // Hide any existing error messages
+          document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+          document.querySelectorAll('.alert-messages').forEach(el => el.style.display = 'none');
+          
+          // Show success modal
+          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+          successModal.show();
+          
+          // Clear form (optional, since user will be redirected)
+          form.reset();
+          
+        } else {
+          // Error: Display error messages
+          console.log('Registration failed:', data.message);
+          console.log('User form errors:', data.user_form_errors);
+          console.log('Customer form errors:', data.customer_form_errors);
+          
+          // Clear any existing error displays
+          document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+          document.querySelectorAll('.alert-messages').forEach(el => el.remove());
+          
+          // Create error messages container
+          let errorHtml = '<div class="alert-messages"><ul class="messages">';
+          let hasErrors = false;
+          
+          // Add general message if exists
+          if (data.message) {
+            errorHtml += `<li>${data.message}</li>`;
+            hasErrors = true;
+          }
+          
+          // Display user form errors
+          if (data.user_form_errors) {
+            for (const [field, errors] of Object.entries(data.user_form_errors)) {
+              for (const error of errors) {
+                errorHtml += `<li><strong>${field.charAt(0).toUpperCase() + field.slice(1)}:</strong> ${error}</li>`;
+                hasErrors = true;
+              }
+            }
+          }
+          
+          // Display customer form errors
+          if (data.customer_form_errors) {
+            for (const [field, errors] of Object.entries(data.customer_form_errors)) {
+              for (const error of errors) {
+                let fieldName = field.replace('_', ' ').charAt(0).toUpperCase() + field.replace('_', ' ').slice(1);
+                errorHtml += `<li><strong>${fieldName}:</strong> ${error}</li>`;
+                hasErrors = true;
+              }
+            }
+          }
+          
+          errorHtml += '</ul></div>';
+          
+          // Insert error messages at the top of the form
+          if (hasErrors) {
+            const formCard = document.querySelector('.form-card');
+            formCard.insertAdjacentHTML('afterbegin', errorHtml);
+            
+            // Scroll to top to show errors
+            document.querySelector('.signup-container').scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
           }
         }
-      };
-      xhr.send(formData);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the form. Please try again.');
+      })
+      .finally(() => {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Registration';
+      });
+    });
+    
+    // Handle success modal "Go to Login" button
+    document.getElementById('goToLogin').addEventListener('click', function() {
+      // Redirect to login page
+      window.location.href = '/customer/customerlogin';
     });
   });
 </script>
@@ -679,48 +920,6 @@
       $('#termsCheck').prop('checked', true);
       $('#signupBtn').prop('disabled', false);
       // Modal will close automatically via data-bs-dismiss="modal"
-    });
-  });
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Select the form element
-    const form = document.getElementById("myForm");
-
-    // Add event listener for form submission
-    form.addEventListener("submit", function(event) {
-      // Prevent the form from submitting immediately
-      event.preventDefault();
-
-      // Log all form data
-      const formData = new FormData(form);
-      for (const pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-      }
-
-      // Use AJAX to submit the form data
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", form.action);
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            // Form submitted successfully
-            console.log(xhr.responseText);
-            // Clear all form fields
-            form.reset();
-            // Display success message
-            alert("Form submitted successfully!");
-          } else {
-            // Error handling
-            console.error("Error:", xhr.statusText);
-            // Display error message if needed
-            // alert("Form submission failed!");
-          }
-        }
-      };
-      xhr.send(formData);
     });
   });
 </script>

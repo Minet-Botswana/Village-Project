@@ -147,7 +147,7 @@ def customer_signup_view(request):
 
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from . import forms, models
 
@@ -169,11 +169,17 @@ def customer_signup_view(request):
             if User.objects.filter(username=username).exists():
                 print("Username already exists")
                 messages.error(request, 'Username already taken. Please choose a different one.')
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': False, 
+                        'message': 'Username already taken. Please choose a different one.'
+                    })
             else:
                 print("Username is unique. Proceeding with registration.")
-                user = user_form.save()
+                # Create user but don't save yet
+                user = user_form.save(commit=False)
                 password = user_form.cleaned_data['password']
-                user.set_password(password)
+                user.set_password(password)  # This properly hashes the password
                 user.save()
 
                 customer = customer_form.save(commit=False)
@@ -191,16 +197,45 @@ def customer_signup_view(request):
 
                 print("Registration successful. Redirecting to login page.")
                 print("Hashed Password:", user.password)  # Print hashed password before saving
-                return HttpResponseRedirect('customerlogin')
+                
+                # Check if this is an AJAX request
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': True, 
+                        'message': 'Registration successful! You can now login with your credentials.',
+                        'redirect_url': '/customer/customerlogin'
+                    })
+                else:
+                    return HttpResponseRedirect('customerlogin')
         else:
             print("Forms are not valid")
             print("User form errors:", user_form.errors)
             print("Customer form errors:", customer_form.errors)           
-            # Add messages to context
+            
+            # Add messages to context for non-AJAX requests
             mydict['messages'] = messages.get_messages(request)
             mydict['user_form_errors'] = user_form.errors
             mydict['customer_form_errors'] = customer_form.errors
             print(messages.get_messages(request))
+            
+            # Return detailed errors for AJAX requests
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                # Convert Django form errors to JSON-serializable format
+                user_errors = {}
+                for field, errors in user_form.errors.items():
+                    user_errors[field] = [str(error) for error in errors]
+                
+                customer_errors = {}
+                for field, errors in customer_form.errors.items():
+                    customer_errors[field] = [str(error) for error in errors]
+                
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'Please correct the errors in the form.',
+                    'user_form_errors': user_errors,
+                    'customer_form_errors': customer_errors
+                })
+    
     return render(request, 'customer/customersignup.html', context=mydict)
 
 

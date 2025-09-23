@@ -38,7 +38,7 @@ def is_customer(user):
 
 def afterlogin_view(request):
     if is_customer(request.user):      
-        return redirect('customer/customer-dashboard')
+        return redirect('customer:customer-dashboard')
     else:
         return redirect('admin-dashboard')
     

@@ -12,12 +12,7 @@ class CustomerUserForm(forms.ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['password'].required = False
-
-    def clean_password(self):
-        # Fetch the existing password
-        user = self.instance
-        return user.password
+        self.fields['password'].required = True
                      
 class CustomerForm(forms.ModelForm):
     GENDER_CHOICES = [
