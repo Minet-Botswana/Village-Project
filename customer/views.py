@@ -424,6 +424,15 @@ def thirdpartyhistory_view(request):
     policies = CMODEL.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer)
     return render(request,'customer/thirdpartyhistory.html',{'policies':policies,'customer':customer})
 
+@login_required(login_url='customerlogin')
+def applied_motor_policies_view(request):
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    applied_policies = CMODEL.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer).order_by('-thirdpartycreation_date')
+    return render(request, 'customer/applied_motor_policies.html', {
+        'applied_policies': applied_policies,
+        'customer': customer
+    })
+
 def ask_question_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
     questionForm=CFORM.QuestionForm() 

@@ -1,0 +1,455 @@
+{% extends 'customer/customerbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<style>
+  :root {
+    /* Corporate Colors */
+    --corporate-blue: #2563eb;
+    --corporate-navy: #1e293b;
+    --corporate-gray: #64748b;
+    --corporate-light-gray: #f1f5f9;
+    --corporate-white: #ffffff;
+    --corporate-success: #059669;
+    --corporate-warning: #d97706;
+    --corporate-info: #0891b2;
+    --corporate-danger: #dc2626;
+    --corporate-border: #e2e8f0;
+    
+    /* Typography */
+    --font-family: 'Inter', 'Segoe UI', sans-serif;
+    
+    /* Spacing & Layout */
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --transition: all 0.2s ease;
+  }
+  
+  /* Main Container */
+  .policies-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: var(--corporate-light-gray);
+    min-height: calc(100vh - 80px);
+    font-family: var(--font-family);
+  }
+  
+  /* Page Header */
+  .page-header {
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--corporate-info);
+  }
+  
+  .page-title {
+    color: var(--corporate-navy);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0 0 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .page-subtitle {
+    color: var(--corporate-gray);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  
+  .title-icon {
+    background: var(--corporate-info);
+    color: var(--corporate-white);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  
+  /* Statistics Summary */
+  .summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stat-card {
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    border: 1px solid var(--corporate-border);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--corporate-navy);
+    margin-bottom: 0.25rem;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--corporate-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Policies Table Container */
+  .policies-table-container {
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--corporate-border);
+    overflow: hidden;
+  }
+  
+  .table-header {
+    background: linear-gradient(135deg, var(--corporate-info), #0e7490);
+    color: var(--corporate-white);
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  /* Modern Table Styles */
+  .policies-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  
+  .policies-table th {
+    background: var(--corporate-light-gray);
+    color: var(--corporate-navy);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.875rem;
+    text-align: left;
+    border-bottom: 2px solid var(--corporate-border);
+  }
+  
+  .policies-table td {
+    padding: 1rem 0.875rem;
+    border-bottom: 1px solid var(--corporate-border);
+    color: var(--corporate-navy);
+    vertical-align: middle;
+  }
+  
+  .policies-table tbody tr {
+    transition: var(--transition);
+  }
+  
+  .policies-table tbody tr:hover {
+    background-color: #f8fafc;
+  }
+  
+  .policies-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Status Badges */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+  
+  .status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fbbf24;
+  }
+  
+  .status-approved {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
+  }
+  
+  .status-rejected {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
+  }
+  
+  .status-under-review {
+    background-color: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #3b82f6;
+  }
+  
+  /* Policy Details */
+  .policy-vehicle {
+    font-weight: 600;
+    color: var(--corporate-navy);
+    margin-bottom: 0.25rem;
+  }
+  
+  .policy-details {
+    font-size: 0.75rem;
+    color: var(--corporate-gray);
+    line-height: 1.4;
+  }
+  
+  .date-applied {
+    font-weight: 500;
+    color: var(--corporate-navy);
+  }
+  
+  .date-details {
+    font-size: 0.75rem;
+    color: var(--corporate-gray);
+    margin-top: 0.25rem;
+  }
+  
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--corporate-gray);
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+    color: var(--corporate-border);
+    margin-bottom: 1rem;
+  }
+  
+  .empty-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--corporate-navy);
+    margin-bottom: 0.5rem;
+  }
+  
+  .empty-text {
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .apply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--corporate-info);
+    color: var(--corporate-white);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: var(--transition);
+  }
+  
+  .apply-btn:hover {
+    background: #0e7490;
+    color: var(--corporate-white);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .policies-container {
+      padding: 0.75rem;
+    }
+    
+    .page-header {
+      padding: 0.875rem;
+    }
+    
+    .page-title {
+      font-size: 1.25rem;
+    }
+    
+    .title-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 1.125rem;
+    }
+    
+    .summary-stats {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+    }
+    
+    .policies-table {
+      font-size: 0.75rem;
+    }
+    
+    .policies-table th,
+    .policies-table td {
+      padding: 0.625rem 0.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .policies-container {
+      padding: 0.5rem;
+    }
+    
+    .page-title {
+      font-size: 1.125rem;
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    
+    .summary-stats {
+      grid-template-columns: 1fr 1fr;
+    }
+    
+    .policies-table-container {
+      overflow-x: auto;
+    }
+    
+    .policies-table {
+      min-width: 600px;
+    }
+  }
+</style>
+
+<div class="policies-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">
+      <div class="title-icon">
+        <i class="fa-solid fa-car-burst"></i>
+      </div>
+      Applied Motor Insurance Policies
+    </h1>
+    <p class="page-subtitle">Track your submitted third-party motor insurance applications and their status</p>
+  </div>
+
+  <!-- Summary Statistics -->
+  <div class="summary-stats">
+    <div class="stat-card">
+      <div class="stat-value">{{ applied_policies.count }}</div>
+      <div class="stat-label">Total Applications</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ applied_policies|length|add:"-1"|add:"1" }}</div>
+      <div class="stat-label">Pending Review</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">0</div>
+      <div class="stat-label">Approved</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">0</div>
+      <div class="stat-label">Active Policies</div>
+    </div>
+  </div>
+
+  <!-- Policies Table -->
+  <div class="policies-table-container">
+    <div class="table-header">
+      <i class="fa-solid fa-clipboard-list"></i>
+      Your Motor Insurance Applications
+    </div>
+    
+    {% if applied_policies %}
+    <table class="policies-table">
+      <thead>
+        <tr>
+          <th>Vehicle & Policy Details</th>
+          <th>Application Date</th>
+          <th>Status</th>
+          <th>Coverage Period</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for policy in applied_policies %}
+        <tr>
+          <td>
+            <div class="policy-vehicle">{{ policy.thirdpartypolicy.vehicle_make }} {{ policy.thirdpartypolicy.vehicle_model }}</div>
+            <div class="policy-details">
+              Registration: {{ policy.thirdpartypolicy.registration_number|default:"Not specified" }}<br>
+              Vehicle Type: {{ policy.thirdpartypolicy.vehicle_type|title|default:"Not specified" }}<br>
+              Year: {{ policy.thirdpartypolicy.vehicle_year|default:"Not specified" }}<br>
+              Policy Type: Third Party Motor Insurance<br>
+              Premium: BWP {{ policy.thirdpartypolicy.premium|floatformat:2|default:"TBD" }}
+            </div>
+          </td>
+          <td>
+            <div class="date-applied">{{ policy.thirdpartycreation_date|date:"M d, Y" }}</div>
+            <div class="date-details">
+              {{ policy.thirdpartycreation_date|timesince }} ago
+            </div>
+          </td>
+          <td>
+            {% if policy.thirdpartystatus == "Pending" %}
+              <span class="status-badge status-pending">
+                <i class="fa-solid fa-clock"></i>
+                {{ policy.thirdpartystatus }}
+              </span>
+            {% elif policy.thirdpartystatus == "Approved" %}
+              <span class="status-badge status-approved">
+                <i class="fa-solid fa-check"></i>
+                {{ policy.thirdpartystatus }}
+              </span>
+            {% elif policy.thirdpartystatus == "Rejected" %}
+              <span class="status-badge status-rejected">
+                <i class="fa-solid fa-times"></i>
+                {{ policy.thirdpartystatus }}
+              </span>
+            {% else %}
+              <span class="status-badge status-under-review">
+                <i class="fa-solid fa-search"></i>
+                {{ policy.thirdpartystatus }}
+              </span>
+            {% endif %}
+          </td>
+          <td>
+            {% if policy.thirdpartypolicy.cover_start and policy.thirdpartypolicy.cover_end %}
+              <div class="date-applied">{{ policy.thirdpartypolicy.cover_start|date:"M d, Y" }}</div>
+              <div class="date-details">to {{ policy.thirdpartypolicy.cover_end|date:"M d, Y" }}</div>
+            {% else %}
+              <div class="policy-details">Coverage dates will be set upon approval</div>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="fa-solid fa-car-side"></i>
+      </div>
+      <h3 class="empty-title">No Motor Insurance Applications</h3>
+      <p class="empty-text">You haven't submitted any third-party motor insurance applications yet. Get started by applying for coverage.</p>
+      <a href="{% url 'customer:apply-thirdparty' %}" class="apply-btn">
+        <i class="fa-solid fa-plus"></i>
+        Apply for Motor Insurance
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock content %}

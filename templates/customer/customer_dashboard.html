@@ -4,231 +4,354 @@
 
 <style>
   :root {
-    --primary: #4070f4;
-    --primary-dark: #3060d0;
-    --secondary: #718096;
-    --dark: #1a202c;
-    --light: #f8fafc;
-    --card-radius: 0.75rem;
-    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --hover-transform: translateY(-3px);
-    --transition-speed: 0.3s;
+    /* Corporate Colors - No Gradients */
+    --corporate-blue: #2563eb;
+    --corporate-navy: #1e293b;
+    --corporate-gray: #64748b;
+    --corporate-light-gray: #f1f5f9;
+    --corporate-white: #ffffff;
+    --corporate-success: #059669;
+    --corporate-warning: #d97706;
+    --corporate-info: #0891b2;
+    --corporate-purple: #7c3aed;
+    --corporate-border: #e2e8f0;
+    
+    /* Typography */
+    --font-family: 'Inter', 'Segoe UI', sans-serif;
+    
+    /* Spacing & Layout */
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --transition: all 0.2s ease;
   }
   
-  /* Remove duplicate body styling that conflicts with base template */
+  /* Main Dashboard Container - Reduced Top Spacing */
   .dashboard-container {
-    padding: 1.5rem;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+    padding: 0.75rem 1rem;
+    background-color: var(--corporate-light-gray);
+    min-height: calc(100vh - 80px);
+    font-family: var(--font-family);
+  }
+  
+  /* Corporate Header - Compact */
+  .dashboard-header {
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    padding: 0.875rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--corporate-blue);
   }
   
   .dashboard-title {
-    color: var(--dark);
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
+    color: var(--corporate-navy);
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem 0;
+    font-family: var(--font-family);
   }
   
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+  .dashboard-subtitle {
+    color: var(--corporate-gray);
+    font-size: 0.8rem;
+    margin: 0;
+    font-weight: 400;
   }
   
-  .dashboard-card {
-    background: white;
-    border-radius: var(--card-radius);
-    border: none;
-    box-shadow: var(--shadow);
-    transition: all var(--transition-speed) ease;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    border: 1px solid rgba(224, 224, 224, 0.3);
-  }
-  
-  .dashboard-card:hover {
-    transform: var(--hover-transform);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
-  }
-  
-  .card-home {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  }
-  
-  .card-motor {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
-  }
-  
-  .card-policy {
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-  }
-  
-  .card-question {
-    background: linear-gradient(135deg, #8e44ad, #9b59b6);
-  }
-  
-  .dashboard-card-body {
-    padding: 1.25rem;
-    position: relative;
-    z-index: 2;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 100px;
-  }
-  
-  .dashboard-card-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.75rem;
-    line-height: 1.3;
-  }
-  
-  .dashboard-card-title a {
-    color: white;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-  
-  .dashboard-card-title a:hover {
-    opacity: 0.9;
-    text-decoration: underline;
-  }
-  
-  .dashboard-card-value {
-    font-size: 1.8rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: auto;
-  }
-  
-  .dashboard-card-icon {
-    font-size: 1.8rem;
-    opacity: 0.8;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-  }
-  
-  /* Welcome section */
+  /* Welcome Section - Compact */
   .welcome-section {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border-radius: var(--card-radius);
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    border: 1px solid rgba(224, 224, 224, 0.3);
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--corporate-border);
   }
   
   .welcome-text {
-    color: var(--dark);
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
+    color: var(--corporate-navy);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
   }
   
   .welcome-subtitle {
-    color: var(--secondary);
-    font-size: 0.85rem;
+    color: var(--corporate-gray);
+    font-size: 0.7rem;
+    margin: 0;
   }
   
-  /* Quick actions section */
+  /* Stats Grid - More Portable Cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Dashboard Cards - Corporate Style */
+  .dashboard-card {
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--corporate-border);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--corporate-blue);
+  }
+  
+  /* Corporate Card Colors - No Gradients */
+  .card-available-home {
+    border-left: 4px solid var(--corporate-blue);
+  }
+  
+  .card-available-motor {
+    border-left: 4px solid var(--corporate-success);
+  }
+  
+  .card-applied-home {
+    border-left: 4px solid var(--corporate-warning);
+  }
+  
+  .card-applied-motor {
+    border-left: 4px solid var(--corporate-info);
+  }
+  
+  .card-question {
+    border-left: 4px solid var(--corporate-purple);
+  }
+  
+  .dashboard-card-body {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 75px;
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--corporate-white);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  
+  .card-available-home .card-icon {
+    background-color: var(--corporate-blue);
+  }
+  
+  .card-available-motor .card-icon {
+    background-color: var(--corporate-success);
+  }
+  
+  .card-applied-home .card-icon {
+    background-color: var(--corporate-warning);
+  }
+  
+  .card-applied-motor .card-icon {
+    background-color: var(--corporate-info);
+  }
+  
+  .card-question .card-icon {
+    background-color: var(--corporate-purple);
+  }
+  
+  .dashboard-card-title {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--corporate-navy);
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .dashboard-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  
+  .dashboard-card-title a:hover {
+    color: var(--corporate-blue);
+  }
+  
+  .dashboard-card-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--corporate-navy);
+    margin: auto 0 0 0;
+  }
+  
+  .card-status {
+    font-size: 0.55rem;
+    font-weight: 500;
+    color: var(--corporate-gray);
+    margin-top: 0.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+  }
+  
+  /* Quick Actions Section - Compact */
   .quick-actions {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .quick-actions-header {
+    background: var(--corporate-white);
+    border-radius: var(--border-radius);
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--corporate-border);
   }
   
   .quick-actions-title {
-    color: var(--dark);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+    color: var(--corporate-navy);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 0 0 0.15rem 0;
+  }
+  
+  .quick-actions-subtitle {
+    color: var(--corporate-gray);
+    font-size: 0.7rem;
+    margin: 0;
   }
   
   .action-buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.5rem;
   }
   
   .action-btn {
-    background: white;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    padding: 0.75rem;
-    border-radius: var(--card-radius);
+    background: var(--corporate-white);
+    border: 1px solid var(--corporate-border);
+    color: var(--corporate-navy);
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
     text-decoration: none;
-    text-align: center;
-    transition: all var(--transition-speed) ease;
+    transition: var(--transition);
     font-weight: 500;
-    font-size: 0.9rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
+    box-shadow: var(--shadow-sm);
   }
   
   .action-btn:hover {
-    background: var(--primary);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    border-color: var(--corporate-blue);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    color: var(--corporate-blue);
   }
   
-  /* Responsive design */
-  @media (max-width: 768px) {
+  .action-btn-icon {
+    width: 24px;
+    height: 24px;
+    background-color: var(--corporate-blue);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--corporate-white);
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+  
+  .action-btn-content {
+    flex: 1;
+  }
+  
+  .action-btn-title {
+    font-weight: 600;
+    font-size: 0.6rem;
+    margin: 0 0 0.1rem 0;
+    line-height: 1.2;
+  }
+  
+  .action-btn-description {
+    font-size: 0.5rem;
+    color: var(--corporate-gray);
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  /* Responsive Design - Compact & Portable */
+  @media (max-width: 1024px) {
     .dashboard-container {
-      padding: 0.75rem;
-    }
-    
-    .dashboard-title {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
+      padding: 0.5rem 0.75rem;
     }
     
     .stats-grid {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.625rem;
     }
     
     .dashboard-card-body {
-      padding: 1rem;
-      min-height: 90px;
+      padding: 0.625rem;
+      min-height: 70px;
     }
     
-    .dashboard-card-title {
-      font-size: 0.85rem;
+    .card-icon {
+      width: 26px;
+      height: 26px;
+      font-size: 0.75rem;
     }
     
     .dashboard-card-value {
-      font-size: 1.5rem;
-    }
-    
-    .dashboard-card-icon {
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
     
     .action-buttons {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
     
     .action-btn {
-      padding: 0.6rem;
-      font-size: 0.85rem;
+      padding: 0.4rem;
+      gap: 0.4rem;
+    }
+    
+    .action-btn-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 0.6rem;
+    }
+    
+    .action-btn-title {
+      font-size: 0.55rem;
+    }
+    
+    .action-btn-description {
+      font-size: 0.45rem;
     }
   }
   
-  @media (max-width: 480px) {
-    .dashboard-container {
-      padding: 0.5rem;
-    }
-    
-    .dashboard-title {
-      font-size: 1.2rem;
+  @media (min-width: 1025px) and (max-width: 1440px) {
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 0.875rem;
     }
     
     .dashboard-card-body {
@@ -236,128 +359,408 @@
       min-height: 80px;
     }
     
+    .card-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 0.85rem;
+    }
+    
     .dashboard-card-title {
-      font-size: 0.8rem;
-      margin-bottom: 0.5rem;
+      font-size: 0.7rem;
     }
     
     .dashboard-card-value {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
     }
     
-    .dashboard-card-icon {
-      font-size: 1.3rem;
+    .card-status {
+      font-size: 0.6rem;
+    }
+    
+    .action-btn-title {
+      font-size: 0.65rem;
+    }
+    
+    .action-btn-description {
+      font-size: 0.55rem;
+    }
+  }
+  
+  @media (min-width: 1441px) {
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    
+    .dashboard-card-body {
+      padding: 1rem;
+      min-height: 85px;
+    }
+    
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+    
+    .dashboard-card-title {
+      font-size: 0.75rem;
+    }
+    
+    .dashboard-card-value {
+      font-size: 1.35rem;
+    }
+    
+    .card-status {
+      font-size: 0.65rem;
+    }
+    
+    .action-btn-title {
+      font-size: 0.7rem;
+    }
+    
+    .action-btn-description {
+      font-size: 0.6rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .dashboard-container {
+      padding: 0.5rem;
+    }
+    
+    .dashboard-header {
+      padding: 0.625rem;
+    }
+    
+    .dashboard-title {
+      font-size: 1rem;
+    }
+    
+    .dashboard-subtitle {
+      font-size: 0.7rem;
     }
     
     .welcome-section {
-      padding: 0.75rem;
+      padding: 0.5rem;
     }
     
     .welcome-text {
-      font-size: 1rem;
+      font-size: 0.75rem;
+    }
+    
+    .welcome-subtitle {
+      font-size: 0.625rem;
+    }
+    
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
+    }
+    
+    .dashboard-card-body {
+      padding: 0.5rem;
+      min-height: 60px;
+    }
+    
+    .card-header {
+      margin-bottom: 0.375rem;
+    }
+    
+    .card-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 0.7rem;
+    }
+    
+    .dashboard-card-title {
+      font-size: 0.6rem;
+    }
+    
+    .dashboard-card-value {
+      font-size: 0.9rem;
+    }
+    
+    .card-status {
+      font-size: 0.5rem;
+      margin-top: 0.1rem;
+    }
+    
+    .quick-actions-header {
+      padding: 0.5rem;
+    }
+    
+    .quick-actions-title {
+      font-size: 0.8rem;
+    }
+    
+    .quick-actions-subtitle {
+      font-size: 0.6rem;
+    }
+    
+    .action-buttons {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+    }
+    
+    .action-btn {
+      padding: 0.375rem;
+      gap: 0.375rem;
+    }
+    
+    .action-btn-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 0.55rem;
+    }
+    
+    .action-btn-title {
+      font-size: 0.5rem;
+    }
+    
+    .action-btn-description {
+      font-size: 0.425rem;
     }
   }
   
-  /* Loading animation */
-  .loading-shimmer {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-  
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
+  @media (max-width: 480px) {
+    .dashboard-container {
+      padding: 0.375rem;
     }
-    100% {
-      background-position: 200% 0;
+    
+    .dashboard-header {
+      padding: 0.5rem;
+    }
+    
+    .dashboard-title {
+      font-size: 0.9rem;
+    }
+    
+    .dashboard-subtitle {
+      font-size: 0.65rem;
+    }
+    
+    .welcome-section {
+      padding: 0.375rem;
+    }
+    
+    .welcome-text {
+      font-size: 0.7rem;
+    }
+    
+    .welcome-subtitle {
+      font-size: 0.6rem;
+    }
+    
+    .stats-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.375rem;
+    }
+    
+    .dashboard-card-body {
+      padding: 0.375rem;
+      min-height: 55px;
+    }
+    
+    .card-header {
+      margin-bottom: 0.25rem;
+    }
+    
+    .card-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 0.6rem;
+    }
+    
+    .dashboard-card-title {
+      font-size: 0.55rem;
+    }
+    
+    .dashboard-card-value {
+      font-size: 0.8rem;
+    }
+    
+    .card-status {
+      font-size: 0.45rem;
+      margin-top: 0.05rem;
+    }
+    
+    .quick-actions-header {
+      padding: 0.375rem;
+    }
+    
+    .quick-actions-title {
+      font-size: 0.75rem;
+    }
+    
+    .quick-actions-subtitle {
+      font-size: 0.55rem;
+    }
+    
+    .action-btn {
+      padding: 0.3rem;
+      gap: 0.3rem;
+    }
+    
+    .action-btn-icon {
+      width: 16px;
+      height: 16px;
+      font-size: 0.5rem;
+    }
+    
+    .action-btn-title {
+      font-size: 0.45rem;
+    }
+    
+    .action-btn-description {
+      font-size: 0.4rem;
     }
   }
 </style>
+</style>
 
 <div class="dashboard-container">
-  <!-- Welcome Section -->
-  <div class="welcome-section">
-    <div class="welcome-text">Welcome back, <strong>{{ user.last_name }} {{ user.first_name }}</strong>!</div>
-    <div class="welcome-subtitle">Here's your insurance overview</div>
+  <!-- Corporate Dashboard Header -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">KoGae Village Product Dashboard</h1>
+    <p class="dashboard-subtitle">Manage your covers, applications, and insurance services</p>
   </div>
 
-  <h1 class="dashboard-title">KoGae Village Scheme Insurance Dashboard</h1>
-  
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-text">Welcome back, <strong>{{ user.first_name }} {{ user.last_name }}</strong></div>
+    <div class="welcome-subtitle">Your insurance overview and policy management center</div>
+  </div>
+
   <!-- Statistics Grid -->
   <div class="stats-grid">
-    <!-- Homeowners Covers Card -->
-    <div class="dashboard-card card-home">
+    <!-- Available Homeowner Covers (Draft/Created but not Applied) -->
+    <div class="dashboard-card card-available-home">
       <div class="dashboard-card-body">
-        <h6 class="dashboard-card-title">
-          <a href="{% url 'customer:available-policies' %}">My Homeowners Covers</a>
-        </h6>
-        <div class="dashboard-card-value">
-          <span>{{ policies.count }}</span>
-          <i class="fa-solid fa-house-medical-circle-check dashboard-card-icon"></i>
+        <div class="card-header">
+          <div class="dashboard-card-title">
+            <a href="{% url 'customer:available-policies' %}">Available Homeowner Covers</a>
+          </div>
+          <div class="card-icon">
+            <i class="fa-solid fa-house-circle-plus"></i>
+          </div>
         </div>
+        <div class="dashboard-card-value">{{ policies.count }}</div>
+        <div class="card-status">Ready to Apply</div>
       </div>
     </div>
 
-    <!-- Third Party Motor Covers Card -->
-    <div class="dashboard-card card-motor">
+    <!-- Available Third Party Motor Covers (Draft/Created but not Applied) -->
+    <div class="dashboard-card card-available-motor">
       <div class="dashboard-card-body">
-        <h6 class="dashboard-card-title">
-          <a href="{% url 'customer:available-thirdpartypolicies' %}">My Third Party Motor Covers</a>
-        </h6>
-        <div class="dashboard-card-value">
-          <span>{{ thirdpartypolicy.count }}</span>
-          <i class="fa-solid fa-car-burst dashboard-card-icon"></i>
+        <div class="card-header">
+          <div class="dashboard-card-title">
+            <a href="{% url 'customer:available-thirdpartypolicies' %}">Available Motor Covers</a>
+          </div>
+          <div class="card-icon">
+            <i class="fa-solid fa-car-side"></i>
+          </div>
         </div>
+        <div class="dashboard-card-value">{{ thirdpartypolicy.count }}</div>
+        <div class="card-status">Ready to Apply</div>
       </div>
     </div>
 
-    <!-- Applied Policy Card -->
-    <div class="dashboard-card card-policy">
+    <!-- Applied Homeowner Policies (Submitted Applications) -->
+    <div class="dashboard-card card-applied-home">
       <div class="dashboard-card-body">
-        <h6 class="dashboard-card-title">
-          <a href="{% url 'customer:history' %}">Applied Policies</a>
-        </h6>
-        <div class="dashboard-card-value">
-          <span>{{ applied_policy }}</span>
-          <i class="fa-solid fa-file-contract dashboard-card-icon"></i>
+        <div class="card-header">
+          <div class="dashboard-card-title">
+            <a href="{% url 'customer:history' %}">Applied Homeowner Policies</a>
+          </div>
+          <div class="card-icon">
+            <i class="fa-solid fa-house-medical-circle-check"></i>
+          </div>
         </div>
+        <div class="dashboard-card-value">{{ applied_policy }}</div>
+        <div class="card-status">Under Review</div>
       </div>
     </div>
 
-    <!-- Total Questions Card -->
+    <!-- Applied Third Party Motor Policies (Submitted Applications) -->
+    <div class="dashboard-card card-applied-motor">
+      <div class="dashboard-card-body">
+        <div class="card-header">
+          <div class="dashboard-card-title">
+            <a href="{% url 'customer:applied-motor-policies' %}">Applied Motor Policies</a>
+          </div>
+          <div class="card-icon">
+            <i class="fa-solid fa-car-burst"></i>
+          </div>
+        </div>
+        <div class="dashboard-card-value">{{ applied_thirdpartypolicy }}</div>
+        <div class="card-status">Under Review</div>
+      </div>
+    </div>
+
+    <!-- Support Questions -->
     <div class="dashboard-card card-question">
       <div class="dashboard-card-body">
-        <h6 class="dashboard-card-title">
-          <a href="{% url 'customer:question-history' %}">Total Questions Asked</a>
-        </h6>
-        <div class="dashboard-card-value">
-          <span>{{ total_question }}</span>
-          <i class="fa-solid fa-clipboard-question dashboard-card-icon"></i>
+        <div class="card-header">
+          <div class="dashboard-card-title">
+            <a href="{% url 'customer:question-history' %}">Support Inquiries</a>
+          </div>
+          <div class="card-icon">
+            <i class="fa-solid fa-headset"></i>
+          </div>
         </div>
+        <div class="dashboard-card-value">{{ total_question }}</div>
+        <div class="card-status">Total Asked</div>
       </div>
     </div>
   </div>
 
   <!-- Quick Actions Section -->
   <div class="quick-actions">
-    <h3 class="quick-actions-title">Quick Actions</h3>
+    <div class="quick-actions-header">
+      <h3 class="quick-actions-title">Quick Actions</h3>
+      <p class="quick-actions-subtitle">Access insurance services and manage your policies</p>
+    </div>
+    
     <div class="action-buttons">
       <a href="{% url 'customer:apply-policy' %}" class="action-btn">
-        <i class="fa-solid fa-plus"></i>
-        Apply for Homeowner Cover
+        <div class="action-btn-icon">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+        <div class="action-btn-content">
+          <div class="action-btn-title">Create Homeowner Cover</div>
+          <div class="action-btn-description">Set up a new homeowner insurance cover</div>
+        </div>
       </a>
+      
       <a href="{% url 'customer:apply-thirdparty' %}" class="action-btn">
-        <i class="fa-solid fa-car"></i>
-        Apply for Motor Cover
+        <div class="action-btn-icon">
+          <i class="fa-solid fa-car"></i>
+        </div>
+        <div class="action-btn-content">
+          <div class="action-btn-title">Create Motor Cover</div>
+          <div class="action-btn-description">Set up third-party motor insurance cover</div>
+        </div>
       </a>
+      
       <a href="{% url 'customer:ask-question' %}" class="action-btn">
-        <i class="fa-solid fa-question-circle"></i>
-        Ask a Question
+        <div class="action-btn-icon">
+          <i class="fa-solid fa-question-circle"></i>
+        </div>
+        <div class="action-btn-content">
+          <div class="action-btn-title">Contact Support</div>
+          <div class="action-btn-description">Get help with your insurance questions</div>
+        </div>
       </a>
+      
       <a href="{% url 'customer:client_forms' %}" class="action-btn">
-        <i class="fa-solid fa-file-text"></i>
-        View Forms
+        <div class="action-btn-icon">
+          <i class="fa-solid fa-file-text"></i>
+        </div>
+        <div class="action-btn-content">
+          <div class="action-btn-title">View Documents</div>
+          <div class="action-btn-description">Access forms and policy documents</div>
+        </div>
       </a>
     </div>
   </div>

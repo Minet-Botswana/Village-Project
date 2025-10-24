@@ -164,33 +164,39 @@
 
     <div class="form-group">
         <label for="{{ homeownersForm.plot_number.id_for_label }}">Plot Number</label>
-        <input type="text" name="{{ homeownersForm.plot_number.name }}" id="{{ homeownersForm.plot_number.id }}" class="form-control" required>
+        <input type="text" name="{{ homeownersForm.plot_number.name }}" id="{{ homeownersForm.plot_number.id }}" class="form-control" placeholder="e.g., Plot 12345" required>
+        <small class="form-text text-muted">The official plot number of the property</small>
     </div>
 
     <div class="form-group">
         <label for="{{ homeownersForm.ward.id_for_label }}">Ward/Kgotla</label>
-        <input type="text" name="{{ homeownersForm.ward.name }}" id="{{ homeownersForm.ward.id }}" class="form-control" required>
+        <input type="text" name="{{ homeownersForm.ward.name }}" id="{{ homeownersForm.ward.id }}" class="form-control" placeholder="e.g., Ward 10 or Kgotla Name" required>
+        <small class="form-text text-muted">The ward number or traditional authority (Kgotla) area</small>
     </div>
 
     <div class="form-group">
         <label for="{{ homeownersForm.village.id_for_label }}">Village</label>
-        <input type="text" name="{{ homeownersForm.village.name }}" id="{{ homeownersForm.village.id }}" class="form-control" required>
+        <input type="text" name="{{ homeownersForm.village.name }}" id="{{ homeownersForm.village.id }}" class="form-control" placeholder="e.g., Gaborone Village" required>
+        <small class="form-text text-muted">The village or township name</small>
     </div>
 
     <div class="form-group">
         <label for="{{ homeownersForm.district.id_for_label }}">District</label>
-        <input type="text" name="{{ homeownersForm.district.name }}" id="{{ homeownersForm.district.id }}" class="form-control" required>
+        <input type="text" name="{{ homeownersForm.district.name }}" id="{{ homeownersForm.district.id }}" class="form-control" placeholder="e.g., South East District" required>
+        <small class="form-text text-muted">The administrative district</small>
     </div>
 
     <div class="form-group">
-        <label for="{{ homeownersForm.title_deed.id_for_label }}">Attachments (e.g., Title Deed)</label>
-        <input type="file" name="{{ homeownersForm.title_deed.name }}" id="{{ homeownersForm.title_deed.id }}" class="form-control" required>
+        <label for="{{ homeownersForm.title_deed.id_for_label }}">Title Deed (Optional)</label>
+        <input type="file" name="{{ homeownersForm.title_deed.name }}" id="{{ homeownersForm.title_deed.id }}" class="form-control" accept=".pdf">
+        <small class="form-text text-muted">Upload the property title deed (PDF format only). This field is optional.</small>
         {{ homeownersForm.title_deed.errors }}
     </div>
 
     <div class="form-group">
         <label for="{{ homeownersForm.financial_interest.id_for_label }}">Financial Interest (Optional)</label>
-        <input type="text" name="{{ homeownersForm.financial_interest.name }}" id="{{ homeownersForm.financial_interest.id }}" class="form-control">
+        <textarea name="{{ homeownersForm.financial_interest.name }}" id="{{ homeownersForm.financial_interest.id }}" class="form-control" rows="3" placeholder="e.g., Mortgaged to ABC Bank, Jointly owned with spouse, etc."></textarea>
+        <small class="form-text text-muted">Describe any financial interests, mortgages, or co-ownership details.</small>
         {{ homeownersForm.financial_interest.errors }}
     </div>
 

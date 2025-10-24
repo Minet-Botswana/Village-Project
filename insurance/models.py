@@ -28,6 +28,14 @@ class Policy(models.Model):
     policy_number = models.CharField(max_length=21, unique=True, blank=True, null=True)
     expiry_date = models.DateField(null=True) 
     
+    # Homeowners Policy Fields
+    plot_number = models.CharField(max_length=50, null=True, blank=True, help_text="The official plot number of the property")
+    ward_kgotla = models.CharField(max_length=50, null=True, blank=True, help_text="The ward number or traditional authority (Kgotla) area")
+    village = models.CharField(max_length=50, null=True, blank=True, help_text="The village or township name")
+    district = models.CharField(max_length=50, null=True, blank=True, help_text="The administrative district")
+    title_deed = models.FileField(upload_to='homeowners/title_deeds/', null=True, blank=True, help_text="Upload property title deed (optional)")
+    financial_interest = models.TextField(null=True, blank=True, help_text="Describe any financial interests, mortgages, or co-ownership details") 
+    
     def __str__(self):
         return self.policy_name
     class Meta:
@@ -61,7 +69,19 @@ class ThirdpartyPolicy(models.Model):
     policy_number = models.CharField(max_length=21, unique=True, blank=True, null=True)
     expiry_date = models.DateField(null=True) 
     
+    # Vehicle Details
+    vehicle_type = models.CharField(max_length=100, null=True, blank=True, help_text="Type of vehicle (e.g., Sedan, SUV, Hatchback)")
+    vehicle_make = models.CharField(max_length=100, null=True, blank=True, help_text="Vehicle manufacturer (e.g., Toyota, BMW)")
+    vehicle_model = models.CharField(max_length=100, null=True, blank=True, help_text="Vehicle model (e.g., Camry, X5)")
+    vehicle_year = models.PositiveIntegerField(null=True, blank=True, help_text="Year of manufacture")
+    chassis_number = models.CharField(max_length=50, null=True, blank=True, help_text="Vehicle chassis/VIN number")
+    registration_number = models.CharField(max_length=20, null=True, blank=True, help_text="Vehicle registration number")
+    engine_number = models.CharField(max_length=50, null=True, blank=True, help_text="Engine serial number")
+    territorial_limits = models.TextField(null=True, blank=True, help_text="Geographic coverage limits")
+    
     def __str__(self):
+        if self.vehicle_make and self.vehicle_model:
+            return f"{self.policy_name} - {self.vehicle_make} {self.vehicle_model}"
         return self.policy_name
     class Meta:
         verbose_name_plural = "Thirdparty Policies"

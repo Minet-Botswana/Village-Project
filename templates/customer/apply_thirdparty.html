@@ -112,45 +112,172 @@ sans-serif; color: #e21a22;" >
         </div>
     </div>
 
-    <h2 style="text-align:center; color:#e21a22; font-family: Titillium Web, sans-serif; font-size: 20px; background-color: rgb(255, 255, 255);">Add Policy (Third Party)</h2>
+    <h2 style="text-align:center; color:#e21a22; font-family: Titillium Web, sans-serif; font-size: 20px; background-color: rgb(255, 255, 255);">Add Policy (Third Party Motor Insurance)</h2>
+    
     <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;" action="{% url 'customer:apply-thirdparty' %}">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="id_number">ID Number</label>
-            <input type="text" name="id_number" id="id_number" class="form-control" placeholder="Enter ID Number" required>
-    
-            <label for="category">Cover Category</label>
-            <select name="category" id="category" class="form-control" required>
-              <option value="" selected disabled>Select Cover Category</option>
-              <option value="2" disabled>Long Term Cover</option>
-              <option value="3">Short Term Cover</option>
-              <!-- Add more options as needed -->
-            </select>
-    
-            <label for="policy_name">Risk</label>
-            <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
-    
-            <label for="premium">Premium (BWP)</label>
-            <input type="text" name="premium" id="premium" class="form-control" value="{{1140.00}}" required readonly>
-    
-            <label for="cover_start">Cover Start:</label>
-            <input type="date" name="cover_start" id="cover_start" class="form-control" required>
-    
-  
-            <div>
-              <label for="id_expiry_date">Expiry Date:</label>
-              <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
-            </div>        
-  
-            <div>
-              <label for="id_cover_end">Renewal Date:</label>
-              <input type="text" name="renewal_date" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
+        
+        <!-- Customer Information Section -->
+        <div class="panel panel-default" style="margin-bottom: 20px;">
+            <div class="panel-heading" style="background-color: #e21a22; color: white;">
+                <h4 class="panel-title">Customer Information</h4>
             </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_number">ID Number</label>
+                            <input type="text" name="id_number" id="id_number" class="form-control" placeholder="Enter ID Number" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="category">Cover Category</label>
+                            <select name="category" id="category" class="form-control" required>
+                                <option value="" selected disabled>Select Cover Category</option>
+                                <option value="2" disabled>Long Term Cover</option>
+                                <option value="3">Short Term Cover</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            
-            <label for="tenure">Tenure (in months):</label>
-            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
-  
+        <!-- Vehicle Information Section -->
+        <div class="panel panel-default" style="margin-bottom: 20px;">
+            <div class="panel-heading" style="background-color: #e21a22; color: white;">
+                <h4 class="panel-title">Vehicle Information</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="vehicle_type">Vehicle Type</label>
+                            <select name="vehicle_type" id="vehicle_type" class="form-control" required>
+                                <option value="">Select Vehicle Type</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="hatchback">Hatchback</option>
+                                <option value="suv">SUV</option>
+                                <option value="truck">Truck</option>
+                                <option value="van">Van</option>
+                                <option value="bus">Bus</option>
+                                <option value="motorcycle">Motorcycle</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="vehicle_make">Vehicle Make</label>
+                            <input type="text" name="vehicle_make" id="vehicle_make" class="form-control" placeholder="e.g., Toyota, BMW, Ford" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="vehicle_model">Vehicle Model</label>
+                            <input type="text" name="vehicle_model" id="vehicle_model" class="form-control" placeholder="e.g., Corolla, X5, Focus" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="vehicle_year">Year of Manufacture</label>
+                            <input type="number" name="vehicle_year" id="vehicle_year" class="form-control" placeholder="e.g., 2020" min="1900" max="2024" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="registration_number">Registration Number</label>
+                            <input type="text" name="registration_number" id="registration_number" class="form-control" placeholder="Vehicle registration number" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="chassis_number">Chassis Number</label>
+                            <input type="text" name="chassis_number" id="chassis_number" class="form-control" placeholder="Vehicle chassis number" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="engine_number">Engine Number</label>
+                            <input type="text" name="engine_number" id="engine_number" class="form-control" placeholder="Engine number" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="territorial_limits">Territorial Limits</label>
+                            <select name="territorial_limits" id="territorial_limits" class="form-control" required>
+                                <option value="">Select Territorial Limits</option>
+                                <option value="botswana">Botswana Only</option>
+                                <option value="sadc">SADC Countries</option>
+                                <option value="africa">Africa</option>
+                                <option value="worldwide">Worldwide</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Policy Information Section -->
+        <div class="panel panel-default" style="margin-bottom: 20px;">
+            <div class="panel-heading" style="background-color: #e21a22; color: white;">
+                <h4 class="panel-title">Policy Information</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="policy_name">Risk</label>
+                            <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="premium">Premium (BWP)</label>
+                            <input type="text" name="premium" id="premium" class="form-control" value="1140.00" required readonly>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="cover_start">Cover Start:</label>
+                            <input type="date" name="cover_start" id="cover_start" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tenure">Tenure (in months):</label>
+                            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_expiry_date">Expiry Date:</label>
+                            <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_cover_end">Renewal Date:</label>
+                            <input type="text" name="renewal_date" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
             View Policy
@@ -209,10 +336,20 @@ sans-serif; color: #e21a22;" >
           var idNumber = $("input[name='id_number']").val();
           var category = $("select[name='category'] option:selected").val();
           var policyName = $("input[name='policy_name']").val();
-          //var sumAssurance = $("input[name='sum_assurance']").val();
           var premium = $("input[name='premium']").val();
           var coverStart = $("input[name='cover_start']").val();
           var tenure = $("input[name='tenure']").val();
+          
+          // Get vehicle information
+          var vehicleType = $("select[name='vehicle_type'] option:selected").text();
+          var vehicleMake = $("input[name='vehicle_make']").val();
+          var vehicleModel = $("input[name='vehicle_model']").val();
+          var vehicleYear = $("input[name='vehicle_year']").val();
+          var registrationNumber = $("input[name='registration_number']").val();
+          var chassisNumber = $("input[name='chassis_number']").val();
+          var engineNumber = $("input[name='engine_number']").val();
+          var territorialLimits = $("select[name='territorial_limits'] option:selected").text();
+          
           // Calculate cover_end based on cover_start and tenure
           var coverEnd = new Date(coverStart);
           coverEnd.setMonth(coverEnd.getMonth() + parseInt(tenure));
@@ -228,36 +365,45 @@ sans-serif; color: #e21a22;" >
           expiryDate.setDate(expiryDate.getDate() - 1);
           var formattedExpiryDate = expiryDate.toISOString().split('T')[0];
   
-          // Log the values to the console for debugging
-          console.log("ID Number: " + idNumber);
-          console.log("Category: " + category);
-          console.log("Policy Name: " + policyName);
-          //console.log("Sum Assurance: " + sumAssurance);
-          console.log("Premium: " + premium);
-          console.log("Tenure: " + tenure);
-          console.log("Cover Start: " + coverStart);
-          console.log("Renewal Date: " + formattedRenewalDate);
-          console.log("Expiry Date: " + formattedExpiryDate);
-  
-          // Check if any of the values are undefined
-          // Check if any of the values are empty or null
-          if (!idNumber || !category || !policyName || !premium || !coverStart || !tenure || !formattedCoverEnd) {
+          // Check if any of the required values are empty or null
+          if (!idNumber || !category || !policyName || !premium || !coverStart || !tenure || 
+              !vehicleType || !vehicleMake || !vehicleModel || !vehicleYear || 
+              !registrationNumber || !chassisNumber || !engineNumber || !territorialLimits) {
               console.log("One or more form fields are empty or null.");
+              Swal.fire({
+                  title: 'Incomplete Form',
+                  text: 'Please fill in all required fields before viewing the policy.',
+                  icon: 'warning',
+                  confirmButtonColor: '#e21a22'
+              });
               return;
           }
   
           // Create the HTML content for the modal
           var modalContent = 
-              "<h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px '>Cover Details</h4>" +
-              "<p>Insured (ID): " + idNumber + "</p>" +
-              "<p>Cover Category: " + category + "</p>" +
-              "<p>Risk: " + policyName + "</p>" +
-              //"<p>Value: P" + sumAssurance + "</p>" +
-              "<p>Premium: P" + premium + "</p>" +
-              "<p>Cover Start: " + coverStart + "</p>" +
-              "<p>Tenure: " + tenure + "</p>" +
-              "<p>Renewal Date: " + formattedRenewalDate + "</p>" +
-              "<p>Expiry Date: " + formattedExpiryDate + "</p>";
+              "<h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px; margin-bottom: 15px;'>Cover Details</h4>" +
+              "<div style='margin-bottom: 20px;'>" +
+              "<p><strong>Insured (ID):</strong> " + idNumber + "</p>" +
+              "<p><strong>Cover Category:</strong> " + category + "</p>" +
+              "<p><strong>Risk:</strong> " + policyName + "</p>" +
+              "<p><strong>Premium:</strong> BWP " + premium + "</p>" +
+              "<p><strong>Cover Start:</strong> " + coverStart + "</p>" +
+              "<p><strong>Tenure:</strong> " + tenure + " months</p>" +
+              "<p><strong>Renewal Date:</strong> " + formattedRenewalDate + "</p>" +
+              "<p><strong>Expiry Date:</strong> " + formattedExpiryDate + "</p>" +
+              "</div>" +
+              
+              "<h4 style='background-color: #e21a22; text-align: center; color: white; border-radius: 8px; margin-bottom: 15px;'>Vehicle Details</h4>" +
+              "<div style='margin-bottom: 20px;'>" +
+              "<p><strong>Vehicle Type:</strong> " + vehicleType + "</p>" +
+              "<p><strong>Make:</strong> " + vehicleMake + "</p>" +
+              "<p><strong>Model:</strong> " + vehicleModel + "</p>" +
+              "<p><strong>Year:</strong> " + vehicleYear + "</p>" +
+              "<p><strong>Registration Number:</strong> " + registrationNumber + "</p>" +
+              "<p><strong>Chassis Number:</strong> " + chassisNumber + "</p>" +
+              "<p><strong>Engine Number:</strong> " + engineNumber + "</p>" +
+              "<p><strong>Territorial Limits:</strong> " + territorialLimits + "</p>" +
+              "</div>";
   
           // Log a message to confirm that the modal content is created
           console.log("Modal content created:", modalContent);

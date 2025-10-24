@@ -22,6 +22,7 @@ urlpatterns = [
     path('apply-thirdparty/<int:pk>', views.thirdpartyapply_view,name='apply-thirdparty'),
     path('history', views.history_view,name='history'),
     path('thirdpartyhistory/', views.thirdpartyhistory_view,name='thirdpartyhistory'),
+    path('applied-motor-policies/', views.applied_motor_policies_view, name='applied-motor-policies'),
 
     path('ask-question', views.ask_question_view,name='ask-question'),
     path('question-history', views.question_history_view,name='question-history'),

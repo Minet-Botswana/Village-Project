@@ -117,49 +117,152 @@ sans-serif; color: #e21a22;" >
     -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
     sans-serif; font-size: 20px; background-color: rgb(255, 255, 255);">Add Homeowners Cover</h2>
 
-    <form method="POST" autocomplete="off" style="margin:100px;margin-top: 0px;"  action="{% url 'customer:apply-policy' %}">
-      {% csrf_token %}
-        <div class="form-group">
-            <label for="id_number">ID Number</label>
-            <input type="text" name="id_number" id="id_number" class="form-control" placeholder="Enter ID Number" required>
-  
-            <label for="category">Cover Category</label>
-               <select name="category" id="category" class="form-control" required>
-                   <option value="" selected disabled>Select Cover Category</option>
-                   <option value="2" disabled>Long Term Cover</option>
-                   <option value="3">Short Term Cover</option>
-                </select>
-  
-            <label for="policy_name">Risk</label>
-            <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
-  
-            <label for="sum_assurance">Sum Insured (Replacement Value)</label>
-            <input type="text" name="sum_assurance" id="sum_assurance" class="form-control" placeholder="Value" required required oninput="calculatePremium()">
-  
-            <label for="premium">Premium</label>
-            <input type="text" name="premium" id="premium" class="form-control" placeholder="Premium" required readonly>
-  
-            <label for="cover_start">Effective Date:</label>
-            <input type="date" name="cover_start" id="cover_start" class="form-control" required>
-  
-            <!--label for="tenure">Tenure (in months):</label>
-            <input type="number" name="tenure" id="tenure" class="form-control" placeholder="Tenure (in months)" required-->
-
-            <div>
-               <label for="id_expiry_date">Expiry Date:</label>
-               <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
-            </div>        
-
-            <!-- Display the automatically calculated cover_end -->
-            <div>
-               <label for="id_cover_end">Renewal Date:</label>
-               <input type="text" name="cover_end" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
+    <form method="POST" enctype="multipart/form-data" autocomplete="off" style="margin:100px;margin-top: 0px;" action="{% url 'customer:apply-policy' %}">
+        {% csrf_token %}
+        
+        <!-- Customer Information Section -->
+        <div class="panel panel-default" style="margin-bottom: 20px;">
+            <div class="panel-heading" style="background-color: #e21a22; color: white;">
+                <h4 class="panel-title">Customer Information</h4>
             </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id_number">ID Number</label>
+                            <input type="text" name="id_number" id="id_number" class="form-control" placeholder="Enter ID Number" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="category">Cover Category</label>
+                            <select name="category" id="category" class="form-control" required>
+                                <option value="" selected disabled>Select Cover Category</option>
+                                <option value="2" disabled>Long Term Cover</option>
+                                <option value="3">Short Term Cover</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            
-            <label for="tenure">Tenure (in months):</label>
-            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+        <!-- Property Information Section -->
+        <div class="panel panel-default" style="margin-bottom: 20px;">
+            <div class="panel-heading" style="background-color: #e21a22; color: white;">
+                <h4 class="panel-title">Property Information</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="plot_number">Plot Number</label>
+                            <input type="text" name="plot_number" id="plot_number" class="form-control" placeholder="e.g., Plot 12345" required>
+                            <small class="form-text text-muted">The official plot number of the property</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ward_kgotla">Ward/Kgotla</label>
+                            <input type="text" name="ward_kgotla" id="ward_kgotla" class="form-control" placeholder="e.g., Ward 10 or Kgotla Name" required>
+                            <small class="form-text text-muted">The ward number or traditional authority (Kgotla) area</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="village">Village</label>
+                            <input type="text" name="village" id="village" class="form-control" placeholder="e.g., Gaborone Village" required>
+                            <small class="form-text text-muted">The village or township name</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="district">District</label>
+                            <input type="text" name="district" id="district" class="form-control" placeholder="e.g., South East District" required>
+                            <small class="form-text text-muted">The administrative district</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="title_deed">Title Deed (Optional)</label>
+                            <input type="file" name="title_deed" id="title_deed" class="form-control" accept=".pdf">
+                            <small class="form-text text-muted">Upload the property title deed (PDF format only)</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="financial_interest">Financial Interest (Optional)</label>
+                            <textarea name="financial_interest" id="financial_interest" class="form-control" rows="3" placeholder="e.g., Mortgaged to ABC Bank, Jointly owned with spouse, etc."></textarea>
+                            <small class="form-text text-muted">Describe any financial interests, mortgages, or co-ownership details</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Policy Information Section -->
+        <div class="panel panel-default" style="margin-bottom: 20px;">
+            <div class="panel-heading" style="background-color: #e21a22; color: white;">
+                <h4 class="panel-title">Policy Information</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="policy_name">Risk</label>
+                            <input type="text" name="policy_name" id="policy_name" class="form-control" placeholder="Risk" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sum_assurance">Sum Insured (Replacement Value)</label>
+                            <input type="text" name="sum_assurance" id="sum_assurance" class="form-control" placeholder="Value" required oninput="calculatePremium()">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="premium">Premium</label>
+                            <input type="text" name="premium" id="premium" class="form-control" placeholder="Premium" required readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="cover_start">Effective Date:</label>
+                            <input type="date" name="cover_start" id="cover_start" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_tenure">Tenure (in months):</label>
+                            <input type="number" name="tenure" id="id_tenure" class="form-control" placeholder="Tenure (in months)" value="12" readonly required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_expiry_date">Expiry Date:</label>
+                            <input type="text" name="expiry_date" class="form-control" id="id_expiry_date" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="id_cover_end">Renewal Date:</label>
+                            <input type="text" name="cover_end" class="form-control" id="id_cover_end" value="{{ formattedCoverEnd|default:''|date:'Y-m-d' }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#policyModal">
            View Policy

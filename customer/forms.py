@@ -117,9 +117,56 @@ class DirectDebitFormModelForm(forms.ModelForm):
         }
 
 class HomeownersCoverForm(forms.ModelForm):
+    # Add custom field definitions with proper labels and help text
+    plot_number = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Plot 12345'}),
+        label='Plot Number',
+        help_text='The official plot number of the property'
+    )
+    
+    ward = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Ward 10 or Kgotla Name'}),
+        label='Ward/Kgotla',
+        help_text='The ward number or traditional authority (Kgotla) area'
+    )
+    
+    village = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Gaborone Village'}),
+        label='Village',
+        help_text='The village or township name'
+    )
+    
+    district = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., South East District'}),
+        label='District',
+        help_text='The administrative district'
+    )
+    
+    title_deed = forms.FileField(
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.pdf'}),
+        label='Title Deed (Optional)',
+        help_text='Upload the property title deed (PDF format only)'
+    )
+    
+    financial_interest = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'e.g., Mortgaged to ABC Bank, Jointly owned with spouse, etc.'}),
+        label='Financial Interest (Optional)',
+        help_text='Describe any financial interests, mortgages, or co-ownership details'
+    )
+
     class Meta:
         model = HomeownersCover
-        fields = ['geo_location', 'plot_number', 'ward', 'village', 'district', 'title_deed', 'financial_interest']
+        fields = ['plot_number', 'ward', 'village', 'district', 'title_deed', 'financial_interest']
 
     def clean_title_deed(self):
         title_deed = self.cleaned_data.get('title_deed')
