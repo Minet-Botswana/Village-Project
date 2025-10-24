@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
 from datetime import date, timedelta
+from django.contrib import messages
 from django.db.models import Q
 from django.core.mail import send_mail
 from insurance import models as CMODEL
@@ -251,10 +252,18 @@ def customer_dashboard_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
     policies = Policy.objects.filter(insured__id_number=customer.id_number)
     thirdpartypolicy = ThirdpartyPolicy.objects.filter(insured__id_number=customer.id_number)
+    
+    # Count applications for dashboard
+    applied_homeowners = CMODEL.PolicyRecord.objects.filter(customer=customer).count()
+    applied_motor = CMODEL.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer).count()
+    total_applications = applied_homeowners + applied_motor
+    
     dict={
         'customer':models.Customer.objects.get(user_id=request.user.id),
         'available_policy':CMODEL.Policy.objects.all().count(),
-        'applied_policy':CMODEL.PolicyRecord.objects.all().filter(customer=models.Customer.objects.get(user_id=request.user.id)).count(),
+        'applied_policy': applied_homeowners,
+        'applied_thirdpartypolicy': applied_motor,
+        'total_applications': total_applications,
         'total_category':CMODEL.Category.objects.all().count(),
         'total_question':CMODEL.Question.objects.all().filter(customer=models.Customer.objects.get(user_id=request.user.id)).count(),
         'policies': policies,
@@ -345,10 +354,20 @@ def apply_thirdparty_view(request):
 
             # Save the policy
             policy.save()
-            messages.success(request, "Cover created Successfully!")
+            
+            # Automatically create a ThirdpartyPolicyRecord for the applied policy
+            from insurance.models import ThirdpartyPolicyRecord
+            policy_record = ThirdpartyPolicyRecord.objects.create(
+                thirdpartycustomer=customer,
+                thirdpartypolicy=policy,
+                thirdpartystatus='Pending'
+            )
+            
+            messages.success(request, "Cover created and applied successfully! Your application is now pending review.")
             print("Policy successfully saved!")
             print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
+            print("Policy Record created with status:", policy_record.status)
 
             return redirect('customer:available-thirdpartypolicies')
 
@@ -379,8 +398,17 @@ def apply_policy_view(request):
 
             # Save the policy
             policy.save()
-            messages.success(request, "Cover created Successfully!")
-            return redirect('customer:available-policies')
+            
+            # Automatically create a PolicyRecord for the applied policy
+            from insurance.models import PolicyRecord
+            policy_record = PolicyRecord.objects.create(
+                customer=customer,
+                Policy=policy,
+                status='Pending'
+            )
+            
+            messages.success(request, "Homeowners cover created and applied successfully! Your application is now pending review.")
+            return redirect('customer:my-applications')
 
     return render(request, 'customer/apply_policy.html', {'policyForm': policyForm})
 
@@ -810,3 +838,69 @@ from django.shortcuts import redirect
 def logout_view(request):
     logout(request)
     return redirect('customerlogin')  # Redirect to the login page or another appropriate page
+
+@login_required(login_url='/customer/customerlogin')
+def policy_detail_view(request, policy_id):
+    """View for displaying detailed homeowners policy information"""
+    try:
+        from insurance.models import Policy, PolicyRecord
+        policy = Policy.objects.get(id=policy_id)
+        policy_record = PolicyRecord.objects.get(Policy=policy)
+        
+        context = {
+            'policy': policy,
+            'policy_record': policy_record,
+        }
+        return render(request, 'customer/policy_detail.html', context)
+    except (Policy.DoesNotExist, PolicyRecord.DoesNotExist):
+        messages.error(request, "Policy not found or no application record exists.")
+        return redirect('customer:available-policies')
+
+@login_required(login_url='/customer/customerlogin')
+def thirdparty_policy_detail_view(request, policy_id):
+    """View for displaying detailed third-party motor policy information"""
+    try:
+        from insurance.models import ThirdpartyPolicy, ThirdpartyPolicyRecord
+        policy = ThirdpartyPolicy.objects.get(id=policy_id)
+        policy_record = ThirdpartyPolicyRecord.objects.get(thirdpartypolicy=policy)
+        
+        context = {
+            'policy': policy,
+            'policy_record': policy_record,
+        }
+        return render(request, 'customer/thirdparty_policy_detail.html', context)
+    except (ThirdpartyPolicy.DoesNotExist, ThirdpartyPolicyRecord.DoesNotExist):
+        messages.error(request, "Policy not found or no application record exists.")
+        return redirect('customer:applied-motor-policies')
+
+@login_required(login_url='/customer/customerlogin')
+def my_applications_view(request):
+    """Unified view for all policy applications by the current customer"""
+    try:
+        # Get the current customer
+        customer = models.Customer.objects.get(user_id=request.user.id)
+        
+        # Get all homeowners policy applications
+        from insurance.models import PolicyRecord, ThirdpartyPolicyRecord
+        homeowners_applications = PolicyRecord.objects.filter(customer=customer).order_by('-creation_date')
+        
+        # Get all third-party motor policy applications  
+        motor_applications = ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer).order_by('-thirdpartycreation_date')
+        
+        context = {
+            'customer': customer,
+            'homeowners_applications': homeowners_applications,
+            'motor_applications': motor_applications,
+            'total_applications': homeowners_applications.count() + motor_applications.count(),
+        }
+        
+        return render(request, 'customer/my_applications.html', context)
+        
+    except models.Customer.DoesNotExist:
+        messages.error(request, "Customer profile not found.")
+        return redirect('customer:customer-dashboard')
+
+def redirect_to_my_applications(request):
+    """Redirect old policy views to the new unified My Applications page"""
+    messages.info(request, "You've been redirected to your applications page for a better experience.")
+    return redirect('customer:my-applications')

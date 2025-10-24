@@ -14,15 +14,21 @@ urlpatterns = [
     path('customer-dashboard', views.customer_dashboard_view,name='customer-dashboard'),
     path('customerlogin', LoginView.as_view(template_name='insurance/adminlogin.html'),name='customerlogin'),
 
-    path('available-policies', views.available_policy_view,name='available-policies'),
-    path('available-thirdpartypolicies', views.available_thirdpartypolicy_view,name='available-thirdpartypolicies'),
+    # Redirect old endpoints to new unified flow
+    path('available-policies', views.redirect_to_my_applications, name='available-policies'),
+    path('available-thirdpartypolicies', views.redirect_to_my_applications, name='available-thirdpartypolicies'),
+    path('history', views.redirect_to_my_applications, name='history'),
+    path('thirdpartyhistory/', views.redirect_to_my_applications, name='thirdpartyhistory'),
+    path('applied-motor-policies/', views.redirect_to_my_applications, name='applied-motor-policies'),
+    
+    # Main application endpoints
     path('apply-policy', views.apply_policy_view,name='apply-policy'),
     path('apply-thirdparty', views.apply_thirdparty_view,name='apply-thirdparty'),
-    path('apply-homeowners/<int:pk>', views.apply_view,name='apply-homeowners'),
-    path('apply-thirdparty/<int:pk>', views.thirdpartyapply_view,name='apply-thirdparty'),
-    path('history', views.history_view,name='history'),
-    path('thirdpartyhistory/', views.thirdpartyhistory_view,name='thirdpartyhistory'),
-    path('applied-motor-policies/', views.applied_motor_policies_view, name='applied-motor-policies'),
+    path('my-applications/', views.my_applications_view, name='my-applications'),
+    
+    # Policy Detail Views
+    path('policy-detail/<int:policy_id>/', views.policy_detail_view, name='policy-detail'),
+    path('thirdparty-policy-detail/<int:policy_id>/', views.thirdparty_policy_detail_view, name='thirdparty-policy-detail'),
 
     path('ask-question', views.ask_question_view,name='ask-question'),
     path('question-history', views.question_history_view,name='question-history'),

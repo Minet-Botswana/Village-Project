@@ -380,6 +380,7 @@
           <th>Application Date</th>
           <th>Status</th>
           <th>Coverage Period</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -431,6 +432,11 @@
             {% else %}
               <div class="policy-details">Coverage dates will be set upon approval</div>
             {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'customer:thirdparty-policy-detail' policy.thirdpartypolicy.id %}" class="btn btn-sm" style="background-color: #e21a22; color: white; text-decoration: none; padding: 6px 12px; border-radius: 4px; transition: background-color 0.3s;">
+              <i class="fa-solid fa-eye" style="margin-right: 5px;"></i>View Details
+            </a>
           </td>
         </tr>
         {% endfor %}

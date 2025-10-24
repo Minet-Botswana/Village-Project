@@ -1,0 +1,267 @@
+{% extends 'customer/customerbase.html' %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+        }
+        
+        .policy-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        .policy-header {
+            background: linear-gradient(135deg, #e21a22, #c41e3a);
+            color: white;
+            padding: 30px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .policy-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .policy-number {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .status-active, .status-approved {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .status-rejected {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .status-expired {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .policy-content {
+            background: white;
+            padding: 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            background-color: #e21a22;
+            color: white;
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 150px;
+        }
+        
+        .detail-value {
+            color: #212529;
+            text-align: right;
+        }
+        
+        .back-button {
+            background-color: #e21a22;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #c41e3a;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .icon {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="policy-container">
+        <a href="{% url 'customer:applied-motor-policies' %}" class="back-button">
+            <i class="fas fa-arrow-left icon"></i>Back to Motor Policies
+        </a>
+        
+        <div class="policy-header">
+            <div class="policy-title">
+                <i class="fas fa-car icon"></i>Third Party Motor Insurance Policy
+            </div>
+            <div class="policy-number">Policy Number: {{ policy.policy_number }}</div>
+            <div class="status-badge status-{{ policy_record.thirdpartystatus|lower }}">
+                {% if policy_record.thirdpartystatus == 'Pending' %}
+                    <i class="fas fa-clock icon"></i>Pending Review
+                {% elif policy_record.thirdpartystatus == 'Active' or policy_record.thirdpartystatus == 'Approved' %}
+                    <i class="fas fa-check-circle icon"></i>Active
+                {% elif policy_record.thirdpartystatus == 'Rejected' %}
+                    <i class="fas fa-times-circle icon"></i>Rejected
+                {% elif policy_record.thirdpartystatus == 'Expired' %}
+                    <i class="fas fa-calendar-times icon"></i>Expired
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="policy-content">
+            <!-- Customer Information -->
+            <div class="section-header">
+                <i class="fas fa-user icon"></i>Customer Information
+            </div>
+            <div class="section-content">
+                <div class="detail-row">
+                    <span class="detail-label">Full Name:</span>
+                    <span class="detail-value">{{ policy.insured.name }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">ID Number:</span>
+                    <span class="detail-value">{{ policy.insured.id_number }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">{{ policy.insured.address }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Mobile:</span>
+                    <span class="detail-value">{{ policy.insured.mobile }}</span>
+                </div>
+            </div>
+            
+            <!-- Vehicle Information -->
+            <div class="section-header">
+                <i class="fas fa-car icon"></i>Vehicle Information
+            </div>
+            <div class="section-content">
+                <div class="detail-row">
+                    <span class="detail-label">Vehicle Type:</span>
+                    <span class="detail-value">{{ policy.vehicle_type|title|default:"Not specified" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Make & Model:</span>
+                    <span class="detail-value">{{ policy.vehicle_make }} {{ policy.vehicle_model }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Year:</span>
+                    <span class="detail-value">{{ policy.vehicle_year|default:"Not specified" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Registration No:</span>
+                    <span class="detail-value">{{ policy.registration_number|default:"Not specified" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Chassis Number:</span>
+                    <span class="detail-value">{{ policy.chassis_number|default:"Not specified" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Engine Number:</span>
+                    <span class="detail-value">{{ policy.engine_number|default:"Not specified" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Territorial Limits:</span>
+                    <span class="detail-value">{{ policy.territorial_limits|default:"Not specified" }}</span>
+                </div>
+            </div>
+            
+            <!-- Policy Details -->
+            <div class="section-header">
+                <i class="fas fa-file-contract icon"></i>Policy Details
+            </div>
+            <div class="section-content">
+                <div class="detail-row">
+                    <span class="detail-label">Risk/Coverage:</span>
+                    <span class="detail-value">{{ policy.policy_name }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Category:</span>
+                    <span class="detail-value">{{ policy.category.category_name }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Premium:</span>
+                    <span class="detail-value">BWP {{ policy.premium|floatformat:2 }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Tenure:</span>
+                    <span class="detail-value">{{ policy.tenure }} months</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Effective Date:</span>
+                    <span class="detail-value">{{ policy.cover_start|date:"M d, Y" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Expiry Date:</span>
+                    <span class="detail-value">{{ policy.expiry_date|date:"M d, Y" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Renewal Date:</span>
+                    <span class="detail-value">{{ policy.cover_end|date:"M d, Y" }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Application Date:</span>
+                    <span class="detail-value">{{ policy_record.thirdpartycreation_date|date:"M d, Y" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock content %}

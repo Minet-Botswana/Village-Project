@@ -1,0 +1,537 @@
+{% extends 'customer/customerbase.html' %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
+                -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+        }
+        
+        .applications-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #e21a22, #c41e3a);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .section-header {
+            background-color: #e21a22;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+        
+        .section-content {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        
+        .applications-table th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .applications-table td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+        
+        .applications-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .policy-info {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 5px;
+        }
+        
+        .policy-details {
+            font-size: 14px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .status-active, .status-approved {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .status-rejected {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .status-expired {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .view-details-btn {
+            background-color: #e21a22;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+        
+        .view-details-btn:hover {
+            background-color: #c41e3a;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #e21a22;
+        }
+        
+        .empty-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .empty-subtitle {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-width: 150px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e21a22;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .apply-new-btn {
+            background-color: #e21a22;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 10px;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+        
+        .apply-new-btn:hover {
+            background-color: #c41e3a;
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* Tab Navigation Styles */
+        .tab-navigation {
+            display: flex;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+            overflow: hidden;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            text-align: center;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-button:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #e21a22;
+            border-bottom: 3px solid #e21a22;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tab-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .tab-count {
+            background: #e21a22;
+            color: white;
+            border-radius: 12px;
+            padding: 4px 8px;
+            font-size: 12px;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        
+        .section-wrapper {
+            background: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="applications-container">
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-file-alt" style="margin-right: 10px;"></i>My Insurance Applications
+            </div>
+            <div class="page-subtitle">
+                Track all your insurance applications and their status
+            </div>
+        </div>
+        
+        <!-- Summary Statistics -->
+        <div class="summary-stats">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_applications }}</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ homeowners_applications.count }}</div>
+                <div class="stat-label">Homeowners Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ motor_applications.count }}</div>
+                <div class="stat-label">Motor Applications</div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="{% url 'customer:apply-policy' %}" class="apply-new-btn">
+                <i class="fas fa-home" style="margin-right: 8px;"></i>Apply for Homeowners
+            </a>
+            <a href="{% url 'customer:apply-thirdparty' %}" class="apply-new-btn">
+                <i class="fas fa-car" style="margin-right: 8px;"></i>Apply for Motor Insurance
+            </a>
+        </div>
+        
+        <!-- Applications Section with Tabs -->
+        {% if homeowners_applications or motor_applications %}
+        <div class="section-wrapper">
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-button active" data-tab="homeowners">
+                    <i class="fas fa-home tab-icon"></i>
+                    Homeowners Insurance
+                    <span class="tab-count">{{ homeowners_applications.count }}</span>
+                </button>
+                <button class="tab-button" data-tab="motor">
+                    <i class="fas fa-car tab-icon"></i>
+                    Motor Insurance
+                    <span class="tab-count">{{ motor_applications.count }}</span>
+                </button>
+            </div>
+            
+            <!-- Homeowners Insurance Tab Content -->
+            <div id="homeowners-tab" class="tab-content active">
+                {% if homeowners_applications %}
+                <table class="applications-table">
+                    <thead>
+                        <tr>
+                            <th>Policy Details</th>
+                            <th>Property Location</th>
+                            <th>Application Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for application in homeowners_applications %}
+                        <tr>
+                            <td>
+                                <div class="policy-info">{{ application.Policy.policy_name }}</div>
+                                <div class="policy-details">
+                                    Policy #: {{ application.Policy.policy_number }}<br>
+                                    Sum Insured: BWP {{ application.Policy.sum_assurance|floatformat:2 }}<br>
+                                    Premium: BWP {{ application.Policy.premium|floatformat:2 }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="policy-details">
+                                    Plot: {{ application.Policy.plot_number|default:"Not specified" }}<br>
+                                    Village: {{ application.Policy.village|default:"Not specified" }}<br>
+                                    District: {{ application.Policy.district|default:"Not specified" }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="policy-info">{{ application.creation_date|date:"M d, Y" }}</div>
+                                <div class="policy-details">
+                                    {{ application.creation_date|timesince }} ago
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ application.status|lower }}">
+                                    {% if application.status == 'Pending' %}
+                                        <i class="fas fa-clock" style="margin-right: 5px;"></i>Pending
+                                    {% elif application.status == 'Active' or application.status == 'Approved' %}
+                                        <i class="fas fa-check-circle" style="margin-right: 5px;"></i>{{ application.status }}
+                                    {% elif application.status == 'Rejected' %}
+                                        <i class="fas fa-times-circle" style="margin-right: 5px;"></i>Rejected
+                                    {% elif application.status == 'Expired' %}
+                                        <i class="fas fa-calendar-times" style="margin-right: 5px;"></i>Expired
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'customer:policy-detail' application.Policy.id %}" class="view-details-btn">
+                                    <i class="fas fa-eye" style="margin-right: 5px;"></i>View Details
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 class="empty-title">No Homeowners Applications</h3>
+                    <p class="empty-subtitle">You haven't applied for any homeowners insurance policies yet.</p>
+                    <a href="{% url 'customer:apply-policy' %}" class="apply-new-btn">
+                        <i class="fas fa-home" style="margin-right: 8px;"></i>Apply for Homeowners
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Motor Insurance Tab Content -->
+            <div id="motor-tab" class="tab-content">
+                {% if motor_applications %}
+                <table class="applications-table">
+                    <thead>
+                        <tr>
+                            <th>Policy & Vehicle Details</th>
+                            <th>Vehicle Info</th>
+                            <th>Application Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for application in motor_applications %}
+                        <tr>
+                            <td>
+                                <div class="policy-info">{{ application.thirdpartypolicy.policy_name }}</div>
+                                <div class="policy-details">
+                                    Policy #: {{ application.thirdpartypolicy.policy_number }}<br>
+                                    Premium: BWP {{ application.thirdpartypolicy.premium|floatformat:2 }}<br>
+                                    Coverage: Third Party Motor
+                                </div>
+                            </td>
+                            <td>
+                                <div class="policy-details">
+                                    {{ application.thirdpartypolicy.vehicle_make }} {{ application.thirdpartypolicy.vehicle_model }}<br>
+                                    Type: {{ application.thirdpartypolicy.vehicle_type|title|default:"Not specified" }}<br>
+                                    Year: {{ application.thirdpartypolicy.vehicle_year|default:"Not specified" }}<br>
+                                    Reg: {{ application.thirdpartypolicy.registration_number|default:"Not specified" }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="policy-info">{{ application.thirdpartycreation_date|date:"M d, Y" }}</div>
+                                <div class="policy-details">
+                                    {{ application.thirdpartycreation_date|timesince }} ago
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ application.thirdpartystatus|lower }}">
+                                    {% if application.thirdpartystatus == 'Pending' %}
+                                        <i class="fas fa-clock" style="margin-right: 5px;"></i>Pending
+                                    {% elif application.thirdpartystatus == 'Active' or application.thirdpartystatus == 'Approved' %}
+                                        <i class="fas fa-check-circle" style="margin-right: 5px;"></i>{{ application.thirdpartystatus }}
+                                    {% elif application.thirdpartystatus == 'Rejected' %}
+                                        <i class="fas fa-times-circle" style="margin-right: 5px;"></i>Rejected
+                                    {% elif application.thirdpartystatus == 'Expired' %}
+                                        <i class="fas fa-calendar-times" style="margin-right: 5px;"></i>Expired
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'customer:thirdparty-policy-detail' application.thirdpartypolicy.id %}" class="view-details-btn">
+                                    <i class="fas fa-eye" style="margin-right: 5px;"></i>View Details
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3 class="empty-title">No Motor Applications</h3>
+                    <p class="empty-subtitle">You haven't applied for any motor insurance policies yet.</p>
+                    <a href="{% url 'customer:apply-thirdparty' %}" class="apply-new-btn">
+                        <i class="fas fa-car" style="margin-right: 8px;"></i>Apply for Motor Insurance
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Empty State -->
+        {% if not homeowners_applications and not motor_applications %}
+        <div class="section-content">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-file-plus"></i>
+                </div>
+                <h3 class="empty-title">No Insurance Applications Yet</h3>
+                <p class="empty-subtitle">You haven't applied for any insurance policies yet. Get started by applying for coverage!</p>
+                <a href="{% url 'customer:apply-policy' %}" class="apply-new-btn">
+                    <i class="fas fa-home" style="margin-right: 8px;"></i>Apply for Homeowners
+                </a>
+                <a href="{% url 'customer:apply-thirdparty' %}" class="apply-new-btn">
+                    <i class="fas fa-car" style="margin-right: 8px;"></i>Apply for Motor Insurance
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- JavaScript for Tab Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Show corresponding tab content
+                    const targetContent = document.getElementById(targetTab + '-tab');
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+{% endblock content %}

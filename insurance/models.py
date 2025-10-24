@@ -102,9 +102,17 @@ class ThirdpartyPolicy(models.Model):
         super().save(*args, **kwargs)
 
 class PolicyRecord(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Active', 'Active'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+        ('Expired', 'Expired'),
+    ]
+    
     customer= models.ForeignKey(Customer, on_delete=models.CASCADE)
     Policy= models.ForeignKey(Policy, on_delete=models.CASCADE)
-    status = models.CharField(max_length=101,default='Pending')
+    status = models.CharField(max_length=101, choices=STATUS_CHOICES, default='Pending')
     creation_date =models.DateField(auto_now=True)
     
     @property
@@ -123,9 +131,17 @@ class PolicyRecord(models.Model):
         return f"{self.customer} - {self.Policy} - {self.status}"
 
 class ThirdpartyPolicyRecord(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Active', 'Active'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+        ('Expired', 'Expired'),
+    ]
+    
     thirdpartycustomer= models.ForeignKey(Customer, on_delete=models.CASCADE)
     thirdpartypolicy= models.ForeignKey(ThirdpartyPolicy, null=True, on_delete=models.CASCADE)
-    thirdpartystatus = models.CharField(max_length=101,default='Pending')
+    thirdpartystatus = models.CharField(max_length=101, choices=STATUS_CHOICES, default='Pending')
     thirdpartycreation_date =models.DateField(auto_now=True)
     
     @property
