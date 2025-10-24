@@ -21,6 +21,8 @@ urlpatterns = [
     path('aboutus', views.aboutus_view),
     path('benefits', views.benefits, name='benefits'),
     path('covers', views.covers, name='covers'),
+    path('claims', views.claims_view, name='claims'),
+    path('claims/guidelines', views.claims_guidelines_view, name='claims_guidelines'),
     path('contactus', views.contactus_view),
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
     

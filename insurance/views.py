@@ -627,3 +627,9 @@ def benefits(request):
 
 def covers(request):
     return render(request, 'insurance/covers.html')
+
+def claims_view(request):
+    return render(request, 'insurance/claims.html')
+
+def claims_guidelines_view(request):
+    return render(request, 'insurance/claims_guidelines.html')

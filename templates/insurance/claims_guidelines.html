@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims Guidelines - KoGae</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .page-title {
+            color: #e22a21;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .guidelines-content {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .step-section {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .step-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            background-color: #e22a21;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .step-title {
+            color: #e22a21;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .step-content p {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .document-list {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .document-list h4 {
+            color: #e22a21;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .document-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .document-list li {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .important-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .important-note .note-icon {
+            color: #856404;
+            margin-right: 10px;
+        }
+
+        .important-note p {
+            margin: 0;
+            color: #856404;
+            font-weight: 500;
+        }
+
+        .contact-card {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .contact-card h3 {
+            color: #e22a21;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            text-align: center;
+        }
+
+        .contact-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #e22a21;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            margin: 0 auto 10px;
+        }
+
+        .btn {
+            background-color: #e22a21;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #c41f17;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            color: #e22a21;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .guidelines-content {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .step-number {
+                margin-right: 0;
+            }
+            
+            .contact-methods {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-link">
+            <a href="/claims"><i class="ri-arrow-left-line"></i> Back to Claims</a>
+        </div>
+
+        <div class="page-header">
+            <h1 class="page-title">How to File Your Claim</h1>
+            <p class="page-subtitle">Follow these simple steps to file your insurance claim quickly and easily.</p>
+        </div>
+
+        <div class="guidelines-content">
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h2 class="step-title">Report the Incident Immediately</h2>
+                </div>
+                <div class="step-content">
+                    <p>Contact us as soon as possible after the incident occurs. You can report your claim 24/7 through any of these methods:</p>
+                    <ul>
+                        <li>Call our claims hotline: <strong>(+267) 361 7300</strong></li>
+                        <li>WhatsApp us: <strong>(+267) 782 99555</strong></li>
+                        <li>Email: <strong>claims@minet.co.bw</strong></li>
+                        <li>Visit our office in Gaborone</li>
+                    </ul>
+                    <div class="important-note">
+                        <p><i class="ri-alert-line note-icon"></i><strong>Important:</strong> Report your claim within 30 days of the incident to avoid delays in processing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h2 class="step-title">Secure the Scene and Take Photos</h2>
+                </div>
+                <div class="step-content">
+                    <p>If it's safe to do so, take steps to prevent further damage and document the incident:</p>
+                    <ul>
+                        <li>Take clear photos of all damage from different angles</li>
+                        <li>Photograph the overall area where the incident occurred</li>
+                        <li>If there are witnesses, get their contact information</li>
+                        <li>Do not throw away damaged items until after the claim is settled</li>
+                    </ul>
+                    <div class="important-note">
+                        <p><i class="ri-camera-line note-icon"></i><strong>Photo Tip:</strong> Take photos with your phone - they have timestamps that help verify when the damage occurred.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h2 class="step-title">Gather Required Documents</h2>
+                </div>
+                <div class="step-content">
+                    <p>Collect the following documents to support your claim:</p>
+                    
+                    <div class="document-list">
+                        <h4>Essential Documents:</h4>
+                        <ul>
+                            <li>Your insurance policy number</li>
+                            <li>Copy of your ID or passport</li>
+                            <li>Photos of the damage</li>
+                            <li>Police report (if applicable)</li>
+                        </ul>
+                    </div>
+
+                    <div class="document-list">
+                        <h4>Additional Documents (if available):</h4>
+                        <ul>
+                            <li>Receipts for damaged items</li>
+                            <li>Repair estimates or quotes</li>
+                            <li>Witness statements</li>
+                            <li>Medical reports (for injury claims)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <h2 class="step-title">Submit Your Claim</h2>
+                </div>
+                <div class="step-content">
+                    <p>Submit your claim with all required documents through any of these methods:</p>
+                    <ul>
+                        <li><strong>Online:</strong> Email documents to claims@minet.co.bw</li>
+                        <li><strong>WhatsApp:</strong> Send photos and documents via WhatsApp</li>
+                        <li><strong>In Person:</strong> Visit our office with printed documents</li>
+                        <li><strong>By Phone:</strong> Call us and we'll guide you through the submission</li>
+                    </ul>
+                    <div class="important-note">
+                        <p><i class="ri-file-text-line note-icon"></i><strong>Claim Number:</strong> You'll receive a claim number once your claim is submitted. Keep this number for all future communications.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <h2 class="step-title">Assessment and Processing</h2>
+                </div>
+                <div class="step-content">
+                    <p>After submitting your claim:</p>
+                    <ul>
+                        <li>Our claims assessor will contact you within 2-3 business days</li>
+                        <li>An inspection may be scheduled if needed</li>
+                        <li>You'll receive updates on your claim status</li>
+                        <li>We'll process your claim as quickly as possible</li>
+                    </ul>
+                    <div class="important-note">
+                        <p><i class="ri-time-line note-icon"></i><strong>Processing Time:</strong> Most claims are processed within 5-10 business days once all documents are received.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-section">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <h2 class="step-title">Settlement</h2>
+                </div>
+                <div class="step-content">
+                    <p>Once your claim is approved:</p>
+                    <ul>
+                        <li>You'll receive a settlement letter explaining the payment</li>
+                        <li>Payment will be made directly to your bank account</li>
+                        <li>For repairs, we may pay the service provider directly</li>
+                        <li>You'll receive confirmation once payment is made</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <h3>Need Help with Your Claim?</h3>
+            <p>Our claims team is here to help you every step of the way.</p>
+            
+            <div class="contact-methods">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="ri-phone-line"></i>
+                    </div>
+                    <h4>Call Us</h4>
+                    <p>(+267) 361 7300</p>
+                    <a href="tel:+26736173000" class="btn">Call Now</a>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="ri-whatsapp-line"></i>
+                    </div>
+                    <h4>WhatsApp</h4>
+                    <p>(+267) 782 99555</p>
+                    <a href="https://wa.me/+26778299555" target="_blank" class="btn">Chat Now</a>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="ri-mail-line"></i>
+                    </div>
+                    <h4>Email</h4>
+                    <p>claims@minet.co.bw</p>
+                    <a href="mailto:claims@minet.co.bw" class="btn">Send Email</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

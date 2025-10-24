@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Claims - KoGae</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .page-title {
+            color: #e22a21;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .claims-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .claim-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .claim-icon {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #e22a21;
+            margin: 0 auto 15px;
+        }
+
+        .claim-card h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .claim-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background-color: #e22a21;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #c41f17;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #e22a21;
+            border: 1px solid #e22a21;
+        }
+
+        .btn-outline:hover {
+            background-color: #e22a21;
+            color: white;
+        }
+
+        .contact-section {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .contact-section h2 {
+            color: #e22a21;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-method {
+            text-align: center;
+        }
+
+        .contact-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #e22a21;
+            margin: 0 auto 10px;
+        }
+
+        .contact-method h4 {
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .contact-method p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            color: #e22a21;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .claims-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .claim-card {
+                padding: 20px;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .contact-methods {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-link">
+            <a href="/"><i class="ri-arrow-left-line"></i> Back to Home</a>
+        </div>
+
+        <div class="page-header">
+            <h1 class="page-title">Insurance Claims</h1>
+            <p class="page-subtitle">Need to file a claim? We're here to help you through the process.</p>
+        </div>
+
+        <div class="claims-grid">
+            <div class="claim-card">
+                <div class="claim-icon">
+                    <i class="ri-file-list-3-line"></i>
+                </div>
+                <h3>How to File a Claim</h3>
+                <p>Step-by-step guide on filing your insurance claim. Learn what documents you need and how the process works.</p>
+                <a href="/claims/guidelines" class="btn">View Guidelines</a>
+            </div>
+
+            <div class="claim-card">
+                <div class="claim-icon">
+                    <i class="ri-phone-line"></i>
+                </div>
+                <h3>Report a Claim by Phone</h3>
+                <p>Call us directly to report your claim. Our team will guide you through the process and help you get started.</p>
+                <a href="tel:+26736173000" class="btn">Call Now</a>
+            </div>
+
+            <div class="claim-card">
+                <div class="claim-icon">
+                    <i class="ri-whatsapp-line"></i>
+                </div>
+                <h3>WhatsApp Support</h3>
+                <p>Get quick help through WhatsApp. Send us a message and we'll assist you with your claim immediately.</p>
+                <a href="https://wa.me/+26778299555" target="_blank" class="btn">Chat on WhatsApp</a>
+            </div>
+
+            <div class="claim-card">
+                <div class="claim-icon">
+                    <i class="ri-mail-line"></i>
+                </div>
+                <h3>Email Your Claim</h3>
+                <p>Send us your claim details by email. Include photos and documents to help us process your claim faster.</p>
+                <a href="mailto:claims@minet.co.bw" class="btn">Send Email</a>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2>Need Help with Your Claim?</h2>
+            <p>Our claims team is ready to assist you. Choose the method that works best for you:</p>
+            
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="ri-time-line"></i>
+                    </div>
+                    <h4>Office Hours</h4>
+                    <p>Monday - Friday: 8:00 AM - 5:00 PM<br>Saturday: 8:00 AM - 1:00 PM</p>
+                    <a href="/claims/guidelines" class="btn btn-outline">View Process</a>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="ri-customer-service-2-line"></i>
+                    </div>
+                    <h4>24/7 Emergency</h4>
+                    <p>For urgent claims after hours, call our emergency line for immediate assistance.</p>
+                    <a href="tel:+26778299555" class="btn btn-outline">Emergency Line</a>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="ri-map-pin-line"></i>
+                    </div>
+                    <h4>Visit Our Office</h4>
+                    <p>Minet House, Plot 50368<br>Gaborone Business Park, Gaborone</p>
+                    <a href="#" class="btn btn-outline">Get Directions</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

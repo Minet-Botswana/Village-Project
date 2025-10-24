@@ -4,578 +4,307 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Minet - KoGae Cover</title>
+    <title>Insurance Covers - KoGae</title>
     <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css">
 
     <style>
-        :root {
-            --primary-color: #99a5ac;
-            --primary-color-dark: #0a7963;
-            --primary-light: #e9f7f7;
-            --accent-color: #a89484;
-            --dark-text: #1e293b;
-            --light-text: #64748b;
-            --white: #ffffff;
-            --gradient-1: linear-gradient(135deg, #87918f 0%, #26967f 100%);
-            --gradient-2: linear-gradient(135deg, #f3a362 0%, #e49847 100%);
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(218, 196, 196, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --border-radius: 12px;
-        }
-
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: #f8fafc;
-            color: var(--dark-text);
+            background-color: #f8f9fa;
+            color: #333;
             line-height: 1.6;
-        }
-
-        .page-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 5rem 1rem 2rem;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            background-color: #fff;
-            box-shadow: var(--shadow-md);
+            padding: 20px;
         }
 
-        .section-heading {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            font-weight: 700;
+        .page-header {
             text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 3rem;
-            position: relative;
+            margin-bottom: 40px;
+            padding: 30px 0;
         }
 
-        .section-heading::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--accent-color);
-            margin: 0.75rem auto 0;
-            border-radius: 2px;
+        .page-title {
+            color: #e22a21;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
-        .cover-cards {
+        .page-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .covers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
-        .card {
-            border-radius: var(--border-radius);
+        .cover-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
         }
 
-        /* Card variants */
-        .card--primary {
-            background: var(--gradient-1);
-            color: #fff;
+        .card-header {
+            background-color: #e22a21;
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
 
-        .card--secondary {
-            background: var(--gradient-2);
-            color: #fff;
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+            color: white !important;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-lg);
+        .card-header .card-title {
+            color: white !important;
         }
 
-        .card__header {
-            padding: 1.5rem;
-            background-color: rgba(0, 0, 0, 0.1);
+        .card-content {
+            padding: 25px;
         }
 
-        .card__title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .section-title {
+            color: #e22a21;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-top: 25px;
         }
 
-        .card__content {
-            padding: 1.5rem;
-            flex: 1;
+        .section-title:first-child {
+            margin-top: 0;
         }
 
-        .card__section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .card__list {
+        .cover-list {
             list-style: none;
-            margin-bottom: 1.5rem;
+            padding: 0;
+            margin: 0 0 20px 0;
         }
 
-        .card__list-item {
-            font-size: 0.9rem;
-            margin-bottom: 0.75rem;
+        .cover-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
             position: relative;
-            padding-left: 1.5rem;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
-        .card__list-item::before {
-            content: '';
+        .cover-item::before {
+            content: "•";
+            color: #e22a21;
             position: absolute;
             left: 0;
-            top: 0.5rem;
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
+            font-weight: bold;
         }
 
-        .card--primary .card__list-item::before {
-            background-color: var(--white);
+        .nested-list {
+            margin-top: 8px;
+            margin-left: 15px;
         }
 
-        .card__nested-list {
-            margin-top: 0.5rem;
-            margin-left: 1rem;
+        .nested-list .cover-item {
+            font-size: 13px;
+            color: #666;
         }
 
-        .card__footer {
-            padding: 1rem 1.5rem;
-            background-color: rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
+        .nested-list .cover-item::before {
+            content: "◦";
+            color: #999;
         }
 
-        .card__footer-text {
-            font-size: 0.75rem;
-            opacity: 0.8;
+        .important-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            background: var(--accent-color);
-            color: var(--white);
-            font-size: 0.875rem;
-            font-weight: 600;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .important-note strong {
+            color: #856404;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            color: #e22a21;
             text-decoration: none;
-            gap: 0.5rem;
+            font-weight: 500;
         }
 
-        .card--primary .btn {
-            background-color: var(--white);
-            color: var(--primary-color);
+        .back-link a:hover {
+            text-decoration: underline;
         }
 
-        .card--secondary .btn {
-            background-color: var(--white);
-            color: var(--accent-color);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn--full-width {
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            max-width: 700px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            animation: slideIn 0.3s ease;
-            position: relative;
-        }
-
-        .modal-header {
-            background: var(--gradient-1);
-            color: var(--white);
-            padding: 1rem 1.5rem;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-            margin: -2rem -2rem 1.5rem;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .close {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            color: var(--white);
-            font-size: 1.5rem;
-            font-weight: 700;
-            cursor: pointer;
-            z-index: 10;
-            transition: transform 0.2s;
-        }
-
-        .close:hover {
-            transform: scale(1.1);
-        }
-
-        .modal-body h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin: 1.5rem 0 0.75rem;
-            color: var(--primary-color);
-        }
-
-        .modal-body p {
-            margin-bottom: 1rem;
-        }
-
-        .modal-body ul {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-body li {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-body li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.5rem;
-            width: 6px;
-            height: 6px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-        }
-
-        .divider {
-            height: 1px;
-            background-color: #e2e8f0;
-            margin: 1.5rem 0;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .cover-cards {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-        }
-
+        /* Mobile responsive */
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
-            }
-
-            .section-heading {
-                margin-bottom: 2rem;
+                padding: 15px;
             }
             
-            .card__header, .card__content, .card__footer {
-                padding: 1.25rem;
+            .covers-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+            
+            .card-content {
+                padding: 20px;
+            }
+            
+            .cover-item {
+                font-size: 13px;
             }
         }
 
-        @media (max-width: 576px) {
-            .main-content {
-                padding: 4.5rem 0.5rem 1rem;
+        @media (max-width: 600px) {
+            .covers-grid {
+                grid-template-columns: 1fr;
             }
             
-            .container {
-                padding: 1rem 0.75rem;
+            .page-header {
+                padding: 20px 0;
+                margin-bottom: 30px;
             }
             
-            .modal-content {
-                width: 95%;
-                padding: 1.5rem;
-            }
-            
-            .modal-header {
-                margin: -1.5rem -1.5rem 1rem;
-            }
-            
-            .btn {
-                padding: 0.6rem 1.2rem;
+            .page-title {
+                font-size: 24px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="page-container">
-        {% include "insurance/navbar.html" %}
+    {% include "insurance/navbar.html" %}
+    
+    <div class="container">
+        <div class="back-link">
+            <a href="/"><i class="ri-arrow-left-line"></i> Back to Home</a>
+        </div>
+
+        <div class="page-header">
+            <h1 class="page-title">Insurance Covers</h1>
+            <p class="page-subtitle">Complete details of our insurance coverage options</p>
+        </div>
         
-        <div class="main-content">
-            <div class="container">
-                <h1 class="section-heading">KoGae Insurance Covers</h1>
-                
-                <div class="cover-cards">
-                    <div class="card card--primary">
-                        <div class="card__header">
-                            <h3 class="card__title">HOMEOWNERS INSURANCE COVER</h3>
-                        </div>
-                        <div class="card__content">
-                            <h4 class="card__section-title">Definitions</h4>
-                            <ul class="card__list">
-                                <li class="card__list-item"><strong>Risk Location:</strong> Address shown on the schedule.</li>
-                                <li class="card__list-item"><strong>Home / Buildings:</strong> Main residence and outbuildings at the address of buildings and includes:
-                                    <ul class="card__nested-list">
-                                        <li>Garages and fixed carports</li>
-                                        <li>Home offices</li>
-                                        <li>Tool sheds</li>
-                                        <li>Domestic workers' living quarters</li>
-                                        <li>Walls, metal palisades, gates and fences but not hedges</li>
-                                        <li>Fixtures and fittings, including built-in furniture and fitted carpets</li>
-                                        <li>Security systems affixed to the home</li>
-                                    </ul>
-                                </li>
-                                <li class="card__list-item"><strong>Standard construction only:</strong> The policy excludes thatch roofs and non-standard buildings.</li>
-                            </ul>
-                            <button class="btn btn--full-width" onclick="openModal('modal1')">
-                                <i class="ri-file-list-3-line"></i> View Full Details
-                            </button>
-                        </div>
-                        <div class="card__footer">
-                            <span class="card__footer-text">2025</span>
-                            <span class="card__footer-text">Minet Botswana | Bryte</span>
-                        </div>
+        <div class="covers-grid">
+            <div class="cover-card">
+                <div class="card-header">
+                    <h2 class="card-title">Homeowners Insurance Cover</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="section-title">What We Cover</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Main residence and outbuildings at your address</li>
+                        <li class="cover-item">Garages and fixed carports</li>
+                        <li class="cover-item">Home offices and tool sheds</li>
+                        <li class="cover-item">Domestic workers' living quarters</li>
+                        <li class="cover-item">Walls, metal palisades, gates and fences</li>
+                        <li class="cover-item">Fixtures and fittings, including built-in furniture</li>
+                        <li class="cover-item">Security systems affixed to the home</li>
+                    </ul>
+
+                    <h3 class="section-title">Perils Covered</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Fire, lightning, or explosion</li>
+                        <li class="cover-item">Storm, wind, water, flood, hail</li>
+                        <li class="cover-item">Impact by trees following storm or wind</li>
+                    </ul>
+
+                    <h3 class="section-title">Additional Benefits</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Bereavement expenses: Max P5,000 per person, P20,000 per event</li>
+                        <li class="cover-item">House contents: Max P10,000 per incident, P20,000 per year</li>
+                        <li class="cover-item">Special alterations after disability: Max P20,000</li>
+                        <li class="cover-item">Fire-fighting charges</li>
+                        <li class="cover-item">Removal of rubble and wreckage</li>
+                    </ul>
+
+                    <h3 class="section-title">Not Covered</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Theft, attempted theft, and malicious damage</li>
+                        <li class="cover-item">Thatch roofs and non-standard buildings</li>
+                        <li class="cover-item">Properties unoccupied for 30+ consecutive days</li>
+                        <li class="cover-item">Faulty design or workmanship</li>
+                        <li class="cover-item">Damage from power cuts or load shedding</li>
+                        <li class="cover-item">Pre-existing damages</li>
+                    </ul>
+
+                    <div class="important-note">
+                        <strong>Important:</strong> This policy excludes thatch roofs and covers standard construction only. Average condition applies for under-insurance.
                     </div>
-                    
-                    <div class="card card--secondary">
-                        <div class="card__header">
-                            <h3 class="card__title">THIRD PARTY INSURANCE COVER</h3>
-                        </div>
-                        <div class="card__content">
-                            <h4 class="card__section-title">Liability Coverage (Defined Events)</h4>
-                            <ul class="card__list">
-                                <li class="card__list-item">Any amount that the insured becomes legally liable to pay arising from the use of the vehicle insured in respect of:
-                                    <ul class="card__nested-list">
-                                        <li>Injury which shall mean accidental death of or bodily injury to any person</li>
-                                        <li>Damage which shall mean accidental loss of or damage to property</li>
-                                    </ul>
-                                </li>
-                                <li class="card__list-item">Costs and expenses incurred with the company's prior written consent</li>
-                                <li class="card__list-item">While the vehicle is being used for the purpose of towing (other than for rewards) any other vehicle or trailer (including liability in connection with the towed vehicle or trailer)</li>
+                </div>
+            </div>
+            
+            <div class="cover-card">
+                <div class="card-header">
+                    <h2 class="card-title">Third Party Vehicle Insurance</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="section-title">Liability Coverage</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Legal liability arising from vehicle use for:
+                            <ul class="nested-list">
+                                <li class="cover-item">Accidental death or bodily injury to any person</li>
+                                <li class="cover-item">Accidental loss or damage to property</li>
                             </ul>
-                            <button class="btn btn--full-width" onclick="openModal('modal2')">
-                                <i class="ri-file-list-3-line"></i> View Full Details
-                            </button>
-                        </div>
-                        <div class="card__footer">
-                            <span class="card__footer-text">2025</span>
-                            <span class="card__footer-text">Minet Botswana | Bryte</span>
-                        </div>
+                        </li>
+                        <li class="cover-item">Costs and expenses with prior written consent</li>
+                        <li class="cover-item">Liability while towing other vehicles or trailers</li>
+                    </ul>
+
+                    <h3 class="section-title">Coverage Limits</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Maximum indemnity: P500,000 per event</li>
+                        <li class="cover-item">Covers single events or series from same incident</li>
+                        <li class="cover-item">Includes legal costs of other parties you're liable for</li>
+                        <li class="cover-item">Settlement and defense costs with our consent</li>
+                    </ul>
+
+                    <h3 class="section-title">What's Included</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Costs you are legally liable for</li>
+                        <li class="cover-item">Legal costs of other parties</li>
+                        <li class="cover-item">Defense and settlement costs (with consent)</li>
+                        <li class="cover-item">Towing liability coverage</li>
+                    </ul>
+
+                    <h3 class="section-title">Exclusions</h3>
+                    <ul class="cover-list">
+                        <li class="cover-item">Accidents before policy start date</li>
+                        <li class="cover-item">Injuries to passengers in trailers or caravans</li>
+                        <li class="cover-item">Passengers outside the cab during incident</li>
+                        <li class="cover-item">Injuries to insured, family, or employees</li>
+                        <li class="cover-item">Damage to your own property</li>
+                        <li class="cover-item">Contractual liability claims</li>
+                    </ul>
+
+                    <div class="important-note">
+                        <strong>Coverage Limit:</strong> Maximum indemnity is P500,000 per event. This applies to any single event or series of events from the same incident.
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Modals -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Homeowners Insurance Cover</h3>
-                <span class="close" onclick="closeModal('modal1')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <h3>Perils Covered</h3>
-                <ul>
-                    <li>Fire, lightning, or explosion.</li>
-                    <li>Storm, wind, water, flood, hail.</li>
-                    <li>Impact by trees following storm, wind, water, floods.</li>
-                </ul>
-                
-                <h3>Automatic Extensions</h3>
-                <ul>
-                    <li>Bereavement expenses: Max P5000 (any one person), P20 000 (any one event) for insured events only.</li>
-                    <li>House contents: Max P 10 000 (any one incident), up to P20, 000 (any one period) following an insured event at the insured premises.</li>
-                    <li>Special alterations after disability: Max P20,000 for special alterations to the home caused by an accident that happened during the term of this policy.</li>
-                    <li>Fire-fighting charges.</li>
-                    <li>Removal of rubble and wreckage.</li>
-                </ul>
-                
-                <h3>General Conditions</h3>
-                <ul>
-                    <li>Cover property for replacement value.</li>
-                    <li>Average condition applies or under-insurance.</li>
-                    <li>We pay the lender first (financial interest).</li>
-                    <li>Inflationary increases to property sums insureds.</li>
-                    <li>Tenant's behavior.</li>
-                    <li>Business use conditions*.</li>
-                </ul>
-                
-                <h3>Events/Items Not Covered</h3>
-                <ul>
-                    <li>Undamaged items (refer to the wording).</li>
-                    <li>Loss or damage not covered caused by:
-                        <ul>
-                            <li>Any process involving the use of water.</li>
-                            <li>Theft, attempted theft, and malicious damage.</li>
-                            <li>Movement of the land supporting the residence.</li>
-                            <li>An event at an unoccupied home unoccupied for 30 consecutive days.</li>
-                            <li>Arising from or during demolition, alteration, construction, cleaning, renovation, repair or similar.</li>
-                            <li>Faulty design or workmanship.</li>
-                            <li>Any loss or damage caused to the Private Residence not being maintained.</li>
-                            <li>Loss or damage caused by deliberate power cuts or load shedding.</li>
-                            <li>Pre-existing damages to your residence.</li>
-                            <li>Loss, damage, injury or Liability caused deliberately by You.</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    
-    <div id="modal2" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Third Party Insurance Cover</h3>
-                <span class="close" onclick="closeModal('modal2')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <h3>Indemnity under the Policy</h3>
-                <ul>
-                    <li>Costs you are liable for</li>
-                    <li>Legal costs of the other person that you are liable for</li>
-                    <li>Costs you incur with our written consent to settle or defend a claim against you</li>
-                </ul>
-                
-                <p><em>Indemnity is limited to the amount of P500,000.00 at the time of the event. This amount applies to any single event, or to any series of events that result from the same incident.</em></p>
-                
-                <div class="divider"></div>
-                
-                <h3>Exclusions</h3>
-                <ul>
-                    <li>Accident / incident occurred before the policy inception date</li>
-                    <li>Injuries to certain individuals:
-                        <ul>
-                            <li>Passengers in trailers or caravans</li>
-                            <li>Passengers outside the cab at the time of the event</li>
-                        </ul>
-                    </li>
-                    <li>Injuries to the insured, family members, or employees under certain conditions</li>
-                    <li>Damage to properties</li>
-                    <li>Compensation under motor vehicle insurance legislation</li>
-                    <li>Any claim arising out of contractual liability</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Function to open modal
-        function openModal(modalId) {
-            var modal = document.getElementById(modalId);
-            modal.style.display = "flex";
-            document.body.style.overflow = "hidden"; // Prevent background scrolling
-        }
-
-        // Function to close modal
-        function closeModal(modalId) {
-            var modal = document.getElementById(modalId);
-            modal.style.display = "none";
-            document.body.style.overflow = ""; // Restore scrolling
-        }
-
-        // Close the modal when clicking outside of it
-        window.onclick = function(event) {
-            var modals = document.getElementsByClassName('modal');
-            for (var i = 0; i < modals.length; i++) {
-                var modal = modals[i];
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                    document.body.style.overflow = ""; // Restore scrolling
-                }
-            }
-        }
-
-        // Close on escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                var modals = document.getElementsByClassName('modal');
-                for (var i = 0; i < modals.length; i++) {
-                    var modal = modals[i];
-                    if (modal.style.display === "flex") {
-                        modal.style.display = "none";
-                        document.body.style.overflow = ""; // Restore scrolling
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 </html>
