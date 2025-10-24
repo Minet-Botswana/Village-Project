@@ -2,382 +2,444 @@
 {% load static %}
 {% block content %}
 
-
 <head>
-    <!-- Bootstrap CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
         crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         
-        <style>
-            .card {
-                margin-bottom: 20px;
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', 'Arial', sans-serif;
+        }
+
+        .kyc-container {
+            max-width: 1000px;
+            margin: 15px auto;
+            padding: 10px;
+        }
+
+        .page-header {
+            background: #e21a22;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-size: 11px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .breadcrumb-nav {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #e21a22;
+        }
+
+        /* Document Status Overview */
+        .status-overview {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .status-header {
+            background: #e21a22;
+            color: white;
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status-grid {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+
+        .status-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .status-submitted {
+            color: #28a745;
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .status-missing {
+            color: #dc3545;
+            border-color: #dc3545;
+            background: #fff8f8;
+        }
+
+        .status-text {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* KYC Forms Grid */
+        .kyc-forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .kyc-card {
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .kyc-card-header {
+            background: #e21a22;
+            color: white;
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .kyc-card-body {
+            padding: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            font-size: 11px;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            background-color: #e21a22;
+            border-color: #e21a22;
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: 4px;
+        }
+
+        .btn-primary:hover {
+            background-color: #c41e3a;
+            border-color: #c41e3a;
+        }
+
+        .btn-primary:disabled {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .submitted-notice {
+            font-size: 10px;
+            color: #28a745;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #f8fff9;
+            border: 1px solid #28a745;
+            border-radius: 4px;
+        }
+
+        .submitted-notice a {
+            color: #28a745;
+            text-decoration: underline;
+        }
+
+        .download-link {
+            font-size: 10px;
+            color: #e21a22;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .kyc-container {
+                margin: 10px auto;
+                padding: 8px;
             }
-    
-            .container-cards {
-                margin-top: 20px;
+
+            .page-header {
+                padding: 10px;
             }
-    
-            .row {
-                display: grid;
-                display: flex;
-                -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-                margin-right: -15px;
-                margin-left: -15px;
-                align-content: space-around;
-                justify-content: flex-start;
-                align-items: flex-start;
-                justify-items: stretch;
-                flex-direction: row;
+
+            .page-title {
+                font-size: 14px;
             }
-    
-            body {
-                margin: 0;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-                    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-                font-size: 1rem;
-                font-weight: 400;
-                color: #212529;
-                text-align: left;
-                background-color: #fff;
-                width: 100%;
+
+            .page-subtitle {
+                font-size: 10px;
             }
-    
-            /* Adjust flex direction to column on smaller screens */
-            @media (max-width: 768px) {
-                .row {
-                    flex-direction: column;
-                }
-    
-                .card {
-                    width: 100%; /* Make cards take full width on smaller screens */
-                }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                gap: 10px;
             }
-            .btn-primary {
-                color: #fff;
-                background-color: #e21a22;
-                border-color: #e21a22;
+
+            .kyc-forms-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
-            .btn-primary:hover {
-                color: #000000;
-                background-color: #ffffff;
-                border-color: #b91d23;
+
+            .kyc-card-body {
+                padding: 10px;
             }
-        </style>
+        }
+    </style>
 </head>
 
-<div class="container">
-    <!-- Add the following paragraph to display the page route -->
-    <div class="row">
-        <div class="col-md-12">
-            <p class="breadcrumb" style="font-size: 14px; font-family: 
-              'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-              -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-              sans-serif; color: #e21a22;"
-            >
-              Home / Form Uploads
-            </p>
+<body>
+    <div class="kyc-container">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <i class="fas fa-home" style="margin-right: 5px;"></i>
+            Home / KYC Forms & Documents
         </div>
-    </div>
 
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-file-shield" style="margin-right: 8px;"></i>
+                Know Your Customer (KYC) Documents
+            </div>
+            <div class="page-subtitle">
+                Upload your required KYC documents for identity verification and compliance
+            </div>
+        </div>
 
-</div>
-
-<div class="container mt-40 container-cards">
-    <div class="row">
-
-        <div class="container">
-            <!-- Add the following paragraph to display the page route -->
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="breadcrumb" style="font-size: 18px; font-family: 
-                      'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                      -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-                      sans-serif; color: #e21a22;"
-                    >
-                      KNOW YOUR CUSTOMER APPLICATION (eKYC) FORM
-                    </h1>
+        <!-- Document Status Overview -->
+        <div class="status-overview">
+            <div class="status-header">
+                <i class="fas fa-clipboard-check" style="margin-right: 8px;"></i>
+                Document Submission Status
+            </div>
+            <div class="status-grid">
+                <div class="status-item {% if existing_kyc_form %}status-submitted{% else %}status-missing{% endif %}">
+                    <i class="fas {% if existing_kyc_form %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
+                    <span class="status-text">
+                        KYC Form: {% if existing_kyc_form %}Submitted{% else %}Missing{% endif %}
+                    </span>
                 </div>
-                <div class="col-md-12">
-                    <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
-                    'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-                    sans-serif; color: #e21a22;" >
-                       Complete our streamlined Know Your Customer Application (eKYC) Form effortlessly to initiate a secure and compliant onboarding process.
-                        At Minet Botswana, we value your time and prioritize the confidentiality of your information. By submitting this form, 
-                        you contribute to a smooth verification process, ensuring a seamless and trustworthy customer experience. Thank you for choosing 
-                        Minet Botswana for your services – where simplicity meets security.
-                    </p>
+                <div class="status-item {% if existing_copy_of_omang %}status-submitted{% else %}status-missing{% endif %}">
+                    <i class="fas {% if existing_copy_of_omang %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
+                    <span class="status-text">
+                        Copy of Omang: {% if existing_copy_of_omang %}Submitted{% else %}Missing{% endif %}
+                    </span>
+                </div>
+                <div class="status-item {% if existing_residence_proof %}status-submitted{% else %}status-missing{% endif %}">
+                    <i class="fas {% if existing_residence_proof %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
+                    <span class="status-text">
+                        Proof of Residence: {% if existing_residence_proof %}Submitted{% else %}Missing{% endif %}
+                    </span>
+                </div>
+                <div class="status-item {% if existing_income_proof %}status-submitted{% else %}status-missing{% endif %}">
+                    <i class="fas {% if existing_income_proof %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
+                    <span class="status-text">
+                        Proof of Income: {% if existing_income_proof %}Submitted{% else %}Missing{% endif %}
+                    </span>
                 </div>
             </div>
         </div>
-        
-        <!-- KYC Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card"> 
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">KYC Forms</div>
-                <div class="card-body">
-                    <!-- Display KYC form for uploading -->
-                    <form method="POST" action="{% url 'customer:upload_kyc_form' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <!-- Your form fields here -->
-                        <div class="form-group">
-                            <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">KYC Form Upload </label>
-                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
-                            <input type="file" name="kyc_form" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required>
 
-                            {{ KYCuploadForm.kyc_form.errors }}
-                        </div>
-                        {% if existing_kyc_form %}
-                        <!-- Display a message for existing KYC form -->
-                        <p style="font-size: 14px; color: #e21a22; font-weight: bold;">KYC form already submitted! You can view it <a href="{{ existing_kyc_form.kyc_form }}" target="_blank">here</a>.</p>
-                        <!-- Disable the submit button -->
-                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
-                        {% else %}
-                        <!-- Enable the submit button for new KYC form -->
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                        {% endif %}
-                        <!-- Download button for KYC form -->
-                        <a href="https://storage.googleapis.com/kogae_bucket/Forms_downloads/KYC.pdf" download style="font-size: 16px;">Download KYC Form</a>
-                    </form>     
-                </div>               
-            </div>            
-        </div>
-        <!-- COPY OF OMANG Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card"> 
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">COPY OF OMANG</div>
-                <div class="card-body">
-                    <!-- Display KYC form for uploading -->
-                    <form method="POST" action="{% url 'customer:upload_copy_of_omang' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <!-- Your form fields here -->
-                        <div class="form-group">
-                            <label for="{{ CopyOfOmangForm.copy_of_omang.id_for_label }}">COPY OF OMANG Upload </label>
-                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
-                            <input type="file" name="copy_of_omang" id="{{ CopyOfOmangForm.copy_of_omang.id }}" class="form-control" required>
+        <!-- KYC Forms Grid -->
+        <div class="kyc-forms-grid">
 
-                            {{ CopyOfOmangForm.copy_of_omang.errors }}
-                        </div>
-                        {% if existing_copy_of_omang %}
-                        <!-- Display a message for existing KYC form -->
-                        <p style="font-size: 14px; color: #e21a22; font-weight: bold;">Copy of Omang has been submitted! You can view it <a href="{{ existing_copy_of_omang.copy_of_omang }}" target="_blank">here</a>.</p>
-                        <!-- Disable the submit button -->
-                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
-                        {% else %}
-                        <!-- Enable the submit button for new KYC form -->
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                        {% endif %}
-                    </form>     
-                </div>               
-            </div>            
-        </div>
-
-        <!-- Proof Of residence Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card"> 
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Proof of Residence</div>
-                <div class="card-body">
-                    <!-- Display KYC form for uploading -->
-                    <form method="POST" action="{% url 'customer:upload_residence_proof' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <!-- Your form fields here -->
-                        <div class="form-group">
-                            <label for="{{ ResidenceProofForm.residence_proof.id_for_label }}">Proof of Residence Upload </label>
-                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
-                            <input type="file" name="residence_proof" id="{{ ResidenceProofForm.residence_proof.id }}" class="form-control" required>
-
-                            {{ ResidenceProofForm.residence_proof.errors }}
-                        </div>
-                        {% if existing_residence_proof %}
-                        <!-- Display a message for existing KYC form -->
-                        <p style="font-size: 14px; color: #e21a22; font-weight: bold;">Proof of Residence has been submitted! You can view it <a href="{{ existing_residence_proof.residence_proof }}" target="_blank">here</a>.</p>
-                        <!-- Disable the submit button -->
-                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
-                        {% else %}
-                        <!-- Enable the submit button for new KYC form -->
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                        {% endif %}
-                    </form>     
-                </div>               
-            </div>            
-        </div>
-
-        <!-- Proof Of Income Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card"> 
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Proof of Residence</div>
-                <div class="card-body">
-                    <!-- Display KYC form for uploading -->
-                    <form method="POST" action="{% url 'customer:upload_income_proof' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <!-- Your form fields here -->
-                        <div class="form-group">
-                            <label for="{{ IncomeProofForm.income_proof.id_for_label }}">Proof of Income Upload </label>
-                            <!--input type="file" name="{{ KYCuploadForm.kyc_form.name }}" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" required-->
-                            <input type="file" name="income_proof" id="{{ IncomeProofForm.income_proof.id }}" class="form-control" required>
-
-                            {{ IncomeProofForm.income_proof.errors }}
-                        </div>
-                        {% if existing_income_proof %}
-                        <!-- Display a message for existing KYC form -->
-                        <p style="font-size: 14px; color: #e21a22; font-weight: bold;">Proof of Residence has been submitted! You can view it <a href="{{ existing_income_proof.income_proof }}" target="_blank">here</a>.</p>
-                        <!-- Disable the submit button -->
-                        <button type="submit" class="btn btn-primary" disabled>Submit Form</button>
-                        {% else %}
-                        <!-- Enable the submit button for new KYC form -->
-                        <button type="submit" class="btn btn-primary">Submit Form</button>
-                        {% endif %}
-                    </form>     
-                </div>               
-            </div>            
-        </div>
-
-    </div>
-</div>
-
-                            <!--POLICY APPLICATION FORMS-->
-
-<div class="container mt-40 container-cards">
-    <div class="row">
-
-        <div class="container">
-            <!-- Add the following paragraph to display the page route -->
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="breadcrumb" style="margin-top: 20px; font-size: 18px; font-family: 
-                      'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                      -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-                      sans-serif; color: #e21a22;"
-                    >
-                      POLICY APPLICATION FORMS
-                    </h1>
+        <!-- KYC Forms Grid -->
+        <div class="kyc-forms-grid">
+            <!-- KYC Form -->
+            <div class="kyc-card">
+                <div class="kyc-card-header">
+                    <i class="fas fa-file-alt" style="margin-right: 5px;"></i>
+                    KYC Form
                 </div>
-                <div class="col-md-12">
-                    <p class="breadcrumb" style="margin-top: 20px; font-size: 14px; font-family: 
-                    'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-                    sans-serif; color: #e21a22;" >
-                        Welcome to our Policy Application Forms section, where you can easily initiate your journey towards comprehensive coverage. 
-                        Our user-friendly forms are designed to streamline the application process, ensuring a hassle-free experience for our valued clients.
-                        Whether you are seeking insurance coverage for your home, vehicle, or other valuable assets, our policy application forms are 
-                        tailored to gather essential information to provide you with the best possible coverage. Simply navigate through the specific 
-                        forms related to your insurance needs, fill in the required details, and submit your application. Our dedicated team is committed 
-                        to processing your application promptly, ensuring that you receive the protection you deserve. Thank you for choosing us for your 
-                        insurance needs, and we look forward to securing your peace of mind with our reliable policies.
-                    </p>
+                <div class="kyc-card-body">
+                    {% if existing_kyc_form %}
+                        <div class="submitted-notice">
+                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
+                            KYC form already submitted! 
+                            <a href="{{ existing_kyc_form.kyc_form }}" target="_blank">View Document</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled>
+                            <i class="fas fa-check" style="margin-right: 5px;"></i>
+                            Submitted
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'customer:upload_kyc_form' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">Upload KYC Form</label>
+                                <input type="file" name="kyc_form" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+                                {{ KYCuploadForm.kyc_form.errors }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
+                                Submit Form
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="https://storage.googleapis.com/kogae_bucket/Forms_downloads/KYC.pdf" download class="download-link">
+                        <i class="fas fa-download" style="margin-right: 5px;"></i>
+                        Download KYC Form Template
+                    </a>
                 </div>
             </div>
-        
-        
-        </div>
 
+            <!-- Copy of Omang -->
+            <div class="kyc-card">
+                <div class="kyc-card-header">
+                    <i class="fas fa-id-card" style="margin-right: 5px;"></i>
+                    Copy of Omang
+                </div>
+                <div class="kyc-card-body">
+                    {% if existing_copy_of_omang %}
+                        <div class="submitted-notice">
+                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
+                            Copy of Omang has been submitted! 
+                            <a href="{{ existing_copy_of_omang.copy_of_omang }}" target="_blank">View Document</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled>
+                            <i class="fas fa-check" style="margin-right: 5px;"></i>
+                            Submitted
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'customer:upload_copy_of_omang' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ CopyOfOmangForm.copy_of_omang.id_for_label }}">Upload Copy of Omang</label>
+                                <input type="file" name="copy_of_omang" id="{{ CopyOfOmangForm.copy_of_omang.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                                {{ CopyOfOmangForm.copy_of_omang.errors }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
+                                Submit Document
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
 
-        <!-- Direct Debit Forms -->
-<div class="col-md-6 col-sm-12">
-    <div class="card">
-        <div class="card-header" style="background-color: #e21a22; color: #fff;">Direct Debit Forms</div>
-        <div class="card-body">
-            {% for direct_debit_form_instance in direct_debit_forms %}
-            <!-- Display Direct Debit form instance details -->
-            {{ direct_debit_form_instance }}
-            {% endfor %}
-            <p style="font-size: small; font: #e21a22; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-            -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-            sans-serif;">
-                Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
-                safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
-                you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners 
-                to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated 
-                Homeowners Cover Forms.
-            </p>
+            <!-- Proof of Residence -->
+            <div class="kyc-card">
+                <div class="kyc-card-header">
+                    <i class="fas fa-home" style="margin-right: 5px;"></i>
+                    Proof of Residence
+                </div>
+                <div class="kyc-card-body">
+                    {% if existing_residence_proof %}
+                        <div class="submitted-notice">
+                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
+                            Proof of Residence has been submitted! 
+                            <a href="{{ existing_residence_proof.residence_proof }}" target="_blank">View Document</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled>
+                            <i class="fas fa-check" style="margin-right: 5px;"></i>
+                            Submitted
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'customer:upload_residence_proof' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ ResidenceProofForm.residence_proof.id_for_label }}">Upload Proof of Residence</label>
+                                <input type="file" name="residence_proof" id="{{ ResidenceProofForm.residence_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                                {{ ResidenceProofForm.residence_proof.errors }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
+                                Submit Document
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
 
-            <!-- Replace the form with a button to redirect -->
-            <button type="button" class="btn btn-primary" onclick="redirectToDirectDebit()">Go to Form</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    function redirectToDirectDebit() {
-        window.location.href = "form/direct_debit.html/";
-    }
-</script>
-
-     <!--/div>
-
-     <div class="row"-->
-        <!-- Homeowners Cover Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card">
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Home Owners Insurance</div>
-                <div class="card-body">
-                    {% for direct_debit_form_instance in direct_debit_forms %}
-                    <!-- Display Direct Debit form instance details -->
-                    {{ direct_debit_form_instance }}
-                    {% endfor %}
-                    <p style="font-size: small; font: #e21a22; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-                    sans-serif;">
-                        Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
-                        safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
-                         you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated Homeowners Cover Forms.</p>
-        
-                    <!-- Replace the form with a button to redirect -->
-                    <button type="button" class="btn btn-primary" onclick="redirectToHomeOwnersInsurance()">Go to Form</button>
+            <!-- Proof of Income -->
+            <div class="kyc-card">
+                <div class="kyc-card-header">
+                    <i class="fas fa-money-bill-wave" style="margin-right: 5px;"></i>
+                    Proof of Income
+                </div>
+                <div class="kyc-card-body">
+                    {% if existing_income_proof %}
+                        <div class="submitted-notice">
+                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
+                            Proof of Income has been submitted! 
+                            <a href="{{ existing_income_proof.income_proof }}" target="_blank">View Document</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary" disabled>
+                            <i class="fas fa-check" style="margin-right: 5px;"></i>
+                            Submitted
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'customer:upload_income_proof' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ IncomeProofForm.income_proof.id_for_label }}">Upload Proof of Income</label>
+                                <input type="file" name="income_proof" id="{{ IncomeProofForm.income_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                                {{ IncomeProofForm.income_proof.errors }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
+                                Submit Document
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        
-        <script>
-            function redirectToHomeOwnersInsurance() {
-                window.location.href = "form/homeowners_insurance.html";
-            }
-        </script>
-
-        <!-- Third Party Car Insurance Forms -->
-        <div class="col-md-6 col-sm-12">
-            <div class="card">
-                <div class="card-header" style="background-color: #e21a22; color: #fff;">Third Party Motor Insurance</div>
-                <div class="card-body">
-                    {% for direct_debit_form_instance in direct_debit_forms %}
-                    <!-- Display Direct Debit form instance details -->
-                    {{ direct_debit_form_instance }}
-                    {% endfor %}
-                    <p style="font-size: small; font: #e21a22; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                    -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-                    sans-serif;">
-                        Discover peace of mind with our Homeowners Cover Forms—a comprehensive solution designed to 
-                        safeguard what matters most: your home. Our user-friendly forms make it easy to access the protection
-                         you need, ensuring a seamless process for securing your property. From essential details to tailored coverage options, our forms empower homeowners to navigate insurance with confidence. Simplify your insurance journey and embrace the reassurance that comes with our dedicated Homeowners Cover Forms.</p>
-        
-                    <!-- Replace the form with a button to redirect -->
-                    <button type="button" class="btn btn-primary" onclick="redirectToThirdPartyInsurance()">Go to Form</button>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            function redirectToThirdPartyInsurance() {
-                window.location.href = "forms/motor_insurance.html";
-            }
-        </script>
     </div>
-</div>
 
-<!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
-
-</html>
 {% endblock content %}

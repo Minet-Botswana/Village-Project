@@ -113,7 +113,7 @@
       z-index: 1001;
     }
 
-    .dropdown:hover .dropdown-menu {
+    .dropdown-menu.show {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
@@ -192,7 +192,7 @@
       z-index: 1001;
     }
 
-    .user-dropdown:hover .user-dropdown-menu {
+    .user-dropdown-menu.show {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
@@ -267,6 +267,11 @@
         border: none;
         border-top: 1px solid #f0f0f0;
         background: #f8f9fa;
+        display: none;
+      }
+
+      .dropdown-menu.show {
+        display: block;
       }
 
       .mobile-menu-btn {
@@ -368,15 +373,18 @@
       
       <div class="nav-item dropdown">
         <div class="nav-link dropdown-toggle">
-          KYC & Claims
+          Customer Support
           <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px;"></i>
         </div>
         <div class="dropdown-menu">
           <a href="{% url 'customer:ask-question' %}" class="dropdown-item">
-            Ask a Question
+            Make an Inquiry
           </a>
           <a href="{% url 'customer:question-history' %}" class="dropdown-item">
-            Support History
+            Inquiries History
+          </a>
+          <a href="{% url 'customer:question-history' %}" class="dropdown-item">
+            Apply for a Claim
           </a>
         </div>
       </div>
@@ -439,8 +447,71 @@
       }
     });
 
-    // Set active nav link based on current page
+    // Dropdown functionality for better reliability
     document.addEventListener('DOMContentLoaded', function() {
+      // Handle dropdown clicks
+      const dropdowns = document.querySelectorAll('.dropdown');
+      
+      dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        const menu = dropdown.querySelector('.dropdown-menu');
+        
+        // Click event for dropdown toggle
+        toggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Close other dropdowns
+          dropdowns.forEach(otherDropdown => {
+            if (otherDropdown !== dropdown) {
+              otherDropdown.querySelector('.dropdown-menu').classList.remove('show');
+            }
+          });
+          
+          // Close user dropdown if open
+          const userMenu = document.querySelector('.user-dropdown-menu');
+          userMenu.classList.remove('show');
+          
+          // Toggle current dropdown
+          menu.classList.toggle('show');
+        });
+      });
+      
+      // Handle user dropdown
+      const userDropdown = document.querySelector('.user-dropdown');
+      const userToggle = userDropdown.querySelector('.user-toggle');
+      const userMenu = userDropdown.querySelector('.user-dropdown-menu');
+      
+      userToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Close other dropdowns
+        dropdowns.forEach(dropdown => {
+          dropdown.querySelector('.dropdown-menu').classList.remove('show');
+        });
+        
+        // Toggle user dropdown
+        userMenu.classList.toggle('show');
+      });
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function(event) {
+        const allDropdowns = document.querySelectorAll('.dropdown');
+        allDropdowns.forEach(dropdown => {
+          const menu = dropdown.querySelector('.dropdown-menu');
+          if (!dropdown.contains(event.target)) {
+            menu.classList.remove('show');
+          }
+        });
+        
+        // Close user dropdown
+        if (!userDropdown.contains(event.target)) {
+          userMenu.classList.remove('show');
+        }
+      });
+
+      // Set active nav link based on current page
       const currentPath = window.location.pathname;
       const navLinks = document.querySelectorAll('.nav-link');
       
