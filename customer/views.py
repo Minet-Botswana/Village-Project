@@ -904,3 +904,22 @@ def redirect_to_my_applications(request):
     """Redirect old policy views to the new unified My Applications page"""
     messages.info(request, "You've been redirected to your applications page for a better experience.")
     return redirect('customer:my-applications')
+
+def policy_wording_view(request):
+    """View for displaying uploaded policy wording documents"""
+    try:
+        # Get the current customer for context
+        customer = models.Customer.objects.get(user_id=request.user.id)
+        
+        # For now, we'll create a simple template
+        # In the future, admins can upload policy wording documents
+        context = {
+            'customer': customer,
+            'page_title': 'Policy Wording Documents',
+        }
+        
+        return render(request, 'customer/policy_wording.html', context)
+        
+    except models.Customer.DoesNotExist:
+        messages.error(request, "Customer profile not found.")
+        return redirect('customer:customer-dashboard')

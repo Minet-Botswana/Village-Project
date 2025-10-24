@@ -1,0 +1,223 @@
+{% extends 'customer/customerbase.html' %}
+{% block content %}
+
+<style>
+  .policy-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .page-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+  
+  .page-subtitle {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  
+  .policy-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border-left: 4px solid #e21a22;
+  }
+  
+  .policy-item {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .policy-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .policy-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .policy-description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .policy-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .download-btn {
+    background-color: #e21a22;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .download-btn:hover {
+    background-color: #c41e3a;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .view-btn {
+    background-color: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+  }
+  
+  .view-btn:hover {
+    background-color: #e9ecef;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+  }
+  
+  .empty-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #e21a22;
+  }
+  
+  .empty-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #495057;
+  }
+  
+  .empty-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .policy-meta {
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .policy-container {
+      margin: 10px;
+      padding: 15px;
+    }
+    
+    .page-title {
+      font-size: 20px;
+    }
+    
+    .policy-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .download-btn, .view-btn {
+      text-align: center;
+    }
+  }
+</style>
+
+<div class="policy-container">
+  <!-- Page Header -->
+  <h1 class="page-title">Policy Wording Documents</h1>
+  <p class="page-subtitle">Access and download official policy wording documents</p>
+
+  <!-- Policy Documents Section -->
+  <div class="policy-section">
+    <h3 style="margin-bottom: 20px; color: #333;">Available Policy Documents</h3>
+    
+    <!-- Sample Policy Documents - In future, these will be dynamically loaded from database -->
+    <div class="policy-item">
+      <div class="policy-title">Homeowners Insurance Policy Wording</div>
+      <div class="policy-description">
+        Comprehensive policy terms and conditions for homeowners insurance coverage including property damage, theft, and liability protection.
+      </div>
+      <div class="policy-meta">
+        Document Type: PDF | Last Updated: Coming Soon
+      </div>
+      <div class="policy-actions">
+        <a href="#" class="view-btn" onclick="alert('Document will be available soon');">
+          <i class="fas fa-eye" style="margin-right: 5px;"></i>
+          View Online
+        </a>
+        <a href="#" class="download-btn" onclick="alert('Document will be available soon');">
+          <i class="fas fa-download" style="margin-right: 5px;"></i>
+          Download PDF
+        </a>
+      </div>
+    </div>
+    
+    <div class="policy-item">
+      <div class="policy-title">Motor Insurance Policy Wording</div>
+      <div class="policy-description">
+        Third-party motor insurance policy terms, coverage details, exclusions, and claims procedures for vehicle insurance.
+      </div>
+      <div class="policy-meta">
+        Document Type: PDF | Last Updated: Coming Soon
+      </div>
+      <div class="policy-actions">
+        <a href="#" class="view-btn" onclick="alert('Document will be available soon');">
+          <i class="fas fa-eye" style="margin-right: 5px;"></i>
+          View Online
+        </a>
+        <a href="#" class="download-btn" onclick="alert('Document will be available soon');">
+          <i class="fas fa-download" style="margin-right: 5px;"></i>
+          Download PDF
+        </a>
+      </div>
+    </div>
+    
+    <!-- Placeholder for future admin-uploaded documents -->
+    <div class="empty-state" style="margin-top: 40px;">
+      <div class="empty-icon">
+        <i class="fas fa-file-upload"></i>
+      </div>
+      <h4 class="empty-title">More Documents Coming Soon</h4>
+      <p class="empty-subtitle">Additional policy wording documents will be uploaded by our administrators and made available here.</p>
+    </div>
+  </div>
+
+  <!-- Help Section -->
+  <div class="policy-section">
+    <h3 style="margin-bottom: 15px; color: #333;">Need Help?</h3>
+    <p style="color: #666; margin-bottom: 15px;">
+      If you have questions about any policy wording or need clarification on terms and conditions, please don't hesitate to contact our support team.
+    </p>
+    <a href="{% url 'customer:ask-question' %}" class="download-btn">
+      <i class="fas fa-question-circle" style="margin-right: 5px;"></i>
+      Ask a Question
+    </a>
+  </div>
+</div>
+
+{% endblock content %}

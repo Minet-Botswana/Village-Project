@@ -25,6 +25,7 @@ urlpatterns = [
     path('apply-policy', views.apply_policy_view,name='apply-policy'),
     path('apply-thirdparty', views.apply_thirdparty_view,name='apply-thirdparty'),
     path('my-applications/', views.my_applications_view, name='my-applications'),
+    path('policy-wording/', views.policy_wording_view, name='policy-wording'),
     
     # Policy Detail Views
     path('policy-detail/<int:policy_id>/', views.policy_detail_view, name='policy-detail'),
