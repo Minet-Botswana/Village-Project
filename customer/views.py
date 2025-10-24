@@ -22,6 +22,36 @@ import calendar
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
+from smtplib import SMTPRecipientsRefused
+from django.core.mail import EmailMessage
+import logging
+
+logger = logging.getLogger(__name__)
+
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'registration/password_reset_form.html'
+    email_template_name = 'registration/password_reset_email.html'
+    success_url = reverse_lazy('customer:password_reset_done')
+    
+    def form_valid(self, form):
+        try:
+            return super().form_valid(form)
+        except SMTPRecipientsRefused as e:
+            logger.error(f"SMTP Recipients Refused: {e}")
+            # Add a user-friendly error message
+            messages.error(
+                self.request, 
+                "Unable to send password reset email at this time. This might be due to email rate limiting. "
+                "Please try again in a few minutes, or contact support for assistance."
+            )
+            return self.form_invalid(form)
+        except Exception as e:
+            logger.error(f"Email sending error: {e}")
+            messages.error(
+                self.request,
+                "An error occurred while sending the password reset email. Please try again later."
+            )
+            return self.form_invalid(form)
 
 class PasswordResetConfirmViewCustom(auth_views.PasswordResetConfirmView):
     template_name = 'forgot_password.html'  # Your custom template for password reset confirmation

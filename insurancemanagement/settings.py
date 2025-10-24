@@ -224,38 +224,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Adjust based on where you want t
 LOGIN_REDIRECT_URL='/afterlogin'
 LOGOUT_REDIRECT_URL = "/adminlogin"  # 
 
-#for contact us give your gmail id and password
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'austinglebane@gmail.com' # this email will be used to send emails
-EMAIL_HOST_PASSWORD = 'oiyt kzox qzwc qrvd' # host email password required
-# now sign in with your host gmail account in your browser
-# open following link and turn it ON
-# https://myaccount.google.com/lesssecureapps
-# otherwise you will get SMTPAuthenticationError at /contactus
-# this process is required because google blocks apps authentication by default
-EMAIL_RECEIVING_USER = ['austinglebane@gmail.com'] # email on which you will receive messages sent from website
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'nare.abaricom.co.bw'  # SMTP server
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True  # Use SSL for port 465
+EMAIL_HOST_USER = 'noreply@minetbw.co.bw'  # Sender email
+EMAIL_HOST_PASSWORD = 'November@062024'  # SMTP password
+DEFAULT_FROM_EMAIL = 'noreply@minetbw.co.bw'
+SERVER_EMAIL = 'noreply@minetbw.co.bw'  # For error emails
+EMAIL_TIMEOUT = 60  # Timeout in seconds
 
 SESSION_COOKIE_AGE = 1800  # 30 minutes
 SESSION_SAVE_EVERY_REQUEST = True # update the session expiration time every time a request is made, ensuring that the session doesn't expire as long as the user is active
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True # log users out when they close their browser
 
-''''
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'goitsemang.lebane@minet.co.bw' # this email will be used to send emails
-EMAIL_HOST_PASSWORD = 'November@062024' # host email password required
-# now sign in with your host gmail account in your browser
-# open following link and turn it ON
-# https://myaccount.google.com/lesssecureapps
-# otherwise you will get SMTPAuthenticationError at /contactus
-# this process is required because google blocks apps authentication by default
-EMAIL_RECEIVING_USER = ['goitsemang.lebane@minet.co.bw'] # email on which you will receive messages sent from website
-'''
+# Email throttling settings to prevent rate limiting
+EMAIL_TIMEOUT = 60  # 60 seconds timeout for email sending
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGGING = {
     'version': 1,
