@@ -110,55 +110,79 @@
             font-weight: 500;
         }
 
-        /* KYC Forms Grid */
-        .kyc-forms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .kyc-card {
+        /* KYC Forms - Single Card */
+        .kyc-main-card {
             background: white;
             border-radius: 5px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
-        .kyc-card-header {
+        .kyc-main-header {
             background: #e21a22;
             color: white;
-            padding: 10px 15px;
-            font-size: 12px;
+            padding: 12px 15px;
+            font-size: 13px;
             font-weight: bold;
         }
 
-        .kyc-card-body {
+        .kyc-main-body {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .kyc-form-section {
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
             padding: 15px;
+            background: #f8f9fa;
+        }
+
+        .kyc-form-section:last-child {
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            color: #e21a22;
+            font-size: 14px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .form-group label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #495057;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .form-control {
-            font-size: 11px;
-            padding: 6px 10px;
-            border-radius: 4px;
+            font-size: 10px;
+            padding: 5px 8px;
+            border-radius: 3px;
         }
 
         .btn-primary {
             background-color: #e21a22;
             border-color: #e21a22;
-            padding: 6px 12px;
-            font-size: 11px;
-            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 10px;
+            border-radius: 3px;
         }
 
         .btn-primary:hover {
@@ -172,14 +196,14 @@
         }
 
         .submitted-notice {
-            font-size: 10px;
+            font-size: 9px;
             color: #28a745;
             font-weight: bold;
-            margin-bottom: 10px;
-            padding: 8px;
+            margin-bottom: 8px;
+            padding: 6px;
             background: #f8fff9;
-            border: 1px solid #28a745;
-            border-radius: 4px;
+            border: 1px solid #d4edda;
+            border-radius: 3px;
         }
 
         .submitted-notice a {
@@ -188,9 +212,9 @@
         }
 
         .download-link {
-            font-size: 10px;
+            font-size: 9px;
             color: #e21a22;
-            margin-top: 8px;
+            margin-top: 6px;
             display: block;
         }
 
@@ -219,13 +243,40 @@
                 gap: 10px;
             }
 
-            .kyc-forms-grid {
+            .kyc-main-body {
+                padding: 15px;
                 grid-template-columns: 1fr;
-                gap: 10px;
+                gap: 15px;
             }
 
-            .kyc-card-body {
-                padding: 10px;
+            .kyc-form-section {
+                padding: 12px;
+            }
+
+            .section-title {
+                font-size: 11px;
+            }
+
+            .form-group label {
+                font-size: 9px;
+            }
+
+            .form-control {
+                font-size: 9px;
+                padding: 4px 6px;
+            }
+
+            .btn-primary {
+                padding: 4px 8px;
+                font-size: 9px;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .kyc-main-body {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
         }
     </style>
@@ -284,18 +335,24 @@
             </div>
         </div>
 
-        <!-- KYC Forms Grid -->
+        <!-- Single KYC Forms Card -->
         <div class="kyc-forms-grid">
 
         <!-- KYC Forms Grid -->
-        <div class="kyc-forms-grid">
-            <!-- KYC Form -->
-            <div class="kyc-card">
-                <div class="kyc-card-header">
-                    <i class="fas fa-file-alt" style="margin-right: 5px;"></i>
-                    KYC Form
-                </div>
-                <div class="kyc-card-body">
+        <!-- Single KYC Forms Card -->
+        <div class="kyc-main-card">
+            <div class="kyc-main-header">
+                <i class="fas fa-upload" style="margin-right: 8px;"></i>
+                Document Upload Forms
+            </div>
+            <div class="kyc-main-body">
+                
+                <!-- KYC Form Section -->
+                <div class="kyc-form-section">
+                    <div class="section-title">
+                        <i class="fas fa-file-alt section-icon"></i>
+                        KYC Form
+                    </div>
                     {% if existing_kyc_form %}
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
@@ -325,15 +382,13 @@
                         Download KYC Form Template
                     </a>
                 </div>
-            </div>
 
-            <!-- Copy of Omang -->
-            <div class="kyc-card">
-                <div class="kyc-card-header">
-                    <i class="fas fa-id-card" style="margin-right: 5px;"></i>
-                    Copy of Omang
-                </div>
-                <div class="kyc-card-body">
+                <!-- Copy of Omang Section -->
+                <div class="kyc-form-section">
+                    <div class="section-title">
+                        <i class="fas fa-id-card section-icon"></i>
+                        Copy of Omang
+                    </div>
                     {% if existing_copy_of_omang %}
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
@@ -359,15 +414,13 @@
                         </form>
                     {% endif %}
                 </div>
-            </div>
 
-            <!-- Proof of Residence -->
-            <div class="kyc-card">
-                <div class="kyc-card-header">
-                    <i class="fas fa-home" style="margin-right: 5px;"></i>
-                    Proof of Residence
-                </div>
-                <div class="kyc-card-body">
+                <!-- Proof of Residence Section -->
+                <div class="kyc-form-section">
+                    <div class="section-title">
+                        <i class="fas fa-home section-icon"></i>
+                        Proof of Residence
+                    </div>
                     {% if existing_residence_proof %}
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
@@ -393,15 +446,13 @@
                         </form>
                     {% endif %}
                 </div>
-            </div>
 
-            <!-- Proof of Income -->
-            <div class="kyc-card">
-                <div class="kyc-card-header">
-                    <i class="fas fa-money-bill-wave" style="margin-right: 5px;"></i>
-                    Proof of Income
-                </div>
-                <div class="kyc-card-body">
+                <!-- Proof of Income Section -->
+                <div class="kyc-form-section">
+                    <div class="section-title">
+                        <i class="fas fa-money-bill-wave section-icon"></i>
+                        Proof of Income
+                    </div>
                     {% if existing_income_proof %}
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
@@ -427,6 +478,7 @@
                         </form>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     </div>
