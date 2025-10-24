@@ -1,130 +1,148 @@
 <!DOCTYPE html>
 {% load widget_tweaks %}
-<html lang="en" dir="ltr">
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KoGae - Client Registration</title>
-    <!-- jQuery first -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Modern Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap 5 JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <title>Customer Sign Up - KoGae Insurance</title>
+    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
     
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-            margin: 0;
-            padding-top: 60px;
-            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .main-content {
+            padding-top: 20px;
+            min-height: calc(100vh - 80px);
         }
 
         .signup-container {
-            max-width: 900px;
-            margin: 15px auto;
-            padding: 0 15px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            color: #e22a21;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .page-title {
-            text-align: center;
             color: #e22a21;
-            margin: 15px 0;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
+            margin-bottom: 10px;
         }
 
-        .form-card {
+        .page-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-container {
             background: white;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .form-section {
-            padding: 15px 0;
+            margin-bottom: 30px;
+            padding-bottom: 25px;
             border-bottom: 1px solid #eee;
-            margin-bottom: 15px;
         }
 
         .form-section:last-of-type {
             border-bottom: none;
+            margin-bottom: 20px;
         }
 
         .section-title {
             color: #e22a21;
-            margin-bottom: 15px;
             font-size: 18px;
             font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
         }
 
         .form-label {
+            display: block;
             font-weight: 500;
-            font-size: 13px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: #333;
+            font-size: 14px;
         }
 
         .form-control, .form-select {
+            width: 100%;
+            padding: 12px;
             border: 1px solid #ccc;
-            padding: 8px 12px;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 14px;
+            background-color: white;
         }
 
         .form-control:focus, .form-select:focus {
             border-color: #e22a21;
-            box-shadow: 0 0 0 2px rgba(226, 42, 33, 0.2);
             outline: none;
+            box-shadow: 0 0 0 2px rgba(226, 42, 33, 0.2);
         }
 
-        .btn-primary {
-            background-color: #e22a21;
-            border: 1px solid #e22a21;
-            padding: 10px 20px;
-            border-radius: 4px;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            background-color: #c41f17;
-            border-color: #c41f17;
-        }
-
-        .btn-primary:disabled {
-            background-color: #ccc;
-            border-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .input-group-text {
-            background-color: #f8f9fa;
-            border: 1px solid #ccc;
-            padding: 8px 10px;
-            font-size: 13px;
-        }
-
-        .input-icon-button {
-            background: none;
-            border: none;
+        .form-help {
+            font-size: 12px;
             color: #666;
-            cursor: pointer;
-            padding: 8px;
+            margin-top: 5px;
         }
 
         .alert-messages {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
-            padding: 12px;
             border-radius: 4px;
-            margin-bottom: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
         
         .messages {
@@ -136,706 +154,296 @@
         .messages li {
             margin-bottom: 5px;
         }
-        
-        .error-message {
-            color: #dc3545;
-            font-size: 12px;
+
+        .terms-section {
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .terms-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .terms-wrapper input[type="checkbox"] {
             margin-top: 3px;
+            width: auto;
         }
-        
-        .terms-checkbox {
-            margin-top: 15px;
+
+        .terms-label {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
         }
-        
+
         .terms-link {
             color: #e22a21;
             text-decoration: none;
+            font-weight: 500;
         }
-        
+
         .terms-link:hover {
             text-decoration: underline;
         }
-        
-        .info-icon {
-            color: #666;
-            margin-left: 3px;
-            font-size: 12px;
+
+        .submit-section {
+            text-align: center;
+            padding-top: 20px;
         }
-        
-        .terms-section {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+
+        .btn-submit {
+            background-color: #e22a21;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 200px;
+            transition: background-color 0.3s ease;
         }
-        
-        .terms-section:last-child {
-            border-bottom: none;
+
+        .btn-submit:hover:not(:disabled) {
+            background-color: #c41f17;
         }
-        
-        .modal-content {
-            border-radius: 5px;
-        }
-        
-        .modal-header {
-            border-bottom: 1px solid #e22a21;
-        }
-        
-        .modal-title {
-            color: #e22a21;
-            font-weight: bold;
-        }
-        
-        .form-text {
-            font-size: 11px;
-            color: #666;
+
+        .btn-submit:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
         /* Mobile responsive */
         @media (max-width: 768px) {
             .signup-container {
-                padding: 0 10px;
-            }
-            
-            .form-card {
                 padding: 15px;
             }
             
+            .form-container {
+                padding: 20px;
+            }
+            
             .page-title {
-                font-size: 20px;
-                margin: 10px 0;
+                font-size: 24px;
             }
             
-            .section-title {
-                font-size: 16px;
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
             }
             
-            .btn-primary {
+            .btn-submit {
                 width: 100%;
+                min-width: auto;
             }
         }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     {% include "insurance/navbar.html" %}
     
-    <div class="signup-container">
-      <h1 class="page-title">Client Registration</h1>
-      
-      {% if user_form_errors %}
-        <div class="alert-messages">
-          <ul class="messages">
-            {% for field, error_list in user_form_errors.items %}
-              {% for error in error_list %}
-                <li>{{ error }}</li>
-              {% endfor %}
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-      
-      {% if customer_form_errors %}
-        <div class="alert-messages">
-          <ul class="messages">
-            {% for field, error_list in customer_form_errors.items %}
-              {% for error in error_list %}
-                <li>{{ error }}</li>
-              {% endfor %}
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-      
-      <div id="username-error-message" class="text-center error-message mb-3"></div>
-      
-      <div class="form-card">
-        <form id="myForm" method="POST" autocomplete="off" enctype="multipart/form-data">
-          {% csrf_token %}
-          
-          <!-- Account Information Section -->
-          <div class="form-section">
-            <h3 class="section-title">Account Information</h3>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="first_name" class="form-label">First Name</label>
-                {% render_field userForm.first_name|attr:'required:true' class="form-control" placeholder="First Name" %}
-              </div>
-              <div class="col-md-6">
-                <label for="last_name" class="form-label">Last Name</label>
-                {% render_field userForm.last_name|attr:'required:true' class="form-control" placeholder="Last Name" %}
-              </div>
-              <div class="col-md-6">
-                <label for="username" class="form-label">
-                  Username
-                  <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Username is auto-generated from client's first name and last name"></i>
-                </label>
-                <div class="input-group">
-                  <span class="input-group-text bg-light"><i class="fas fa-user"></i></span>
-                  {% render_field userForm.username|attr:'required:true' class="form-control" placeholder="Username" %}
-                </div>
-              </div>
-              <div class="col-md-6">
-                <label for="inputPassword4" class="form-label">
-                  Password
-                  <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter a strong password with at least 8 characters"></i>
-                </label>
-                <div class="input-group">
-                  <span class="input-group-text bg-light"><i class="fas fa-lock"></i></span>
-                  {% render_field userForm.password|attr:'required:true' class="form-control" placeholder="Password" id="password-input" minlength="8" %}
-                  <button class="btn btn-outline-secondary input-icon-button" type="button" id="toggle-password">
-                    <i class="fas fa-eye" id="eye-icon"></i>
-                  </button>
-                </div>
-                <small class="form-text text-muted">Use at least 8 characters with letters and numbers</small>
-              </div>
-              <div class="col-md-6">
-                <label for="confirm_password" class="form-label">Confirm Password</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-light"><i class="fas fa-lock"></i></span>
-                  <input type="password" name="confirm_password" class="form-control" id="confirm-password-input" placeholder="Confirm Password" required>
-                  <button class="btn btn-outline-secondary input-icon-button" type="button" id="toggle-confirm-password">
-                    <i class="fas fa-eye" id="confirm-eye-icon"></i>
-                  </button>
-                </div>
-                <div id="confirm-password-error-message" class="error-message"></div>
-              </div>
+    <div class="main-content">
+        <div class="signup-container">
+            <div class="back-link">
+                <a href="/customer/customerclick">
+                    <i class="ri-arrow-left-line"></i>
+                    Back to Customer Area
+                </a>
             </div>
-          </div>
-          
-          <!-- Personal Information Section -->
-          <div class="form-section">
-            <h3 class="section-title">Personal Information</h3>
-            <div class="row g-3">
-              <div class="col-md-6 col-lg-4">
-                <label for="gender" class="form-label">Gender</label>
-                {{ customerForm.gender|attr:'required:true'|add_class:"form-select" }}
-              </div>
-              <div class="col-md-6 col-lg-4">
-                <label for="date_of_birth" class="form-label">Date of Birth</label>
-                {{ customerForm.date_of_birth|attr:'required:true'|add_class:"form-control" }}
-              </div>
-              <div class="col-md-6 col-lg-4">
-                <label for="marital_status" class="form-label">Marital Status</label>
-                {{ customerForm.marital_status|attr:'required:true'|add_class:"form-select" }}
-              </div>
-              <div class="col-md-6">
-                <label for="id_type" class="form-label">Identification Type</label>
-                {% render_field customerForm.id_type|attr:'required:true' class="form-select" %}
-              </div>
-              <div class="col-md-6">
-                <label for="id_number" class="form-label">ID/Passport Number</label>
-                {% render_field customerForm.id_number|attr:'required:true' class="form-control" placeholder="ID/Passport Number" %}
-              </div>
+
+            <div class="page-header">
+                <h1 class="page-title">Create Your Account</h1>
+                <p class="page-subtitle">Join KoGae Insurance and protect what matters most</p>
             </div>
-          </div>
-          
-          <!-- Contact Information Section -->
-          <div class="form-section">
-            <h3 class="section-title">Contact Information</h3>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="mobile" class="form-label">Mobile</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-light"><i class="fas fa-phone"></i></span>
-                  {% render_field customerForm.mobile|attr:'required:true' class="form-control" placeholder="Mobile (8 digits)" id="id_mobile" %}
-                </div>
-                <div id="mobile-error-message" class="error-message"></div>
-                <small class="form-text text-muted">Enter your 8-digit mobile number without the country code +267</small>
-              </div>
-              <div class="col-md-6">
-                <label for="alternate_phone" class="form-label">
-                  Alternate Phone
-                  <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter N/A if not available"></i>
-                </label>
-                {% render_field customerForm.alternate_phone|attr:'required:false' class="form-control" placeholder="Alternate Phone" %}
-              </div>
-              <div class="col-md-6">
-                <label for="address" class="form-label">Email Address</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-light"><i class="fas fa-envelope"></i></span>
-                  {% render_field customerForm.address|attr:'required:true' class="form-control" placeholder="Email" type="email" %}
-                </div>
-              </div>
-              <div class="col-md-6">
-                <label for="occupation" class="form-label">Occupation</label>
-                {% render_field customerForm.occupation|attr:'required:true' class="form-control" placeholder="Occupation" %}
-              </div>
-              <div class="col-md-6">
-                <label for="physical_address" class="form-label">Physical Address</label>
-                {% render_field customerForm.physical_address|attr:'required:true' class="form-control" placeholder="Physical Address" %}
-              </div>
-              <div class="col-md-6">
-                <label for="postal_address" class="form-label">Postal Address</label>
-                {% render_field customerForm.postal_address|attr:'required:true' class="form-control" placeholder="Postal Address" %}
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-check terms-checkbox">
-            <input type="checkbox" class="form-check-input" id="termsCheck" required>
-            <label class="form-check-label" for="termsCheck">
-              I agree to the <a href="#" class="terms-link" id="termsLink">Terms and Conditions</a>
-            </label>
-          </div>
-          
-          <div class="mt-4">
-            <button type="submit" class="btn btn-primary" id="signupBtn" disabled>Submit Registration</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Terms and Conditions Modal -->
-<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="terms-section">
-          <p><strong>Information Collection:</strong> By submitting your details for our insurance services, you agree to provide accurate and complete information about yourself, including personal details, contact information, and any other data required for insurance purposes.</p>
-        </div>
-        <div class="terms-section">
-          <p><strong>Data Protection:</strong> We are committed to protecting your privacy and securing your personal information. Any data collected from you will be used solely for the purpose of providing insurance services and will not be shared with third parties without your consent, except as required by law.</p>
-        </div>
-        <div class="terms-section">
-          <p><strong>Accuracy of Information:</strong> It is your responsibility to ensure that all information provided to us is accurate and up-to-date. Any inaccuracies or omissions may affect the coverage and validity of your insurance policy.</p>
-        </div>
-        <div class="terms-section">
-          <p><strong>Use of Information:</strong> We may use the information collected from you to assess your insurance needs, process claims, communicate with you regarding your policy, and improve our services. By agreeing to these terms, you consent to the use of your information for these purposes.</p>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="acceptTerms" data-bs-dismiss="modal">Accept</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header" style="border-bottom: 1px solid #e22a21;">
-        <h5 class="modal-title" id="successModalLabel" style="color: #e22a21; font-weight: bold;">
-          <i class="fas fa-check-circle me-2"></i>Registration Successful!
-        </h5>
-      </div>
-      <div class="modal-body text-center" style="padding: 20px;">
-        <div class="mb-3">
-          <i class="fas fa-check-circle" style="font-size: 48px; color: #28a745;"></i>
-        </div>
-        <h4 style="color: #28a745; margin-bottom: 15px;">Welcome to KoGae Insurance!</h4>
-        <p class="lead" style="color: #333;">Your registration has been completed successfully.</p>
-        <p style="color: #666;">You can now use your username and password to log in to your account and access all our insurance services.</p>
-        <div class="mt-4">
-          <p><strong>Next Steps:</strong></p>
-          <ul class="list-unstyled" style="color: #333;">
-            <li><i class="fas fa-arrow-right me-2" style="color: #e22a21;"></i>You will be redirected to the login page</li>
-            <li><i class="fas fa-arrow-right me-2" style="color: #e22a21;"></i>Use your username and password to sign in</li>
-            <li><i class="fas fa-arrow-right me-2" style="color: #e22a21;"></i>Explore your customer dashboard</li>
-          </ul>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content: center; border-top: none;">
-        <button type="button" class="btn btn-primary" id="goToLogin" style="min-width: 180px;">
-          <i class="fas fa-sign-in-alt me-2"></i>Go to Login Page
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-    <!-- JAVASCRIPT SCRIPTS FOR MORE FUNCTIONALITIES -->
-
-    <script>
-      // Function to display the tooltip information 'i' icon - updated for Bootstrap 5
-      $(document).ready(function(){
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-      });
-    </script>
-    <script>
-      $(document).ready(function () {
-        // Function to update the username field
-        function updateUsername() {
-          var firstName = $('#id_first_name').val().toLowerCase();
-          var lastName = $('#id_last_name').val().toLowerCase();
-          var generatedUsername = firstName.charAt(0) + lastName;
-          $('#id_username').val(generatedUsername);
-        }
-    
-        // Listen for changes in the first_name and last_name fields
-        $('#id_first_name, #id_last_name').on('input', function () {
-          updateUsername();
-        });
-        // Initial username update
-        updateUsername();
-      });
-
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var mobileInput = document.getElementById("id_mobile");
-        var alternatePhoneInput = document.getElementById("id_alternate_phone");
-
-  
-          mobileInput.addEventListener("input", function () {
-              var mobileValue = mobileInput.value.trim();
-              var errorMessage = document.getElementById("mobile-error-message");
-  
-              // Validate if the mobile number is exactly 8 digits and does not include the country code +267
-              if (/^\d{8}$/.test(mobileValue) && !mobileValue.startsWith("+267")) {
-                  errorMessage.textContent = "";  // Clear any previous error message
-              } else {
-                  errorMessage.textContent = "Please enter a valid 8-digit mobile number without the country code +267.";
-              }
-          });
-      });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Password toggle functionality
-        const passwordInput = document.getElementById("password-input");
-        const togglePasswordButton = document.getElementById("toggle-password");
-        const eyeIcon = document.getElementById("eye-icon");
-        
-        // Confirm password toggle functionality
-        const confirmPasswordInput = document.getElementById("confirm-password-input");
-        const toggleConfirmPasswordButton = document.getElementById("toggle-confirm-password");
-        const confirmEyeIcon = document.getElementById("confirm-eye-icon");
-
-        // Toggle password visibility
-        togglePasswordButton.addEventListener("click", function() {
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
-            } else {
-                passwordInput.type = "password";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
-            }
-        });
-        
-        // Toggle confirm password visibility
-        toggleConfirmPasswordButton.addEventListener("click", function() {
-            if (confirmPasswordInput.type === "password") {
-                confirmPasswordInput.type = "text";
-                confirmEyeIcon.classList.remove("fa-eye");
-                confirmEyeIcon.classList.add("fa-eye-slash");
-            } else {
-                confirmPasswordInput.type = "password";
-                confirmEyeIcon.classList.remove("fa-eye-slash");
-                confirmEyeIcon.classList.add("fa-eye");
-            }
-        });
-    });
-</script>
-<script>
-  $(document).ready(function() {
-    // Function to display error message for username
-    function displayUsernameErrorMessage() {
-      $('#username-error-message').text("A user with that username already exists.");
-    }
-
-    // Check if the user form has errors related to the username field
-    var userFormErrors = '{{ user_form_errors }}';
-    if (userFormErrors.includes('username')) {
-      displayUsernameErrorMessage();
-    }
-  });
-</script>
-
-<script>
-  $(document).ready(function () {
-      // Function to validate password confirmation
-      function validatePasswordConfirmation() {
-          var password = $('#password-input').val();
-          var confirmPassword = $('#confirm-password-input').val();
-          var errorMessage = $('#confirm-password-error-message');
-
-          if (password === confirmPassword) {
-              errorMessage.text("Passwords match!");  // Clear any previous error message
-              return true;
-          } else {
-              errorMessage.text("Passwords do not match!");
-              return false;
-          }
-      }
-
-      // Listen for changes in the password and password confirmation fields
-      $('#password-input, #confirm-password-input').on('input', function () {
-          validatePasswordConfirmation();
-      });
-
-      // Validate the password confirmation before submitting the form
-      $('form').submit(function (event) {
-          if (!validatePasswordConfirmation()) {
-              event.preventDefault(); // Prevent form submission if passwords do not match
-          }
-      });
-  });
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Add helper function to clean up modal backdrop issues
-    window.cleanupModal = function() {
-      $('.modal-backdrop').remove();
-      $('body').removeClass('modal-open').css('overflow', '');
-      $('body').css('padding-right', '');
-    };
-    
-    // Select the form element
-    const form = document.getElementById("myForm");
-    const submitBtn = document.getElementById("signupBtn");
-
-    // Add event listener for form submission
-    form.addEventListener("submit", function(event) {
-      // Prevent the form from submitting normally
-      event.preventDefault();
-
-      // Client-side validation before submitting
-      let validationErrors = [];
-      
-      // Check required fields
-      const requiredFields = [
-        { name: 'first_name', label: 'First Name' },
-        { name: 'last_name', label: 'Last Name' },
-        { name: 'username', label: 'Username' },
-        { name: 'password', label: 'Password' },
-        { name: 'confirm_password', label: 'Confirm Password' },
-        { name: 'gender', label: 'Gender' },
-        { name: 'date_of_birth', label: 'Date of Birth' },
-        { name: 'marital_status', label: 'Marital Status' },
-        { name: 'id_type', label: 'ID Type' },
-        { name: 'id_number', label: 'ID Number' },
-        { name: 'mobile', label: 'Mobile' },
-        { name: 'address', label: 'Email Address' },
-        { name: 'occupation', label: 'Occupation' },
-        { name: 'physical_address', label: 'Physical Address' },
-        { name: 'postal_address', label: 'Postal Address' }
-      ];
-      
-      requiredFields.forEach(field => {
-        const input = form.querySelector(`[name="${field.name}"]`);
-        if (input && (!input.value || input.value.trim() === '')) {
-          validationErrors.push(`${field.label} is required.`);
-        }
-      });
-      
-      // Check password confirmation
-      const password = form.querySelector('[name="password"]').value;
-      const confirmPassword = form.querySelector('[name="confirm_password"]').value;
-      if (password !== confirmPassword) {
-        validationErrors.push('Passwords do not match.');
-      }
-      
-      // Check password length
-      if (password && password.length < 8) {
-        validationErrors.push('Password must be at least 8 characters long.');
-      }
-      
-      // Check mobile number format (8 digits)
-      const mobile = form.querySelector('[name="mobile"]').value;
-      if (mobile && !/^\d{8}$/.test(mobile)) {
-        validationErrors.push('Mobile number must be exactly 8 digits.');
-      }
-      
-      // Check email format
-      const email = form.querySelector('[name="address"]').value;
-      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        validationErrors.push('Please enter a valid email address.');
-      }
-      
-      // Check terms agreement
-      const termsCheck = form.querySelector('#termsCheck');
-      if (!termsCheck.checked) {
-        validationErrors.push('You must agree to the Terms and Conditions.');
-      }
-      
-      // If there are validation errors, display them and stop submission
-      if (validationErrors.length > 0) {
-        // Clear any existing error displays
-        document.querySelectorAll('.alert-messages').forEach(el => el.remove());
-        
-        // Create error messages container
-        let errorHtml = '<div class="alert-messages"><ul class="messages">';
-        validationErrors.forEach(error => {
-          errorHtml += `<li>${error}</li>`;
-        });
-        errorHtml += '</ul></div>';
-        
-        // Insert error messages at the top of the form
-        const formCard = document.querySelector('.form-card');
-        formCard.insertAdjacentHTML('afterbegin', errorHtml);
-        
-        // Scroll to top to show errors
-        document.querySelector('.signup-container').scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
-        });
-        
-        return; // Stop here, don't submit the form
-      }
-
-      // If validation passes, proceed with form submission
-      // Disable submit button to prevent multiple submissions
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
-
-      // Create FormData object
-      const formData = new FormData(form);
-
-      // Use fetch API to submit the form data
-      fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRFToken': formData.get('csrfmiddlewaretoken')
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Success: Show success modal
-          console.log('Registration successful!');
-          
-          // Hide any existing error messages
-          document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-          document.querySelectorAll('.alert-messages').forEach(el => el.style.display = 'none');
-          
-          // Show success modal
-          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-          successModal.show();
-          
-          // Clear form (optional, since user will be redirected)
-          form.reset();
-          
-        } else {
-          // Error: Display error messages
-          console.log('Registration failed:', data.message);
-          console.log('User form errors:', data.user_form_errors);
-          console.log('Customer form errors:', data.customer_form_errors);
-          
-          // Clear any existing error displays
-          document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-          document.querySelectorAll('.alert-messages').forEach(el => el.remove());
-          
-          // Create error messages container
-          let errorHtml = '<div class="alert-messages"><ul class="messages">';
-          let hasErrors = false;
-          
-          // Add general message if exists
-          if (data.message) {
-            errorHtml += `<li>${data.message}</li>`;
-            hasErrors = true;
-          }
-          
-          // Display user form errors
-          if (data.user_form_errors) {
-            for (const [field, errors] of Object.entries(data.user_form_errors)) {
-              for (const error of errors) {
-                errorHtml += `<li><strong>${field.charAt(0).toUpperCase() + field.slice(1)}:</strong> ${error}</li>`;
-                hasErrors = true;
-              }
-            }
-          }
-          
-          // Display customer form errors
-          if (data.customer_form_errors) {
-            for (const [field, errors] of Object.entries(data.customer_form_errors)) {
-              for (const error of errors) {
-                let fieldName = field.replace('_', ' ').charAt(0).toUpperCase() + field.replace('_', ' ').slice(1);
-                errorHtml += `<li><strong>${fieldName}:</strong> ${error}</li>`;
-                hasErrors = true;
-              }
-            }
-          }
-          
-          errorHtml += '</ul></div>';
-          
-          // Insert error messages at the top of the form
-          if (hasErrors) {
-            const formCard = document.querySelector('.form-card');
-            formCard.insertAdjacentHTML('afterbegin', errorHtml);
             
-            // Scroll to top to show errors
-            document.querySelector('.signup-container').scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start' 
-            });
-          }
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while submitting the form. Please try again.');
-      })
-      .finally(() => {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Submit Registration';
-      });
-    });
-    
-    // Handle success modal "Go to Login" button
-    document.getElementById('goToLogin').addEventListener('click', function() {
-      // Redirect to login page
-      window.location.href = '/customer/customerlogin';
-    });
-  });
-</script>
+            {% if user_form_errors or customer_form_errors %}
+                <div class="alert-messages">
+                    <ul class="messages">
+                        {% for field, error_list in user_form_errors.items %}
+                            {% for error in error_list %}
+                                <li><strong>{{ field|title }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for field, error_list in customer_form_errors.items %}
+                            {% for error in error_list %}
+                                <li><strong>{{ field|title|replace:"_":" " }}:</strong> {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            <div class="form-container">
+                <form method="POST" autocomplete="off" id="signupForm">
+                    {% csrf_token %}
+                    
+                    <!-- Account Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="ri-user-line"></i>
+                            Account Information
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_first_name" class="form-label">First Name *</label>
+                                {% render_field userForm.first_name class="form-control" placeholder="Enter your first name" %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_last_name" class="form-label">Last Name *</label>
+                                {% render_field userForm.last_name class="form-control" placeholder="Enter your last name" %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_username" class="form-label">Username *</label>
+                                {% render_field userForm.username class="form-control" placeholder="Username" readonly="readonly" %}
+                                <div class="form-help">Username is automatically generated from your names</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password" class="form-label">Password *</label>
+                                {% render_field userForm.password class="form-control" placeholder="Create a secure password" %}
+                                <div class="form-help">Minimum 8 characters required</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="ri-profile-line"></i>
+                            Personal Information
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_gender" class="form-label">Gender *</label>
+                                {{ customerForm.gender|add_class:"form-select" }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_date_of_birth" class="form-label">Date of Birth *</label>
+                                {{ customerForm.date_of_birth|add_class:"form-control" }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_marital_status" class="form-label">Marital Status *</label>
+                                {{ customerForm.marital_status|add_class:"form-select" }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_id_type" class="form-label">ID Type *</label>
+                                {% render_field customerForm.id_type class="form-select" %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="id_id_number" class="form-label">ID/Passport Number *</label>
+                            {% render_field customerForm.id_number class="form-control" placeholder="Enter your ID or passport number" %}
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="ri-contacts-line"></i>
+                            Contact Information
+                        </h3>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_mobile" class="form-label">Mobile Number *</label>
+                                {% render_field customerForm.mobile class="form-control" placeholder="71234567" %}
+                                <div class="form-help">Enter 8 digits without country code (+267)</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_alternate_phone" class="form-label">Alternate Phone</label>
+                                {% render_field customerForm.alternate_phone class="form-control" placeholder="Optional alternate number" %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_address" class="form-label">Email Address *</label>
+                                {% render_field customerForm.address class="form-control" placeholder="your.email@example.com" type="email" %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_occupation" class="form-label">Occupation *</label>
+                                {% render_field customerForm.occupation class="form-control" placeholder="Your profession" %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="id_physical_address" class="form-label">Physical Address *</label>
+                                {% render_field customerForm.physical_address class="form-control" placeholder="Your physical address" %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_postal_address" class="form-label">Postal Address *</label>
+                                {% render_field customerForm.postal_address class="form-control" placeholder="Your postal address" %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="terms-section">
+                        <div class="terms-wrapper">
+                            <input type="checkbox" id="termsCheck" required>
+                            <label for="termsCheck" class="terms-label">
+                                I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and understand that my information will be used to provide insurance services.
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="submit-section">
+                        <button type="submit" class="btn-submit" disabled>
+                            <i class="ri-user-add-line"></i>
+                            Create My Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-<script>
-  // Initialize Bootstrap 5 tooltips and modal handling
-  $(document).ready(function(){
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-    
-    // Open modal when clicking the terms link
-    $('#termsLink').on('click', function(e) {
-      e.preventDefault();
-      // Open the modal using Bootstrap 5's native API
-      var termsModal = new bootstrap.Modal(document.getElementById('termsModal'));
-      termsModal.show();
-    });
-    
-    // Terms checkbox handling
-    $('#termsCheck').change(function() {
-      $('#signupBtn').prop('disabled', !this.checked);
-    });
-    
-    // Accept terms button functionality - check the box when Accept is clicked
-    $('#acceptTerms').click(function() {
-      $('#termsCheck').prop('checked', true);
-      $('#signupBtn').prop('disabled', false);
-      // Modal will close automatically via data-bs-dismiss="modal"
-    });
-  });
-</script>
-
-    <!-- Additional script for modal cleanup if needed -->
     <script>
-      // This script runs after everything is loaded
-      window.addEventListener('load', function() {
-        // Event listener for when modal is hidden - log for debugging
-        document.getElementById('termsModal').addEventListener('hidden.bs.modal', function () {
-          console.log('Modal was closed');
-          // Bootstrap 5 should handle cleanup automatically now
+        document.addEventListener('DOMContentLoaded', function() {
+            // Username generation
+            const firstNameInput = document.querySelector('#id_first_name');
+            const lastNameInput = document.querySelector('#id_last_name');
+            const usernameInput = document.querySelector('#id_username');
+            
+            function generateUsername() {
+                const firstName = firstNameInput.value.trim().toLowerCase();
+                const lastName = lastNameInput.value.trim().toLowerCase();
+                
+                if (firstName && lastName) {
+                    const username = firstName.charAt(0) + lastName;
+                    usernameInput.value = username;
+                }
+            }
+            
+            if (firstNameInput && lastNameInput && usernameInput) {
+                firstNameInput.addEventListener('input', generateUsername);
+                lastNameInput.addEventListener('input', generateUsername);
+            }
+            
+            // Terms checkbox handling
+            const termsCheck = document.getElementById('termsCheck');
+            const submitBtn = document.querySelector('.btn-submit');
+            
+            if (termsCheck && submitBtn) {
+                termsCheck.addEventListener('change', function() {
+                    submitBtn.disabled = !this.checked;
+                });
+            }
         });
-      });
     </script>
-    
+
     {% include "insurance/footer.html" %}
-  </body>
+</body>
 </html>

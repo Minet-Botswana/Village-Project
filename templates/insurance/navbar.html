@@ -1,192 +1,161 @@
 {% load static %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
 
 <style>
-  :root {
-    --primary-color: #12ac8e;
-    --secondary-color: #fb923c;
-    --white: #ffffff;
-    --dark: #1e293b;
-    --light-gray: #f1f5f9;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  .kogae-navbar {
-    padding: 0.75rem 1rem;
-    background-color: var(--white);
-    box-shadow: var(--shadow);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1030;
-    transition: all 0.3s ease;
-  }
-  
-  .kogae-navbar-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .kogae-navbar-brand {
-    display: flex;
-    align-items: center;
-    margin-right: 1rem;
-  }
-  
-  .kogae-navbar-logo {
-    max-height: 40px;
-    width: auto;
-  }
-  
-  .kogae-navbar-links {
-    display: flex;
-    align-items: center;
+  body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    list-style: none;
-    margin-left: auto;
+    line-height: 1.6;
+    color: #333;
   }
-  
-  .kogae-navbar-item {
-    margin: 0 0.5rem;
-  }
-  
-  .kogae-navbar-link {
-    color: var(--dark);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    padding: 0.5rem 0.75rem;
+
+  .btn {
+    padding: 12px 24px;
+    background-color: #e22a21;
+    color: white;
+    border: none;
     border-radius: 4px;
-    transition: all 0.2s ease;
+    font-size: 14px;
+    cursor: pointer;
     text-decoration: none;
     display: inline-block;
   }
-  
-  .kogae-navbar-link:hover,
-  .kogae-navbar-link:focus {
-    color: var(--white);
-    background-color: var(--primary-color);
+
+  .btn:hover {
+    background-color: #c41f17;
+  }
+
+  .btn a {
+    color: white;
     text-decoration: none;
-    transform: translateY(-2px);
   }
-  
-  .kogae-navbar-toggle {
+
+  header {
+    background-color: #e22a21;
+    color: white;
+    padding: 0;
+  }
+
+  .nav__container {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .nav__logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .nav__logo span {
+    color: #fb923c;
+  }
+
+  .nav__links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .link a:hover {
+    color: #fb923c;
+  }
+
+  .mobile__menu {
     display: none;
-    background: transparent;
-    border: none;
-    color: var(--dark);
-    font-size: 1.5rem;
+    font-size: 24px;
+    color: white;
     cursor: pointer;
-    padding: 0.25rem;
   }
-  
-  /* Mobile Navigation */
+
+  /* Mobile responsive */
   @media (max-width: 768px) {
-    .kogae-navbar-container {
-      justify-content: space-between;
-    }
-    
-    .kogae-navbar-links {
-      position: fixed;
+    .nav__links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
       top: 60px;
       left: 0;
       right: 0;
-      flex-direction: column;
-      background-color: var(--white);
-      box-shadow: var(--shadow);
-      padding: 1rem;
-      margin: 0;
-      transform: translateY(-100%);
-      transition: transform 0.3s ease;
-      opacity: 0;
-      visibility: hidden;
-      z-index: 1029;
+      background-color: #e22a21;
+      padding: 20px;
+      gap: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
-    .kogae-navbar-links.show {
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
+
+    .nav__links.active {
+      display: flex;
     }
-    
-    .kogae-navbar-item {
-      width: 100%;
-      margin: 0.5rem 0;
-    }
-    
-    .kogae-navbar-link {
+
+    .mobile__menu {
       display: block;
-      width: 100%;
-      text-align: center;
-      padding: 0.75rem;
-    }
-    
-    .kogae-navbar-toggle {
-      display: block;
-      margin-left: auto;
-      order: 2;
     }
   }
 </style>
 
-<!-- Navigation Bar -->
-<nav class="kogae-navbar">
-  <div class="kogae-navbar-container">
-    <div class="kogae-navbar-brand">
-      <img src="{% static 'image/minetbryte.png' %}" alt="Minet Logo" class="kogae-navbar-logo">
-    </div>
-    
-    <button class="kogae-navbar-toggle" id="navbar-toggle" aria-label="Toggle Navigation">
-      <i class="fas fa-bars"></i>
-    </button>
-    
-    <ul class="kogae-navbar-links" id="navbar-links">
-      <li class="kogae-navbar-item">
-        <a href="/" class="kogae-navbar-link">Home</a>
-      </li>
-      <li class="kogae-navbar-item">
-        <a href="/covers" class="kogae-navbar-link">Covers</a>
-      </li>
-      <li class="kogae-navbar-item">
-        <a href="/customer/customerclick" class="kogae-navbar-link">Your Information</a>
-      </li>
-      <li class="kogae-navbar-item">
-        <a href="/contactus" class="kogae-navbar-link">Claims</a>
-      </li>
-      <li class="kogae-navbar-item">
-        <a href="/customer/customerlogin" class="kogae-navbar-link">Login</a>
-      </li>
+<header>
+  <nav class="nav__container">
+    <img src="{% static 'image/minetbryte.png' %}" alt="Minet Bryte Logo" style="width: 200px; height: auto; background-color: white; border-radius: 7px;" />
+    <ul class="nav__links">
+      <li class="link"><a href="/">Home</a></li>
+      <li class="link"><a href="/covers">Covers</a></li>
+      <li class="link"><a href="/customer/customerclick">Your Information</a></li>
+      <li class="link"><a href="/claims">Claims</a></li>
     </ul>
-  </div>
-</nav>
+    <button class="btn">
+      <a href="/customer/customerlogin">Login</a>
+    </button>
+    <div class="mobile__menu">
+      <i class="ri-menu-line"></i>
+    </div>
+  </nav>
+</header>
 
 <script>
-  // Mobile menu toggle functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const navbarToggle = document.getElementById('navbar-toggle');
-    const navbarLinks = document.getElementById('navbar-links');
-    
-    navbarToggle.addEventListener('click', function() {
-      navbarLinks.classList.toggle('show');
-    });
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-      const isClickInsideNav = navbarToggle.contains(event.target) || 
-                              navbarLinks.contains(event.target);
+  // Mobile menu functionality
+  const mobileMenu = document.querySelector('.mobile__menu');
+  const navLinks = document.querySelector('.nav__links');
+  
+  if (mobileMenu) {
+    mobileMenu.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
       
-      if (!isClickInsideNav && navbarLinks.classList.contains('show')) {
-        navbarLinks.classList.remove('show');
+      // Change icon based on menu state
+      const icon = mobileMenu.querySelector('i');
+      if (navLinks.classList.contains('active')) {
+        icon.classList.remove('ri-menu-line');
+        icon.classList.add('ri-close-line');
+      } else {
+        icon.classList.remove('ri-close-line');
+        icon.classList.add('ri-menu-line');
+      }
+    });
+  }
+  
+  // Close mobile menu when clicking a nav link
+  const links = document.querySelectorAll('.nav__links li a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      if (navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+        const icon = mobileMenu.querySelector('i');
+        icon.classList.remove('ri-close-line');
+        icon.classList.add('ri-menu-line');
       }
     });
   });
