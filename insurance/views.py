@@ -701,8 +701,39 @@ def disapprove_thirdpartyrequest_view(request,pk):
 
 
 def admin_question_view(request):
-    questions = models.Question.objects.all()
-    return render(request,'insurance/admin_question.html',{'questions':questions})
+    if request.method == 'POST':
+        question_id = request.POST.get('question_id')
+        admin_comment = request.POST.get('admin_comment')
+        
+        if question_id and admin_comment:
+            try:
+                from django.utils import timezone
+                question = models.Question.objects.get(id=question_id)
+                question.admin_comment = admin_comment
+                question.answered_by = request.user
+                question.answered_date = timezone.now()
+                question.save()
+                messages.success(request, 'Response submitted successfully!')
+            except models.Question.DoesNotExist:
+                messages.error(request, 'Question not found.')
+        
+        return redirect('admin-question')
+    
+    questions = models.Question.objects.all().order_by('-asked_date')
+    
+    # Calculate statistics
+    total_questions = questions.count()
+    answered_questions = questions.exclude(admin_comment='Nothing').count()
+    pending_questions = questions.filter(admin_comment='Nothing').count()
+    
+    context = {
+        'questions': questions,
+        'total_questions': total_questions,
+        'answered_questions': answered_questions,
+        'pending_questions': pending_questions,
+    }
+    
+    return render(request, 'insurance/admin_question.html', context)
 
 from customer.models import Customer, KYCform, CopyOfOmang, ResidenceProof, IncomeProof, HomeownersCover, ThirdPartyCarInsurance
 

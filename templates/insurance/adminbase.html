@@ -121,6 +121,96 @@
             padding: 30px 20px;
         }
 
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 15px;
+                height: auto;
+                flex-wrap: wrap;
+            }
+
+            .admin-logo {
+                font-size: 18px;
+                padding: 15px 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .admin-nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                order: 3;
+                gap: 0;
+                border-top: 1px solid rgba(255,255,255,0.2);
+            }
+
+            .admin-nav-links.show {
+                display: flex;
+            }
+
+            .nav-item {
+                width: 100%;
+                height: auto;
+            }
+
+            .nav-link {
+                padding: 12px 15px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                height: auto;
+            }
+
+            .admin-user {
+                padding: 15px 0;
+                order: 2;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .logout-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .admin-container {
+                padding: 20px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-logo {
+                font-size: 16px;
+            }
+
+            .nav-link {
+                font-size: 13px;
+            }
+
+            .nav-link i {
+                font-size: 14px;
+            }
+
+            .admin-container {
+                padding: 15px 10px;
+            }
+        }
+
         {% block extra_css %}{% endblock %}
     </style>
 </head>
@@ -132,7 +222,11 @@
                 <i class="ri-shield-user-line"></i> Minet Admin
             </a>
             
-            <ul class="admin-nav-links">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="ri-menu-line"></i>
+            </button>
+
+            <ul class="admin-nav-links" id="adminNavLinks">
                 <li class="nav-item">
                     <a href="{% url 'admin-view-customer' %}" class="nav-link">
                         <i class="ri-user-line"></i> Customers
@@ -174,6 +268,28 @@
         {% block content %}
         {% endblock %}
     </div>
+
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const adminNavLinks = document.getElementById('adminNavLinks');
+            
+            if (mobileMenuBtn && adminNavLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    adminNavLinks.classList.toggle('show');
+                    const icon = this.querySelector('i');
+                    if (adminNavLinks.classList.contains('show')) {
+                        icon.classList.remove('ri-menu-line');
+                        icon.classList.add('ri-close-line');
+                    } else {
+                        icon.classList.remove('ri-close-line');
+                        icon.classList.add('ri-menu-line');
+                    }
+                });
+            }
+        });
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>
