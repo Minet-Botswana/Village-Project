@@ -114,6 +114,27 @@
     text-decoration: none;
   }
   
+  .action-link.disabled {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .action-link.disabled:hover {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+  
+  .requirement-text {
+    display: block;
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 4px;
+    font-style: italic;
+  }
+  
   .action-icon {
     margin-right: 10px;
     width: 20px;
@@ -185,12 +206,22 @@
           Apply for Homeowners Insurance
         </a>
       </li>
+      {% if has_approved_homeowners %}
       <li class="action-item">
         <a href="{% url 'customer:apply-thirdparty' %}" class="action-link">
           <i class="fas fa-car action-icon"></i>
-          Apply for Motor Insurance
+          Apply for Motor Insurance Add-on
         </a>
       </li>
+      {% else %}
+      <li class="action-item action-disabled">
+        <div class="action-link disabled">
+          <i class="fas fa-car action-icon"></i>
+          <span>Motor Insurance Add-on</span>
+          <small class="requirement-text">Requires approved homeowners coverage</small>
+        </div>
+      </li>
+      {% endif %}
       <li class="action-item">
         <a href="{% url 'customer:my-applications' %}" class="action-link">
           <i class="fas fa-list action-icon"></i>

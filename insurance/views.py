@@ -11,7 +11,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from customer import models as CMODEL
 from customer import forms as CFORM
-from .models import CustomModelName
+from .models import CustomModelName, PolicyRecord
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.views import View
@@ -107,12 +107,28 @@ def admin_view_customer_view(request):
     for entry in marital_status_distribution:
         marital_status_counts[entry['marital_status']] = entry['count']
         
+    # Get individual counts for template use
+    male_count = customers.filter(gender='M').count()
+    female_count = customers.filter(gender='F').count()
+    married_count = customers.filter(marital_status='M').count()
+    single_count = customers.filter(marital_status='S').count()
+        
     # Serialize marital_status_counts dictionary to JSON
     marital_status_counts_json = json.dumps(marital_status_counts)
     print("Marital Status Counts:", marital_status_counts)
     print("gender_percentage", gender_percentage_json)
 
-    return render(request, 'insurance/admin_view_customer.html', {'customers': customers, 'gender_percentage_json': gender_percentage_json,'marital_status_counts_json': marital_status_counts_json})
+    context = {
+        'customers': customers, 
+        'gender_percentage_json': gender_percentage_json,
+        'marital_status_counts_json': marital_status_counts_json,
+        'male_count': male_count,
+        'female_count': female_count,
+        'married_count': married_count,
+        'single_count': single_count,
+    }
+    
+    return render(request, 'insurance/admin_view_customer.html', context)
 
 
 # In your views.py
@@ -299,6 +315,20 @@ def admin_apply_thirdparty_view(request):
                 print('Customer with ID number', id_number, 'does not exist')
                 return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
 
+            # Check if customer has approved homeowners coverage
+            approved_homeowners = PolicyRecord.objects.filter(
+                customer=customer, 
+                status__in=['Approved', 'Active']
+            ).exists()
+            
+            if not approved_homeowners:
+                messages.error(request, 
+                    f"Customer {customer.get_name()} (ID: {id_number}) does not have approved homeowners coverage. "
+                    "Motor insurance can only be offered as an add-on to existing homeowners coverage. "
+                    "Please ensure the customer has approved homeowners insurance first."
+                )
+                return render(request, 'insurance/admin_add_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
+
             policy = thirdpartypolicyForm.save(commit=False)
             print("Policy before assignment:", policy)
             policy.category = category
@@ -310,7 +340,7 @@ def admin_apply_thirdparty_view(request):
 
             # Save the policy
             policy.save()
-            messages.success(request, "Cover created Successfully!")
+            messages.success(request, f"Motor insurance add-on created successfully for {customer.get_name()}!")
             print("Policy successfully saved!")
             print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
@@ -428,7 +458,19 @@ def admin_view_policy_holder_view(request):
     #policyrecords = models.PolicyRecord.objects.all()
     userrecords = models.Customer.objects.all()
     policyrecords = models.PolicyRecord.objects.select_related('Policy').all()
-    return render(request,'insurance/admin_view_policy_holder.html',{'policyrecords':policyrecords, 'userrecords':userrecords})
+    
+    # Calculate counts for different policy statuses
+    pending_count = policyrecords.filter(status='Pending').count()
+    approved_count = policyrecords.filter(status='Approved').count()
+    rejected_count = policyrecords.filter(status='Rejected').count()
+    
+    return render(request,'insurance/admin_view_policy_holder.html',{
+        'policyrecords': policyrecords, 
+        'userrecords': userrecords,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
+        'rejected_count': rejected_count
+    })
 
 def admin_view_thirdpartypolicy_holder_view(request):
     #policyrecords = models.ThirdpartyPolicyRecord.objects.all()
@@ -495,11 +537,26 @@ def admin_customerforms(request):
     customers = Customer.objects.all()
     
     customer_data = []
+    kyc_forms_count = 0
+    copy_of_omang_count = 0
+    residence_proof_count = 0
+    income_proof_count = 0
+    
     for customer in customers:
         kyc_form = KYCform.objects.filter(customer=customer).first()
         copy_of_omang = CopyOfOmang.objects.filter(customer=customer).first()
         residence_proof = ResidenceProof.objects.filter(customer=customer).first()
         income_proof = IncomeProof.objects.filter(customer=customer).first()
+        
+        # Count submitted documents
+        if kyc_form:
+            kyc_forms_count += 1
+        if copy_of_omang:
+            copy_of_omang_count += 1
+        if residence_proof:
+            residence_proof_count += 1
+        if income_proof:
+            income_proof_count += 1
         
         customer_data.append({
             'customer': customer,
@@ -509,7 +566,13 @@ def admin_customerforms(request):
             'income_proof': income_proof,
         })
     
-    context = {'customer_data': customer_data}
+    context = {
+        'customer_data': customer_data,
+        'kyc_forms_count': kyc_forms_count,
+        'copy_of_omang_count': copy_of_omang_count,
+        'residence_proof_count': residence_proof_count,
+        'income_proof_count': income_proof_count,
+    }
     return render(request, 'insurance/admin_customerforms.html', context)
 
 def admin_homeownersview(request):

@@ -1,0 +1,412 @@
+{% extends 'customer/customerbase.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', 'Arial', sans-serif;
+        }
+
+        .claims-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #e21a22, #b91720);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(226, 26, 34, 0.2);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .claims-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid #e21a22;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e21a22;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 20px;
+        }
+
+        .claims-content {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .requirements-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .requirements-list li:last-child {
+            border-bottom: none;
+        }
+
+        .requirement-number {
+            background: #e21a22;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .process-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            background: #e21a22;
+            border-radius: 50%;
+        }
+
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: -17px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #e0e0e0;
+        }
+
+        .timeline-item:last-child:after {
+            display: none;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: #e21a22;
+            margin-bottom: 5px;
+        }
+
+        .timeline-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .important-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .important-notice .notice-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .important-notice .notice-content {
+            color: #856404;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .contact-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .contact-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .contact-item i {
+            color: #e21a22;
+        }
+
+        @media (max-width: 768px) {
+            .claims-container {
+                margin: 10px;
+                padding: 10px;
+            }
+
+            .claims-section {
+                padding: 20px;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<div class="claims-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-title">Claims Guidelines</div>
+        <div class="page-subtitle">How to submit and process your insurance claims</div>
+    </div>
+
+    <!-- Claims Overview -->
+    <div class="claims-section">
+        <div class="section-title">
+            <i class="fas fa-info-circle section-icon"></i>
+            Claims Overview
+        </div>
+        <div class="claims-content">
+            <p>At Minet Insurance, we understand that making a claim can be a stressful experience. Our claims guidelines are designed to help you through the process as smoothly as possible. We are committed to providing fair, fast, and transparent claims handling for all our policyholders.</p>
+            
+            <div class="important-notice">
+                <div class="notice-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important Notice
+                </div>
+                <div class="notice-content">
+                    All claims must be reported within 30 days of the incident. Delayed reporting may affect your claim processing.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Required Documents -->
+    <div class="claims-section">
+        <div class="section-title">
+            <i class="fas fa-file-alt section-icon"></i>
+            Required Documents
+        </div>
+        <div class="claims-content">
+            <p>To process your claim efficiently, please ensure you have the following documents ready:</p>
+            
+            <ul class="requirements-list">
+                <li>
+                    <div class="requirement-number">1</div>
+                    <div>
+                        <strong>Completed Claim Form</strong><br>
+                        <small>Download and fill out the appropriate claim form completely and accurately.</small>
+                    </div>
+                </li>
+                <li>
+                    <div class="requirement-number">2</div>
+                    <div>
+                        <strong>Copy of Policy Document</strong><br>
+                        <small>Provide a copy of your current insurance policy or policy number.</small>
+                    </div>
+                </li>
+                <li>
+                    <div class="requirement-number">3</div>
+                    <div>
+                        <strong>Proof of Loss/Damage</strong><br>
+                        <small>Photos, videos, or other evidence of the incident or damage.</small>
+                    </div>
+                </li>
+                <li>
+                    <div class="requirement-number">4</div>
+                    <div>
+                        <strong>Police Report (if applicable)</strong><br>
+                        <small>Required for theft, accidents, or criminal damage incidents.</small>
+                    </div>
+                </li>
+                <li>
+                    <div class="requirement-number">5</div>
+                    <div>
+                        <strong>Repair Estimates/Invoices</strong><br>
+                        <small>Professional estimates for repairs or replacement costs.</small>
+                    </div>
+                </li>
+                <li>
+                    <div class="requirement-number">6</div>
+                    <div>
+                        <strong>Medical Reports (for personal injury)</strong><br>
+                        <small>Medical certificates, hospital reports, and treatment records.</small>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Claims Process -->
+    <div class="claims-section">
+        <div class="section-title">
+            <i class="fas fa-cogs section-icon"></i>
+            Claims Process Timeline
+        </div>
+        <div class="claims-content">
+            <div class="process-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">1. Report Your Claim</div>
+                    <div class="timeline-description">Contact us immediately to report your claim. Provide initial details about the incident.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">2. Submit Documentation</div>
+                    <div class="timeline-description">Submit all required documents within 7 days of reporting your claim.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">3. Claim Assessment</div>
+                    <div class="timeline-description">Our assessor will review your claim and may arrange for inspection if necessary (5-10 business days).</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">4. Claim Decision</div>
+                    <div class="timeline-description">We will notify you of our decision and settlement amount if approved (10-15 business days).</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">5. Payment Processing</div>
+                    <div class="timeline-description">If approved, payment will be processed within 5-7 business days of acceptance.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Types of Claims -->
+    <div class="claims-section">
+        <div class="section-title">
+            <i class="fas fa-list-ul section-icon"></i>
+            Types of Claims We Cover
+        </div>
+        <div class="claims-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 style="color: #e21a22; font-weight: 600; margin-bottom: 10px;">Homeowners Insurance</h6>
+                    <ul style="margin-left: 15px;">
+                        <li>Fire and smoke damage</li>
+                        <li>Water damage and floods</li>
+                        <li>Theft and burglary</li>
+                        <li>Storm and hail damage</li>
+                        <li>Structural damage</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 style="color: #e21a22; font-weight: 600; margin-bottom: 10px;">Motor Insurance</h6>
+                    <ul style="margin-left: 15px;">
+                        <li>Vehicle accidents</li>
+                        <li>Theft of vehicle</li>
+                        <li>Windscreen damage</li>
+                        <li>Third-party liability</li>
+                        <li>Personal injury</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section">
+        <div class="contact-title">Need Help with Your Claim?</div>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+267 361 7302</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>claims@minet.co.bw</span>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp Support Available</span>
+            </div>
+        </div>
+        <p style="margin-top: 15px; color: #666; font-size: 13px;">
+            Our claims team is available Monday to Friday, 8:00 AM - 4:30 PM 
+        </p>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+{% endblock content %}

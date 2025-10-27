@@ -357,27 +357,28 @@
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
                             KYC form already submitted! 
-                            <a href="{{ existing_kyc_form.kyc_form }}" target="_blank">View Document</a>
+                            {% if existing_kyc_form.kyc_form %}
+                                <a href="{{ existing_kyc_form.kyc_form.url }}" target="_blank">View Document</a>
+                            {% else %}
+                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
+                            {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary" disabled>
-                            <i class="fas fa-check" style="margin-right: 5px;"></i>
-                            Submitted
-                        </button>
-                    {% else %}
-                        <form method="POST" action="{% url 'customer:upload_kyc_form' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">Upload KYC Form</label>
-                                <input type="file" name="kyc_form" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
-                                {{ KYCuploadForm.kyc_form.errors }}
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
-                                Submit Form
-                            </button>
-                        </form>
                     {% endif %}
-                    <a href="https://storage.googleapis.com/kogae_bucket/Forms_downloads/KYC.pdf" download class="download-link">
+                    <form method="POST" action="{% url 'customer:upload_kyc_form' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">
+                                {% if existing_kyc_form %}Replace KYC Form{% else %}Upload KYC Form{% endif %}
+                            </label>
+                            <input type="file" name="kyc_form" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+                            {{ KYCuploadForm.kyc_form.errors }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-{% if existing_kyc_form %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
+                            {% if existing_kyc_form %}Replace Document{% else %}Submit Form{% endif %}
+                        </button>
+                    </form>
+                    <a href="{% static 'Downloads/KYC.pdf' %}" download class="download-link">
                         <i class="fas fa-download" style="margin-right: 5px;"></i>
                         Download KYC Form Template
                     </a>
@@ -393,26 +394,27 @@
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
                             Copy of Omang has been submitted! 
-                            <a href="{{ existing_copy_of_omang.copy_of_omang }}" target="_blank">View Document</a>
+                            {% if existing_copy_of_omang.copy_of_omang %}
+                                <a href="{{ existing_copy_of_omang.copy_of_omang.url }}" target="_blank">View Document</a>
+                            {% else %}
+                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
+                            {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary" disabled>
-                            <i class="fas fa-check" style="margin-right: 5px;"></i>
-                            Submitted
-                        </button>
-                    {% else %}
-                        <form method="POST" action="{% url 'customer:upload_copy_of_omang' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="{{ CopyOfOmangForm.copy_of_omang.id_for_label }}">Upload Copy of Omang</label>
-                                <input type="file" name="copy_of_omang" id="{{ CopyOfOmangForm.copy_of_omang.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                                {{ CopyOfOmangForm.copy_of_omang.errors }}
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
-                                Submit Document
-                            </button>
-                        </form>
                     {% endif %}
+                    <form method="POST" action="{% url 'customer:upload_copy_of_omang' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ CopyOfOmangForm.copy_of_omang.id_for_label }}">
+                                {% if existing_copy_of_omang %}Replace Copy of Omang{% else %}Upload Copy of Omang{% endif %}
+                            </label>
+                            <input type="file" name="copy_of_omang" id="{{ CopyOfOmangForm.copy_of_omang.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                            {{ CopyOfOmangForm.copy_of_omang.errors }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-{% if existing_copy_of_omang %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
+                            {% if existing_copy_of_omang %}Replace Document{% else %}Submit Document{% endif %}
+                        </button>
+                    </form>
                 </div>
 
                 <!-- Proof of Residence Section -->
@@ -425,26 +427,27 @@
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
                             Proof of Residence has been submitted! 
-                            <a href="{{ existing_residence_proof.residence_proof }}" target="_blank">View Document</a>
+                            {% if existing_residence_proof.residence_proof %}
+                                <a href="{{ existing_residence_proof.residence_proof.url }}" target="_blank">View Document</a>
+                            {% else %}
+                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
+                            {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary" disabled>
-                            <i class="fas fa-check" style="margin-right: 5px;"></i>
-                            Submitted
-                        </button>
-                    {% else %}
-                        <form method="POST" action="{% url 'customer:upload_residence_proof' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="{{ ResidenceProofForm.residence_proof.id_for_label }}">Upload Proof of Residence</label>
-                                <input type="file" name="residence_proof" id="{{ ResidenceProofForm.residence_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                                {{ ResidenceProofForm.residence_proof.errors }}
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
-                                Submit Document
-                            </button>
-                        </form>
                     {% endif %}
+                    <form method="POST" action="{% url 'customer:upload_residence_proof' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ ResidenceProofForm.residence_proof.id_for_label }}">
+                                {% if existing_residence_proof %}Replace Proof of Residence{% else %}Upload Proof of Residence{% endif %}
+                            </label>
+                            <input type="file" name="residence_proof" id="{{ ResidenceProofForm.residence_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                            {{ ResidenceProofForm.residence_proof.errors }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-{% if existing_residence_proof %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
+                            {% if existing_residence_proof %}Replace Document{% else %}Submit Document{% endif %}
+                        </button>
+                    </form>
                 </div>
 
                 <!-- Proof of Income Section -->
@@ -457,26 +460,27 @@
                         <div class="submitted-notice">
                             <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
                             Proof of Income has been submitted! 
-                            <a href="{{ existing_income_proof.income_proof }}" target="_blank">View Document</a>
+                            {% if existing_income_proof.income_proof %}
+                                <a href="{{ existing_income_proof.income_proof.url }}" target="_blank">View Document</a>
+                            {% else %}
+                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
+                            {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary" disabled>
-                            <i class="fas fa-check" style="margin-right: 5px;"></i>
-                            Submitted
-                        </button>
-                    {% else %}
-                        <form method="POST" action="{% url 'customer:upload_income_proof' %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="{{ IncomeProofForm.income_proof.id_for_label }}">Upload Proof of Income</label>
-                                <input type="file" name="income_proof" id="{{ IncomeProofForm.income_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                                {{ IncomeProofForm.income_proof.errors }}
-                            </div>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-upload" style="margin-right: 5px;"></i>
-                                Submit Document
-                            </button>
-                        </form>
                     {% endif %}
+                    <form method="POST" action="{% url 'customer:upload_income_proof' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ IncomeProofForm.income_proof.id_for_label }}">
+                                {% if existing_income_proof %}Replace Proof of Income{% else %}Upload Proof of Income{% endif %}
+                            </label>
+                            <input type="file" name="income_proof" id="{{ IncomeProofForm.income_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
+                            {{ IncomeProofForm.income_proof.errors }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-{% if existing_income_proof %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
+                            {% if existing_income_proof %}Replace Document{% else %}Submit Document{% endif %}
+                        </button>
+                    </form>
                 </div>
 
             </div>

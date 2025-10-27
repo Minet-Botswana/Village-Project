@@ -1,165 +1,507 @@
-{% extends 'insurance/adminbase.html' %}
-{% block content %}
-{%load static%}
+{% extends "insurance/adminbase.html" %}
 
-<head>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+{% block title %}KYC Documents - Minet Insurance{% endblock %}
 
-  <style media="screen">
-    a:link {
-      text-decoration: none;
-    }
+{% block extra_css %}
+/* KYC Documents Specific Styles */
+.page-header {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-    .panel-primary>.panel-heading {
-    color: #fff;
-    background-color: #e21a22;
-    border-color: #333;
-  }
-  .panel-heading h6 {
-      background-color: #e21a22 !important;
-      color: white !important; /* Adjust text color for better visibility */
-      border: 1px solid #e21a22!important;
-    }
+.page-title {
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
 
-    h6 {
-      text-align: center;
-    }
+.page-subtitle {
+    color: #666;
+    font-size: 16px;
+}
 
-    .row {
-      margin: 100px;
-    }
+.kyc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
 
-       label #sidebar_btn {
-      z-index: 1;
-      color: #fff;
-      position: fixed;
-      cursor: pointer;
-      left: 300px;
-      padding-left: 60px;
-      margin-top:15px;
-      font-size: 20px;
-      
-      transition: 0.5s;
-      transition-property: color;
-    }
+.customer-card {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-    .dataTables_wrapper .dataTables_length select {
-      border: 1px solid #aaa;
-      border-radius: 3px;
-      padding: 5px;
-      background-color: transparent;
-      padding: 4px;
-      margin-top: 4px;
-      margin-left: 7px;
-    }
+.customer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
 
-    .dataTables_wrapper .dataTables_filter input {
-      border: 1px solid #aaa;
-      border-radius: 3px;
-      padding: 5px;
-      background-color: transparent;
-      margin-left: 3px;
-      margin-top: 4px;
-      margin-right: 12px;
-    }
+.customer-header {
+    background-color: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e1e5e9;
+}
 
-    label {
-    display: inline-block;
-    margin-bottom: 5px;
-    font-weight: bold;
+.customer-name {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.customer-info {
+    color: #666;
+    font-size: 13px;
+}
+
+.documents-list {
+    padding: 20px;
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.document-item:last-child {
+    border-bottom: none;
+}
+
+.document-info {
+    flex: 1;
+}
+
+.document-name {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.document-date {
+    color: #666;
+    font-size: 12px;
+}
+
+.document-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-submitted {
+    background-color: #00875a;
+}
+
+.status-missing {
+    background-color: #cc0000;
+}
+
+.status-text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-submitted-text {
+    color: #00875a;
+}
+
+.status-missing-text {
+    color: #cc0000;
+}
+
+.document-action {
     margin-left: 10px;
 }
-  </style>
 
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+.btn-download {
+    padding: 4px 8px;
+    background-color: #e21a22;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 11px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+.btn-download:hover {
+    background-color: #c41f17;
+    color: white;
+    text-decoration: none;
+}
 
-  <!-- DataTables JS -->
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+.btn-download:disabled {
+    background-color: #e1e5e9;
+    color: #666;
+    cursor: not-allowed;
+}
 
-  <!-- DataTables initialization script -->
-  <script>
-      $(document).ready(function() {
-          $('#dev-table').DataTable();
-      });
-  </script>
-</head>
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
 
-<div class="container">
-  <!-- Add the following paragraph to display the page route -->
-  <div class="row" style="margin-top: auto !important; margin-left: 1px !important;">
-      <div class="col-md-12">
-          <p class="breadcrumb" style="font-size: 14px; font-family: 
-            'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-            -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', 
-            sans-serif; color: #e21a22;"
-          >
-            Home / Customer Forms 
-          </p>
-      </div>
-  </div>
+.stat-card {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-  <!-- Your existing content goes here -->
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e21a22;
+    margin-bottom: 8px;
+}
 
+.stat-label {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.stat-description {
+    color: #666;
+    font-size: 12px;
+}
+
+.filter-controls {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-button {
+    padding: 8px 16px;
+    border: 1px solid #e1e5e9;
+    background: white;
+    color: #000000;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-button.active,
+.filter-button:hover {
+    background: #e21a22;
+    color: white;
+    border-color: #e21a22;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 250px;
+    padding: 8px 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-input:focus {
+    border-color: #e21a22;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(226, 26, 34, 0.1);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #e1e5e9;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .kyc-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-input {
+        min-width: auto;
+    }
+    
+    .stats-summary {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h1 class="page-title">KYC Documents Management</h1>
+    <p class="page-subtitle">Monitor and manage customer Know Your Customer documentation</p>
 </div>
-<br><br>
-<div class="container" style="margin-top: -100px !important; font-size: small !important;">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h6 class="panel-title">Customer Forms</h6>
+
+<!-- Statistics Summary -->
+<div class="stats-summary">
+    <div class="stat-card">
+        <div class="stat-number">{{ customer_data|length }}</div>
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-description">In the system</div>
     </div>
-    <table class="table table-hover" id="dev-table">
-      <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>KYC Form</th>
-            <th>Copy of Omang</th>
-            <th>Proof of Residence</th>
-            <th>Proof of Income</th>
-        </tr>
-      </thead>
-      {% for data in customer_data %}
-      <tr>
-        <td>{{ data.customer.get_name }}</td>
-        <td>
-            {% if data.kyc_form %}
-                <a href="{{ data.kyc_form.get_download_url }}">View</a>
-            {% else %}
-                N/A
-            {% endif %}
-        </td>
-        <td>
-            {% if data.copy_of_omang %}
-                <a href="{{ data.copy_of_omang.get_download_url }}">View</a>
-            {% else %}
-                N/A
-            {% endif %}
-        </td>
-        <td>
-            {% if data.residence_proof %}
-                <a href="{{ data.residence_proof.get_download_url }}">View</a>
-            {% else %}
-                N/A
-            {% endif %}
-        </td>
-        <td>
-            {% if data.income_proof %}
-                <a href="{{ data.income_proof.get_download_url }}">View</a>
-            {% else %}
-                N/A
-            {% endif %}
-        </td>
-  
-    </tr>
-      {% endfor %}
-    </table>
-  </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ kyc_forms_count }}</div>
+        <div class="stat-label">KYC Forms</div>
+        <div class="stat-description">Submitted</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ copy_of_omang_count }}</div>
+        <div class="stat-label">ID Documents</div>
+        <div class="stat-description">Submitted</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ residence_proof_count }}</div>
+        <div class="stat-label">Residence Proofs</div>
+        <div class="stat-description">Submitted</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ income_proof_count }}</div>
+        <div class="stat-label">Income Proofs</div>
+        <div class="stat-description">Submitted</div>
+    </div>
 </div>
 
-<br><br><br><br><br><br>
-{% endblock content %}
+<!-- Filter Controls -->
+<div class="filter-controls">
+    <button class="filter-button active" onclick="filterDocuments('all')">All Customers</button>
+    <button class="filter-button" onclick="filterDocuments('complete')">Complete KYC</button>
+    <button class="filter-button" onclick="filterDocuments('incomplete')">Incomplete KYC</button>
+    <button class="filter-button" onclick="filterDocuments('missing')">Missing Documents</button>
+    <input type="text" id="customerSearch" class="search-input" placeholder="Search customers...">
+</div>
+
+<!-- Customer KYC Grid -->
+{% if customer_data %}
+<div class="kyc-grid" id="kycGrid">
+    {% for data in customer_data %}
+    <div class="customer-card" 
+         data-search="{{ data.customer.user.first_name|lower }} {{ data.customer.user.last_name|lower }} {{ data.customer.id_number|lower }}"
+         data-complete="{% if data.kyc_form and data.copy_of_omang and data.residence_proof and data.income_proof %}true{% else %}false{% endif %}">
+        <div class="customer-header">
+            <div class="customer-name">{{ data.customer.user.first_name }} {{ data.customer.user.last_name }}</div>
+            <div class="customer-info">
+                ID: {{ data.customer.id_number|default:"Not provided" }} | 
+                {{ data.customer.mobile }}
+            </div>
+        </div>
+        
+        <div class="documents-list">
+            <!-- KYC Form -->
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-name">KYC Application Form</div>
+                    {% if data.kyc_form %}
+                        <div class="document-date">Submitted: {{ data.kyc_form.submission_date }}</div>
+                    {% endif %}
+                </div>
+                <div class="document-status">
+                    {% if data.kyc_form %}
+                        <span class="status-indicator status-submitted"></span>
+                        <span class="status-text status-submitted-text">Submitted</span>
+                        <div class="document-action">
+                            <a href="{{ data.kyc_form.get_download_url }}" target="_blank" class="btn-download">
+                                <i class="ri-download-line"></i> View
+                            </a>
+                        </div>
+                    {% else %}
+                        <span class="status-indicator status-missing"></span>
+                        <span class="status-text status-missing-text">Missing</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Copy of Omang -->
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-name">Copy of Omang/ID</div>
+                    {% if data.copy_of_omang %}
+                        <div class="document-date">Submitted: {{ data.copy_of_omang.submission_date }}</div>
+                    {% endif %}
+                </div>
+                <div class="document-status">
+                    {% if data.copy_of_omang %}
+                        <span class="status-indicator status-submitted"></span>
+                        <span class="status-text status-submitted-text">Submitted</span>
+                        <div class="document-action">
+                            <a href="{{ data.copy_of_omang.get_download_url }}" target="_blank" class="btn-download">
+                                <i class="ri-download-line"></i> View
+                            </a>
+                        </div>
+                    {% else %}
+                        <span class="status-indicator status-missing"></span>
+                        <span class="status-text status-missing-text">Missing</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Residence Proof -->
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-name">Proof of Residence</div>
+                    {% if data.residence_proof %}
+                        <div class="document-date">Submitted: {{ data.residence_proof.submission_date }}</div>
+                    {% endif %}
+                </div>
+                <div class="document-status">
+                    {% if data.residence_proof %}
+                        <span class="status-indicator status-submitted"></span>
+                        <span class="status-text status-submitted-text">Submitted</span>
+                        <div class="document-action">
+                            <a href="{{ data.residence_proof.get_download_url }}" target="_blank" class="btn-download">
+                                <i class="ri-download-line"></i> View
+                            </a>
+                        </div>
+                    {% else %}
+                        <span class="status-indicator status-missing"></span>
+                        <span class="status-text status-missing-text">Missing</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Income Proof -->
+            <div class="document-item">
+                <div class="document-info">
+                    <div class="document-name">Proof of Income</div>
+                    {% if data.income_proof %}
+                        <div class="document-date">Submitted: {{ data.income_proof.submission_date }}</div>
+                    {% endif %}
+                </div>
+                <div class="document-status">
+                    {% if data.income_proof %}
+                        <span class="status-indicator status-submitted"></span>
+                        <span class="status-text status-submitted-text">Submitted</span>
+                        <div class="document-action">
+                            <a href="{{ data.income_proof.get_download_url }}" target="_blank" class="btn-download">
+                                <i class="ri-download-line"></i> View
+                            </a>
+                        </div>
+                    {% else %}
+                        <span class="status-indicator status-missing"></span>
+                        <span class="status-text status-missing-text">Missing</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="ri-folder-user-line"></i>
+    <h3>No Customer Data Found</h3>
+    <p>There are currently no customers with KYC documentation in the system.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Search functionality
+document.getElementById('customerSearch').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const cards = document.querySelectorAll('.customer-card');
+    
+    cards.forEach(card => {
+        const searchData = card.getAttribute('data-search');
+        if (searchData.includes(searchTerm)) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+// Filter functionality
+function filterDocuments(filter) {
+    const cards = document.querySelectorAll('.customer-card');
+    const buttons = document.querySelectorAll('.filter-button');
+    
+    // Update active button
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    cards.forEach(card => {
+        const isComplete = card.getAttribute('data-complete') === 'true';
+        const documentItems = card.querySelectorAll('.document-item');
+        let hasSubmitted = false;
+        let hasMissing = false;
+        
+        documentItems.forEach(item => {
+            const statusElement = item.querySelector('.status-submitted-text');
+            if (statusElement) {
+                hasSubmitted = true;
+            } else {
+                hasMissing = true;
+            }
+        });
+        
+        let shouldShow = false;
+        
+        switch(filter) {
+            case 'all':
+                shouldShow = true;
+                break;
+            case 'complete':
+                shouldShow = isComplete;
+                break;
+            case 'incomplete':
+                shouldShow = !isComplete;
+                break;
+            case 'missing':
+                shouldShow = hasMissing;
+                break;
+        }
+        
+        card.style.display = shouldShow ? '' : 'none';
+    });
+}
+</script>
+{% endblock %}

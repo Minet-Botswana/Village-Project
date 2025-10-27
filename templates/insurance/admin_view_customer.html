@@ -1,388 +1,370 @@
-{% extends 'insurance/adminbase.html' %}
-{% block content %}
-{% load static %}
+{% extends "insurance/adminbase.html" %}
 
+{% block title %}Customer Management - Minet Insurance{% endblock %}
 
+{% block extra_css %}
+/* Customer Management Specific Styles */
+.page-header {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-<!-- Add SweetAlert library -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+.page-title {
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
 
+.page-subtitle {
+    color: #666;
+    font-size: 16px;
+}
 
-  <!-- Bootstrap CSS & JS -->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
-  <!-- DataTables Core & Bootstrap Integration -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap.min.js"></script>
-
-  <!-- DataTables Buttons + Export Dependencies -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-
-  <!-- Responsive Extension -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap.min.js"></script>
-
-
-<style media="screen">
-  a:link {
-    text-decoration: none;
-  }
-  h6 {
-    text-align: center;
-    font-family: "Titillium Web", sans-serif;
-  }
-  .panel-heading h6 {
-    background-color: #e21a22 !important;
-    color: white !important; /* Adjust text color for better visibility */
-    border: 1px solid #e21a22!important;
-  }
-  .btn-primary {
-    color: #fff;
-    background-color: #e21a22;
-    border-color: #e21a22;
-  }
-  .content {
-    margin-left: 250px;
-    background-color: #fff;
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-    transition: 0.5s;
-    font-family: "Titillium Web", sans-serif;
-    font-size: small;
-  }
-  .btn-danger {
-    color: #fff;
-    background-color: #e21a22;
-    border-color: #e21a22;
-  }
-  .panel-primary>.panel-heading {
-    color: #fff;
-    background-color: #e21a22;
-    border-color: #333;
-  }
-  .table-container {
-    margin-top: 2px; /* Adjust margin as needed */
-  }
-  .row {
-    margin: 10px;
-  }
-  label #sidebar_btn {
-    z-index: 1;
-    color: #fff;
-    position: fixed;
-    cursor: pointer;
-    left: 300px;
-    padding-left: 60px;
-    margin-top:15px;
-    font-size: 20px;
-    font-family: "Titillium Web", sans-serif;
-    transition: 0.5s;
-    transition-property: color;
-  }
-  .breadcrumb {
-    font-size: 14px;
-    font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
-    color: #e21a22;
-  }
-  #dev-table {
-    border-spacing: 0 !important; /* Set spacing between table cells to 0 */
-  }
-  .dataTables_wrapper .dataTables_length select {
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 5px;
-    background-color: transparent;
-    padding: 4px;
-    margin-top: 4px;
-    margin-left: 7px;
-  }
-  .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 5px;
-    background-color: transparent;
-    margin-left: 3px;
-    margin-top: 4px;
-    margin-right: 12px;
-  }
-  label {
-    display: inline-block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    margin-left: 10px;
-  }
-  .alert-messages {
-    background-color: rgb(7, 253, 7);
-    color: #721c24;
-    padding: 10px 20px;
-    border-radius: 5px;
+.search-controls {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 20px;
     margin-bottom: 20px;
-  }
-  .messages {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .messages li {
-    margin-bottom: 5px;
-  }
-  
-</style>
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-<!-- DataTables initialization script -->
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.search-input:focus {
+    border-color: #e21a22;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(226, 26, 34, 0.1);
+}
+
+.customers-table-container {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.customers-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.customers-table th {
+    background-color: #f8f9fa;
+    color: #000000;
+    font-weight: 600;
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e5e9;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.customers-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f3f4;
+    color: #000000;
+}
+
+.customers-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.customers-table tr:last-child td {
+    border-bottom: none;
+}
+
+.customer-name {
+    font-weight: 600;
+    color: #000000;
+}
+
+.customer-id {
+    color: #666;
+    font-size: 13px;
+}
+
+.contact-info {
+    color: #000000;
+}
+
+.contact-secondary {
+    color: #666;
+    font-size: 12px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background-color: #d1f2eb;
+    color: #00875a;
+}
+
+.status-inactive {
+    background-color: #ffe6e6;
+    color: #cc0000;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-view {
+    background-color: #f8f9fa;
+    color: #000000;
+    border: 1px solid #e1e5e9;
+}
+
+.btn-view:hover {
+    background-color: #e21a22;
+    color: white;
+    border-color: #e21a22;
+    text-decoration: none;
+}
+
+.btn-edit {
+    background-color: #e21a22;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #c41f17;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+    color: white;
+    text-decoration: none;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-mini {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-mini-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e21a22;
+    margin-bottom: 4px;
+}
+
+.stat-mini-label {
+    color: #666;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #e1e5e9;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .customers-table-container {
+        overflow-x: auto;
+    }
+    
+    .customers-table {
+        min-width: 600px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .search-controls {
+        padding: 15px;
+    }
+    
+    .page-header {
+        padding: 20px;
+    }
+    
+    .page-title {
+        font-size: 22px;
+    }
+}
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h1 class="page-title">Customer Management</h1>
+    <p class="page-subtitle">Manage and view all registered customers</p>
+</div>
+
+<!-- Statistics -->
+<div class="stats-row">
+    <div class="stat-mini">
+        <div class="stat-mini-number">{{ customers.count }}</div>
+        <div class="stat-mini-label">Total Customers</div>
+    </div>
+    <div class="stat-mini">
+        <div class="stat-mini-number">{{ male_count }}</div>
+        <div class="stat-mini-label">Male Customers</div>
+    </div>
+    <div class="stat-mini">
+        <div class="stat-mini-number">{{ female_count }}</div>
+        <div class="stat-mini-label">Female Customers</div>
+    </div>
+    <div class="stat-mini">
+        <div class="stat-mini-number">{{ married_count }}</div>
+        <div class="stat-mini-label">Married</div>
+    </div>
+</div>
+
+<!-- Search Controls -->
+<div class="search-controls">
+    <input type="text" id="customerSearch" class="search-input" placeholder="Search customers by name, ID, or phone number...">
+</div>
+
+<!-- Customers Table -->
+<div class="customers-table-container">
+    {% if customers %}
+        <table class="customers-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Contact Information</th>
+                    <th>Demographics</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="customersTableBody">
+                {% for customer in customers %}
+                <tr class="customer-row" data-search="{{ customer.user.first_name|lower }} {{ customer.user.last_name|lower }} {{ customer.id_number|lower }} {{ customer.mobile|lower }}">
+                    <td>
+                        <div class="customer-name">{{ customer.user.first_name }} {{ customer.user.last_name }}</div>
+                        <div class="customer-id">ID: {{ customer.id_number|default:"Not provided" }}</div>
+                    </td>
+                    <td>
+                        <div class="contact-info">{{ customer.mobile }}</div>
+                        <div class="contact-secondary">{{ customer.user.email }}</div>
+                    </td>
+                    <td>
+                        <div class="contact-info">
+                            {% if customer.gender %}{{ customer.get_gender_display }}{% else %}Not specified{% endif %}
+                        </div>
+                        <div class="contact-secondary">
+                            {% if customer.date_of_birth %}{{ customer.date_of_birth }}{% else %}DOB not provided{% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="contact-info">{{ customer.address|truncatechars:25 }}</div>
+                        <div class="contact-secondary">{{ customer.occupation|default:"Not specified" }}</div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-active">Active</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'update-customer' customer.id %}" class="btn btn-edit">
+                                <i class="ri-edit-line"></i> Edit
+                            </a>
+                            <a href="{% url 'delete-customer' customer.id %}" 
+                               class="btn btn-delete"
+                               onclick="return confirm('Are you sure you want to delete this customer?')">
+                                <i class="ri-delete-bin-line"></i> Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <i class="ri-user-line"></i>
+            <h3>No Customers Found</h3>
+            <p>There are currently no registered customers in the system.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
 <script>
-    $(document).ready(function() {
-        $('#dev-table').DataTable({
-      responsive: true,
-      paging: true,
-      searching: true,
-      ordering: true,
-      lengthChange: true,
-      info: true,
-      dom: 'Bfrtip',
-      buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-      ]
+// Customer search functionality
+document.getElementById('customerSearch').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('.customer-row');
+    
+    rows.forEach(row => {
+        const searchData = row.getAttribute('data-search');
+        if (searchData.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
     });
-    });
-
-    // Function to confirm deletion using SweetAlert
-    function confirmDelete(url) {
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this user!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                window.location.href = url; // Redirect to delete URL if confirmed
-            } else {
-                swal("User deletion canceled!");
-            }
-        });
-    }
+});
 </script>
-
-<div class="container-fluid">
-  <!-- Add the following paragraph to display the page route -->
-  <div class="row">
-    <div class="col-md-12">
-      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
-        Home / Clients
-      </p>
-    </div>
-  </div>
-
-</div>
-
-<!-- Add Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- DJANGO MESSAGES FOR WRITING MESSAGES HERE-->
-<br>
-
-
-<div class="table-responsive container-fluid">
-  <div class="panel panel-primary panel-default">
-    <div class="panel-heading">
-      <h6 class="panel-title">Clients</h6>
-    </div>
-    <table class="table table-hover" id="dev-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Mobile</th>
-          <th>ID No.</th>
-          <th>Email</th>
-          <th>Update</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      {% for t in customers %}
-      <tr>
-        <td>{{ t.get_name }}</td>
-        <td>{{ t.mobile }}</td>
-        <td>{{ t.id_number }}</td>
-        <td>{{ t.address }}</td>
-        <td><a class="btn btn-primary btn-xs" href="{% url 'update-customer' t.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
-        <td><button class="btn btn-danger btn-xs" onclick="confirmDelete('{% url 'delete-customer' t.id  %}')"><span class="glyphicon glyphicon-trash"></span></button></td>
-      </tr>
-      {% endfor %}
-     
-    </table>
-  </div>
-</div>
-
-<!-- Add Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<div class="container-fluid">
-  <!-- Add the following paragraph to display the page route -->
-  <div class="row">
-    <div class="col-md-12">
-      <p class="breadcrumb" style="font-size: 16px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
-        Demographic Overview Analysis
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- Pie chart container -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-6">
-      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
-        Demographic Breakdown by Genders
-      </p>
-      <div class="text-center">
-        <span class="badge" style="background-color: #FF6384;">Other</span>
-        <span class="badge" style="background-color: #36A2EB;">Male</span>
-        <span class="badge" style="background-color: #4ad122;">Female</span>
-      </div>
-      <div class="pie-chart-container">
-        <!-- Add canvas element for the pie chart with reduced dimensions -->
-        <canvas id="genderPieChart" width="300" height="300"></canvas>
-      </div>
-      </div>
-
-    <!-- Bar chart container -->
-    <div class="col-md-6">
-      <p class="breadcrumb" style="font-size: 14px; font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif; color: #e21a22;">
-        Marital Status Distribution
-      </p>
-      <div class="text-center">
-        <span class="badge" style="background-color: #FF6384;">Married</span>
-        <span class="badge" style="background-color: #36A2EB;">Divorced</span>
-        <span class="badge" style="background-color: #FFCE56;">Single</span>
-        <span class="badge" style="background-color: #000000;">Widowed</span>
-      </div>
-      <div class="bar-chart-container">
-        <!-- Add canvas element for the bar chart with reduced dimensions -->
-        <canvas id="maritalStatusBarChart" width="300" height="300"></canvas>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Get gender distribution data from Django view
-  var genderData = {{ gender_percentage_json|safe }};
-
-  // Extract labels and data for the pie chart
-  var labels = Object.keys(genderData);
-  var data = Object.values(genderData);
-
-  // Set colors for different genders
-  var colors = ['#FF6384', '#36A2EB', '#FFCE56']; // You can customize colors as needed
-
-  // Initialize pie chart
-  var ctxPie = document.getElementById('genderPieChart').getContext('2d');
-  var pieChart = new Chart(ctxPie, {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: colors
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false, // Set to false to allow specifying custom dimensions
-      legend: {
-        display: true,
-        position: 'left' // Position of the legend
-      },
-      layout: {
-        padding: {
-          left: 2,
-          right: 10,
-          top: 10,
-          bottom: 10
-        }
-      },
-      // Adjust the size of the pie chart
-      elements: {
-        arc: {
-          borderWidth: 0
-        }
-      },
-      // Set the radius of the pie chart
-      radius: '90%'
-    }
-  });
-
-  // Get marital status distribution data from Django view
-  var maritalStatusData = {{ marital_status_counts_json|safe }};
-
-  // Extract labels and data for the bar chart
-  var labels = Object.keys(maritalStatusData);
-  var data = Object.values(maritalStatusData);
-
-  // Set colors for the bar chart
-  var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#000000']; // You can customize colors as needed
-
-  // Initialize bar chart
-  var ctxBar = document.getElementById('maritalStatusBarChart').getContext('2d');
-  var barChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: data,
-        backgroundColor: colors
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false, // Set to false to allow specifying custom dimensions
-      legend: {
-        display: false // Hide legend for bar chart
-      },
-      layout: {
-        padding: {
-          left: 10,
-          right: 10,
-          top: 10,
-          bottom: 10
-        }
-      },
-      // Set the scales for x and y axes
-      scales: {
-        xAxes: [{
-          gridLines: {
-            display: false // Hide grid lines for x axis
-          },
-          ticks: {
-            beginAtZero: true // Start y axis at zero
-          }
-        }],
-        yAxes: [{
-          gridLines: {
-            display: false // Hide grid lines for y axis
-          }
-        }]
-      }
-    }
-  });
-</script>
-
-
-
-
-
-{% endblock content %}
+{% endblock %}

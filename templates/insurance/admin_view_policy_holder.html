@@ -1,233 +1,493 @@
-{% extends 'insurance/adminbase.html' %}
-{% block content %}
-{%load static%}
+{% extends "insurance/adminbase.html" %}
 
-<head>
-  <!-- Bootstrap CSS & JS -->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+{% block title %}Policy Applications - Minet Insurance{% endblock %}
 
-  <!-- DataTables Core & Bootstrap Integration -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap.min.js"></script>
+{% block extra_css %}
+/* Policy Applications Specific Styles */
+.page-header {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-  <!-- DataTables Buttons + Export Dependencies -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+.page-title {
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
 
-  <!-- Responsive Extension -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap.min.js"></script>
+.page-subtitle {
+    color: #666;
+    font-size: 16px;
+}
 
-  <style media="screen">
-    a:link {
-      text-decoration: none;
-    }
+.applications-container {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-    .panel-primary>.panel-heading {
-    color: #fff;
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.applications-table th {
+    background-color: #f8f9fa;
+    color: #000000;
+    font-weight: 600;
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e5e9;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.applications-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f3f4;
+    color: #000000;
+    vertical-align: top;
+}
+
+.applications-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.applications-table tr:last-child td {
+    border-bottom: none;
+}
+
+.customer-info {
+    color: #000000;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.customer-details {
+    color: #666;
+    font-size: 12px;
+}
+
+.policy-info {
+    color: #000000;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.policy-details {
+    color: #666;
+    font-size: 12px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background-color: #d1f2eb;
+    color: #00875a;
+}
+
+.status-rejected {
+    background-color: #ffe6e6;
+    color: #cc0000;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-approve {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #218838;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-reject {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #c82333;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-view {
     background-color: #e21a22;
-    border-color: #333;
-  }
-  .panel-heading h6 {
-      background-color: #e21a22 !important;
-      color: white !important; /* Adjust text color for better visibility */
-      border: 1px solid #e21a22!important;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #c41f17;
+    color: white;
+    text-decoration: none;
+}
+
+.filter-tabs {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tab-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tab-item {
+    flex: 1;
+}
+
+.tab-link {
+    display: block;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    border-right: 1px solid #e1e5e9;
+    transition: all 0.3s ease;
+}
+
+.tab-link:last-child {
+    border-right: none;
+}
+
+.tab-link.active,
+.tab-link:hover {
+    background: #e21a22;
+    color: white;
+    text-decoration: none;
+}
+
+.tab-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    margin-left: 6px;
+}
+
+.stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e21a22;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.stat-description {
+    color: #666;
+    font-size: 12px;
+}
+
+.search-controls {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-input:focus {
+    border-color: #e21a22;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(226, 26, 34, 0.1);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 48px;
+    color: #e1e5e9;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .applications-container {
+        overflow-x: auto;
     }
-
-    h6 {
-      text-align: center;
+    
+    .applications-table {
+        min-width: 800px;
     }
-
-    .row {
-      margin: 100px;
+    
+    .action-buttons {
+        flex-direction: column;
     }
-
-    #dev-table {
-
-border-spacing: 0 !important; /* Set spacing between table cells to 0 */
+    
+    .tab-list {
+        flex-direction: column;
+    }
+    
+    .tab-link {
+        border-right: none;
+        border-bottom: 1px solid #e1e5e9;
+    }
+    
+    .tab-link:last-child {
+        border-bottom: none;
+    }
 }
+{% endblock %}
 
-.dataTables_wrapper .dataTables_length select {
-border: 1px solid #aaa;
-border-radius: 3px;
-padding: 5px;
-background-color: transparent;
-padding: 4px;
-margin-top: 4px;
-margin-left: 7px;
-}
-
-.dataTables_wrapper .dataTables_filter input {
-border: 1px solid #aaa;
-border-radius: 3px;
-padding: 5px;
-background-color: transparent;
-margin-left: 3px;
-margin-top: 4px;
-margin-right: 12px;
-}
-
-label {
-display: inline-block;
-margin-bottom: 5px;
-font-weight: bold;
-margin-left: 10px;
-}
-
-tr.policy-row {
-  cursor: pointer !important;
-}
-
-</style>
-
-  <!-- DataTables initialization script -->
-  <script>
-      $(document).ready(function() {
-          $('#dev-table').DataTable({
-      responsive: true,
-      paging: true,
-      searching: true,
-      ordering: true,
-      lengthChange: true,
-      info: true,
-      dom: 'Bfrtip',
-      buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
-      ]
-    });
-      });
-  </script>
-  
-</head>
-<br><br>
-
-{% if success_message %}
-<div class="alert alert-success">
-    {{ success_message }}
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h1 class="page-title">Policy Applications Management</h1>
+    <p class="page-subtitle">Review and manage homeowners insurance applications</p>
 </div>
-{% endif %}
 
-{% if messages %}
-<div class="alert-messages">
-    <ul class="messages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-            {{ message }}
+<!-- Statistics Overview -->
+<div class="stats-overview">
+    <div class="stat-card">
+        <div class="stat-number">{{ policyrecords.count }}</div>
+        <div class="stat-label">Total Applications</div>
+        <div class="stat-description">All time</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ pending_count }}</div>
+        <div class="stat-label">Pending Review</div>
+        <div class="stat-description">Awaiting decision</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ approved_count }}</div>
+        <div class="stat-label">Approved</div>
+        <div class="stat-description">Active policies</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ rejected_count }}</div>
+        <div class="stat-label">Rejected</div>
+        <div class="stat-description">Declined applications</div>
+    </div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="filter-tabs">
+    <ul class="tab-list">
+        <li class="tab-item">
+            <a href="{% url 'admin-view-policy-holder' %}" class="tab-link active">
+                All Applications
+                <span class="tab-badge">{{ policyrecords.count }}</span>
+            </a>
         </li>
-        {% endfor %}
+        <li class="tab-item">
+            <a href="{% url 'admin-view-waiting-policy-holder' %}" class="tab-link">
+                Pending Review
+                <span class="tab-badge">{{ pending_count }}</span>
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="{% url 'admin-view-approved-policy-holder' %}" class="tab-link">
+                Approved
+                <span class="tab-badge">{{ approved_count }}</span>
+            </a>
+        </li>
+        <li class="tab-item">
+            <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="tab-link">
+                Rejected
+                <span class="tab-badge">{{ rejected_count }}</span>
+            </a>
+        </li>
     </ul>
 </div>
-{% endif %}
-<br>
-<div class="container">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h6 class="panel-title">Homeowners Policy Holder Record</h6>
-    </div>
-    <table class="table table-hover" id="dev-table">
-      <thead>
-        <tr>
-          <th>Policy No.</th>
-          <th>Policy Name</th>
-          <th>Customer Name</th>
-          <th>Applied Date</th>
-          <th>Status</th>
-          <th class="text-right">Action</th>
-        </tr>
-      </thead>
-      {% for t in policyrecords %}
-      <tr>
-        <td data-toggle="modal" data-target="#expiryModal{{ t.id }}"> {{ t.Policy.policy_number }}</td>
-        <td> {{t.Policy}}</td>
-        <td> {{t.customer}}</td> 
-        <td>{{t.creation_date}}</td>
-        <td>{{t.status}}</td>
 
-                    {% if t.status == 'Pending' %}
-                <td class="text-right">
-                    <button class="btn btn-primary badge-pill" style="width: 80px;"><a  style="text-decoration: none;color: white;" href="{% url 'approve-request' t.id  %}">Approve</a> </button>
-                    <button class="btn btn-danger badge-pill" style="width: 70px;"><a  style="text-decoration: none;color: white;" href="{% url 'reject-request' t.id  %}">Reject</a> </button>
-                </td>              
-
-                {% else %}
-                <td class="text-right">
-                <span style="color:red;font-size:16px;" class="label success">{{t.status}}</span></td>
-                
-
-                {% endif %}
-      </tr>
-      <!-- Modal for Expiry Date -->
-      <div class="modal fade" id="expiryModal{{ t.id }}" tabindex="-1" role="dialog" aria-labelledby="expiryModalLabel{{ t.id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="expiryModalLabel{{ t.id }}">Policy and Customer Details</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <!-- Policy details -->
-              <p style="color: #e21a22; font-size: medium;"><strong>Policy Details Details</strong></p>
-              <hr>
-              <p><strong>Policy Number:</strong> {{ t.Policy.policy_number }}</p>
-              <p><strong>Risk:</strong> {{ t.Policy.policy_name }}</p>
-              <p><strong>Category:</strong> {{ t.Policy.category }}</p>
-              <p><strong>Premium:</strong> BWP{{ t.Policy.premium }}</p>
-              <p><strong>Tenure:</strong> {{ t.Policy.tenure }} Months</p>
-              <p><strong>Effective Date:</strong> {{ t.Policy.cover_start }}</p>
-              <p><strong>Expiry Date:</strong> {{ t.Policy.expiry_date }}</p>
-              <p><strong>Renewal Date:</strong> {{ t.Policy.cover_end }}</p>
-              
-              <!-- Customer details -->
-
-              <hr>
-              <p style="color: #e21a22; font-size: medium;"><strong>Customer Details</strong></p>
-              <hr>
-              {% for userrecord in userrecords %}
-                <p><strong>Customer Name:</strong> {{ userrecord.user.first_name }} {{ userrecord.user.last_name }}</p>
-                <p><strong>Customer Mobile:</strong> {{ userrecord.mobile }}</p>
-                <p><strong>Customer Alternate Phone:</strong> {{ userrecord.alternate_phone }}</p>
-                <p><strong>Customer Email:</strong> {{ userrecord.address }}</p>
-                <p><strong>Customer ID Number:</strong> {{ userrecord.id_number }}</p>
-                <p><strong>Customer Work:</strong> {{ userrecord.occupation }}</p>
-                <p><strong>Customer Physical Address:</strong> {{ userrecord.physical_address }}</p>
-                <p><strong>Customer Postal Address:</strong> {{ userrecord.postal_address }}</p>
-                <p><strong>Customer Date of Birth:</strong> {{ userrecord.date_of_birth }}</p>
-                <p><strong>Customer Gender:</strong> {{ userrecord.gender }}</p>
-                <p><strong>Customer Marital Status:</strong> {{ userrecord.marital_status }}</p>
-              {% endfor %}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </table>
-  </div>
+<!-- Search Controls -->
+<div class="search-controls">
+    <input type="text" id="applicationSearch" class="search-input" placeholder="Search applications by customer name, policy, or ID...">
 </div>
 
-<script>
-  $(document).ready(function () {
-    // Handle click on row to show the expiry date modal
-    $('td[data-toggle="modal"]').click(function () {
-      var modalId = $(this).data('target');
-      $(modalId).modal('show');
-    });
-  });
-</script>
+<!-- Applications Table -->
+<div class="applications-container">
+    {% if policyrecords %}
+        <table class="applications-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Policy Details</th>
+                    <th>Coverage Period</th>
+                    <th>Premium</th>
+                    <th>Status</th>
+                    <th>Application Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="applicationsTableBody">
+                {% for record in policyrecords %}
+                <tr class="application-row" data-search="{{ record.customer.user.first_name|lower }} {{ record.customer.user.last_name|lower }} {{ record.Policy.policy_name|lower }} {{ record.customer.id_number|lower }}">
+                    <td>
+                        <div class="customer-info">{{ record.customer.user.first_name }} {{ record.customer.user.last_name }}</div>
+                        <div class="customer-details">
+                            ID: {{ record.customer.id_number|default:"Not provided" }}<br>
+                            Phone: {{ record.customer.mobile }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="policy-info">{{ record.Policy.policy_name }}</div>
+                        <div class="policy-details">
+                            Policy #: {{ record.Policy.policy_number }}<br>
+                            Category: {{ record.Policy.category.category_name }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="policy-info">{{ record.Policy.tenure }} months</div>
+                        <div class="policy-details">
+                            Start: {{ record.Policy.cover_start|default:"Not set" }}<br>
+                            End: {{ record.Policy.cover_end|default:"Not set" }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="policy-info">P{{ record.Policy.premium|floatformat:2 }}</div>
+                        <div class="policy-details">
+                            Sum Assured: P{{ record.Policy.sum_assurance|floatformat:2 }}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-{{ record.status|lower }}">{{ record.status }}</span>
+                    </td>
+                    <td>
+                        <div class="policy-info">{{ record.creation_date }}</div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            {% if record.status == 'Pending' %}
+                                <a href="{% url 'approve-request' record.id %}" 
+                                   class="btn btn-approve"
+                                   onclick="return confirm('Are you sure you want to approve this application?')">
+                                    <i class="ri-check-line"></i> Approve
+                                </a>
+                                <a href="{% url 'reject-request' record.id %}" 
+                                   class="btn btn-reject"
+                                   onclick="return confirm('Are you sure you want to reject this application?')">
+                                    <i class="ri-close-line"></i> Reject
+                                </a>
+                            {% endif %}
+                            <a href="#" class="btn btn-view">
+                                <i class="ri-eye-line"></i> View
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-state">
+            <i class="ri-file-list-3-line"></i>
+            <h3>No Applications Found</h3>
+            <p>There are currently no policy applications to review.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
 
-<br><br><br><br><br><br>
-{% endblock content %}
+{% block extra_js %}
+<script>
+// Application search functionality
+document.getElementById('applicationSearch').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('.application-row');
+    
+    rows.forEach(row => {
+        const searchData = row.getAttribute('data-search');
+        if (searchData.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+// Confirmation for actions
+function confirmAction(action, message) {
+    return confirm(message || `Are you sure you want to ${action} this application?`);
+}
+</script>
+{% endblock %}

@@ -1,13 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
-
-from google.cloud import storage
-from storages.backends.gcloud import GoogleCloudStorage
-from django.conf import settings
-import mimetypes
 from django.utils import timezone
-
 from django.core.files.base import ContentFile
 import uuid
 from django.db import transaction
@@ -79,38 +73,14 @@ class KYCform(models.Model):
         verbose_name_plural = "KYC Forms"
    
     def save(self, *args, **kwargs):
+        # Simply save the model - Django will handle file storage to MEDIA_ROOT automatically
+        super().save(*args, **kwargs)
+            
+    def get_download_url(self):
+        """Return the URL to access the uploaded file"""
         if self.kyc_form:
-            # Generate a unique filename for each upload
-            filename = f"{uuid.uuid4()}/{self.kyc_form.name}"
-            
-            # Upload the file to Google Cloud Storage
-            uploaded_url = self.upload_form(self.kyc_form, filename)
-            
-            # Save the URL path in the model
-            if uploaded_url:
-                self.kyc_form.name = uploaded_url
-            else:
-                print("Failed to upload KYC form to Google Cloud Storage.")
-        
-        try:
-            super().save(*args, **kwargs)
-        except Exception as e:
-            print(f"Error saving KYC Form instance: {e}")
-            
-    @staticmethod
-    def upload_form(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('Forms/KYC/' + filename)
-            #blob.upload_from_file(file)
-            # Set the content type based on the file extension
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None
+            return self.kyc_form.url
+        return None
         
 class CopyOfOmang(models.Model):
     # Link to the authenticated customer
@@ -122,42 +92,15 @@ class CopyOfOmang(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        return self.copy_of_omang if self.copy_of_omang else None
+        """Return the URL to access the uploaded file"""
+        if self.copy_of_omang:
+            return self.copy_of_omang.url
+        return None
     
     @transaction.atomic
     def save(self, *args, **kwargs):
-        if self.copy_of_omang:
-            # Generate a unique filename for each upload
-            filename = f"{uuid.uuid4()}/{self.copy_of_omang.name}"
-            
-            # Upload the file to Google Cloud Storage
-            uploaded_url = self.upload_form(self.copy_of_omang, filename)
-            
-            # Save the URL path in the model
-            if uploaded_url:
-                self.copy_of_omang.name = uploaded_url
-            else:
-                print("Failed to upload Copy Of Omang  form to Google Cloud Storage.")
-        
-        try:
-            super().save(*args, **kwargs)
-        except Exception as e:
-            print(f"Error saving Copy of Omang Form instance: {e}")
-            
-    @staticmethod
-    def upload_form(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('Forms/CopyOfOmang/' + filename)
-            #blob.upload_from_file(file)
-            # Set the content type based on the file extension
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None
+        # Simply save the model - Django will handle file storage to MEDIA_ROOT automatically
+        super().save(*args, **kwargs)
             
     def __str__(self):
         return f"{self.customer.user.get_full_name()} - Copy of Omang {self.id}"
@@ -173,47 +116,17 @@ class ResidenceProof(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        return self.residence_proof if self.residence_proof else None
+        """Return the URL to access the uploaded file"""
+        if self.residence_proof:
+            return self.residence_proof.url
+        return None
    
     def save(self, *args, **kwargs):
-        if self.residence_proof:
-            # Generate a unique filename for each upload
-            filename = f"{uuid.uuid4()}/{self.residence_proof.name}"
-            
-            # Upload the file to Google Cloud Storage
-            uploaded_url = self.upload_form(self.residence_proof, filename)
-            
-            # Save the URL path in the model
-            if uploaded_url:
-                self.residence_proof.name = uploaded_url
-            else:
-                print("Failed to upload proof of residence form to Google Cloud Storage.")
-        
-        try:
-            super().save(*args, **kwargs)
-        except Exception as e:
-            print(f"Error savingproof of residence Form instance: {e}")
+        # Simply save the model - Django will handle file storage to MEDIA_ROOT automatically
+        super().save(*args, **kwargs)
             
     def __str__(self):
         return f"{self.customer.user.get_full_name()} - Residence Proof {self.id}"
-            
-    @staticmethod
-    def upload_form(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('Forms/ResidenceProof/' + filename)
-            #blob.upload_from_file(file)
-            # Set the content type based on the file extension
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None
-        
-    def __str__(self):
-        return f"{self.customer.user.get_full_name()} - Residence Proof {self.id}"     
 
 #Proof of Income Model
 class IncomeProof(models.Model):
@@ -226,41 +139,12 @@ class IncomeProof(models.Model):
     submission_date = models.DateField(auto_now_add=True)
 
     def get_download_url(self):
-        return self.income_proof if self.income_proof else None
+        """Return the URL for downloading the uploaded document"""
+        return self.income_proof.url if self.income_proof else None
    
     def save(self, *args, **kwargs):
-        if self.income_proof:
-            # Generate a unique filename for each upload
-            filename = f"{uuid.uuid4()}/{self.income_proof.name}"
-            
-            # Upload the file to Google Cloud Storage
-            uploaded_url = self.upload_form(self.income_proof, filename)
-            
-            # Save the URL path in the model
-            if uploaded_url:
-                self.income_proof.name = uploaded_url
-            else:
-                print("Failed to upload proof of income form to Google Cloud Storage.")
-        
-        try:
-            super().save(*args, **kwargs)
-        except Exception as e:
-            print(f"Error saving proof of income Form instance: {e}")
-            
-    @staticmethod
-    def upload_form(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('Forms/IncomeProof/' + filename)
-            #blob.upload_from_file(file)
-            # Set the content type based on the file extension
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None  
+        # Simply save the model - Django will handle file storage to MEDIA_ROOT automatically
+        super().save(*args, **kwargs)  
         
     def __str__(self):
         return f"{self.customer.user.get_full_name()} - Income Proof {self.id}"
@@ -327,22 +211,6 @@ class HomeownersCover(models.Model):
         except Exception as e:
             print(f"Error saving HomeownersCover instance: {e}")
 
-    @staticmethod
-    def upload_form(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('Forms/HomeOwnersCover/' + filename)
-
-            # Set the content type based on the file extension
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None
-
 class ThirdPartyCarInsurance(models.Model):
     
     LOCAL = 'Local'
@@ -393,19 +261,3 @@ class ThirdPartyCarInsurance(models.Model):
             print(f"Validation error saving Third Party Cover instance: {e}")
         except Exception as e:
             print(f"Error saving Third Party Cover instance: {e}")
-
-    @staticmethod
-    def upload_form(file, filename):
-        try:
-            client = storage.Client()
-            bucket = client.get_bucket(settings.GS_BUCKET_NAME)
-            blob = bucket.blob('Forms/ThirdPartyCarCover/' + filename)
-
-            # Set the content type based on the file extension
-            content_type, encoding = mimetypes.guess_type(filename)
-            blob.upload_from_file(file, content_type=content_type)
-
-            return blob.public_url
-        except Exception as e:
-            print("Failed to upload!")
-            return None

@@ -288,6 +288,12 @@ def customer_dashboard_view(request):
     applied_motor = CMODEL.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer).count()
     total_applications = applied_homeowners + applied_motor
     
+    # Check if customer has approved homeowners coverage for motor insurance eligibility
+    has_approved_homeowners = CMODEL.PolicyRecord.objects.filter(
+        customer=customer, 
+        status__in=['Approved', 'Active']
+    ).exists()
+    
     dict={
         'customer':models.Customer.objects.get(user_id=request.user.id),
         'available_policy':CMODEL.Policy.objects.all().count(),
@@ -298,6 +304,7 @@ def customer_dashboard_view(request):
         'total_question':CMODEL.Question.objects.all().filter(customer=models.Customer.objects.get(user_id=request.user.id)).count(),
         'policies': policies,
         'thirdpartypolicy':thirdpartypolicy,
+        'has_approved_homeowners': has_approved_homeowners,
     }
     return render(request,'customer/customer_dashboard.html',context=dict)
 
@@ -346,6 +353,28 @@ from insurance.models import Category
 
 @login_required(login_url='/customer/customerlogin')
 def apply_thirdparty_view(request):
+    # Check if the current user has any approved homeowners coverage
+    try:
+        current_customer = models.Customer.objects.get(user_id=request.user.id)
+        
+        # Check for approved homeowners policy
+        from insurance.models import PolicyRecord
+        approved_homeowners = PolicyRecord.objects.filter(
+            customer=current_customer, 
+            status__in=['Approved', 'Active']
+        ).exists()
+        
+        if not approved_homeowners:
+            messages.error(request, 
+                "Motor insurance is only available as an add-on to homeowners coverage. "
+                "Please apply for and get approved for homeowners insurance first."
+            )
+            return redirect('customer:motor-insurance-requirement')  # Redirect to helpful page
+            
+    except models.Customer.DoesNotExist:
+        messages.error(request, "Customer profile not found. Please complete your profile first.")
+        return redirect('customer:customer-dashboard')
+    
     thirdpartypolicyForm = ThirdpartyPolicyForm()
     print("Request method:", request.method)
     if request.method == 'POST':
@@ -373,6 +402,19 @@ def apply_thirdparty_view(request):
                 print('Customer with ID number', id_number, 'does not exist')
                 return render(request, 'insurance/error_template.html', {'error_message': 'Customer not found'})
 
+            # Double-check that this customer has approved homeowners coverage
+            homeowners_check = PolicyRecord.objects.filter(
+                customer=customer, 
+                status__in=['Approved', 'Active']
+            ).exists()
+            
+            if not homeowners_check:
+                messages.error(request, 
+                    f"Customer {customer.get_name()} does not have approved homeowners coverage. "
+                    "Motor insurance can only be purchased as an add-on to homeowners coverage."
+                )
+                return render(request, 'customer/apply_thirdparty.html', {'thirdpartypolicyForm': thirdpartypolicyForm})
+
             policy = thirdpartypolicyForm.save(commit=False)
             print("Policy before assignment:", policy)
             policy.category = category
@@ -393,7 +435,10 @@ def apply_thirdparty_view(request):
                 thirdpartystatus='Pending'
             )
             
-            messages.success(request, "Cover created and applied successfully! Your application is now pending review.")
+            messages.success(request, 
+                "Motor insurance add-on created and applied successfully! "
+                "Your application is now pending review."
+            )
             print("Policy successfully saved!")
             print("Policy Number:", policy.policy_number)
             print("Cover End:", policy.cover_end)
@@ -519,7 +564,21 @@ from django.contrib import messages
 def client_forms(request):
     user = request.user
     customer = user.customer
-    return render(request, 'customer/client_forms.html')
+    
+    # Get all existing documents for this customer
+    existing_kyc_form = KYCform.objects.filter(customer=customer).first()
+    existing_copy_of_omang = CopyOfOmang.objects.filter(customer=customer).first()
+    existing_residence_proof = ResidenceProof.objects.filter(customer=customer).first()
+    existing_income_proof = IncomeProof.objects.filter(customer=customer).first()
+    
+    context = {
+        'existing_kyc_form': existing_kyc_form,
+        'existing_copy_of_omang': existing_copy_of_omang,
+        'existing_residence_proof': existing_residence_proof,
+        'existing_income_proof': existing_income_proof,
+    }
+    
+    return render(request, 'customer/client_forms.html', context)
 
 
 def direct_debit_view(request):
@@ -622,9 +681,9 @@ def upload_kyc_form(request):
     existing_kyc_form = KYCform.objects.filter(customer=customer).first()
 
     if existing_kyc_form:
-        # KYC form has already been submitted
-        submit_button_disabled = True
-        submit_button_text = 'Form Submitted'
+        # KYC form has already been submitted, allow replacement
+        submit_button_disabled = False
+        submit_button_text = 'Replace Document'
     else:
         submit_button_disabled = False
         submit_button_text = 'Submit Form'
@@ -632,22 +691,21 @@ def upload_kyc_form(request):
     if request.method == 'POST':
         form = KYCuploadForm(request.POST, request.FILES)
         if form.is_valid():
-            if not existing_kyc_form:
-                # Save the form data to the database only if a form hasn't been submitted already
+            if existing_kyc_form:
+                # Replace the existing document
+                existing_kyc_form.kyc_form = form.cleaned_data['kyc_form']
+                existing_kyc_form.save()
+                messages.success(request, 'KYC form replaced successfully!')
+            else:
+                # Save new form data to the database
                 kyc_instance = form.save(commit=False)
                 kyc_instance.customer = customer
-                form_file = request.FILES['kyc_form']
-                filename = form_file.name
-                form_file_url = KYCform.upload_form(form_file, filename)
-
-                if form_file_url:
-                    kyc_instance.kyc_form = form_file_url
-                    kyc_instance.save()
-
-                    messages.success(request, 'KYC form uploaded successfully!')
-                    return redirect('customer:upload_kyc_form')
-                else:
-                    messages.error(request, 'Failed to upload KYC form to Google Cloud Storage.')
+                kyc_instance.save()
+                messages.success(request, 'KYC form uploaded successfully!')
+            
+            return redirect('customer:client_forms')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
 
     else:
         form = KYCuploadForm()
@@ -665,13 +723,13 @@ def upload_copy_of_omang(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
 
-    # Check if a KYCform instance exists for the current customer
-    existing_copy_of_omang =  CopyOfOmang.objects.filter(customer=customer).first()
+    # Check if a CopyOfOmang instance exists for the current customer
+    existing_copy_of_omang = CopyOfOmang.objects.filter(customer=customer).first()
 
     if existing_copy_of_omang:
-        # KYC form has already been submitted
-        submit_button_disabled = True
-        submit_button_text = 'Form Submitted'
+        # Omang copy has already been submitted, allow replacement
+        submit_button_disabled = False
+        submit_button_text = 'Replace Document'
     else:
         submit_button_disabled = False
         submit_button_text = 'Submit Form'
@@ -679,22 +737,21 @@ def upload_copy_of_omang(request):
     if request.method == 'POST':
         form = CopyOfOmangForm(request.POST, request.FILES)
         if form.is_valid():
-            if not existing_copy_of_omang:
-                # Save the form data to the database only if a form hasn't been submitted already
+            if existing_copy_of_omang:
+                # Replace the existing document
+                existing_copy_of_omang.copy_of_omang = form.cleaned_data['copy_of_omang']
+                existing_copy_of_omang.save()
+                messages.success(request, 'Omang copy replaced successfully!')
+            else:
+                # Save new form data to the database
                 copy_of_omang_instance = form.save(commit=False)
                 copy_of_omang_instance.customer = customer
-                form_file = request.FILES['copy_of_omang']
-                filename = form_file.name
-                form_file_url = CopyOfOmang.upload_form(form_file, filename)
-
-                if form_file_url:
-                    copy_of_omang_instance.copy_of_omang = form_file_url
-                    copy_of_omang_instance.save()
-
-                    messages.success(request, 'Omang File uploaded successfully!')
-                    return redirect('customer:upload_copy_of_omang')
-                else:
-                    messages.error(request, 'Failed to upload Omang File to Google Cloud Storage.')
+                copy_of_omang_instance.save()
+                messages.success(request, 'Omang copy uploaded successfully!')
+            
+            return redirect('customer:client_forms')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
 
     else:
         form = CopyOfOmangForm()
@@ -712,13 +769,13 @@ def upload_residence_proof(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
 
-    # Check if a KYCform instance exists for the current customer
-    existing_residence_proof =  ResidenceProof.objects.filter(customer=customer).first()
+    # Check if a ResidenceProof instance exists for the current customer
+    existing_residence_proof = ResidenceProof.objects.filter(customer=customer).first()
 
     if existing_residence_proof:
-        # KYC form has already been submitted
-        submit_button_disabled = True
-        submit_button_text = 'Form Submitted'
+        # Residence proof has already been submitted, allow replacement
+        submit_button_disabled = False
+        submit_button_text = 'Replace Document'
     else:
         submit_button_disabled = False
         submit_button_text = 'Submit Form'
@@ -726,22 +783,21 @@ def upload_residence_proof(request):
     if request.method == 'POST':
         form = ResidenceProofForm(request.POST, request.FILES)
         if form.is_valid():
-            if not existing_residence_proof:
-                # Save the form data to the database only if a form hasn't been submitted already
+            if existing_residence_proof:
+                # Replace the existing document
+                existing_residence_proof.residence_proof = form.cleaned_data['residence_proof']
+                existing_residence_proof.save()
+                messages.success(request, 'Residence proof replaced successfully!')
+            else:
+                # Save new form data to the database
                 residence_proof_instance = form.save(commit=False)
                 residence_proof_instance.customer = customer
-                form_file = request.FILES['residence_proof']
-                filename = form_file.name
-                form_file_url = ResidenceProof.upload_form(form_file, filename)
-
-                if form_file_url:
-                    residence_proof_instance.residence_proof = form_file_url
-                    residence_proof_instance.save()
-
-                    messages.success(request, 'residence_proof uploaded successfully!')
-                    return redirect('customer:upload_residence_proof')
-                else:
-                    messages.error(request, 'Failed to upload residence_proof to Google Cloud Storage.')
+                residence_proof_instance.save()
+                messages.success(request, 'Residence proof uploaded successfully!')
+            
+            return redirect('customer:client_forms')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
 
     else:
         form = ResidenceProofForm()
@@ -758,13 +814,13 @@ def upload_income_proof(request):
     user = request.user
     customer = get_object_or_404(Customer, user=user)
 
-    # Check if a KYCform instance exists for the current customer
-    existing_income_proof =  IncomeProof.objects.filter(customer=customer).first()
+    # Check if an IncomeProof instance exists for the current customer
+    existing_income_proof = IncomeProof.objects.filter(customer=customer).first()
 
     if existing_income_proof:
-        # KYC form has already been submitted
-        submit_button_disabled = True
-        submit_button_text = 'Form Submitted'
+        # Income proof has already been submitted, allow replacement
+        submit_button_disabled = False
+        submit_button_text = 'Replace Document'
     else:
         submit_button_disabled = False
         submit_button_text = 'Submit Form'
@@ -772,22 +828,21 @@ def upload_income_proof(request):
     if request.method == 'POST':
         form = IncomeProofForm(request.POST, request.FILES)
         if form.is_valid():
-            if not existing_income_proof:
-                # Save the form data to the database only if a form hasn't been submitted already
+            if existing_income_proof:
+                # Replace the existing document
+                existing_income_proof.income_proof = form.cleaned_data['income_proof']
+                existing_income_proof.save()
+                messages.success(request, 'Income proof replaced successfully!')
+            else:
+                # Save new form data to the database
                 income_proof_instance = form.save(commit=False)
                 income_proof_instance.customer = customer
-                form_file = request.FILES['income_proof']
-                filename = form_file.name
-                form_file_url = IncomeProof.upload_form(form_file, filename)
-
-                if form_file_url:
-                    income_proof_instance.income_proof = form_file_url
-                    income_proof_instance.save()
-
-                    messages.success(request, 'income_proof uploaded successfully!')
-                    return redirect('customer:upload_income_proof')
-                else:
-                    messages.error(request, 'Failed to upload income_proof to Google Cloud Storage.')
+                income_proof_instance.save()
+                messages.success(request, 'Income proof uploaded successfully!')
+            
+            return redirect('customer:client_forms')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
 
     else:
         form = IncomeProofForm()
@@ -811,22 +866,12 @@ def update_homeowners_cover(request, id):
     if request.method == 'POST':
         form = HomeownersCoverForm(request.POST, request.FILES, instance=homeowners_cover)
         if form.is_valid():
-            # Save the form to get the updated title_deed URL
-            updated_cover = form.save(commit=False)
-
-            # Check if a new title_deed file is provided
-            if 'title_deed' in request.FILES:
-                file = request.FILES['title_deed']
-                # Upload title_deed to Google Cloud Storage or other storage
-                public_url = HomeownersCover.upload_form(file, file.name)
-                # Set the title_deed field to the storage URL
-                updated_cover.title_deed.name = public_url
-
-            # Save the updated cover with the new title_deed URL
-            updated_cover.save()
-
-            # Redirect to a success page or display a success message
+            # Save the form - Django will handle file storage automatically
+            form.save()
+            messages.success(request, 'Homeowners cover updated successfully!')
             return redirect('customer:display_user_homeowners_covers')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
     else:
         form = HomeownersCoverForm(instance=homeowners_cover)
 
@@ -839,23 +884,12 @@ def update_thirdparty_cover(request, id):
     if request.method == 'POST':
         form = ThirdPartyCarInsuranceForm(request.POST, request.FILES, instance=thirdparty_cover)
         if form.is_valid():
-            # Save the form to get the updated blue_book URL
-            updated_cover = form.save(commit=False)
-
-            # Check if a new blue_book file is provided
-            if 'blue_book' in request.FILES:
-                file = request.FILES['blue_book']
-                # Upload blue_book to Google Cloud Storage or other storage
-                public_url = ThirdPartyCarInsurance.upload_form(file, file.name)
-                # Set the blue_book field to the storage URL
-                updated_cover.blue_book.name = public_url
-
-                # Save the updated cover with the new blue_book URL
-                updated_cover.save()
-                print("Updated Cover Data:", updated_cover.__dict__)
-
-                # Redirect to a success page or display a success message 
-                return redirect('customer:display_user_thirdparty_covers')
+            # Save the form - Django will handle file storage automatically
+            form.save()
+            messages.success(request, 'Third party cover updated successfully!')
+            return redirect('customer:display_user_thirdparty_covers')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
     else:
         form = ThirdPartyCarInsuranceForm(instance=thirdparty_cover)
 
@@ -953,3 +987,13 @@ def policy_wording_view(request):
     except models.Customer.DoesNotExist:
         messages.error(request, "Customer profile not found.")
         return redirect('customer:customer-dashboard')
+
+@login_required(login_url='/customer/customerlogin')
+def motor_insurance_requirement_view(request):
+    """View to inform customers about homeowners requirement for motor insurance"""
+    return render(request, 'customer/motor_insurance_requirement.html')
+
+@login_required(login_url='/customer/customerlogin')
+def claims_guidelines_view(request):
+    """Claims guidelines page for logged-in customers"""
+    return render(request, 'customer/claims_guidelines.html')
