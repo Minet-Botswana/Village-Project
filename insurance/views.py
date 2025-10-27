@@ -452,21 +452,71 @@ def delete_policy_view(request,pk):
     return redirect('admin-delete-policy')
 
 def admin_view_policy_holder_view(request):
-    #policyrecords = models.PolicyRecord.objects.all()
-    userrecords = models.Customer.objects.all()
-    policyrecords = models.PolicyRecord.objects.select_related('Policy').all()
+    # Get all homeowners policy records
+    homeowners_records = models.PolicyRecord.objects.select_related('Policy', 'customer__user').all()
     
-    # Calculate counts for different policy statuses
-    pending_count = policyrecords.filter(status='Pending').count()
-    approved_count = policyrecords.filter(status='Approved').count()
-    rejected_count = policyrecords.filter(status='Rejected').count()
+    # Get all third-party policy records  
+    thirdparty_records = models.ThirdpartyPolicyRecord.objects.select_related('thirdpartypolicy', 'thirdpartycustomer__user').all()
+    
+    # Calculate counts for homeowners policies
+    homeowners_pending = homeowners_records.filter(status='Pending').count()
+    homeowners_approved = homeowners_records.filter(status='Approved').count()
+    homeowners_rejected = homeowners_records.filter(status='Rejected').count()
+    
+    # Calculate counts for third-party policies
+    thirdparty_pending = thirdparty_records.filter(thirdpartystatus='Pending').count()
+    thirdparty_approved = thirdparty_records.filter(thirdpartystatus='Approved').count()
+    thirdparty_rejected = thirdparty_records.filter(thirdpartystatus='Rejected').count()
+    
+    # Total counts
+    total_pending = homeowners_pending + thirdparty_pending
+    total_approved = homeowners_approved + thirdparty_approved
+    total_rejected = homeowners_rejected + thirdparty_rejected
+    total_applications = homeowners_records.count() + thirdparty_records.count()
+    
+    # Create customer policy relationships to show motor insurance dependencies
+    customer_policies = {}
+    
+    # Track homeowners policies by customer
+    for record in homeowners_records:
+        customer_id = record.customer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.customer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['homeowners'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.Policy.premium)
+    
+    # Track motor policies by customer and link to homeowners
+    for record in thirdparty_records:
+        customer_id = record.thirdpartycustomer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.thirdpartycustomer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['motor'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.thirdpartypolicy.premium)
     
     return render(request,'insurance/admin_view_policy_holder.html',{
-        'policyrecords': policyrecords, 
-        'userrecords': userrecords,
-        'pending_count': pending_count,
-        'approved_count': approved_count,
-        'rejected_count': rejected_count
+        'homeowners_records': homeowners_records,
+        'thirdparty_records': thirdparty_records,
+        'customer_policies': customer_policies,
+        'total_applications': total_applications,
+        'pending_count': total_pending,
+        'approved_count': total_approved,
+        'rejected_count': total_rejected,
+        'homeowners_pending': homeowners_pending,
+        'homeowners_approved': homeowners_approved,
+        'homeowners_rejected': homeowners_rejected,
+        'thirdparty_pending': thirdparty_pending,
+        'thirdparty_approved': thirdparty_approved,
+        'thirdparty_rejected': thirdparty_rejected,
     })
 
 def admin_view_thirdpartypolicy_holder_view(request):
@@ -475,24 +525,150 @@ def admin_view_thirdpartypolicy_holder_view(request):
     return render(request,'insurance/admin_view_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
 
 def admin_view_approved_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all().filter(status='Approved')
-    return render(request,'insurance/admin_view_approved_policy_holder.html',{'policyrecords':policyrecords})
+    # Get approved homeowners and motor policies
+    homeowners_records = models.PolicyRecord.objects.filter(status='Approved').select_related('Policy', 'customer__user')
+    thirdparty_records = models.ThirdpartyPolicyRecord.objects.filter(thirdpartystatus='Approved').select_related('thirdpartypolicy', 'thirdpartycustomer__user')
+    
+    # Calculate counts
+    homeowners_approved = homeowners_records.count()
+    thirdparty_approved = thirdparty_records.count()
+    total_approved = homeowners_approved + thirdparty_approved
+    
+    # Create customer policy relationships
+    customer_policies = {}
+    
+    for record in homeowners_records:
+        customer_id = record.customer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.customer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['homeowners'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.Policy.premium)
+    
+    for record in thirdparty_records:
+        customer_id = record.thirdpartycustomer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.thirdpartycustomer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['motor'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.thirdpartypolicy.premium)
+    
+    return render(request,'insurance/admin_view_approved_policy_holder.html',{
+        'customer_policies': customer_policies,
+        'homeowners_records': homeowners_records,
+        'thirdparty_records': thirdparty_records,
+        'approved_count': total_approved,
+        'homeowners_approved': homeowners_approved,
+        'thirdparty_approved': thirdparty_approved,
+    })
 
 def admin_view_approved_thirdpartypolicy_holder_view(request):
     policyrecords = models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Approved')
     return render(request,'insurance/admin_view_approved_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
 
 def admin_view_disapproved_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all().filter(status='Disapproved')
-    return render(request,'insurance/admin_view_disapproved_policy_holder.html',{'policyrecords':policyrecords})
+    # Get rejected homeowners and motor policies
+    homeowners_records = models.PolicyRecord.objects.filter(status='Rejected').select_related('Policy', 'customer__user')
+    thirdparty_records = models.ThirdpartyPolicyRecord.objects.filter(thirdpartystatus='Rejected').select_related('thirdpartypolicy', 'thirdpartycustomer__user')
+    
+    # Calculate counts
+    homeowners_rejected = homeowners_records.count()
+    thirdparty_rejected = thirdparty_records.count()
+    total_rejected = homeowners_rejected + thirdparty_rejected
+    
+    # Create customer policy relationships
+    customer_policies = {}
+    
+    for record in homeowners_records:
+        customer_id = record.customer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.customer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['homeowners'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.Policy.premium)
+    
+    for record in thirdparty_records:
+        customer_id = record.thirdpartycustomer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.thirdpartycustomer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['motor'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.thirdpartypolicy.premium)
+    
+    return render(request,'insurance/admin_view_disapproved_policy_holder.html',{
+        'customer_policies': customer_policies,
+        'homeowners_records': homeowners_records,
+        'thirdparty_records': thirdparty_records,
+        'rejected_count': total_rejected,
+        'homeowners_rejected': homeowners_rejected,
+        'thirdparty_rejected': thirdparty_rejected,
+    })
 
 def admin_view_disapproved_thirdpartypolicy_holder_view(request):
     policyrecords = models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Disapproved')
     return render(request,'insurance/admin_view_disapproved_thirdpartypolicy_holder.html',{'policyrecords':policyrecords})
 
 def admin_view_waiting_policy_holder_view(request):
-    policyrecords = models.PolicyRecord.objects.all().filter(status='Pending')
-    return render(request,'insurance/admin_view_waiting_policy_holder.html',{'policyrecords':policyrecords})
+    # Get pending homeowners and motor policies
+    homeowners_records = models.PolicyRecord.objects.filter(status='Pending').select_related('Policy', 'customer__user')
+    thirdparty_records = models.ThirdpartyPolicyRecord.objects.filter(thirdpartystatus='Pending').select_related('thirdpartypolicy', 'thirdpartycustomer__user')
+    
+    # Calculate counts
+    homeowners_pending = homeowners_records.count()
+    thirdparty_pending = thirdparty_records.count()
+    total_pending = homeowners_pending + thirdparty_pending
+    
+    # Create customer policy relationships
+    customer_policies = {}
+    
+    for record in homeowners_records:
+        customer_id = record.customer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.customer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['homeowners'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.Policy.premium)
+    
+    for record in thirdparty_records:
+        customer_id = record.thirdpartycustomer.id
+        if customer_id not in customer_policies:
+            customer_policies[customer_id] = {
+                'customer': record.thirdpartycustomer,
+                'homeowners': [],
+                'motor': [],
+                'total_premium': 0
+            }
+        customer_policies[customer_id]['motor'].append(record)
+        customer_policies[customer_id]['total_premium'] += float(record.thirdpartypolicy.premium)
+    
+    return render(request,'insurance/admin_view_waiting_policy_holder.html',{
+        'customer_policies': customer_policies,
+        'homeowners_records': homeowners_records,
+        'thirdparty_records': thirdparty_records,
+        'pending_count': total_pending,
+        'homeowners_pending': homeowners_pending,
+        'thirdparty_pending': thirdparty_pending,
+    })
 
 def admin_view_waiting_thirdpartypolicy_holder_view(request):
     policyrecords = models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Pending')
@@ -693,3 +869,14 @@ def claims_view(request):
 
 def claims_guidelines_view(request):
     return render(request, 'insurance/claims_guidelines.html')
+
+@login_required(login_url='adminlogin')
+def admin_policy_holder_details_view(request, customer_id):
+    customer = Customer.objects.get(id=customer_id)
+    homeowners = models.PolicyRecord.objects.filter(customer=customer).select_related('Policy')
+    motor = models.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer).select_related('thirdpartypolicy')
+    return render(request, 'insurance/admin_policy_holder_details.html', {
+        'customer': customer,
+        'homeowners': homeowners,
+        'motor': motor,
+    })

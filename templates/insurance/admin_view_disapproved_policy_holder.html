@@ -360,8 +360,8 @@
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">
-    <h1 class="page-title">Policy Applications Management</h1>
-    <p class="page-subtitle">Review and manage homeowners and motor insurance applications</p>
+    <h1 class="page-title">Rejected Policy Applications</h1>
+    <p class="page-subtitle">Declined homeowners and motor insurance applications</p>
 </div>
 
 <!-- Statistics Overview -->
@@ -414,7 +414,7 @@
 <div class="filter-tabs">
     <ul class="tab-list">
         <li class="tab-item">
-            <a href="{% url 'admin-view-policy-holder' %}" class="tab-link active">
+            <a href="{% url 'admin-view-policy-holder' %}" class="tab-link">
                 All Applications
                 <span class="tab-badge">{{ total_applications }}</span>
             </a>
@@ -432,7 +432,7 @@
             </a>
         </li>
         <li class="tab-item">
-            <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="tab-link">
+            <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="tab-link active">
                 Rejected
                 <span class="tab-badge">{{ rejected_count }}</span>
             </a>
@@ -608,8 +608,8 @@
     {% else %}
         <div class="empty-state">
             <i class="ri-file-list-3-line"></i>
-            <h3>No Applications Found</h3>
-            <p>There are currently no policy applications to review.</p>
+            <h3>No Rejected Applications Found</h3>
+            <p>There are currently no rejected policy applications.</p>
         </div>
     {% endif %}
 </div>

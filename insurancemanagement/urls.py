@@ -1,4 +1,3 @@
-
 from django.contrib import admin
 from insurance import views
 from django.contrib.auth.views import LogoutView
@@ -84,7 +83,7 @@ urlpatterns = [
     
     path('update-question/<int:pk>', views.update_question_view,name='update-question'),
     #path('reset-password/', auth_views.PasswordResetView.as_view(), name='reset-password'),
-    
+    path('admin-policy-holder-details/<int:customer_id>/', views.admin_policy_holder_details_view, name='admin-policy-holder-details'),
 
 ]
 

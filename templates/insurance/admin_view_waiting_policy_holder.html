@@ -360,8 +360,8 @@
 {% block content %}
 <!-- Page Header -->
 <div class="page-header">
-    <h1 class="page-title">Policy Applications Management</h1>
-    <p class="page-subtitle">Review and manage homeowners and motor insurance applications</p>
+    <h1 class="page-title">Pending Policy Applications</h1>
+    <p class="page-subtitle">Review homeowners and motor insurance applications awaiting approval</p>
 </div>
 
 <!-- Statistics Overview -->
@@ -414,13 +414,13 @@
 <div class="filter-tabs">
     <ul class="tab-list">
         <li class="tab-item">
-            <a href="{% url 'admin-view-policy-holder' %}" class="tab-link active">
+            <a href="{% url 'admin-view-policy-holder' %}" class="tab-link">
                 All Applications
                 <span class="tab-badge">{{ total_applications }}</span>
             </a>
         </li>
         <li class="tab-item">
-            <a href="{% url 'admin-view-waiting-policy-holder' %}" class="tab-link">
+            <a href="{% url 'admin-view-waiting-policy-holder' %}" class="tab-link active">
                 Pending Review
                 <span class="tab-badge">{{ pending_count }}</span>
             </a>

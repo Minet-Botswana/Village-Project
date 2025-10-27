@@ -1,0 +1,172 @@
+{% extends "insurance/adminbase.html" %}
+{% block title %}Policy Holder Details - Minet Insurance{% endblock %}
+{% block extra_css %}
+<style>
+.page-header {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.page-title {
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.page-subtitle {
+    color: #666;
+    font-size: 16px;
+}
+.details-section {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    margin-bottom: 30px;
+    padding: 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.details-section h2 {
+    color: #e21a22;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.applications-table th {
+    background-color: #f8f9fa;
+    color: #000000;
+    font-weight: 600;
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #e1e5e9;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.applications-table td {
+    padding: 10px;
+    border-bottom: 1px solid #f1f3f4;
+    color: #000000;
+    vertical-align: top;
+}
+.applications-table tr:last-child td {
+    border-bottom: none;
+}
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.status-approved {
+    background-color: #d1f2eb;
+    color: #00875a;
+}
+.status-rejected {
+    background-color: #ffe6e6;
+    color: #cc0000;
+}
+@media (max-width: 768px) {
+    .details-section {
+        padding: 12px;
+    }
+    .applications-table {
+        min-width: 600px;
+        font-size: 13px;
+    }
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Policy Holder Details</h1>
+    <p class="page-subtitle">Full details for {{ customer.user.first_name }} {{ customer.user.last_name }} (ID: {{ customer.id_number }})</p>
+</div>
+
+<div class="details-section">
+    <h2>Customer Information</h2>
+    <ul>
+        <li><strong>Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</li>
+        <li><strong>ID Number:</strong> {{ customer.id_number }}</li>
+        <li><strong>Phone:</strong> {{ customer.mobile }}</li>
+        <li><strong>Email:</strong> {{ customer.user.email }}</li>
+        <li><strong>Address:</strong> {{ customer.address }}</li>
+    </ul>
+</div>
+
+<div class="details-section">
+    <h2>Homeowners Policies</h2>
+    {% if homeowners %}
+        {% for record in homeowners %}
+        <div class="details-subsection">
+            <table class="applications-table">
+                <tr><th>Policy Name</th><td>{{ record.Policy.policy_name }}</td></tr>
+                <tr><th>Policy #</th><td>{{ record.Policy.policy_number }}</td></tr>
+                <tr><th>Category</th><td>{{ record.Policy.category.category_name }}</td></tr>
+                <tr><th>Sum Assured</th><td>P{{ record.Policy.sum_assurance|floatformat:2 }}</td></tr>
+                <tr><th>Premium</th><td>P{{ record.Policy.premium|floatformat:2 }}</td></tr>
+                <tr><th>Tenure</th><td>{{ record.Policy.tenure }} months</td></tr>
+                <tr><th>Status</th><td><span class="status-badge status-{{ record.status|lower }}">{{ record.status }}</span></td></tr>
+                <tr><th>Coverage Period</th><td>{{ record.Policy.cover_start|default:"Not set" }} - {{ record.Policy.cover_end|default:"Not set" }}</td></tr>
+                <tr><th>Plot Number</th><td>{{ record.Policy.plot_number }}</td></tr>
+                <tr><th>Ward/Kgotla</th><td>{{ record.Policy.ward_kgotla }}</td></tr>
+                <tr><th>Village</th><td>{{ record.Policy.village }}</td></tr>
+                <tr><th>District</th><td>{{ record.Policy.district }}</td></tr>
+                <tr><th>Title Deed</th><td>{% if record.Policy.title_deed %}<a href="{{ record.Policy.title_deed.url }}" target="_blank">Download</a>{% else %}N/A{% endif %}</td></tr>
+                <tr><th>Financial Interest</th><td>{{ record.Policy.financial_interest }}</td></tr>
+                <tr><th>Created</th><td>{{ record.Policy.creation_date }}</td></tr>
+                <tr><th>Expiry Date</th><td>{{ record.Policy.expiry_date|default:"N/A" }}</td></tr>
+            </table>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No homeowners policies found.</p>
+    {% endif %}
+</div>
+
+<div class="details-section">
+    <h2>Motor Insurance Add-ons</h2>
+    {% if motor %}
+        {% for record in motor %}
+        <div class="details-subsection">
+            <table class="applications-table">
+                <tr><th>Policy Name</th><td>{{ record.thirdpartypolicy.policy_name }}</td></tr>
+                <tr><th>Policy #</th><td>{{ record.thirdpartypolicy.policy_number }}</td></tr>
+                <tr><th>Category</th><td>{{ record.thirdpartypolicy.category.category_name }}</td></tr>
+                <tr><th>Premium</th><td>P{{ record.thirdpartypolicy.premium|floatformat:2 }}</td></tr>
+                <tr><th>Tenure</th><td>{{ record.thirdpartypolicy.tenure }} months</td></tr>
+                <tr><th>Status</th><td><span class="status-badge status-{{ record.thirdpartystatus|lower }}">{{ record.thirdpartystatus }}</span></td></tr>
+                <tr><th>Coverage Period</th><td>{{ record.thirdpartypolicy.cover_start|default:"Not set" }} - {{ record.thirdpartypolicy.cover_end|default:"Not set" }}</td></tr>
+                <tr><th>Vehicle Type</th><td>{{ record.thirdpartypolicy.vehicle_type }}</td></tr>
+                <tr><th>Make</th><td>{{ record.thirdpartypolicy.vehicle_make }}</td></tr>
+                <tr><th>Model</th><td>{{ record.thirdpartypolicy.vehicle_model }}</td></tr>
+                <tr><th>Year</th><td>{{ record.thirdpartypolicy.vehicle_year }}</td></tr>
+                <tr><th>Chassis Number</th><td>{{ record.thirdpartypolicy.chassis_number }}</td></tr>
+                <tr><th>Registration Number</th><td>{{ record.thirdpartypolicy.registration_number }}</td></tr>
+                <tr><th>Engine Number</th><td>{{ record.thirdpartypolicy.engine_number }}</td></tr>
+                <tr><th>Territorial Limits</th><td>{{ record.thirdpartypolicy.territorial_limits }}</td></tr>
+                <tr><th>Created</th><td>{{ record.thirdpartypolicy.creation_date }}</td></tr>
+                <tr><th>Expiry Date</th><td>{{ record.thirdpartypolicy.expiry_date|default:"N/A" }}</td></tr>
+            </table>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No motor insurance add-ons found.</p>
+    {% endif %}
+</div>
+{% endblock %}
