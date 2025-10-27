@@ -85,6 +85,20 @@ urlpatterns = [
     #path('reset-password/', auth_views.PasswordResetView.as_view(), name='reset-password'),
     path('admin-policy-holder-details/<int:customer_id>/', views.admin_policy_holder_details_view, name='admin-policy-holder-details'),
 
+    # KYC Compliance Monitoring URLs for Staff Admins
+    path('admin-kyc-dashboard/', views.admin_kyc_compliance_dashboard, name='admin-kyc-dashboard'),
+    path('admin-kyc-customer-detail/<int:customer_id>/', views.admin_kyc_customer_detail, name='admin-kyc-customer-detail'),
+    path('admin-approve-kyc/<int:customer_id>/', views.admin_approve_kyc, name='admin-approve-kyc'),
+    path('admin-reject-kyc/<int:customer_id>/', views.admin_reject_kyc, name='admin-reject-kyc'),
+    path('admin-mark-kyc-renewal/<int:customer_id>/', views.admin_mark_kyc_renewal, name='admin-mark-kyc-renewal'),
+    path('admin-bulk-kyc-action/', views.admin_bulk_kyc_action, name='admin-bulk-kyc-action'),
+    
+    # Policy Wording Management URLs for Staff Admins
+    path('admin-policy-wordings/', views.admin_policy_wordings_view, name='admin-policy-wordings'),
+    path('admin-add-policy-wording/', views.admin_add_policy_wording_view, name='admin-add-policy-wording'),
+    path('admin-edit-policy-wording/<int:wording_id>/', views.admin_edit_policy_wording_view, name='admin-edit-policy-wording'),
+    path('admin-delete-policy-wording/<int:wording_id>/', views.admin_delete_policy_wording_view, name='admin-delete-policy-wording'),
+    path('admin-toggle-wording-status/<int:wording_id>/', views.admin_toggle_wording_status_view, name='admin-toggle-wording-status'),
 ]
 
 # Serve static files from Google Cloud Storage in production

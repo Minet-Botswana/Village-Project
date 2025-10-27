@@ -1,0 +1,573 @@
+{% extends "insurance/adminbase.html" %}
+
+{% block title %}KYC Details - {{ customer.get_name }} - Minet Insurance{% endblock %}
+
+{% block extra_css %}
+<style>
+.kyc-detail-container {
+    padding: 20px;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.back-button:hover {
+    background: #5a6268;
+    color: white;
+    text-decoration: none;
+}
+
+.customer-header {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.customer-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.kyc-status-large {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-compliant { background: #d1f2eb; color: #00875a; }
+.status-pending { background: #fff3cd; color: #856404; }
+.status-non-compliant { background: #f8d7da; color: #721c24; }
+.status-renewal-required { background: #ffeaa7; color: #d63031; }
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.info-item {
+    padding: 10px 0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    color: #000;
+    font-size: 15px;
+}
+
+.section-card {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e21a22;
+}
+
+.document-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.document-name {
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.document-date {
+    color: #666;
+    font-size: 13px;
+}
+
+.download-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #e21a22;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.download-btn:hover {
+    background: #c41f17;
+    color: white;
+    text-decoration: none;
+}
+
+.no-document {
+    padding: 15px;
+    background: #fff3cd;
+    border-radius: 6px;
+    color: #856404;
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.btn-action {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-approve {
+    background: #28a745;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #218838;
+    color: white;
+}
+
+.btn-reject {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #c82333;
+    color: white;
+}
+
+.btn-renewal {
+    background: #fd7e14;
+    color: white;
+}
+
+.btn-renewal:hover {
+    background: #e8590c;
+    color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.modal-header {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.modal-form-group {
+    margin-bottom: 15px;
+}
+
+.modal-label {
+    display: block;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.modal-input,
+.modal-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+}
+
+.btn-submit {
+    background: #e21a22;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background: #c41f17;
+}
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="kyc-detail-container">
+    <a href="{% url 'admin-kyc-dashboard' %}" class="back-button">
+        ← Back to KYC Dashboard
+    </a>
+    
+    <!-- Alerts -->
+    {% if customer.kyc_is_expired %}
+    <div class="alert alert-danger">
+        <strong>⚠️ KYC Expired!</strong> This customer's KYC has expired. Please review and take action.
+    </div>
+    {% elif customer.kyc_expires_soon %}
+    <div class="alert alert-warning">
+        <strong>⏰ KYC Expiring Soon!</strong> This customer's KYC will expire in {{ customer.days_until_kyc_expiry }} days.
+    </div>
+    {% endif %}
+    
+    <!-- Customer Header -->
+    <div class="customer-header">
+        <div class="customer-name">{{ customer.get_name }}</div>
+        <span class="kyc-status-large status-{{ customer.kyc_status|lower|cut:' '|cut:'-' }}">
+            {{ customer.kyc_status }}
+        </span>
+        
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">ID Number</div>
+                <div class="info-value">{{ customer.id_number|default:"Not provided" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Mobile</div>
+                <div class="info-value">{{ customer.mobile }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">{{ customer.user.email }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Occupation</div>
+                <div class="info-value">{{ customer.occupation|default:"Not provided" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">KYC Approval Date</div>
+                <div class="info-value">{{ customer.kyc_approval_date|date:"d M Y, g:i A"|default:"Not approved" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">KYC Expiry Date</div>
+                <div class="info-value">{{ customer.kyc_expiry_date|date:"d M Y"|default:"N/A" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Days Until Expiry</div>
+                <div class="info-value">
+                    {% if customer.days_until_kyc_expiry is not None %}
+                        {% if customer.days_until_kyc_expiry < 0 %}
+                            <span style="color: #dc3545; font-weight: bold;">Expired {{ customer.days_since_kyc_expired }} days ago</span>
+                        {% else %}
+                            {{ customer.days_until_kyc_expiry }} days
+                        {% endif %}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Reviewed By</div>
+                <div class="info-value">{{ customer.kyc_reviewed_by.get_full_name|default:"Not reviewed" }}</div>
+            </div>
+        </div>
+        
+        {% if customer.kyc_notes %}
+        <div class="info-item" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e1e5e9;">
+            <div class="info-label">Admin Notes</div>
+            <div class="info-value">{{ customer.kyc_notes }}</div>
+        </div>
+        {% endif %}
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            {% if customer.kyc_status != 'Compliant' %}
+            <button onclick="showApproveModal()" class="btn-action btn-approve">
+                ✓ Approve KYC
+            </button>
+            {% endif %}
+            
+            {% if customer.kyc_status != 'Non-Compliant' %}
+            <button onclick="showRejectModal()" class="btn-action btn-reject">
+                ✗ Reject KYC
+            </button>
+            {% endif %}
+            
+            <a href="{% url 'admin-mark-kyc-renewal' customer.id %}?next=detail" class="btn-action btn-renewal">
+                🔄 Mark for Renewal
+            </a>
+        </div>
+    </div>
+    
+    <!-- KYC Documents Section -->
+    <div class="section-card">
+        <div class="section-title">KYC Documents</div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+            <!-- KYC Form -->
+            <div>
+                <div class="document-name">KYC Form</div>
+                {% if kyc_form %}
+                <div class="document-item">
+                    <div class="document-date">Submitted: {{ kyc_form.submission_date|date:"d M Y" }}</div>
+                    {% if kyc_form.kyc_form %}
+                    <a href="{{ kyc_form.kyc_form.url }}" target="_blank" class="download-btn">
+                        📄 Download KYC Form
+                    </a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="no-document">Not submitted</div>
+                {% endif %}
+            </div>
+            
+            <!-- Copy of Omang/ID -->
+            <div>
+                <div class="document-name">Copy of Omang/ID</div>
+                {% if omang_copy %}
+                <div class="document-item">
+                    <div class="document-date">Submitted: {{ omang_copy.submission_date|date:"d M Y" }}</div>
+                    {% if omang_copy.copy_of_omang %}
+                    <a href="{{ omang_copy.copy_of_omang.url }}" target="_blank" class="download-btn">
+                        📄 Download ID Copy
+                    </a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="no-document">Not submitted</div>
+                {% endif %}
+            </div>
+            
+            <!-- Residence Proof -->
+            <div>
+                <div class="document-name">Proof of Residence</div>
+                {% if residence_proof %}
+                <div class="document-item">
+                    <div class="document-date">Submitted: {{ residence_proof.submission_date|date:"d M Y" }}</div>
+                    {% if residence_proof.residence_proof %}
+                    <a href="{{ residence_proof.residence_proof.url }}" target="_blank" class="download-btn">
+                        📄 Download Residence Proof
+                    </a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="no-document">Not submitted</div>
+                {% endif %}
+            </div>
+            
+            <!-- Income Proof -->
+            <div>
+                <div class="document-name">Proof of Income</div>
+                {% if income_proof %}
+                <div class="document-item">
+                    <div class="document-date">Submitted: {{ income_proof.submission_date|date:"d M Y" }}</div>
+                    {% if income_proof.income_proof %}
+                    <a href="{{ income_proof.income_proof.url }}" target="_blank" class="download-btn">
+                        📄 Download Income Proof
+                    </a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="no-document">Not submitted</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Policy Information -->
+    {% if homeowners or motor %}
+    <div class="section-card">
+        <div class="section-title">Policy Information</div>
+        
+        {% if homeowners %}
+        <h4>Homeowners Policies</h4>
+        {% for record in homeowners %}
+        <div class="document-item">
+            <div class="document-name">{{ record.Policy.policy_name }} - {{ record.Policy.policy_number }}</div>
+            <div class="document-date">
+                Status: <strong>{{ record.status }}</strong> | 
+                Premium: P{{ record.Policy.premium }} | 
+                Tenure: {{ record.Policy.tenure }} months
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        
+        {% if motor %}
+        <h4 style="margin-top: 20px;">Motor Insurance Policies</h4>
+        {% for record in motor %}
+        <div class="document-item">
+            <div class="document-name">{{ record.thirdpartypolicy.policy_name }} - {{ record.thirdpartypolicy.policy_number }}</div>
+            <div class="document-date">
+                Status: <strong>{{ record.thirdpartystatus }}</strong> | 
+                Vehicle: {{ record.thirdpartypolicy.vehicle_make }} {{ record.thirdpartypolicy.vehicle_model }} |
+                Premium: P{{ record.thirdpartypolicy.premium }}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Approve Modal -->
+<div id="approveModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">Approve KYC</div>
+        <form method="POST" action="{% url 'admin-approve-kyc' customer.id %}">
+            {% csrf_token %}
+            <div class="modal-form-group">
+                <label class="modal-label">Validity Period (months)</label>
+                <input type="number" name="expiry_months" value="12" class="modal-input" required>
+            </div>
+            <div class="modal-form-group">
+                <label class="modal-label">Notes</label>
+                <textarea name="notes" class="modal-textarea" placeholder="Optional notes..."></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" onclick="closeApproveModal()" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn-submit">Approve KYC</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div id="rejectModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">Reject KYC</div>
+        <form method="POST" action="{% url 'admin-reject-kyc' customer.id %}">
+            {% csrf_token %}
+            <div class="modal-form-group">
+                <label class="modal-label">Reason for Rejection</label>
+                <textarea name="reason" class="modal-textarea" placeholder="Enter reason for rejection..." required></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" onclick="closeRejectModal()" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn-submit">Reject KYC</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showApproveModal() {
+    document.getElementById('approveModal').style.display = 'block';
+}
+
+function closeApproveModal() {
+    document.getElementById('approveModal').style.display = 'none';
+}
+
+function showRejectModal() {
+    document.getElementById('rejectModal').style.display = 'block';
+}
+
+function closeRejectModal() {
+    document.getElementById('rejectModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const approveModal = document.getElementById('approveModal');
+    const rejectModal = document.getElementById('rejectModal');
+    if (event.target == approveModal) {
+        closeApproveModal();
+    }
+    if (event.target == rejectModal) {
+        closeRejectModal();
+    }
+}
+</script>
+{% endblock %}

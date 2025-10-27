@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from insurance import models as CMODEL
 from insurance import forms as CFORM
 from django.contrib.auth.models import User
-from insurance.models import Policy, ThirdpartyPolicy
+from insurance.models import Policy, ThirdpartyPolicy, PolicyWording
 from django.views import View
 from django.template.loader import get_template
 from django.shortcuts import render, redirect
@@ -294,6 +294,20 @@ def customer_dashboard_view(request):
         status__in=['Approved', 'Active']
     ).exists()
     
+    # Get KYC status information
+    kyc_status = customer.kyc_status
+    kyc_needs_attention = kyc_status in ['Pending', 'Non-Compliant', 'Renewal Required']
+    kyc_alert_message = None
+    
+    if kyc_status == 'Pending':
+        kyc_alert_message = "Your KYC documents are under review. We'll notify you once approved."
+    elif kyc_status == 'Non-Compliant':
+        kyc_alert_message = f"Your KYC application was not approved. Reason: {customer.kyc_notes or 'Please contact support for details.'}"
+    elif kyc_status == 'Renewal Required':
+        kyc_alert_message = "Your KYC documents need to be renewed. Please upload updated documents."
+    elif customer.kyc_expires_soon:
+        kyc_alert_message = f"Your KYC will expire in {customer.days_until_kyc_expiry} days. Please prepare to renew."
+    
     dict={
         'customer':models.Customer.objects.get(user_id=request.user.id),
         'available_policy':CMODEL.Policy.objects.all().count(),
@@ -305,6 +319,9 @@ def customer_dashboard_view(request):
         'policies': policies,
         'thirdpartypolicy':thirdpartypolicy,
         'has_approved_homeowners': has_approved_homeowners,
+        'kyc_status': kyc_status,
+        'kyc_needs_attention': kyc_needs_attention,
+        'kyc_alert_message': kyc_alert_message,
     }
     return render(request,'customer/customer_dashboard.html',context=dict)
 
@@ -554,6 +571,50 @@ def question_history_view(request):
     customer = models.Customer.objects.get(user_id=request.user.id)
     questions = CMODEL.Question.objects.all().filter(customer=customer)
     return render(request,'customer/question_history.html',{'questions':questions,'customer':customer})
+
+
+@login_required(login_url='customerlogin')
+def edit_question_view(request, question_id):
+    """Edit an existing question"""
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    question = CMODEL.Question.objects.get(id=question_id, customer=customer)
+    
+    # Prevent editing if question has been answered
+    if question.admin_comment and question.admin_comment != 'Nothing':
+        messages.error(request, 'Cannot edit a question that has already been answered by admin.')
+        return redirect('customer:question-history')
+    
+    if request.method == 'POST':
+        questionForm = CFORM.QuestionForm(request.POST, instance=question)
+        if questionForm.is_valid():
+            questionForm.save()
+            messages.success(request, 'Question updated successfully!')
+            return redirect('customer:question-history')
+    else:
+        questionForm = CFORM.QuestionForm(instance=question)
+    
+    return render(request, 'customer/edit_question.html', {
+        'questionForm': questionForm,
+        'question': question,
+        'customer': customer
+    })
+
+
+@login_required(login_url='customerlogin')
+def delete_question_view(request, question_id):
+    """Delete a question"""
+    customer = models.Customer.objects.get(user_id=request.user.id)
+    question = CMODEL.Question.objects.get(id=question_id, customer=customer)
+    
+    # Prevent deleting if question has been answered
+    if question.admin_comment and question.admin_comment != 'Nothing':
+        messages.error(request, 'Cannot delete a question that has already been answered by admin.')
+        return redirect('customer:question-history')
+    
+    question.delete()
+    messages.success(request, 'Question deleted successfully!')
+    return redirect('customer:question-history')
+
 
 #################### VIEWS FOR FORMS #########################################
 from django.shortcuts import render, redirect
@@ -1027,3 +1088,35 @@ def customer_profile_update_view(request):
         'customer_form': customer_form,
         'customer': customer
     })
+
+
+@login_required(login_url='customerlogin')
+def customer_policy_wordings_view(request):
+    """
+    Customer view to browse and download policy wordings
+    """
+    # Get filter parameters
+    policy_type = request.GET.get('policy_type', '')
+    
+    # Get only active policy wordings
+    wordings = PolicyWording.objects.filter(is_active=True)
+    
+    # Apply policy type filter if selected
+    if policy_type:
+        wordings = wordings.filter(policy_type=policy_type)
+    
+    # Group wordings by policy type for better organization
+    wordings_by_type = {}
+    for policy_type_choice, policy_type_label in PolicyWording.POLICY_TYPE_CHOICES:
+        type_wordings = wordings.filter(policy_type=policy_type_choice)
+        if type_wordings.exists():
+            wordings_by_type[policy_type_label] = type_wordings
+    
+    context = {
+        'wordings': wordings,
+        'wordings_by_type': wordings_by_type,
+        'policy_types': PolicyWording.POLICY_TYPE_CHOICES,
+        'selected_policy_type': policy_type,
+    }
+    
+    return render(request, 'customer/policy_wordings.html', context)

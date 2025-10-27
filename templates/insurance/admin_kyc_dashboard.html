@@ -1,0 +1,284 @@
+{% extends "insurance/adminbase.html" %}
+
+{% block title %}KYC Compliance Dashboard - Minet Insurance{% endblock %}
+
+{% block extra_css %}
+<style>
+/* KYC Dashboard Specific Styles */
+.kyc-dashboard {
+    padding: 20px;
+}
+
+.kyc-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.kyc-stat-card {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.kyc-stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.kyc-stat-label {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stat-compliant .kyc-stat-number { color: #28a745; }
+.stat-pending .kyc-stat-number { color: #ffc107; }
+.stat-non-compliant .kyc-stat-number { color: #dc3545; }
+.stat-renewal .kyc-stat-number { color: #fd7e14; }
+.stat-expiring .kyc-stat-number { color: #e83e8c; }
+
+.kyc-controls {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.kyc-filter-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.kyc-filter-tab {
+    padding: 10px 20px;
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.kyc-filter-tab:hover,
+.kyc-filter-tab.active {
+    background: #e21a22;
+    color: white;
+    border-color: #e21a22;
+    text-decoration: none;
+}
+
+.kyc-table-container {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.kyc-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.kyc-table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    color: #000;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.kyc-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f3f4;
+    vertical-align: middle;
+}
+
+.kyc-table tr:hover {
+    background: #f8f9fa;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-compliant { background: #d1f2eb; color: #00875a; }
+.status-pending { background: #fff3cd; color: #856404; }
+.status-non-compliant { background: #f8d7da; color: #721c24; }
+.status-renewal-required { background: #ffeaa7; color: #d63031; }
+
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+}
+
+.btn-view {
+    background: #e21a22;
+    color: white;
+}
+
+.btn-view:hover {
+    background: #c41f17;
+    color: white;
+    text-decoration: none;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #e1e5e9;
+    border-radius: 4px;
+    font-size: 14px;
+    flex: 1;
+    max-width: 300px;
+}
+
+.search-input:focus {
+    border-color: #e21a22;
+    outline: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="kyc-dashboard">
+    <h1 style="margin-bottom: 20px; color: #000;">KYC Compliance Dashboard</h1>
+    
+    <!-- Statistics Grid -->
+    <div class="kyc-stats-grid">
+        <div class="kyc-stat-card">
+            <div class="kyc-stat-number">{{ total_customers }}</div>
+            <div class="kyc-stat-label">Total Customers</div>
+        </div>
+        <div class="kyc-stat-card stat-compliant">
+            <div class="kyc-stat-number">{{ compliant_count }}</div>
+            <div class="kyc-stat-label">Compliant</div>
+        </div>
+        <div class="kyc-stat-card stat-pending">
+            <div class="kyc-stat-number">{{ pending_count }}</div>
+            <div class="kyc-stat-label">Pending Review</div>
+        </div>
+        <div class="kyc-stat-card stat-non-compliant">
+            <div class="kyc-stat-number">{{ non_compliant_count }}</div>
+            <div class="kyc-stat-label">Non-Compliant</div>
+        </div>
+        <div class="kyc-stat-card stat-renewal">
+            <div class="kyc-stat-number">{{ renewal_required_count }}</div>
+            <div class="kyc-stat-label">Renewal Required</div>
+        </div>
+        <div class="kyc-stat-card stat-expiring">
+            <div class="kyc-stat-number">{{ expiring_soon }}</div>
+            <div class="kyc-stat-label">Expiring Soon (30 days)</div>
+        </div>
+    </div>
+    
+    <!-- Filter Tabs -->
+    <div class="kyc-filter-tabs">
+        <a href="?status=all" class="kyc-filter-tab {% if status_filter == 'all' %}active{% endif %}">All</a>
+        <a href="?status=Pending" class="kyc-filter-tab {% if status_filter == 'Pending' %}active{% endif %}">Pending</a>
+        <a href="?status=Compliant" class="kyc-filter-tab {% if status_filter == 'Compliant' %}active{% endif %}">Compliant</a>
+        <a href="?status=Non-Compliant" class="kyc-filter-tab {% if status_filter == 'Non-Compliant' %}active{% endif %}">Non-Compliant</a>
+        <a href="?status=Renewal Required" class="kyc-filter-tab {% if status_filter == 'Renewal Required' %}active{% endif %}">Renewal Required</a>
+    </div>
+    
+    <!-- Search Controls -->
+    <div class="kyc-controls">
+        <form method="GET" style="display: flex; gap: 10px; align-items: center; width: 100%;">
+            <input type="text" 
+                   name="search" 
+                   class="search-input" 
+                   placeholder="Search by name, ID, or phone..." 
+                   value="{{ search_query }}">
+            <input type="hidden" name="status" value="{{ status_filter }}">
+            <button type="submit" class="action-btn btn-view">Search</button>
+        </form>
+    </div>
+    
+    <!-- KYC Table -->
+    <div class="kyc-table-container">
+        {% if customers %}
+        <table class="kyc-table">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>ID Number</th>
+                    <th>Contact</th>
+                    <th>KYC Status</th>
+                    <th>Approval Date</th>
+                    <th>Expiry Date</th>
+                    <th>Days Until Expiry</th>
+                    <th>Reviewed By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td><strong>{{ customer.get_name }}</strong></td>
+                    <td>{{ customer.id_number|default:"N/A" }}</td>
+                    <td>{{ customer.mobile }}</td>
+                    <td>
+                        <span class="status-badge status-{{ customer.kyc_status|lower|cut:' '|cut:'-' }}">
+                            {{ customer.kyc_status }}
+                        </span>
+                    </td>
+                    <td>{{ customer.kyc_approval_date|date:"d M Y"|default:"N/A" }}</td>
+                    <td>{{ customer.kyc_expiry_date|date:"d M Y"|default:"N/A" }}</td>
+                    <td>
+                        {% if customer.days_until_kyc_expiry is not None %}
+                            {% if customer.days_until_kyc_expiry < 0 %}
+                                <span style="color: #dc3545; font-weight: bold;">{{ customer.days_since_kyc_expired }} days ago</span>
+                            {% elif customer.days_until_kyc_expiry <= 30 %}
+                                <span style="color: #fd7e14; font-weight: bold;">{{ customer.days_until_kyc_expiry }} days</span>
+                            {% else %}
+                                <span style="color: #28a745;">{{ customer.days_until_kyc_expiry }} days</span>
+                            {% endif %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>{{ customer.kyc_reviewed_by.get_full_name|default:"Not reviewed" }}</td>
+                    <td>
+                        <a href="{% url 'admin-kyc-customer-detail' customer.id %}" class="action-btn btn-view">
+                            View Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div style="padding: 40px; text-align: center; color: #666;">
+            <p>No customers found matching your criteria.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

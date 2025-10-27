@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.core.files.base import ContentFile
 import uuid
 from django.db import transaction
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -27,6 +29,13 @@ class Customer(models.Model):
         ('Passport', 'Passport'),
     ]
     
+    KYC_STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Compliant', 'Compliant'),
+        ('Non-Compliant', 'Non-Compliant'),
+        ('Renewal Required', 'Renewal Required'),
+    ]
+    
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     #profile_pic= models.TextField(null=True, blank=True)
     address = models.CharField(max_length=40)
@@ -44,6 +53,14 @@ class Customer(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES, null=True, blank=True)
+    
+    # KYC Compliance fields
+    kyc_status = models.CharField(max_length=20, choices=KYC_STATUS_CHOICES, default='Pending', help_text="Current KYC compliance status")
+    kyc_approval_date = models.DateTimeField(null=True, blank=True, help_text="Date when KYC was approved")
+    kyc_expiry_date = models.DateField(null=True, blank=True, help_text="Date when KYC expires (typically 1-2 years from approval)")
+    kyc_reviewed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='kyc_reviews', help_text="Admin who reviewed the KYC")
+    kyc_notes = models.TextField(null=True, blank=True, help_text="Notes about KYC status, reasons for rejection, etc.")
+    kyc_last_updated = models.DateTimeField(auto_now=True, help_text="Last time KYC status was updated")
    
     @property
     def get_name(self):
@@ -51,6 +68,68 @@ class Customer(models.Model):
     @property
     def get_instance(self):
         return self
+    
+    @property
+    def is_kyc_compliant(self):
+        """Check if customer is KYC compliant"""
+        return self.kyc_status == 'Compliant'
+    
+    @property
+    def kyc_expires_soon(self):
+        """Check if KYC expires within 30 days"""
+        if self.kyc_expiry_date and self.kyc_status == 'Compliant':
+            days_until_expiry = (self.kyc_expiry_date - timezone.now().date()).days
+            return 0 <= days_until_expiry <= 30
+        return False
+    
+    @property
+    def kyc_is_expired(self):
+        """Check if KYC has expired"""
+        if self.kyc_expiry_date:
+            return timezone.now().date() > self.kyc_expiry_date
+        return False
+    
+    @property
+    def days_until_kyc_expiry(self):
+        """Calculate days until KYC expiry"""
+        if self.kyc_expiry_date:
+            delta = self.kyc_expiry_date - timezone.now().date()
+            return delta.days
+        return None
+    
+    @property
+    def days_since_kyc_expired(self):
+        """Calculate days since KYC expired (positive number)"""
+        if self.kyc_expiry_date:
+            delta = self.kyc_expiry_date - timezone.now().date()
+            if delta.days < 0:
+                return abs(delta.days)
+        return None
+    
+    def mark_kyc_for_renewal(self):
+        """Mark KYC as requiring renewal"""
+        self.kyc_status = 'Renewal Required'
+        self.save(update_fields=['kyc_status', 'kyc_last_updated'])
+    
+    def approve_kyc(self, reviewed_by, expiry_months=12, notes=""):
+        """Approve KYC with expiry date"""
+        self.kyc_status = 'Compliant'
+        self.kyc_approval_date = timezone.now()
+        self.kyc_expiry_date = timezone.now().date() + relativedelta(months=expiry_months)
+        self.kyc_reviewed_by = reviewed_by
+        if notes:
+            self.kyc_notes = notes
+        self.save(update_fields=['kyc_status', 'kyc_approval_date', 'kyc_expiry_date', 'kyc_reviewed_by', 'kyc_notes', 'kyc_last_updated'])
+    
+    def reject_kyc(self, reviewed_by, reason=""):
+        """Reject KYC application"""
+        self.kyc_status = 'Non-Compliant'
+        self.kyc_reviewed_by = reviewed_by
+        self.kyc_notes = reason
+        self.kyc_approval_date = None
+        self.kyc_expiry_date = None
+        self.save(update_fields=['kyc_status', 'kyc_reviewed_by', 'kyc_notes', 'kyc_approval_date', 'kyc_expiry_date', 'kyc_last_updated'])
+    
     def __str__(self):
         return self.user.first_name
     

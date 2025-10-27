@@ -163,6 +163,47 @@ class Question(models.Model):
     customer= models.ForeignKey(Customer, on_delete=models.CASCADE)
     description =models.CharField(max_length=500)
     admin_comment=models.CharField(max_length=200,default='Nothing')
+    answered_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='answered_questions')
+    answered_date = models.DateTimeField(null=True, blank=True)
     asked_date =models.DateField(auto_now=True)
     def __str__(self):
         return self.description
+
+
+class PolicyWording(models.Model):
+    """
+    Model to store policy wording documents with version control
+    """
+    POLICY_TYPE_CHOICES = [
+        ('Homeowners', 'Homeowners Insurance'),
+        ('Motor', 'Motor Insurance'),
+        ('General', 'General Policy'),
+    ]
+    
+    title = models.CharField(max_length=200, help_text="Policy wording title")
+    policy_type = models.CharField(max_length=50, choices=POLICY_TYPE_CHOICES, help_text="Type of policy")
+    version = models.CharField(max_length=20, help_text="Version number (e.g., 1.0, 2.1)")
+    description = models.TextField(help_text="Brief description of the policy wording")
+    document = models.FileField(upload_to='policy_wordings/', help_text="Upload policy wording document (PDF)")
+    is_active = models.BooleanField(default=True, help_text="Is this version currently active?")
+    effective_date = models.DateField(help_text="Date when this version becomes effective")
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='uploaded_wordings')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = "Policy Wordings"
+        ordering = ['-effective_date', '-version']
+        unique_together = ['title', 'version']
+    
+    def __str__(self):
+        return f"{self.title} - v{self.version}"
+    
+    def save(self, *args, **kwargs):
+        # When marking as active, deactivate other versions of the same policy type
+        if self.is_active:
+            PolicyWording.objects.filter(
+                policy_type=self.policy_type,
+                title=self.title
+            ).exclude(id=self.id).update(is_active=False)
+        super().save(*args, **kwargs)

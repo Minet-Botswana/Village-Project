@@ -89,8 +89,13 @@
             resize: vertical;
         }
 
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
         .btn-submit {
-            width: 100%;
+            flex: 1;
             background: #e21a22;
             border: none;
             padding: 10px;
@@ -111,6 +116,29 @@
             transform: translateY(0);
         }
 
+        .btn-cancel {
+            flex: 1;
+            background: #6c757d;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+            color: white;
+            text-decoration: none;
+        }
+
         .info-note {
             background: #fff5f5;
             border-left: 3px solid #e21a22;
@@ -125,24 +153,27 @@
 
 <div class="page-container">
     <div class="page-header">
-        <h1 class="page-title">Ask a Question</h1>
-        <p class="page-subtitle">Submit your inquiry and our team will respond promptly</p>
+        <h1 class="page-title">Edit Question</h1>
+        <p class="page-subtitle">Update your inquiry details</p>
     </div>
 
     <div class="question-card">
-        <div class="form-section-title">Your Question</div>
+        <div class="form-section-title">Question Details</div>
         
         <div class="info-note">
-            Please provide as much detail as possible to help us assist you better.
+            You can update your question before it has been answered by our team.
         </div>
 
         <form method="POST" autocomplete="off">
             {% csrf_token %}
             <div class="form-group">
-                <label for="course_name">Describe Your Problem or Question</label>
+                <label for="course_name">Question Description</label>
                 {% render_field questionForm.description class="form-control" placeholder="Type your question or problem description here..." %}
             </div>
-            <button type="submit" class="btn btn-submit">Submit Question</button>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-submit">Update Question</button>
+                <a href="{% url 'customer:question-history' %}" class="btn-cancel">Cancel</a>
+            </div>
         </form>
     </div>
 </div>

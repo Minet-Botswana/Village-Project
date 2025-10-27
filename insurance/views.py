@@ -11,7 +11,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from customer import models as CMODEL
 from customer import forms as CFORM
-from .models import CustomModelName, PolicyRecord
+from .models import CustomModelName, PolicyRecord, PolicyWording
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.views import View
@@ -19,6 +19,7 @@ from .forms import PolicyForm
 from customer.models import Customer 
 from .models import Category
 from django.http import JsonResponse
+from django.contrib import messages
 
 #@login_required
 @login_required(login_url='adminlogin')
@@ -880,3 +881,346 @@ def admin_policy_holder_details_view(request, customer_id):
         'homeowners': homeowners,
         'motor': motor,
     })
+
+
+# ===========================
+# KYC COMPLIANCE MONITORING VIEWS FOR STAFF ADMINS
+# ===========================
+
+@login_required(login_url='adminlogin')
+def admin_kyc_compliance_dashboard(request):
+    """
+    Main KYC compliance dashboard for staff admins
+    Shows all customers with their KYC status, allows filtering and search
+    """
+    from django.db.models import Count, Q
+    from django.utils import timezone
+    
+    # Get filter parameters
+    status_filter = request.GET.get('status', 'all')
+    search_query = request.GET.get('search', '')
+    
+    # Base queryset
+    customers = Customer.objects.select_related('user', 'kyc_reviewed_by').all()
+    
+    # Apply status filter
+    if status_filter != 'all':
+        customers = customers.filter(kyc_status=status_filter)
+    
+    # Apply search filter
+    if search_query:
+        customers = customers.filter(
+            Q(user__first_name__icontains=search_query) |
+            Q(user__last_name__icontains=search_query) |
+            Q(id_number__icontains=search_query) |
+            Q(mobile__icontains=search_query)
+        )
+    
+    # Calculate statistics
+    total_customers = Customer.objects.count()
+    compliant_count = Customer.objects.filter(kyc_status='Compliant').count()
+    pending_count = Customer.objects.filter(kyc_status='Pending').count()
+    non_compliant_count = Customer.objects.filter(kyc_status='Non-Compliant').count()
+    renewal_required_count = Customer.objects.filter(kyc_status='Renewal Required').count()
+    
+    # Count expiring soon (within 30 days)
+    thirty_days_from_now = timezone.now().date() + timedelta(days=30)
+    expiring_soon = Customer.objects.filter(
+        kyc_status='Compliant',
+        kyc_expiry_date__lte=thirty_days_from_now,
+        kyc_expiry_date__gte=timezone.now().date()
+    ).count()
+    
+    context = {
+        'customers': customers,
+        'total_customers': total_customers,
+        'compliant_count': compliant_count,
+        'pending_count': pending_count,
+        'non_compliant_count': non_compliant_count,
+        'renewal_required_count': renewal_required_count,
+        'expiring_soon': expiring_soon,
+        'status_filter': status_filter,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'insurance/admin_kyc_dashboard.html', context)
+
+
+@login_required(login_url='adminlogin')
+def admin_kyc_customer_detail(request, customer_id):
+    """
+    Detailed view of a customer's KYC information and documents
+    Allows staff admin to approve, reject, or mark for renewal
+    """
+    from customer.models import KYCform, CopyOfOmang, ResidenceProof, IncomeProof
+    
+    customer = Customer.objects.select_related('user', 'kyc_reviewed_by').get(id=customer_id)
+    
+    # Get all KYC documents
+    kyc_form = KYCform.objects.filter(customer=customer).first()
+    omang_copy = CopyOfOmang.objects.filter(customer=customer).first()
+    residence_proof = ResidenceProof.objects.filter(customer=customer).first()
+    income_proof = IncomeProof.objects.filter(customer=customer).first()
+    
+    # Get policy records
+    homeowners = models.PolicyRecord.objects.filter(customer=customer).select_related('Policy')
+    motor = models.ThirdpartyPolicyRecord.objects.filter(thirdpartycustomer=customer).select_related('thirdpartypolicy')
+    
+    context = {
+        'customer': customer,
+        'kyc_form': kyc_form,
+        'omang_copy': omang_copy,
+        'residence_proof': residence_proof,
+        'income_proof': income_proof,
+        'homeowners': homeowners,
+        'motor': motor,
+    }
+    
+    return render(request, 'insurance/admin_kyc_customer_detail.html', context)
+
+
+@login_required(login_url='adminlogin')
+def admin_approve_kyc(request, customer_id):
+    """
+    Approve a customer's KYC
+    """
+    if request.method == 'POST':
+        customer = Customer.objects.get(id=customer_id)
+        expiry_months = int(request.POST.get('expiry_months', 12))
+        notes = request.POST.get('notes', 'Approved by admin')
+        
+        customer.approve_kyc(
+            reviewed_by=request.user,
+            expiry_months=expiry_months,
+            notes=notes
+        )
+        
+        messages.success(request, f'KYC approved for {customer.get_name}. Valid for {expiry_months} months.')
+        return redirect('admin-kyc-customer-detail', customer_id=customer_id)
+    
+    return redirect('admin-kyc-dashboard')
+
+
+@login_required(login_url='adminlogin')
+def admin_reject_kyc(request, customer_id):
+    """
+    Reject a customer's KYC
+    """
+    if request.method == 'POST':
+        customer = Customer.objects.get(id=customer_id)
+        reason = request.POST.get('reason', 'Documents do not meet requirements')
+        
+        customer.reject_kyc(
+            reviewed_by=request.user,
+            reason=reason
+        )
+        
+        messages.success(request, f'KYC rejected for {customer.get_name}.')
+        return redirect('admin-kyc-customer-detail', customer_id=customer_id)
+    
+    return redirect('admin-kyc-dashboard')
+
+
+@login_required(login_url='adminlogin')
+def admin_mark_kyc_renewal(request, customer_id):
+    """
+    Mark a customer's KYC for renewal
+    """
+    customer = Customer.objects.get(id=customer_id)
+    customer.mark_kyc_for_renewal()
+    
+    messages.success(request, f'KYC marked for renewal for {customer.get_name}. Customer will be notified to upload new documents.')
+    
+    # Redirect based on referrer
+    next_url = request.GET.get('next', 'admin-kyc-dashboard')
+    if next_url == 'detail':
+        return redirect('admin-kyc-customer-detail', customer_id=customer_id)
+    return redirect('admin-kyc-dashboard')
+
+
+@login_required(login_url='adminlogin')
+def admin_bulk_kyc_action(request):
+    """
+    Handle bulk KYC actions (approve, reject, mark for renewal)
+    """
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        customer_ids = request.POST.getlist('customer_ids')
+        
+        if not customer_ids:
+            messages.error(request, 'No customers selected.')
+            return redirect('admin-kyc-dashboard')
+        
+        customers = Customer.objects.filter(id__in=customer_ids)
+        
+        if action == 'approve':
+            for customer in customers:
+                customer.approve_kyc(
+                    reviewed_by=request.user,
+                    expiry_months=12,
+                    notes='Bulk approved by admin'
+                )
+            messages.success(request, f'{customers.count()} customers approved.')
+        
+        elif action == 'reject':
+            reason = request.POST.get('bulk_reason', 'Bulk rejected by admin')
+            for customer in customers:
+                customer.reject_kyc(
+                    reviewed_by=request.user,
+                    reason=reason
+                )
+            messages.success(request, f'{customers.count()} customers rejected.')
+        
+        elif action == 'mark_renewal':
+            for customer in customers:
+                customer.mark_kyc_for_renewal()
+            messages.success(request, f'{customers.count()} customers marked for renewal.')
+        
+        return redirect('admin-kyc-dashboard')
+    
+    return redirect('admin-kyc-dashboard')
+
+
+# ====================== POLICY WORDING VIEWS ======================
+
+@login_required(login_url='adminlogin')
+def admin_policy_wordings_view(request):
+    """
+    Staff admin view to manage policy wordings
+    """
+    # Get filter parameters
+    policy_type = request.GET.get('policy_type', '')
+    status = request.GET.get('status', '')
+    search = request.GET.get('search', '')
+    
+    # Base queryset
+    wordings = PolicyWording.objects.all()
+    
+    # Apply filters
+    if policy_type:
+        wordings = wordings.filter(policy_type=policy_type)
+    
+    if status == 'active':
+        wordings = wordings.filter(is_active=True)
+    elif status == 'inactive':
+        wordings = wordings.filter(is_active=False)
+    
+    if search:
+        wordings = wordings.filter(
+            Q(title__icontains=search) |
+            Q(version__icontains=search) |
+            Q(description__icontains=search)
+        )
+    
+    # Statistics
+    total_wordings = PolicyWording.objects.count()
+    active_wordings = PolicyWording.objects.filter(is_active=True).count()
+    inactive_wordings = PolicyWording.objects.filter(is_active=False).count()
+    
+    context = {
+        'wordings': wordings,
+        'policy_types': PolicyWording.POLICY_TYPE_CHOICES,
+        'selected_policy_type': policy_type,
+        'selected_status': status,
+        'search_query': search,
+        'total_wordings': total_wordings,
+        'active_wordings': active_wordings,
+        'inactive_wordings': inactive_wordings,
+    }
+    
+    return render(request, 'insurance/admin_policy_wordings.html', context)
+
+
+@login_required(login_url='adminlogin')
+def admin_add_policy_wording_view(request):
+    """
+    Staff admin view to add new policy wording
+    """
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        policy_type = request.POST.get('policy_type')
+        version = request.POST.get('version')
+        description = request.POST.get('description')
+        effective_date = request.POST.get('effective_date')
+        is_active = request.POST.get('is_active') == 'on'
+        document = request.FILES.get('document')
+        
+        try:
+            wording = PolicyWording.objects.create(
+                title=title,
+                policy_type=policy_type,
+                version=version,
+                description=description,
+                effective_date=effective_date,
+                is_active=is_active,
+                document=document,
+                uploaded_by=request.user
+            )
+            messages.success(request, f'Policy wording "{wording.title}" v{wording.version} created successfully!')
+            return redirect('admin-policy-wordings')
+        except Exception as e:
+            messages.error(request, f'Error creating policy wording: {str(e)}')
+    
+    context = {
+        'policy_types': PolicyWording.POLICY_TYPE_CHOICES,
+    }
+    return render(request, 'insurance/admin_add_policy_wording.html', context)
+
+
+@login_required(login_url='adminlogin')
+def admin_edit_policy_wording_view(request, wording_id):
+    """
+    Staff admin view to edit policy wording
+    """
+    wording = PolicyWording.objects.get(id=wording_id)
+    
+    if request.method == 'POST':
+        wording.title = request.POST.get('title')
+        wording.policy_type = request.POST.get('policy_type')
+        wording.version = request.POST.get('version')
+        wording.description = request.POST.get('description')
+        wording.effective_date = request.POST.get('effective_date')
+        wording.is_active = request.POST.get('is_active') == 'on'
+        
+        if request.FILES.get('document'):
+            wording.document = request.FILES.get('document')
+        
+        try:
+            wording.save()
+            messages.success(request, f'Policy wording "{wording.title}" updated successfully!')
+            return redirect('admin-policy-wordings')
+        except Exception as e:
+            messages.error(request, f'Error updating policy wording: {str(e)}')
+    
+    context = {
+        'wording': wording,
+        'policy_types': PolicyWording.POLICY_TYPE_CHOICES,
+    }
+    return render(request, 'insurance/admin_edit_policy_wording.html', context)
+
+
+@login_required(login_url='adminlogin')
+def admin_delete_policy_wording_view(request, wording_id):
+    """
+    Staff admin view to delete policy wording
+    """
+    wording = PolicyWording.objects.get(id=wording_id)
+    title = wording.title
+    version = wording.version
+    wording.delete()
+    messages.success(request, f'Policy wording "{title}" v{version} deleted successfully!')
+    return redirect('admin-policy-wordings')
+
+
+@login_required(login_url='adminlogin')
+def admin_toggle_wording_status_view(request, wording_id):
+    """
+    Toggle active/inactive status of policy wording
+    """
+    wording = PolicyWording.objects.get(id=wording_id)
+    wording.is_active = not wording.is_active
+    wording.save()
+    
+    status = 'activated' if wording.is_active else 'deactivated'
+    messages.success(request, f'Policy wording "{wording.title}" v{wording.version} {status}!')
+    return redirect('admin-policy-wordings')
