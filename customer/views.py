@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from insurance import models as CMODEL
 from insurance import forms as CFORM
 from django.contrib.auth.models import User
-from insurance.models import Policy
+from insurance.models import Policy, ThirdpartyPolicy
 from django.views import View
 from django.template.loader import get_template
 from django.shortcuts import render, redirect
@@ -997,3 +997,33 @@ def motor_insurance_requirement_view(request):
 def claims_guidelines_view(request):
     """Claims guidelines page for logged-in customers"""
     return render(request, 'customer/claims_guidelines.html')
+
+@login_required(login_url='customerlogin')
+def customer_profile_update_view(request):
+    """View for customers to update their profile information"""
+    try:
+        customer = models.Customer.objects.get(user_id=request.user.id)
+    except models.Customer.DoesNotExist:
+        messages.error(request, 'Customer profile not found.')
+        return redirect('customer:customer-dashboard')
+    
+    if request.method == 'POST':
+        user_form = forms.CustomerUserUpdateForm(request.POST, instance=request.user)
+        customer_form = forms.CustomerForm(request.POST, instance=customer)
+        
+        if user_form.is_valid() and customer_form.is_valid():
+            user_form.save()
+            customer_form.save()
+            messages.success(request, 'Your profile has been updated successfully!')
+            return redirect('customer:customer-dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        user_form = forms.CustomerUserUpdateForm(instance=request.user)
+        customer_form = forms.CustomerForm(instance=customer)
+    
+    return render(request, 'customer/profile_update.html', {
+        'user_form': user_form,
+        'customer_form': customer_form,
+        'customer': customer
+    })

@@ -148,13 +148,10 @@ def update_customer_view(request, pk):
 
     if request.method == 'POST':
         print("Processing POST request")
-        # Exclude the password field from the POST data
-        post_data = request.POST.copy()
-        if 'password' in post_data:
-            del post_data['password']
-
-        userForm = CFORM.CustomerUserForm(post_data, instance=user)
-        customerForm = CFORM.CustomerForm(post_data, request.FILES, instance=customer)
+        
+        # Use the update form (without password requirement)
+        userForm = CFORM.CustomerUserUpdateForm(request.POST, instance=user)
+        customerForm = CFORM.CustomerForm(request.POST, request.FILES, instance=customer)
 
         if userForm.is_valid() and customerForm.is_valid():
             print("Forms are valid")
@@ -169,7 +166,7 @@ def update_customer_view(request, pk):
             print("Customer Form Errors:", customerForm.errors)
     else:
         print("Rendering update form")
-        userForm = CFORM.CustomerUserForm(instance=user)
+        userForm = CFORM.CustomerUserUpdateForm(instance=user)
         customerForm = CFORM.CustomerForm(instance=customer)
         
     mydict = {'userForm': userForm, 'customerForm': customerForm, 'customer': customer}

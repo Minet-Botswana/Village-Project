@@ -35,6 +35,7 @@ urlpatterns = [
     path('ask-question', views.ask_question_view,name='ask-question'),
     path('question-history', views.question_history_view,name='question-history'),
     path('claims-guidelines/', views.claims_guidelines_view, name='claims-guidelines'),
+    path('profile-update/', views.customer_profile_update_view, name='profile-update'),
     path('forms/', views.client_forms, name='client_forms'),
     
     path('form/direct_debit/', views.direct_debit_view, name='direct_debit'),

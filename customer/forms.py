@@ -13,6 +13,38 @@ class CustomerUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['password'].required = True
+
+class CustomerUserUpdateForm(forms.ModelForm):
+    """Form for updating customer user info without requiring password"""
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['email'].required = True
+        
+        # Add CSS classes to fields
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'readonly': 'readonly'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        
+        # Make username field disabled/readonly
+        self.fields['username'].disabled = True
+        
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        # Check if email already exists (excluding current user)
+        if self.instance and self.instance.pk:
+            if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("This email address is already in use. Please choose a different email.")
+        else:
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError("This email address is already in use. Please choose a different email.")
+        return email
                      
 class CustomerForm(forms.ModelForm):
     GENDER_CHOICES = [
