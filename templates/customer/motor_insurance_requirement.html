@@ -1,163 +1,48 @@
 {% extends 'customer/customerbase.html' %}
+{% load static %}
 {% block content %}
 
-<style>
-.requirement-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    text-align: center;
-    font-family: 'Segoe UI', sans-serif;
-}
+<div class="mc-wrap" style="max-width:640px;margin-left:auto;margin-right:auto;">
 
-.requirement-icon {
-    font-size: 48px;
-    color: #e21a22;
-    margin-bottom: 20px;
-}
+  <div style="background:#fff; border:1px solid var(--mc-border); padding:40px 36px; text-align:center; font-family:var(--mc-font);">
 
-.requirement-title {
-    color: #000000;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 15px;
-}
-
-.requirement-message {
-    color: #666;
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 30px;
-}
-
-.requirement-steps {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 6px;
-    margin-bottom: 30px;
-    text-align: left;
-}
-
-.requirement-steps h4 {
-    color: #e21a22;
-    font-size: 18px;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.requirement-steps ol {
-    color: #333;
-    font-size: 14px;
-    line-height: 1.6;
-    margin: 0;
-    padding-left: 20px;
-}
-
-.requirement-steps li {
-    margin-bottom: 8px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.btn-primary-custom {
-    background-color: #e21a22;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary-custom:hover {
-    background-color: #c41520;
-    color: white;
-    text-decoration: none;
-}
-
-.btn-secondary-custom {
-    background-color: transparent;
-    color: #666;
-    padding: 12px 25px;
-    border: 2px solid #dee2e6;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-secondary-custom:hover {
-    background-color: #f8f9fa;
-    color: #333;
-    text-decoration: none;
-}
-
-@media (max-width: 768px) {
-    .requirement-container {
-        margin: 20px;
-        padding: 20px;
-    }
-    
-    .requirement-title {
-        font-size: 20px;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn-primary-custom,
-    .btn-secondary-custom {
-        width: 100%;
-        max-width: 250px;
-    }
-}
-</style>
-
-<div class="requirement-container">
-    <div class="requirement-icon">
-        <i class="fas fa-shield-alt"></i>
+    <!-- Icon -->
+    <div style="width:64px;height:64px;background:var(--mc-red);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+      <i class="fas fa-car" style="font-size:28px;color:#fff;"></i>
     </div>
-    
-    <h1 class="requirement-title">Motor Insurance Add-on Requires Homeowners Coverage</h1>
-    
-    <p class="requirement-message">
-        Motor insurance is available exclusively as an add-on to our homeowners insurance policies. 
-        You'll need to have approved homeowners coverage before you can apply for motor insurance protection.
+
+    <!-- Title -->
+    <h1 style="font-size:18px;font-weight:700;color:#111;margin:0 0 10px;font-family:var(--mc-font);">Motor Insurance Requires Homeowners Coverage</h1>
+
+    <!-- Message -->
+    <p style="font-size:13px;color:#555;line-height:1.7;margin:0 0 28px;">
+      Motor insurance is available exclusively as an add-on to our homeowners insurance policies.
+      You'll need to have an approved homeowners policy before you can apply for motor insurance.
     </p>
-    
-    <div class="requirement-steps">
-        <h4>How to Get Motor Insurance Coverage:</h4>
-        <ol>
-            <li>Apply for homeowners insurance policy</li>
-            <li>Complete the required documentation (KYC forms)</li>
-            <li>Wait for homeowners policy approval</li>
-            <li>Once approved, you can then apply for motor insurance add-on</li>
-        </ol>
+
+    <!-- Steps -->
+    <div style="background:#f7f7f7;border-left:4px solid var(--mc-red);text-align:left;padding:18px 20px;margin-bottom:28px;">
+      <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#444;margin:0 0 12px;font-family:var(--mc-font);">How to Get Motor Insurance</p>
+      <ol style="margin:0;padding-left:18px;font-size:13px;color:#333;line-height:1.8;">
+        <li>Apply for a homeowners insurance policy</li>
+        <li>Complete the required documentation (KYC forms)</li>
+        <li>Wait for homeowners policy approval from Minet</li>
+        <li>Once approved, you can apply for the motor insurance add-on</li>
+      </ol>
     </div>
-    
-    <div class="action-buttons">
-        <a href="{% url 'customer:apply-policy' %}" class="btn-primary-custom">
-            <i class="fas fa-home" style="margin-right: 8px;"></i>
-            Apply for Homeowners Insurance
-        </a>
-        <a href="{% url 'customer:customer-dashboard' %}" class="btn-secondary-custom">
-            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i>
-            Back to Dashboard
-        </a>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="{% url 'customer:apply-policy' %}" class="mc-btn mc-btn-primary">
+        <i class="fas fa-home" style="margin-right:6px;"></i>Apply for Homeowners Insurance
+      </a>
+      <a href="{% url 'customer:customer-dashboard' %}" class="mc-btn mc-btn-outline">
+        <i class="fas fa-arrow-left" style="margin-right:6px;"></i>Back to Dashboard
+      </a>
     </div>
+
+  </div>
+
 </div>
 
-{% endblock %}
+{% endblock content %}

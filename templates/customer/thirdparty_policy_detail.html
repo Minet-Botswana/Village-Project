@@ -1,331 +1,116 @@
-{% extends 'customer/customerbase.html' %}
-{% block content %}
+﻿{% extends 'customer/customerbase.html' %}
 {% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', 
-                -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
-        }
-        
-        .policy-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 10px;
-        }
-        
-        .policy-header {
-            background: #e21a22;
-            color: white;
-            padding: 15px;
-            border-radius: 5px 5px 0 0;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .policy-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .policy-number {
-            font-size: 11px;
-            opacity: 0.9;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 10px;
-            margin-top: 8px;
-        }
-        
-        .status-pending {
-            background-color: #ffc107;
-            color: #212529;
-        }
-        
-        .status-active, .status-approved {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        .status-rejected {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .status-expired {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .policy-content {
-            background: white;
-            padding: 0;
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .section-header {
-            background-color: #e21a22;
-            color: white;
-            padding: 8px 12px;
-            margin: 0;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .section-content {
-            padding: 10px;
-        }
-        
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-        
-        .detail-label {
-            font-weight: 600;
-            color: #495057;
-            min-width: 120px;
-            font-size: 11px;
-        }
-        
-        .detail-value {
-            color: #212529;
-            text-align: right;
-            font-size: 11px;
-        }
-        
-        .back-button {
-            background-color: #e21a22;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            text-decoration: none;
-            display: inline-block;
-            transition: background-color 0.3s;
-            font-size: 11px;
-        }
-        
-        .back-button:hover {
-            background-color: #c41e3a;
-            color: white;
-            text-decoration: none;
-        }
-        
-        .icon {
-            margin-right: 5px;
-        }
+<style>
+  .pd-card { background:#fff; border:1px solid var(--mc-border); margin-bottom:24px; }
 
-        /* Mobile Responsive Styles */
-        @media (max-width: 768px) {
-            .policy-container {
-                margin: 10px auto;
-                padding: 8px;
-            }
-            
-            .policy-header {
-                padding: 10px;
-            }
-            
-            .policy-title {
-                font-size: 14px;
-                margin-bottom: 3px;
-            }
-            
-            .policy-number {
-                font-size: 9px;
-            }
-            
-            .status-badge {
-                padding: 2px 6px;
-                font-size: 8px;
-                margin-top: 5px;
-            }
-            
-            .section-header {
-                padding: 6px 8px;
-                font-size: 10px;
-            }
-            
-            .section-content {
-                padding: 8px;
-            }
-            
-            .detail-row {
-                padding: 4px 0;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2px;
-            }
-            
-            .detail-label,
-            .detail-value {
-                font-size: 10px;
-                min-width: auto;
-                text-align: left;
-            }
-            
-            .detail-value {
-                font-weight: 500;
-                color: #e21a22;
-            }
-            
-            .back-button {
-                padding: 5px 10px;
-                font-size: 10px;
-                margin-bottom: 8px;
-            }
-        }
-    </style>
-</head>
+  /* Hero */
+  .pd-hero { background:var(--mc-red); color:#fff; padding:20px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  .pd-hero-left h2 { margin:0 0 4px; font-size:17px; font-weight:700; font-family:var(--mc-font); }
+  .pd-hero-left p  { margin:0; font-size:12px; opacity:0.85; font-family:var(--mc-font); }
+  .pd-premium-box  { background:rgba(255,255,255,0.15); padding:10px 18px; text-align:center; }
+  .pd-premium-box .amount { font-size:20px; font-weight:700; font-family:var(--mc-font); display:block; }
+  .pd-premium-box .lbl    { font-size:10px; text-transform:uppercase; letter-spacing:0.5px; opacity:0.85; font-family:var(--mc-font); }
 
-<body>
-    <div class="policy-container">
-        <a href="{% url 'customer:applied-motor-policies' %}" class="back-button">
-            <i class="fas fa-arrow-left icon"></i>Back to Motor Policies
-        </a>
-        
-        <div class="policy-header">
-            <div class="policy-title">
-                <i class="fas fa-car icon"></i>Third Party Motor Insurance Policy
-            </div>
-            <div class="policy-number">Policy Number: {{ policy.policy_number }}</div>
-            <div class="status-badge status-{{ policy_record.thirdpartystatus|lower }}">
-                {% if policy_record.thirdpartystatus == 'Pending' %}
-                    <i class="fas fa-clock icon"></i>Pending Review
-                {% elif policy_record.thirdpartystatus == 'Active' or policy_record.thirdpartystatus == 'Approved' %}
-                    <i class="fas fa-check-circle icon"></i>Active
-                {% elif policy_record.thirdpartystatus == 'Rejected' %}
-                    <i class="fas fa-times-circle icon"></i>Rejected
-                {% elif policy_record.thirdpartystatus == 'Expired' %}
-                    <i class="fas fa-calendar-times icon"></i>Expired
-                {% endif %}
-            </div>
+  /* Section heading */
+  .pd-section-heading { padding:8px 20px; background:#f7f7f7; border-top:1px solid var(--mc-border); border-bottom:1px solid var(--mc-border); border-left:4px solid var(--mc-red); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:#444; font-family:var(--mc-font); }
+
+  /* 2-up grid of label+value pairs */
+  .pd-fields { display:grid; grid-template-columns:1fr 1fr; gap:0; padding:0 20px; }
+  .pd-field  { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:8px; padding:9px 12px 9px 0; border-bottom:1px solid #f3f3f3; font-family:var(--mc-font); font-size:13px; }
+  .pd-field.full { grid-column:1 / -1; }
+  .pd-field:nth-last-child(1):nth-child(odd) { grid-column:1 / -1; }
+  .pd-label { color:#888; font-size:12px; }
+  .pd-value { font-weight:600; color:#111; font-size:13px; }
+  .pd-value.red { color:var(--mc-red); }
+
+  @media(max-width:640px){
+    .pd-hero   { flex-direction:column; }
+    .pd-fields { grid-template-columns:1fr; }
+    .pd-field, .pd-field.full { grid-column:unset; grid-template-columns:1fr 1fr; }
+  }
+</style>
+
+<div class="mc-wrap">
+
+  <!-- breadcrumb / back -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <a href="{% url 'customer:applied-motor-policies' %}" class="mc-btn mc-btn-outline" style="font-size:12px;padding:6px 14px;">
+      <i class="fas fa-arrow-left"></i>&nbsp; Back
+    </a>
+    <span style="font-family:var(--mc-font);font-size:12px;color:#999;">Motor Policies &rsaquo; Policy Detail</span>
+  </div>
+
+  <div class="pd-card">
+
+    <!-- â”€â”€ Hero â”€â”€ -->
+    <div class="pd-hero">
+      <div class="pd-hero-left">
+        <h2><i class="fas fa-car" style="margin-right:8px;opacity:0.85;"></i>Third Party Motor Insurance</h2>
+        <p>Policy No: <strong>{{ policy.policy_number|default:"Pending Assignment" }}</strong></p>
+        <div style="margin-top:10px;">
+          {% if policy_record.thirdpartystatus == 'Pending' %}
+            <span class="mc-badge mc-badge-warning"><i class="fas fa-clock"></i>&nbsp; Pending Review</span>
+          {% elif policy_record.thirdpartystatus == 'Active' or policy_record.thirdpartystatus == 'Approved' %}
+            <span class="mc-badge mc-badge-success"><i class="fas fa-check-circle"></i>&nbsp; Active</span>
+          {% elif policy_record.thirdpartystatus == 'Rejected' %}
+            <span class="mc-badge mc-badge-danger"><i class="fas fa-times-circle"></i>&nbsp; Rejected</span>
+          {% elif policy_record.thirdpartystatus == 'Expired' %}
+            <span class="mc-badge mc-badge-dark"><i class="fas fa-calendar-times"></i>&nbsp; Expired</span>
+          {% else %}
+            <span class="mc-badge mc-badge-dark">{{ policy_record.thirdpartystatus }}</span>
+          {% endif %}
         </div>
-        
-        <div class="policy-content">
-            <!-- Customer Information -->
-            <div class="section-header">
-                <i class="fas fa-user icon"></i>Customer Information
-            </div>
-            <div class="section-content">
-                <div class="detail-row">
-                    <span class="detail-label">Full Name:</span>
-                    <span class="detail-value">{{ policy.insured.name }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">ID Number:</span>
-                    <span class="detail-value">{{ policy.insured.id_number }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Email:</span>
-                    <span class="detail-value">{{ policy.insured.address }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Mobile:</span>
-                    <span class="detail-value">{{ policy.insured.mobile }}</span>
-                </div>
-            </div>
-            
-            <!-- Vehicle Information -->
-            <div class="section-header">
-                <i class="fas fa-car icon"></i>Vehicle Information
-            </div>
-            <div class="section-content">
-                <div class="detail-row">
-                    <span class="detail-label">Vehicle Type:</span>
-                    <span class="detail-value">{{ policy.vehicle_type|title|default:"Not specified" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Make & Model:</span>
-                    <span class="detail-value">{{ policy.vehicle_make }} {{ policy.vehicle_model }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Year:</span>
-                    <span class="detail-value">{{ policy.vehicle_year|default:"Not specified" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Registration No:</span>
-                    <span class="detail-value">{{ policy.registration_number|default:"Not specified" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Chassis Number:</span>
-                    <span class="detail-value">{{ policy.chassis_number|default:"Not specified" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Engine Number:</span>
-                    <span class="detail-value">{{ policy.engine_number|default:"Not specified" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Territorial Limits:</span>
-                    <span class="detail-value">{{ policy.territorial_limits|default:"Not specified" }}</span>
-                </div>
-            </div>
-            
-            <!-- Policy Details -->
-            <div class="section-header">
-                <i class="fas fa-file-contract icon"></i>Policy Details
-            </div>
-            <div class="section-content">
-                <div class="detail-row">
-                    <span class="detail-label">Risk/Coverage:</span>
-                    <span class="detail-value">{{ policy.policy_name }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Category:</span>
-                    <span class="detail-value">{{ policy.category.category_name }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Premium:</span>
-                    <span class="detail-value">BWP {{ policy.premium|floatformat:2 }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Tenure:</span>
-                    <span class="detail-value">{{ policy.tenure }} months</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Effective Date:</span>
-                    <span class="detail-value">{{ policy.cover_start|date:"M d, Y" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Expiry Date:</span>
-                    <span class="detail-value">{{ policy.expiry_date|date:"M d, Y" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Renewal Date:</span>
-                    <span class="detail-value">{{ policy.cover_end|date:"M d, Y" }}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Application Date:</span>
-                    <span class="detail-value">{{ policy_record.thirdpartycreation_date|date:"M d, Y" }}</span>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="pd-premium-box">
+        <span class="amount">BWP {{ policy.premium|floatformat:2 }}</span>
+        <span class="lbl">Annual Premium</span>
+      </div>
     </div>
-</body>
-</html>
 
+    <!-- â”€â”€ Customer Information â”€â”€ -->
+    <div class="pd-section-heading"><i class="fas fa-user" style="margin-right:6px;"></i>Customer Information</div>
+    <div class="pd-fields">
+      <div class="pd-field"><span class="pd-label">Full Name</span><span class="pd-value">{{ policy.insured.name }}</span></div>
+      <div class="pd-field"><span class="pd-label">Omang / ID Number</span><span class="pd-value">{{ policy.insured.id_number }}</span></div>
+      <div class="pd-field"><span class="pd-label">Email</span><span class="pd-value">{{ policy.insured.address }}</span></div>
+      <div class="pd-field"><span class="pd-label">Mobile</span><span class="pd-value">{{ policy.insured.mobile }}</span></div>
+    </div>
+
+    <!-- â”€â”€ Vehicle Information â”€â”€ -->
+    <div class="pd-section-heading"><i class="fas fa-car" style="margin-right:6px;"></i>Vehicle Information</div>
+    <div class="pd-fields">
+      <div class="pd-field"><span class="pd-label">Vehicle Type</span><span class="pd-value">{{ policy.vehicle_type|title|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Make &amp; Model</span><span class="pd-value">{{ policy.vehicle_make|default:"&mdash;" }} {{ policy.vehicle_model|default:"" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Year of Manufacture</span><span class="pd-value">{{ policy.vehicle_year|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Registration No.</span><span class="pd-value">{{ policy.registration_number|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Chassis Number</span><span class="pd-value">{{ policy.chassis_number|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Engine Number</span><span class="pd-value">{{ policy.engine_number|default:"&mdash;" }}</span></div>
+      <div class="pd-field full"><span class="pd-label">Territorial Limits</span><span class="pd-value">{{ policy.territorial_limits|default:"&mdash;" }}</span></div>
+    </div>
+
+    <!-- â”€â”€ Policy Details â”€â”€ -->
+    <div class="pd-section-heading"><i class="fas fa-file-contract" style="margin-right:6px;"></i>Policy Details</div>
+    <div class="pd-fields">
+      <div class="pd-field"><span class="pd-label">Risk / Coverage</span><span class="pd-value">{{ policy.policy_name }}</span></div>
+      <div class="pd-field"><span class="pd-label">Cover Category</span><span class="pd-value">{{ policy.category.category_name }}</span></div>
+      <div class="pd-field"><span class="pd-label">Annual Premium</span><span class="pd-value red">BWP {{ policy.premium|floatformat:2 }}</span></div>
+      {% if policy_record.thirdpartystatus == 'Active' or policy_record.thirdpartystatus == 'Approved' %}
+      <div class="pd-field"><span class="pd-label">Tenure</span><span class="pd-value">{{ policy.tenure }} months</span></div>
+      <div class="pd-field"><span class="pd-label">Effective Date</span><span class="pd-value">{{ policy.cover_start|date:"d M Y"|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Expiry Date</span><span class="pd-value">{{ policy.expiry_date|date:"d M Y"|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Renewal Date</span><span class="pd-value">{{ policy.cover_end|date:"d M Y"|default:"&mdash;" }}</span></div>
+      <div class="pd-field"><span class="pd-label">Application Date</span><span class="pd-value">{{ policy_record.thirdpartycreation_date|date:"d M Y" }}</span></div>
+      {% else %}
+      <div class="pd-field full">
+        <span class="pd-label">Cover Dates</span>
+        <span class="pd-value" style="color:#f0a500;font-size:12px;"><i class="fas fa-clock" style="margin-right:4px;"></i>Dates will be confirmed once your application is approved</span>
+      </div>
+      {% endif %}
+    </div>
+
+  </div><!-- /pd-card -->
+
+</div>
 {% endblock content %}

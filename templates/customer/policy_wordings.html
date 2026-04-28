@@ -1,339 +1,68 @@
-{% extends 'customer/customerbase.html' %}
+﻿{% extends 'customer/customerbase.html' %}
+{% load static %}
 {% block content %}
 
 <style>
-    .page-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .page-header {
-        margin-bottom: 20px;
-    }
-
-    .page-title {
-        font-size: 22px;
-        font-weight: 700;
-        color: #333;
-        margin: 0 0 5px 0;
-    }
-
-    .page-subtitle {
-        font-size: 13px;
-        color: #666;
-        margin: 0;
-    }
-
-    .filter-section {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .filter-group {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .filter-group label {
-        font-size: 13px;
-        font-weight: 600;
-        color: #555;
-    }
-
-    .filter-group select {
-        padding: 8px 12px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        font-size: 14px;
-        min-width: 200px;
-    }
-
-    .category-section {
-        margin-bottom: 25px;
-    }
-
-    .category-title {
-        font-size: 18px;
-        font-weight: 600;
-        color: #e21a22;
-        margin-bottom: 15px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #e21a22;
-    }
-
-    .wordings-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 15px;
-    }
-
-    .wording-card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 15px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .wording-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    .wording-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: start;
-        margin-bottom: 10px;
-    }
-
-    .wording-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: #333;
-        margin: 0;
-    }
-
-    .wording-version {
-        background: #e21a22;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-size: 11px;
-        font-weight: 600;
-    }
-
-    .wording-description {
-        font-size: 13px;
-        color: #666;
-        margin: 10px 0;
-        line-height: 1.5;
-    }
-
-    .wording-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 15px;
-        padding-top: 12px;
-        border-top: 1px solid #e9ecef;
-    }
-
-    .wording-date {
-        font-size: 12px;
-        color: #6c757d;
-    }
-
-    .btn-download {
-        background: #e21a22;
-        color: white;
-        padding: 6px 15px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 12px;
-        font-weight: 600;
-        transition: background 0.2s;
-        display: inline-block;
-    }
-
-    .btn-download:hover {
-        background: #c01018;
-        color: white;
-        text-decoration: none;
-    }
-
-    .no-wordings {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 40px 20px;
-        text-align: center;
-        color: #6c757d;
-    }
-
-    .info-box {
-        background: #e7f3ff;
-        border-left: 3px solid #007bff;
-        padding: 12px 15px;
-        margin-bottom: 20px;
-        border-radius: 4px;
-        font-size: 13px;
-        color: #004085;
-    }
-
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-        .page-container {
-            padding: 15px 10px;
-        }
-
-        .page-title {
-            font-size: 20px;
-        }
-
-        .page-subtitle {
-            font-size: 12px;
-        }
-
-        .filter-section {
-            padding: 12px;
-        }
-
-        .filter-group {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 8px;
-        }
-
-        .filter-group select {
-            min-width: 100%;
-            font-size: 13px;
-        }
-
-        .wordings-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .category-title {
-            font-size: 16px;
-        }
-
-        .wording-card {
-            padding: 12px;
-        }
-
-        .wording-title {
-            font-size: 15px;
-        }
-
-        .wording-description {
-            font-size: 12px;
-        }
-
-        .wording-meta {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .btn-download {
-            width: 100%;
-            text-align: center;
-        }
-
-        .info-box {
-            font-size: 12px;
-            padding: 10px 12px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .page-container {
-            padding: 10px 8px;
-        }
-
-        .page-title {
-            font-size: 18px;
-        }
-
-        .wording-card {
-            padding: 10px;
-        }
-
-        .wording-title {
-            font-size: 14px;
-        }
-
-        .wording-version {
-            font-size: 10px;
-            padding: 2px 8px;
-        }
-
-        .wording-description {
-            font-size: 11px;
-        }
-
-        .wording-date {
-            font-size: 11px;
-        }
-
-        .btn-download {
-            font-size: 11px;
-            padding: 5px 12px;
-        }
-    }
+  .pw-section-heading { padding:8px 20px; background:#f7f7f7; border-left:4px solid var(--mc-red); border-bottom:1px solid var(--mc-border); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:#444; font-family:var(--mc-font); margin-bottom:14px; }
 </style>
 
-<div class="page-container">
-    <div class="page-header">
-        <h1 class="page-title">Policy Wordings</h1>
-        <p class="page-subtitle">Download and review our insurance policy documents</p>
-    </div>
+<div class="mc-wrap">
 
-    <div class="info-box">
-        Below are our current policy wording documents. Please download and review the documents relevant to your insurance coverage.
-    </div>
+  <div class="mc-page-header">
+    <h1>Policy Wordings</h1>
+    <p>Download and review our insurance policy documents</p>
+  </div>
 
-    <!-- Filter Section -->
-    {% if policy_types|length > 1 %}
-    <div class="filter-section">
-        <form method="GET">
-            <div class="filter-group">
-                <label>Filter by Policy Type:</label>
-                <select name="policy_type" onchange="this.form.submit()">
-                    <option value="">All Types</option>
-                    {% for type_value, type_label in policy_types %}
-                    <option value="{{ type_value }}" {% if selected_policy_type == type_value %}selected{% endif %}>
-                        {{ type_label }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </form>
-    </div>
-    {% endif %}
+  <div style="background:#fff8e1;border-left:4px solid #f0a500;padding:12px 16px;margin-bottom:20px;font-family:var(--mc-font);font-size:13px;color:#5a3e00;">
+    <i class="fas fa-info-circle" style="margin-right:6px;"></i>
+    Below are our current policy wording documents. Please download and review the documents relevant to your insurance coverage.
+  </div>
 
-    <!-- Wordings by Category -->
-    {% if wordings_by_type %}
-        {% for category, category_wordings in wordings_by_type.items %}
-        <div class="category-section">
-            <h2 class="category-title">{{ category }}</h2>
-            <div class="wordings-grid">
-                {% for wording in category_wordings %}
-                <div class="wording-card">
-                    <div class="wording-header">
-                        <h3 class="wording-title">{{ wording.title }}</h3>
-                        <span class="wording-version">v{{ wording.version }}</span>
-                    </div>
-                    <p class="wording-description">{{ wording.description }}</p>
-                    <div class="wording-meta">
-                        <span class="wording-date">
-                            Effective: {{ wording.effective_date|date:"d M Y" }}
-                        </span>
-                        <a href="{{ wording.document.url }}" class="btn-download" download>
-                            Download PDF
-                        </a>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
+  {% if policy_types|length > 1 %}
+  <div style="background:#fff;border:1px solid var(--mc-border);padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-family:var(--mc-font);">
+    <span style="font-size:12px;font-weight:700;color:#555;white-space:nowrap;">Filter by Type:</span>
+    <form method="GET" style="display:flex;align-items:center;gap:8px;">
+      <select name="policy_type" onchange="this.form.submit()" class="mc-select" style="min-width:200px;">
+        <option value="">All Types</option>
+        {% for type_value, type_label in policy_types %}
+        <option value="{{ type_value }}" {% if selected_policy_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if wordings_by_type %}
+    {% for category, category_wordings in wordings_by_type.items %}
+    <div style="margin-bottom:28px;">
+      <div class="pw-section-heading">{{ category }}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;">
+        {% for wording in category_wordings %}
+        <div style="background:#fff;border:1px solid var(--mc-border);padding:18px 20px;font-family:var(--mc-font);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+            <span style="font-size:14px;font-weight:700;color:#111;">{{ wording.title }}</span>
+            <span class="mc-badge mc-badge-dark" style="flex-shrink:0;margin-left:10px;">v{{ wording.version }}</span>
+          </div>
+          <p style="font-size:12px;color:#666;margin:0 0 14px;line-height:1.6;">{{ wording.description }}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f3f3f3;padding-top:12px;">
+            <span style="font-size:11px;color:#888;">Effective: {{ wording.effective_date|date:"d M Y" }}</span>
+            <a href="{{ wording.document.url }}" class="mc-btn mc-btn-primary" style="font-size:12px;padding:6px 14px;" download>
+              <i class="fas fa-download" style="margin-right:5px;"></i>Download PDF
+            </a>
+          </div>
         </div>
         {% endfor %}
-    {% else %}
-        <div class="no-wordings">
-            <p>No policy wordings are currently available.</p>
-            <p style="font-size: 12px; margin-top: 10px;">Please check back later or contact us for more information.</p>
-        </div>
-    {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <div style="background:#fff;border:1px solid var(--mc-border);padding:48px 24px;text-align:center;font-family:var(--mc-font);">
+    <i class="fas fa-file-pdf" style="font-size:32px;color:#ddd;margin-bottom:12px;display:block;"></i>
+    <p style="font-size:14px;color:#888;margin:0 0 6px;">No policy wordings are currently available.</p>
+    <p style="font-size:12px;color:#aaa;margin:0;">Please check back later or contact us for more information.</p>
+  </div>
+  {% endif %}
+
 </div>
 
-<br><br>
-{% endblock %}
+{% endblock content %}
