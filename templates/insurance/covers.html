@@ -1,310 +1,251 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Insurance Covers - KoGae</title>
-    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Insurance Covers | KoGae</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-        }
+    :root {
+      --red:    #c0111a;
+      --dark:   #1a1a1a;
+      --border: #d5d5d5;
+      --bg:     #f0f2f5;
+      --font:   Arial, 'Helvetica Neue', sans-serif;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    body { font-family: var(--font); font-size: 14px; color: #333; background: var(--bg); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 0;
-        }
+    /* ── NAV ── */
+    .lp-nav { background: var(--red); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 200; }
+    .lp-nav img { height: 36px; background: #fff; padding: 4px 8px; }
+    .lp-nav-links { display: flex; gap: 28px; list-style: none; }
+    .lp-nav-links a { color: #fff; font-size: 13px; font-weight: 600; opacity: 0.9; }
+    .lp-nav-links a:hover { opacity: 1; text-decoration: underline; }
+    .lp-btn-login { background: #fff; color: var(--red); padding: 8px 20px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; border: none; }
+    .lp-btn-login:hover { background: #f0f0f0; }
+    .lp-hamburger { display: none; background: none; border: none; cursor: pointer; }
+    .lp-hamburger span { display: block; width: 22px; height: 2px; background: #fff; margin: 4px 0; }
 
-        .page-title {
-            color: #e22a21;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    /* ── PAGE HEADER ── */
+    .pg-header { background: var(--red); color: #fff; padding: 36px 40px; border-bottom: 4px solid #8b0000; text-align: center; }
+    .pg-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+    .pg-header p  { font-size: 14px; opacity: 0.88; }
 
-        .page-subtitle {
-            color: #666;
-            font-size: 16px;
-        }
+    /* ── CONTENT ── */
+    .pg-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .pg-back  { font-size: 12px; color: var(--red); margin-bottom: 24px; display: inline-flex; align-items: center; gap: 6px; }
+    .pg-back:hover { text-decoration: underline; }
 
-        .covers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
+    /* ── GRID ── */
+    .cv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-        .cover-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    /* ── COVER PANEL ── */
+    .cv-panel { background: #fff; border: 1px solid var(--border); }
+    .cv-panel-head { background: var(--red); color: #fff; padding: 16px 20px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .cv-panel-head i { font-size: 16px; opacity: 0.85; }
+    .cv-panel-body { padding: 0; }
 
-        .card-header {
-            background-color: #e22a21 !important;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
+    /* ── SECTIONS ── */
+    .cv-sec { border-bottom: 1px solid #f0f0f0; }
+    .cv-sec:last-child { border-bottom: none; }
+    .cv-sec-title { padding: 12px 20px 0; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--red); }
+    .cv-list { list-style: none; padding: 8px 20px 16px; }
+    .cv-item { display: flex; gap: 10px; align-items: flex-start; padding: 5px 0; font-size: 13px; color: #444; border-bottom: 1px solid #f7f7f7; }
+    .cv-item:last-child { border-bottom: none; }
+    .cv-item i { color: var(--red); font-size: 10px; margin-top: 4px; flex-shrink: 0; }
+    .cv-item.excl i { color: #aaa; }
+    .cv-item.excl span { color: #888; }
+    .cv-nested { margin: 6px 0 0 16px; }
+    .cv-nested .cv-item { font-size: 12px; color: #666; }
+    .cv-nested .cv-item i { color: #aaa; }
 
-        .card-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0;
-            color: white !important;
-        }
+    /* ── NOTE ── */
+    .cv-note { margin: 0 20px 16px; padding: 10px 14px; background: #fffbe6; border-left: 3px solid #e6a800; font-size: 12px; color: #5a4200; }
 
-        .card-header .card-title {
-            color: white !important;
-        }
+    /* ── FOOTER ── */
+    .lp-footer { background: #111; color: #888; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 40px; }
 
-        .card-content {
-            padding: 25px;
-        }
-
-        .section-title {
-            color: #e22a21;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            margin-top: 25px;
-        }
-
-        .section-title:first-child {
-            margin-top: 0;
-        }
-
-        .cover-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-
-        .cover-item {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            position: relative;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .cover-item::before {
-            content: "•";
-            color: #e22a21;
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-
-        .nested-list {
-            margin-top: 8px;
-            margin-left: 15px;
-        }
-
-        .nested-list .cover-item {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .nested-list .cover-item::before {
-            content: "◦";
-            color: #999;
-        }
-
-        .important-note {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 4px;
-            padding: 15px;
-            margin: 20px 0;
-            font-size: 14px;
-        }
-
-        .important-note strong {
-            color: #856404;
-        }
-
-        .back-link {
-            margin-bottom: 20px;
-        }
-
-        .back-link a {
-            color: #e22a21;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .covers-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .page-title {
-                font-size: 28px;
-            }
-            
-            .card-content {
-                padding: 20px;
-            }
-            
-            .cover-item {
-                font-size: 13px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .covers-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .page-header {
-                padding: 20px 0;
-                margin-bottom: 30px;
-            }
-            
-            .page-title {
-                font-size: 24px;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .lp-nav-links, .lp-btn-login { display: none; }
+      .lp-hamburger { display: block; }
+      .lp-nav-links.open { display: flex; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--red); padding: 16px 24px; gap: 14px; z-index: 100; }
+      .pg-header { padding: 28px 20px; }
+      .pg-wrap { padding: 24px 20px; }
+      .cv-grid { grid-template-columns: 1fr; }
+      .lp-footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-    {% include "insurance/navbar.html" %}
-    
-    <div class="container">
-        <div class="back-link">
-            <a href="/"><i class="ri-arrow-left-line"></i> Back to Home</a>
+
+<!-- NAV -->
+<nav class="lp-nav">
+  <a href="/"><img src="/static/image/minetbryte.png" alt="Minet Bryte Logo"></a>
+  <ul class="lp-nav-links" id="navLinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/covers">Covers</a></li>
+    <li><a href="/claims">Claims</a></li>
+    <li><a href="/customer/customerclick">Your Information</a></li>
+  </ul>
+  <a href="/customer/customerlogin"><button class="lp-btn-login">Log In</button></a>
+  <button class="lp-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="pg-header">
+  <h1>Insurance Covers</h1>
+  <p>Complete details of our coverage options for homes and vehicles</p>
+</div>
+
+<div class="pg-wrap">
+
+  <a href="/" class="pg-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+
+  <div class="cv-grid">
+
+    <!-- HOMEOWNERS -->
+    <div class="cv-panel">
+      <div class="cv-panel-head">
+        <i class="fas fa-home"></i> Homeowners Insurance Cover
+      </div>
+      <div class="cv-panel-body">
+
+        <div class="cv-sec">
+          <div class="cv-sec-title">What We Cover</div>
+          <ul class="cv-list">
+            <li class="cv-item"><i class="fas fa-check"></i><span>Main residence and outbuildings at your address</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Garages and fixed carports</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Home offices and tool sheds</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Domestic workers' living quarters</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Walls, metal palisades, gates and fences</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Fixtures, fittings and built-in furniture</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Security systems affixed to the home</span></li>
+          </ul>
         </div>
 
-        <div class="page-header">
-            <h1 class="page-title">Insurance Covers</h1>
-            <p class="page-subtitle">Complete details of our insurance coverage options</p>
+        <div class="cv-sec">
+          <div class="cv-sec-title">Perils Covered</div>
+          <ul class="cv-list">
+            <li class="cv-item"><i class="fas fa-check"></i><span>Fire, lightning, or explosion</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Storm, wind, water, flood, hail</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Impact by trees following storm or wind</span></li>
+          </ul>
         </div>
-        
-        <div class="covers-grid">
-            <div class="cover-card">
-                <div class="card-header">
-                    <h2 class="card-title">Homeowners Insurance Cover</h2>
-                </div>
-                <div class="card-content">
-                    <h3 class="section-title">What We Cover</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Main residence and outbuildings at your address</li>
-                        <li class="cover-item">Garages and fixed carports</li>
-                        <li class="cover-item">Home offices and tool sheds</li>
-                        <li class="cover-item">Domestic workers' living quarters</li>
-                        <li class="cover-item">Walls, metal palisades, gates and fences</li>
-                        <li class="cover-item">Fixtures and fittings, including built-in furniture</li>
-                        <li class="cover-item">Security systems affixed to the home</li>
-                    </ul>
 
-                    <h3 class="section-title">Perils Covered</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Fire, lightning, or explosion</li>
-                        <li class="cover-item">Storm, wind, water, flood, hail</li>
-                        <li class="cover-item">Impact by trees following storm or wind</li>
-                    </ul>
-
-                    <h3 class="section-title">Additional Benefits</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Bereavement expenses: Max P5,000 per person, P20,000 per event</li>
-                        <li class="cover-item">House contents: Max P10,000 per incident, P20,000 per year</li>
-                        <li class="cover-item">Special alterations after disability: Max P20,000</li>
-                        <li class="cover-item">Fire-fighting charges</li>
-                        <li class="cover-item">Removal of rubble and wreckage</li>
-                    </ul>
-
-                    <h3 class="section-title">Not Covered</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Theft, attempted theft, and malicious damage</li>
-                        <li class="cover-item">Thatch roofs and non-standard buildings</li>
-                        <li class="cover-item">Properties unoccupied for 30+ consecutive days</li>
-                        <li class="cover-item">Faulty design or workmanship</li>
-                        <li class="cover-item">Damage from power cuts or load shedding</li>
-                        <li class="cover-item">Pre-existing damages</li>
-                    </ul>
-
-                    <div class="important-note">
-                        <strong>Important:</strong> This policy excludes thatch roofs and covers standard construction only. Average condition applies for under-insurance.
-                    </div>
-                </div>
-            </div>
-            
-            <div class="cover-card">
-                <div class="card-header">
-                    <h2 class="card-title">Third Party Vehicle Insurance</h2>
-                </div>
-                <div class="card-content">
-                    <h3 class="section-title">Liability Coverage</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Legal liability arising from vehicle use for:
-                            <ul class="nested-list">
-                                <li class="cover-item">Accidental death or bodily injury to any person</li>
-                                <li class="cover-item">Accidental loss or damage to property</li>
-                            </ul>
-                        </li>
-                        <li class="cover-item">Costs and expenses with prior written consent</li>
-                        <li class="cover-item">Liability while towing other vehicles or trailers</li>
-                    </ul>
-
-                    <h3 class="section-title">Coverage Limits</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Maximum indemnity: P500,000 per event</li>
-                        <li class="cover-item">Covers single events or series from same incident</li>
-                        <li class="cover-item">Includes legal costs of other parties you're liable for</li>
-                        <li class="cover-item">Settlement and defense costs with our consent</li>
-                    </ul>
-
-                    <h3 class="section-title">What's Included</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Costs you are legally liable for</li>
-                        <li class="cover-item">Legal costs of other parties</li>
-                        <li class="cover-item">Defense and settlement costs (with consent)</li>
-                        <li class="cover-item">Towing liability coverage</li>
-                    </ul>
-
-                    <h3 class="section-title">Exclusions</h3>
-                    <ul class="cover-list">
-                        <li class="cover-item">Accidents before policy start date</li>
-                        <li class="cover-item">Injuries to passengers in trailers or caravans</li>
-                        <li class="cover-item">Passengers outside the cab during incident</li>
-                        <li class="cover-item">Injuries to insured, family, or employees</li>
-                        <li class="cover-item">Damage to your own property</li>
-                        <li class="cover-item">Contractual liability claims</li>
-                    </ul>
-
-                    <div class="important-note">
-                        <strong>Coverage Limit:</strong> Maximum indemnity is P500,000 per event. This applies to any single event or series of events from the same incident.
-                    </div>
-                </div>
-            </div>
+        <div class="cv-sec">
+          <div class="cv-sec-title">Additional Benefits</div>
+          <ul class="cv-list">
+            <li class="cv-item"><i class="fas fa-check"></i><span>Bereavement expenses — max P5,000 per person / P20,000 per event</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>House contents — max P10,000 per incident / P20,000 per year</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Special alterations after disability — max P20,000</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Fire-fighting charges</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Removal of rubble and wreckage</span></li>
+          </ul>
         </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title">Not Covered</div>
+          <ul class="cv-list">
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Theft, attempted theft, and malicious damage</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Thatch roofs and non-standard buildings</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Properties unoccupied for 30+ consecutive days</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Faulty design or workmanship</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Damage from power cuts or load shedding</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Pre-existing damages</span></li>
+          </ul>
+        </div>
+
+        <div class="cv-note">
+          <strong>Note:</strong> This policy excludes thatch roofs and covers standard construction only. Average condition applies for under-insurance.
+        </div>
+
+      </div>
     </div>
+
+    <!-- MOTOR -->
+    <div class="cv-panel">
+      <div class="cv-panel-head">
+        <i class="fas fa-car"></i> Third Party Vehicle Insurance
+      </div>
+      <div class="cv-panel-body">
+
+        <div class="cv-sec">
+          <div class="cv-sec-title">Liability Coverage</div>
+          <ul class="cv-list">
+            <li class="cv-item"><i class="fas fa-check"></i>
+              <span>Legal liability arising from vehicle use for:
+                <ul class="cv-nested">
+                  <li class="cv-item"><i class="fas fa-circle"></i><span>Accidental death or bodily injury to any person</span></li>
+                  <li class="cv-item"><i class="fas fa-circle"></i><span>Accidental loss or damage to property</span></li>
+                </ul>
+              </span>
+            </li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Costs and expenses with prior written consent</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Liability while towing other vehicles or trailers</span></li>
+          </ul>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title">Coverage Limits</div>
+          <ul class="cv-list">
+            <li class="cv-item"><i class="fas fa-check"></i><span>Maximum indemnity: <strong>P500,000 per event</strong></span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Covers single events or series from the same incident</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Includes legal costs of other parties you are liable for</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Settlement and defence costs with our consent</span></li>
+          </ul>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title">What's Included</div>
+          <ul class="cv-list">
+            <li class="cv-item"><i class="fas fa-check"></i><span>Costs you are legally liable for</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Legal costs of other parties</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Defence and settlement costs (with consent)</span></li>
+            <li class="cv-item"><i class="fas fa-check"></i><span>Towing liability coverage</span></li>
+          </ul>
+        </div>
+
+        <div class="cv-sec">
+          <div class="cv-sec-title">Exclusions</div>
+          <ul class="cv-list">
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Accidents before policy start date</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Injuries to passengers in trailers or caravans</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Passengers outside the cab during incident</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Injuries to insured, family, or employees</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Damage to your own property</span></li>
+            <li class="cv-item excl"><i class="fas fa-times"></i><span>Contractual liability claims</span></li>
+          </ul>
+        </div>
+
+        <div class="cv-note">
+          <strong>Coverage Limit:</strong> Maximum indemnity is P500,000 per event. Applies to any single event or series of events from the same incident.
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="lp-footer">
+  <span>&copy; <script>document.write(new Date().getFullYear())</script> Minet Botswana Holdings &times; Bryte Insurance. All rights reserved.</span>
+  <span>KoGae Village Insurance</span>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  if (hamburger) {
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  }
+</script>
 </body>
 </html>
