@@ -239,3 +239,40 @@ class PolicyWording(models.Model):
                 title=self.title
             ).exclude(id=self.id).update(is_active=False)
         super().save(*args, **kwargs)
+
+
+class PremiumRate(models.Model):
+    """
+    Singleton model — only one record (pk=1) is ever saved.
+    Stores the homeowners short-term premium rate used to calculate
+    Annual Premium = Sum Insured × rate.
+    Edit via Django Admin → Insurance → Premium Rate.
+    """
+    rate = models.DecimalField(
+        max_digits=6,
+        decimal_places=4,
+        default=0.13,
+        help_text="Premium rate as a decimal (e.g. 0.13 = 13%). "
+                  "Annual Premium is calculated as Sum Insured × this rate.",
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Homeowners Premium Rate"
+        verbose_name_plural = "Homeowners Premium Rate"
+
+    def __str__(self):
+        return f"Homeowners Premium Rate: {float(self.rate) * 100:.2f}%"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1  # enforce singleton
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        pass  # prevent deletion
+
+    @classmethod
+    def get_rate(cls):
+        """Return the current rate, creating the default (0.13) if missing."""
+        obj, _ = cls.objects.get_or_create(pk=1, defaults={"rate": 0.13})
+        return obj.rate

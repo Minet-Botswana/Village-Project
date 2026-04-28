@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from insurance import models as CMODEL
 from insurance import forms as CFORM
 from django.contrib.auth.models import User
-from insurance.models import Policy, ThirdpartyPolicy, PolicyWording
+from insurance.models import Policy, ThirdpartyPolicy, PolicyWording, PremiumRate
 from django.views import View
 from django.template.loader import get_template
 from django.shortcuts import render, redirect
@@ -469,6 +469,7 @@ from datetime import timedelta
 @login_required(login_url='/customer/customerlogin')
 def apply_policy_view(request):
     policyForm = PolicyForm()
+    premium_rate = PremiumRate.get_rate()
     print("Request method:", request.method)
     if request.method == 'POST':
         policyForm = PolicyForm(request.POST)
@@ -484,9 +485,11 @@ def apply_policy_view(request):
             policy = policyForm.save(commit=False)
             policy.category = category
             policy.insured = customer
-            policy.cover_start = policyForm.cleaned_data['cover_start']
-            policy.tenure = policyForm.cleaned_data['tenure']
+            policy.cover_start = date.today()  # set by system on submission
+            policy.tenure = policyForm.cleaned_data.get('tenure') or 12
             policy.cover_end = add_months(policy.cover_start, policy.tenure)
+            # Recalculate premium server-side using the stored rate
+            policy.premium = round(policy.sum_assurance * premium_rate, 2)
 
             # Save the policy
             policy.save()
@@ -502,7 +505,11 @@ def apply_policy_view(request):
             messages.success(request, "Homeowners cover created and applied successfully! Your application is now pending review.")
             return redirect('customer:my-applications')
 
-    return render(request, 'customer/apply_policy.html', {'policyForm': policyForm})
+    return render(request, 'customer/apply_policy.html', {
+        'policyForm': policyForm,
+        'premium_rate': premium_rate,
+        'premium_rate_pct': float(premium_rate) * 100,
+    })
 
 '''
 def apply_view(request,pk):

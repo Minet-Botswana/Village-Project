@@ -1,624 +1,271 @@
-{% extends 'customer/customerbase.html' %}
-{% block content %}
+﻿{% extends 'customer/customerbase.html' %}
 {% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-        }
-        
-        .applications-container {
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 15px;
-        }
-        
-        .page-header {
-            background: #e21a22;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .page-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .page-subtitle {
-            font-size: 12px;
-            opacity: 0.9;
-        }
-        
-        .section-header {
-            background-color: #e21a22;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px 8px 0 0;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 0;
-        }
-        
-        .section-content {
-            background: white;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .applications-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0;
-        }
-        
-        .applications-table th {
-            background-color: #f8f9fa;
-            color: #495057;
-            font-weight: 600;
-            padding: 8px 10px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 12px;
-        }
-        
-        .applications-table td {
-            padding: 8px 10px;
-            border-bottom: 1px solid #dee2e6;
-            vertical-align: middle;
-            font-size: 12px;
-        }
-        
-        .applications-table tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .policy-info {
-            font-weight: 600;
-            color: #212529;
-            margin-bottom: 3px;
-            font-size: 12px;
-        }
-        
-        .policy-details {
-            font-size: 11px;
-            color: #6c757d;
-            line-height: 1.3;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 10px;
-            text-transform: uppercase;
-        }
-        
-        .status-pending {
-            background-color: #ffc107;
-            color: #212529;
-        }
-        
-        .status-active, .status-approved {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        .status-rejected {
-            background-color: #dc3545;
-            color: white;
-        }
-        
-        .status-expired {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .view-details-btn {
-            background-color: #e21a22;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            text-decoration: none;
-            font-size: 11px;
-            transition: background-color 0.3s;
-            display: inline-block;
-        }
-        
-        .view-details-btn:hover {
-            background-color: #c41e3a;
-            color: white;
-            text-decoration: none;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 30px 15px;
-            color: #6c757d;
-        }
-        
-        .empty-icon {
-            font-size: 36px;
-            margin-bottom: 12px;
-            color: #e21a22;
-        }
-        
-        .empty-title {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #495057;
-        }
-        
-        .empty-subtitle {
-            font-size: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .summary-stats {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 12px;
-            border-radius: 5px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            min-width: 100px;
-        }
-        
-        .stat-number {
-            font-size: 20px;
-            font-weight: bold;
-            color: #e21a22;
-            margin-bottom: 3px;
-        }
-        
-        .stat-label {
-            color: #666;
-            font-size: 11px;
-        }
-        
-        .apply-new-btn {
-            background-color: #e21a22;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 12px;
-            margin-right: 8px;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-        
-        .apply-new-btn:hover {
-            background-color: #c41e3a;
-            color: white;
-            text-decoration: none;
-        }
-        
-        /* Tab Navigation Styles */
-        .tab-navigation {
-            display: flex;
-            background: white;
-            border-radius: 5px 5px 0 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 0;
-            overflow: hidden;
-        }
-        
-        .tab-button {
-            flex: 1;
-            padding: 12px 15px;
-            background: #f8f9fa;
-            border: none;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            color: #6c757d;
-            transition: all 0.3s ease;
-            text-align: center;
-            border-bottom: 2px solid transparent;
-        }
-        
-        .tab-button:hover {
-            background: #e9ecef;
-            color: #495057;
-        }
-        
-        .tab-button.active {
-            background: white;
-            color: #e21a22;
-            border-bottom: 2px solid #e21a22;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .tab-icon {
-            margin-right: 5px;
-            font-size: 14px;
-        }
-        
-        .tab-count {
-            background: #e21a22;
-            color: white;
-            border-radius: 10px;
-            padding: 2px 6px;
-            font-size: 10px;
-            margin-left: 5px;
-            font-weight: bold;
-        }
-        
-        .section-wrapper {
-            background: white;
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
+<style>
+  /* Page-specific layout only */
+  .ma-tabs { display: flex; border-bottom: 3px solid var(--mc-red); margin-bottom: 0; }
+  .ma-tab-btn {
+    flex: 1;
+    padding: 11px 14px;
+    background: #f5f5f5;
+    border: none;
+    border-right: 1px solid var(--mc-divider);
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    font-family: var(--mc-font);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+  .ma-tab-btn:last-child { border-right: none; }
+  .ma-tab-btn:hover { background: #eee; color: #111; }
+  .ma-tab-btn.active { background: #fff; color: var(--mc-red); border-bottom: 3px solid var(--mc-red); margin-bottom: -3px; }
+  .ma-tab-count {
+    background: var(--mc-red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    display: inline-block;
+    min-width: 18px;
+    text-align: center;
+  }
+  .ma-tab-btn.active .ma-tab-count { background: var(--mc-dark); }
 
-        /* Mobile Responsive Styles */
-        @media (max-width: 768px) {
-            .applications-container {
-                margin: 10px auto;
-                padding: 10px;
-            }
-            
-            .page-header {
-                padding: 10px;
-                margin-bottom: 15px;
-            }
-            
-            .page-title {
-                font-size: 16px;
-            }
-            
-            .page-subtitle {
-                font-size: 10px;
-            }
-            
-            .summary-stats {
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            
-            .stat-card {
-                padding: 8px;
-                min-width: 100px;
-            }
-            
-            .stat-number {
-                font-size: 16px;
-            }
-            
-            .stat-label {
-                font-size: 9px;
-            }
-            
-            .tab-button {
-                padding: 8px 10px;
-                font-size: 10px;
-            }
-            
-            .applications-table {
-                font-size: 10px;
-            }
-            
-            .applications-table th,
-            .applications-table td {
-                padding: 5px 6px;
-            }
-            
-            .apply-new-btn {
-                padding: 6px 12px;
-                font-size: 10px;
-                margin-right: 5px;
-                display: block;
-                margin-bottom: 8px;
-                text-align: center;
-            }
-            
-            .view-details-btn {
-                padding: 3px 6px;
-                font-size: 9px;
-            }
-            
-            .empty-state {
-                padding: 20px 10px;
-            }
-            
-            .empty-icon {
-                font-size: 28px;
-                margin-bottom: 8px;
-            }
-            
-            .empty-title {
-                font-size: 14px;
-            }
-            
-            .empty-subtitle {
-                font-size: 10px;
-                margin-bottom: 15px;
-            }
-        }
-    </style>
-</head>
+  .ma-tab-pane { display: none; }
+  .ma-tab-pane.active { display: block; }
 
-<body>
-    <div class="applications-container">
-        <div class="page-header">
-            <div class="page-title">
-                <i class="fas fa-file-alt" style="margin-right: 10px;"></i>My Insurance Applications
-            </div>
-            <div class="page-subtitle">
-                Track all your insurance applications and their status
-            </div>
-        </div>
-        
-        <!-- Summary Statistics -->
-        <div class="summary-stats">
-            <div class="stat-card">
-                <div class="stat-number">{{ total_applications }}</div>
-                <div class="stat-label">Total Applications</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">{{ homeowners_applications.count }}</div>
-                <div class="stat-label">Homeowners Applications</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">{{ motor_applications.count }}</div>
-                <div class="stat-label">Motor Applications</div>
-            </div>
-        </div>
-        
-        <!-- Quick Actions -->
-        <div style="text-align: center; margin-bottom: 30px;">
-            <a href="{% url 'customer:apply-policy' %}" class="apply-new-btn">
-                <i class="fas fa-home" style="margin-right: 8px;"></i>Apply for Homeowners
-            </a>
-            <a href="{% url 'customer:apply-thirdparty' %}" class="apply-new-btn">
-                <i class="fas fa-car" style="margin-right: 8px;"></i>Apply for Motor Insurance
-            </a>
-        </div>
-        
-        <!-- Applications Section with Tabs -->
-        {% if homeowners_applications or motor_applications %}
-        <div class="section-wrapper">
-            <!-- Tab Navigation -->
-            <div class="tab-navigation">
-                <button class="tab-button active" data-tab="homeowners">
-                    <i class="fas fa-home tab-icon"></i>
-                    Homeowners Insurance
-                    <span class="tab-count">{{ homeowners_applications.count }}</span>
-                </button>
-                <button class="tab-button" data-tab="motor">
-                    <i class="fas fa-car tab-icon"></i>
-                    Motor Insurance
-                    <span class="tab-count">{{ motor_applications.count }}</span>
-                </button>
-            </div>
-            
-            <!-- Homeowners Insurance Tab Content -->
-            <div id="homeowners-tab" class="tab-content active">
-                {% if homeowners_applications %}
-                <table class="applications-table">
-                    <thead>
-                        <tr>
-                            <th>Policy Details</th>
-                            <th>Property Location</th>
-                            <th>Application Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for application in homeowners_applications %}
-                        <tr>
-                            <td>
-                                <div class="policy-info">{{ application.Policy.policy_name }}</div>
-                                <div class="policy-details">
-                                    Policy #: {{ application.Policy.policy_number }}<br>
-                                    Sum Insured: BWP {{ application.Policy.sum_assurance|floatformat:2 }}<br>
-                                    Premium: BWP {{ application.Policy.premium|floatformat:2 }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="policy-details">
-                                    Plot: {{ application.Policy.plot_number|default:"Not specified" }}<br>
-                                    Village: {{ application.Policy.village|default:"Not specified" }}<br>
-                                    District: {{ application.Policy.district|default:"Not specified" }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="policy-info">{{ application.creation_date|date:"M d, Y" }}</div>
-                                <div class="policy-details">
-                                    {{ application.creation_date|timesince }} ago
-                                </div>
-                            </td>
-                            <td>
-                                <span class="status-badge status-{{ application.status|lower }}">
-                                    {% if application.status == 'Pending' %}
-                                        <i class="fas fa-clock" style="margin-right: 5px;"></i>Pending
-                                    {% elif application.status == 'Active' or application.status == 'Approved' %}
-                                        <i class="fas fa-check-circle" style="margin-right: 5px;"></i>{{ application.status }}
-                                    {% elif application.status == 'Rejected' %}
-                                        <i class="fas fa-times-circle" style="margin-right: 5px;"></i>Rejected
-                                    {% elif application.status == 'Expired' %}
-                                        <i class="fas fa-calendar-times" style="margin-right: 5px;"></i>Expired
-                                    {% endif %}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{% url 'customer:policy-detail' application.Policy.id %}" class="view-details-btn">
-                                    <i class="fas fa-eye" style="margin-right: 5px;"></i>View Details
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <h3 class="empty-title">No Homeowners Applications</h3>
-                    <p class="empty-subtitle">You haven't applied for any homeowners insurance policies yet.</p>
-                    <a href="{% url 'customer:apply-policy' %}" class="apply-new-btn">
-                        <i class="fas fa-home" style="margin-right: 8px;"></i>Apply for Homeowners
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-            
-            <!-- Motor Insurance Tab Content -->
-            <div id="motor-tab" class="tab-content">
-                {% if motor_applications %}
-                <table class="applications-table">
-                    <thead>
-                        <tr>
-                            <th>Policy & Vehicle Details</th>
-                            <th>Vehicle Info</th>
-                            <th>Application Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for application in motor_applications %}
-                        <tr>
-                            <td>
-                                <div class="policy-info">{{ application.thirdpartypolicy.policy_name }}</div>
-                                <div class="policy-details">
-                                    Policy #: {{ application.thirdpartypolicy.policy_number }}<br>
-                                    Premium: BWP {{ application.thirdpartypolicy.premium|floatformat:2 }}<br>
-                                    Coverage: Third Party Motor
-                                </div>
-                            </td>
-                            <td>
-                                <div class="policy-details">
-                                    {{ application.thirdpartypolicy.vehicle_make }} {{ application.thirdpartypolicy.vehicle_model }}<br>
-                                    Type: {{ application.thirdpartypolicy.vehicle_type|title|default:"Not specified" }}<br>
-                                    Year: {{ application.thirdpartypolicy.vehicle_year|default:"Not specified" }}<br>
-                                    Reg: {{ application.thirdpartypolicy.registration_number|default:"Not specified" }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="policy-info">{{ application.thirdpartycreation_date|date:"M d, Y" }}</div>
-                                <div class="policy-details">
-                                    {{ application.thirdpartycreation_date|timesince }} ago
-                                </div>
-                            </td>
-                            <td>
-                                <span class="status-badge status-{{ application.thirdpartystatus|lower }}">
-                                    {% if application.thirdpartystatus == 'Pending' %}
-                                        <i class="fas fa-clock" style="margin-right: 5px;"></i>Pending
-                                    {% elif application.thirdpartystatus == 'Active' or application.thirdpartystatus == 'Approved' %}
-                                        <i class="fas fa-check-circle" style="margin-right: 5px;"></i>{{ application.thirdpartystatus }}
-                                    {% elif application.thirdpartystatus == 'Rejected' %}
-                                        <i class="fas fa-times-circle" style="margin-right: 5px;"></i>Rejected
-                                    {% elif application.thirdpartystatus == 'Expired' %}
-                                        <i class="fas fa-calendar-times" style="margin-right: 5px;"></i>Expired
-                                    {% endif %}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{% url 'customer:thirdparty-policy-detail' application.thirdpartypolicy.id %}" class="view-details-btn">
-                                    <i class="fas fa-eye" style="margin-right: 5px;"></i>View Details
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-car"></i>
-                    </div>
-                    <h3 class="empty-title">No Motor Applications</h3>
-                    <p class="empty-subtitle">You haven't applied for any motor insurance policies yet.</p>
-                    <a href="{% url 'customer:apply-thirdparty' %}" class="apply-new-btn">
-                        <i class="fas fa-car" style="margin-right: 8px;"></i>Apply for Motor Insurance
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-        {% endif %}
-        
-        <!-- Empty State -->
-        {% if not homeowners_applications and not motor_applications %}
-        <div class="section-content">
-            <div class="empty-state">
-                <div class="empty-icon">
-                    <i class="fas fa-file-plus"></i>
-                </div>
-                <h3 class="empty-title">No Insurance Applications Yet</h3>
-                <p class="empty-subtitle">You haven't applied for any insurance policies yet. Get started by applying for coverage!</p>
-                <a href="{% url 'customer:apply-policy' %}" class="apply-new-btn">
-                    <i class="fas fa-home" style="margin-right: 8px;"></i>Apply for Homeowners
-                </a>
-                <a href="{% url 'customer:apply-thirdparty' %}" class="apply-new-btn">
-                    <i class="fas fa-car" style="margin-right: 8px;"></i>Apply for Motor Insurance
-                </a>
-            </div>
-        </div>
-        {% endif %}
+  .ma-empty {
+    padding: 32px 20px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--mc-border);
+    border-top: none;
+  }
+  .ma-empty-icon { font-size: 36px; color: var(--mc-red); margin-bottom: 10px; }
+  .ma-empty-title { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 6px; }
+  .ma-empty-sub { font-size: 13px; color: #777; margin-bottom: 16px; }
+
+  .ma-actions-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .mc-table th:nth-child(2),
+    .mc-table td:nth-child(2) { display: none; }
+    .ma-actions-bar { flex-direction: column; }
+    .ma-tab-btn { font-size: 12px; padding: 9px 8px; }
+  }
+</style>
+
+<div class="mc-wrap">
+
+  <div class="mc-page-header">
+    <h1>My Insurance Applications</h1>
+    <p>Track all your cover applications and their current status</p>
+  </div>
+
+  <div class="mc-stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 16px;">
+    <div class="mc-stat">
+      <div class="mc-stat-num">{{ total_applications }}</div>
+      <div class="mc-stat-label">Total</div>
     </div>
-    
-    <!-- JavaScript for Tab Functionality -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetTab = this.getAttribute('data-tab');
-                    
-                    // Remove active class from all buttons and contents
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Show corresponding tab content
-                    const targetContent = document.getElementById(targetTab + '-tab');
-                    if (targetContent) {
-                        targetContent.classList.add('active');
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+    <div class="mc-stat">
+      <div class="mc-stat-num">{{ homeowners_applications.count }}</div>
+      <div class="mc-stat-label">Homeowners</div>
+    </div>
+    <div class="mc-stat">
+      <div class="mc-stat-num">{{ motor_applications.count }}</div>
+      <div class="mc-stat-label">Motor</div>
+    </div>
+  </div>
+
+  <div class="ma-actions-bar">
+    <a href="{% url 'customer:apply-policy' %}" class="mc-btn mc-btn-primary">
+      <i class="fas fa-home"></i>&nbsp; Apply for Homeowners
+    </a>
+    <a href="{% url 'customer:apply-thirdparty' %}" class="mc-btn mc-btn-outline">
+      <i class="fas fa-car"></i>&nbsp; Apply for Motor Insurance
+    </a>
+  </div>
+
+  {% if homeowners_applications or motor_applications %}
+
+  <div class="ma-tabs">
+    <button class="ma-tab-btn active" data-tab="homeowners">
+      <i class="fas fa-home"></i>
+      Homeowners
+      <span class="ma-tab-count">{{ homeowners_applications.count }}</span>
+    </button>
+    <button class="ma-tab-btn" data-tab="motor">
+      <i class="fas fa-car"></i>
+      Motor Insurance
+      <span class="ma-tab-count">{{ motor_applications.count }}</span>
+    </button>
+  </div>
+
+  <div id="tab-homeowners" class="ma-tab-pane active">
+    {% if homeowners_applications %}
+    <div style="overflow-x:auto;">
+      <table class="mc-table">
+        <thead>
+          <tr>
+            <th>Policy</th>
+            <th>Property Location</th>
+            <th>Date Applied</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in homeowners_applications %}
+          <tr>
+            <td>
+              <div style="font-weight:600;color:#111;margin-bottom:2px;">{{ app.Policy.policy_name }}</div>
+              <div class="mc-text-muted mc-text-small">
+                No. {{ app.Policy.policy_number }}<br>
+                Sum: BWP {{ app.Policy.sum_assurance|floatformat:2 }}<br>
+                Premium: BWP {{ app.Policy.premium|floatformat:2 }}
+              </div>
+            </td>
+            <td>
+              <div class="mc-text-small">
+                Plot {{ app.Policy.plot_number|default:"&mdash;" }}<br>
+                {{ app.Policy.village|default:"" }}{% if app.Policy.village and app.Policy.district %}, {% endif %}{{ app.Policy.district|default:"" }}
+              </div>
+            </td>
+            <td>
+              <div style="font-weight:600;font-size:13px;">{{ app.creation_date|date:"d M Y" }}</div>
+              <div class="mc-text-muted mc-text-small">{{ app.creation_date|timesince }} ago</div>
+            </td>
+            <td>
+              {% with s=app.status|lower %}
+              <span class="mc-badge {% if s == 'pending' %}mc-badge-warning{% elif s == 'active' or s == 'approved' %}mc-badge-success{% elif s == 'rejected' %}mc-badge-danger{% else %}mc-badge-dark{% endif %}">
+                {{ app.status }}
+              </span>
+              {% endwith %}
+            </td>
+            <td>
+              <a href="{% url 'customer:policy-detail' app.Policy.id %}" class="mc-btn mc-btn-primary" style="padding:5px 10px;font-size:11px;">
+                <i class="fas fa-eye"></i> View
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="ma-empty">
+      <div class="ma-empty-icon"><i class="fas fa-home"></i></div>
+      <div class="ma-empty-title">No Homeowners Applications</div>
+      <div class="ma-empty-sub">You haven't applied for homeowners cover yet.</div>
+      <a href="{% url 'customer:apply-policy' %}" class="mc-btn mc-btn-primary">Apply Now</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <div id="tab-motor" class="ma-tab-pane">
+    {% if motor_applications %}
+    <div style="overflow-x:auto;">
+      <table class="mc-table">
+        <thead>
+          <tr>
+            <th>Policy</th>
+            <th>Vehicle Details</th>
+            <th>Date Applied</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in motor_applications %}
+          <tr>
+            <td>
+              <div style="font-weight:600;color:#111;margin-bottom:2px;">{{ app.thirdpartypolicy.policy_name }}</div>
+              <div class="mc-text-muted mc-text-small">
+                No. {{ app.thirdpartypolicy.policy_number }}<br>
+                Premium: BWP {{ app.thirdpartypolicy.premium|floatformat:2 }}
+              </div>
+            </td>
+            <td>
+              <div class="mc-text-small">
+                {{ app.thirdpartypolicy.vehicle_make }} {{ app.thirdpartypolicy.vehicle_model }}<br>
+                Year: {{ app.thirdpartypolicy.vehicle_year|default:"&mdash;" }}<br>
+                Reg: {{ app.thirdpartypolicy.registration_number|default:"&mdash;" }}
+              </div>
+            </td>
+            <td>
+              <div style="font-weight:600;font-size:13px;">{{ app.thirdpartycreation_date|date:"d M Y" }}</div>
+              <div class="mc-text-muted mc-text-small">{{ app.thirdpartycreation_date|timesince }} ago</div>
+            </td>
+            <td>
+              {% with s=app.thirdpartystatus|lower %}
+              <span class="mc-badge {% if s == 'pending' %}mc-badge-warning{% elif s == 'active' or s == 'approved' %}mc-badge-success{% elif s == 'rejected' %}mc-badge-danger{% else %}mc-badge-dark{% endif %}">
+                {{ app.thirdpartystatus }}
+              </span>
+              {% endwith %}
+            </td>
+            <td>
+              <a href="{% url 'customer:thirdparty-policy-detail' app.thirdpartypolicy.id %}" class="mc-btn mc-btn-primary" style="padding:5px 10px;font-size:11px;">
+                <i class="fas fa-eye"></i> View
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="ma-empty">
+      <div class="ma-empty-icon"><i class="fas fa-car"></i></div>
+      <div class="ma-empty-title">No Motor Applications</div>
+      <div class="ma-empty-sub">You haven't applied for motor insurance yet.</div>
+      <a href="{% url 'customer:apply-thirdparty' %}" class="mc-btn mc-btn-primary">Apply Now</a>
+    </div>
+    {% endif %}
+  </div>
+
+  {% else %}
+
+  <div class="ma-empty" style="border-top:1px solid var(--mc-border);">
+    <div class="ma-empty-icon"><i class="fas fa-file-alt"></i></div>
+    <div class="ma-empty-title">No Applications Yet</div>
+    <div class="ma-empty-sub">You haven't applied for any insurance policies yet.</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <a href="{% url 'customer:apply-policy' %}" class="mc-btn mc-btn-primary">
+        <i class="fas fa-home"></i>&nbsp; Apply for Homeowners
+      </a>
+      <a href="{% url 'customer:apply-thirdparty' %}" class="mc-btn mc-btn-outline">
+        <i class="fas fa-car"></i>&nbsp; Apply for Motor Insurance
+      </a>
+    </div>
+  </div>
+
+  {% endif %}
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var tabs = document.querySelectorAll('.ma-tab-btn');
+    tabs.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        tabs.forEach(function (b) { b.classList.remove('active'); });
+        document.querySelectorAll('.ma-tab-pane').forEach(function (p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        var pane = document.getElementById('tab-' + btn.getAttribute('data-tab'));
+        if (pane) pane.classList.add('active');
+      });
+    });
+  });
+</script>
 
 {% endblock content %}

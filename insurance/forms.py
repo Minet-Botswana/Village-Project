@@ -42,8 +42,8 @@ class CategoryForm(forms.ModelForm):
 class PolicyForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=models.Category.objects.all(), empty_label="Cover Category", to_field_name="id")
     id_number = forms.CharField(label='ID Number', max_length=20, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter ID Number'}))
-    cover_start = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))  # New field for cover start date
-    tenure = forms.IntegerField()  # New field for tenure
+    cover_start = forms.DateField(required=False, widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))  # set by system
+    tenure = forms.IntegerField(required=False)  # sent as hidden field value="12"
 
     # Homeowners Policy Fields
     plot_number = forms.CharField(
@@ -100,8 +100,8 @@ class PolicyForm(forms.ModelForm):
 class ThirdpartyPolicyForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=models.Category.objects.all(), empty_label="Cover Category", to_field_name="id")
     id_number = forms.CharField(label='ID Number', max_length=20, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter ID Number'}))
-    cover_start = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))  # New field for cover start date
-    tenure = forms.IntegerField()  # New field for tenure
+    cover_start = forms.DateField(required=False, widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))  # set by system
+    tenure = forms.IntegerField(required=False)  # sent as hidden field
     
     # Vehicle Details Fields
     vehicle_type = forms.CharField(

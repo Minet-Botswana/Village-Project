@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Policy, PolicyRecord, Question, ThirdpartyPolicy, ThirdpartyPolicyRecord, PolicyWording
+from .models import Category, Policy, PolicyRecord, Question, ThirdpartyPolicy, ThirdpartyPolicyRecord, PolicyWording, PremiumRate
 from django.utils.html import format_html
 
 @admin.register(Category)
@@ -78,3 +78,29 @@ class PolicyWordingAdmin(admin.ModelAdmin):
         if not change:  # If creating new object
             obj.uploaded_by = request.user
         super().save_model(request, obj, form, change)
+
+
+@admin.register(PremiumRate)
+class PremiumRateAdmin(admin.ModelAdmin):
+    list_display = ('rate_display', 'updated_at')
+    readonly_fields = ('updated_at',)
+    fieldsets = (
+        ('Homeowners Short-Term Premium Rate', {
+            'description': 'Annual Premium = Sum Insured × this rate. '
+                           'For example, a rate of 0.1300 means 13%.',
+            'fields': ('rate', 'updated_at'),
+        }),
+    )
+
+    def rate_display(self, obj):
+        return format_html(
+            '<strong>{:.2f}%</strong>', float(obj.rate) * 100
+        )
+    rate_display.short_description = 'Current Rate'
+
+    def has_add_permission(self, request):
+        # Only allow adding if no record exists yet
+        return not PremiumRate.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False  # Prevent deletion of the singleton
