@@ -1,327 +1,73 @@
-{% extends 'customer/customerbase.html' %}
+﻿{% extends 'customer/customerbase.html' %}
+{% load static %}
 {% block content %}
-{%load static%}
 
-<head>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<div class="mc-wrap">
 
-  <style media="screen">
-    .page-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .page-header {
-      margin-bottom: 20px;
-    }
-
-    .page-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #333;
-      margin: 0 0 5px 0;
-    }
-
-    .page-subtitle {
-      font-size: 13px;
-      color: #666;
-      margin: 0;
-    }
-
-    .history-card {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .card-header {
-      background: #e21a22;
-      color: white;
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .table-responsive {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      margin: 0;
-      border-collapse: collapse;
-    }
-
-    thead {
-      background: #f8f9fa;
-    }
-
-    thead th {
-      padding: 12px 15px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #555;
-      text-align: left;
-      border-bottom: 2px solid #dee2e6;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid #e9ecef;
-      transition: background 0.2s;
-    }
-
-    tbody tr:hover {
-      background: #f8f9fa;
-    }
-
-    tbody tr:last-child {
-      border-bottom: none;
-    }
-
-    tbody td {
-      padding: 12px 15px;
-      font-size: 13px;
-      color: #333;
-      vertical-align: middle;
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 3px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .status-answered {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .status-pending {
-      background: #fff3cd;
-      color: #856404;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-action {
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 600;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-edit {
-      background: #007bff;
-      color: white;
-    }
-
-    .btn-edit:hover {
-      background: #0056b3;
-      color: white;
-      text-decoration: none;
-    }
-
-    .btn-delete {
-      background: #dc3545;
-      color: white;
-    }
-
-    .btn-delete:hover {
-      background: #c82333;
-      color: white;
-      text-decoration: none;
-    }
-
-    .no-data {
-      padding: 40px 20px;
-      text-align: center;
-      color: #6c757d;
-      font-size: 14px;
-    }
-
-    .question-text {
-      max-width: 400px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-      .page-container {
-        padding: 15px 10px;
-      }
-
-      .page-title {
-        font-size: 20px;
-      }
-
-      .page-subtitle {
-        font-size: 12px;
-      }
-
-      .card-header {
-        padding: 10px 15px;
-        font-size: 15px;
-      }
-
-      thead th {
-        padding: 10px 8px;
-        font-size: 11px;
-      }
-
-      tbody td {
-        padding: 10px 8px;
-        font-size: 12px;
-      }
-
-      .question-text {
-        max-width: 200px;
-        font-size: 12px;
-      }
-
-      .action-buttons {
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .btn-action {
-        width: 100%;
-        text-align: center;
-        font-size: 11px;
-        padding: 4px 8px;
-      }
-
-      .status-badge {
-        font-size: 10px;
-        padding: 3px 6px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .page-container {
-        padding: 10px 5px;
-      }
-
-      .history-card {
-        border-radius: 4px;
-      }
-
-      .card-header {
-        padding: 8px 12px;
-        font-size: 14px;
-      }
-
-      /* Stack table for very small screens */
-      .table-responsive {
-        font-size: 12px;
-      }
-
-      thead th {
-        font-size: 10px;
-        padding: 8px 5px;
-      }
-
-      tbody td {
-        font-size: 11px;
-        padding: 8px 5px;
-      }
-
-      .question-text {
-        max-width: 150px;
-      }
-
-      .no-data {
-        padding: 30px 15px;
-        font-size: 13px;
-      }
-    }
-  </style>
-</head>
-
-<div class="page-container">
-  <div class="page-header">
-    <h1 class="page-title">Question History</h1>
-    <p class="page-subtitle">View and manage your submitted questions</p>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div class="mc-page-header" style="margin:0;">
+      <h1 style="margin:0;">Inquiries History</h1>
+      <p style="margin:0;">View and manage your submitted questions</p>
+    </div>
+    <a href="{% url 'customer:ask-question' %}" class="mc-btn mc-btn-primary">
+      <i class="fas fa-plus" style="margin-right:6px;"></i>New Inquiry
+    </a>
   </div>
 
-  <div class="history-card">
-    <div class="card-header">Your Questions</div>
-    
+  <div style="background:#fff;border:1px solid var(--mc-border);">
+    <div style="padding:8px 20px;background:#f7f7f7;border-left:4px solid var(--mc-red);border-bottom:1px solid var(--mc-border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#444;font-family:var(--mc-font);">Your Questions</div>
+
     {% if questions %}
-    <div class="table-responsive">
-      <table>
+    <div style="overflow-x:auto;">
+      <table class="mc-table">
         <thead>
           <tr>
-            <th style="width: 60px;">No.</th>
+            <th style="width:48px;">#</th>
             <th>Question</th>
-            <th>Admin Comment</th>
-            <th style="width: 120px;">Answered By</th>
-            <th style="width: 100px;">Status</th>
-            <th style="width: 120px;">Asked Date</th>
-            <th style="width: 150px;">Actions</th>
+            <th>Admin Response</th>
+            <th style="width:130px;">Answered By</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:110px;">Date</th>
+            <th style="width:130px;">Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for t in questions %}
           <tr>
             <td>{{ forloop.counter }}</td>
-            <td>
-              <div class="question-text" title="{{ t.description }}">
-                {{ t.description }}
-              </div>
-            </td>
+            <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ t.description }}">{{ t.description }}</td>
             <td>
               {% if t.admin_comment != 'Nothing' %}
                 {{ t.admin_comment }}
               {% else %}
-                <span style="color: #adb5bd; font-style: italic;">Pending response</span>
+                <span style="color:#bbb;font-style:italic;font-size:12px;">Pending response</span>
               {% endif %}
             </td>
             <td>
               {% if t.answered_by %}
-                <div style="font-weight: 600; color: #333;">{{ t.answered_by.get_full_name|default:t.answered_by.username }}</div>
-                {% if t.answered_date %}
-                  <div style="font-size: 11px; color: #6c757d;">{{ t.answered_date|date:"d M Y H:i" }}</div>
-                {% endif %}
+                <div style="font-weight:600;font-size:12px;">{{ t.answered_by.get_full_name|default:t.answered_by.username }}</div>
+                {% if t.answered_date %}<div style="font-size:11px;color:#888;">{{ t.answered_date|date:"d M Y" }}</div>{% endif %}
               {% else %}
-                <span style="color: #adb5bd; font-style: italic;">-</span>
+                <span style="color:#bbb;font-size:12px;">—</span>
               {% endif %}
             </td>
             <td>
               {% if t.admin_comment != 'Nothing' %}
-                <span class="status-badge status-answered">Answered</span>
+                <span class="mc-badge mc-badge-success">Answered</span>
               {% else %}
-                <span class="status-badge status-pending">Pending</span>
+                <span class="mc-badge mc-badge-warning">Pending</span>
               {% endif %}
             </td>
-            <td>{{ t.asked_date|date:"d M Y" }}</td>
+            <td style="font-size:12px;">{{ t.asked_date|date:"d M Y" }}</td>
             <td>
-              <div class="action-buttons">
-                {% if t.admin_comment == 'Nothing' %}
-                  <a href="{% url 'customer:edit-question' t.id %}" class="btn-action btn-edit">Edit</a>
-                  <a href="{% url 'customer:delete-question' t.id %}" 
-                     class="btn-action btn-delete" 
-                     onclick="return confirm('Are you sure you want to delete this question?')">Delete</a>
-                {% else %}
-                  <span style="color: #6c757d; font-size: 12px; font-style: italic;">Cannot edit answered question</span>
-                {% endif %}
+              {% if t.admin_comment == 'Nothing' %}
+              <div style="display:flex;gap:6px;">
+                <a href="{% url 'customer:edit-question' t.id %}" class="mc-btn mc-btn-outline" style="font-size:11px;padding:4px 10px;">Edit</a>
+                <a href="{% url 'customer:delete-question' t.id %}" class="mc-btn mc-btn-outline" style="font-size:11px;padding:4px 10px;color:var(--mc-red);border-color:var(--mc-red);" onclick="return confirm('Delete this question?')">Delete</a>
               </div>
+              {% else %}
+                <span style="color:#aaa;font-size:11px;font-style:italic;">Cannot edit</span>
+              {% endif %}
             </td>
           </tr>
           {% endfor %}
@@ -329,13 +75,14 @@
       </table>
     </div>
     {% else %}
-    <div class="no-data">
-      <p>You haven't asked any questions yet.</p>
-      <a href="{% url 'customer:ask-question' %}" style="color: #e21a22; font-weight: 600;">Ask your first question</a>
+    <div style="padding:48px 24px;text-align:center;font-family:var(--mc-font);">
+      <i class="fas fa-comments" style="font-size:32px;color:#ddd;margin-bottom:12px;display:block;"></i>
+      <p style="font-size:14px;color:#888;margin:0 0 12px;">You haven&rsquo;t asked any questions yet.</p>
+      <a href="{% url 'customer:ask-question' %}" class="mc-btn mc-btn-primary" style="font-size:13px;">Ask your first question</a>
     </div>
     {% endif %}
   </div>
+
 </div>
 
-<br><br>
 {% endblock content %}

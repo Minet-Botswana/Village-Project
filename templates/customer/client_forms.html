@@ -1,501 +1,169 @@
-{% extends 'customer/customerbase.html' %}
+﻿{% extends 'customer/customerbase.html' %}
 {% load static %}
 {% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Inter', 'Arial', sans-serif;
-        }
+<style>
+  .kf-row     { display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--mc-border); background:#fff; margin-bottom:2px; }
+  .kf-label   { padding:14px 20px; border-right:1px solid var(--mc-border); display:flex; align-items:center; gap:10px; }
+  .kf-ltitle  { font-family:var(--mc-font); font-size:12px; font-weight:700; color:#222; }
+  .kf-lsub    { font-family:var(--mc-font); font-size:11px; color:#888; margin-top:2px; }
+  .kf-dot     { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:2px; }
+  .kf-dot.ok  { background:#aaa; }
+  .kf-dot.no  { background:#ddd; }
+  .kf-action  { padding:14px 20px; display:flex; align-items:center; }
 
-        .kyc-container {
-            max-width: 1000px;
-            margin: 15px auto;
-            padding: 10px;
-        }
+  .kf-grid    { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:28px; }
+  .kf-card    { background:#fff; border:1px solid var(--mc-border); }
+  .kf-heading { padding:10px 20px; background:#f7f7f7; border-left:4px solid var(--mc-red); border-bottom:1px solid var(--mc-border); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.7px; color:#444; font-family:var(--mc-font); display:flex; justify-content:space-between; align-items:center; }
+  .kf-body    { padding:20px 24px; }
+  .kf-notice  { padding:10px 14px; border:1px solid var(--mc-border); background:#fafafa; margin-bottom:14px; font-size:12px; font-family:var(--mc-font); color:#555; display:flex; align-items:center; justify-content:space-between; }
+  @media(max-width:700px){ .kf-grid { grid-template-columns:1fr; } .kf-row { grid-template-columns:1fr; } }
+</style>
 
-        .page-header {
-            background: #e21a22;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+<div class="mc-wrap" style="max-width:900px;margin-left:auto;margin-right:auto;">
 
-        .page-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+  <div class="mc-page-header">
+    <h1>KYC Documents</h1>
+    <p>Upload the required Know Your Customer documents to complete verification</p>
+  </div>
 
-        .page-subtitle {
-            font-size: 11px;
-            opacity: 0.9;
-            margin: 0;
-        }
-
-        .breadcrumb-nav {
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 15px;
-            padding: 8px 12px;
-            background: white;
-            border-radius: 4px;
-            border-left: 3px solid #e21a22;
-        }
-
-        /* Document Status Overview */
-        .status-overview {
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .status-header {
-            background: #e21a22;
-            color: white;
-            padding: 10px 15px;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .status-grid {
-            padding: 15px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            background: #f8f9fa;
-        }
-
-        .status-icon {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .status-submitted {
-            color: #28a745;
-            border-color: #28a745;
-            background: #f8fff9;
-        }
-
-        .status-missing {
-            color: #dc3545;
-            border-color: #dc3545;
-            background: #fff8f8;
-        }
-
-        .status-text {
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        /* KYC Forms - Single Card */
-        .kyc-main-card {
-            background: white;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .kyc-main-header {
-            background: #e21a22;
-            color: white;
-            padding: 12px 15px;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .kyc-main-body {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
-
-        .kyc-form-section {
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            padding: 15px;
-            background: #f8f9fa;
-        }
-
-        .kyc-form-section:last-child {
-            border-bottom: 1px solid #e9ecef;
-            margin-bottom: 0;
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #495057;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-icon {
-            color: #e21a22;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            font-size: 10px;
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 4px;
-        }
-
-        .form-control {
-            font-size: 10px;
-            padding: 5px 8px;
-            border-radius: 3px;
-        }
-
-        .btn-primary {
-            background-color: #e21a22;
-            border-color: #e21a22;
-            padding: 5px 10px;
-            font-size: 10px;
-            border-radius: 3px;
-        }
-
-        .btn-primary:hover {
-            background-color: #c41e3a;
-            border-color: #c41e3a;
-        }
-
-        .btn-primary:disabled {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .submitted-notice {
-            font-size: 9px;
-            color: #28a745;
-            font-weight: bold;
-            margin-bottom: 8px;
-            padding: 6px;
-            background: #f8fff9;
-            border: 1px solid #d4edda;
-            border-radius: 3px;
-        }
-
-        .submitted-notice a {
-            color: #28a745;
-            text-decoration: underline;
-        }
-
-        .download-link {
-            font-size: 9px;
-            color: #e21a22;
-            margin-top: 6px;
-            display: block;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .kyc-container {
-                margin: 10px auto;
-                padding: 8px;
-            }
-
-            .page-header {
-                padding: 10px;
-            }
-
-            .page-title {
-                font-size: 14px;
-            }
-
-            .page-subtitle {
-                font-size: 10px;
-            }
-
-            .status-grid {
-                grid-template-columns: 1fr;
-                padding: 10px;
-                gap: 10px;
-            }
-
-            .kyc-main-body {
-                padding: 15px;
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .kyc-form-section {
-                padding: 12px;
-            }
-
-            .section-title {
-                font-size: 11px;
-            }
-
-            .form-group label {
-                font-size: 9px;
-            }
-
-            .form-control {
-                font-size: 9px;
-                padding: 4px 6px;
-            }
-
-            .btn-primary {
-                padding: 4px 8px;
-                font-size: 9px;
-            }
-        }
-
-        /* Tablet Responsive */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .kyc-main-body {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="kyc-container">
-        <!-- Breadcrumb -->
-        <div class="breadcrumb-nav">
-            <i class="fas fa-home" style="margin-right: 5px;"></i>
-            Home / KYC Forms & Documents
+  <!-- Status Summary -->
+  <div>
+    <div class="kf-row">
+      <div class="kf-label">
+        <div class="kf-dot {% if existing_kyc_form %}ok{% else %}no{% endif %}"></div>
+        <div>
+          <div class="kf-ltitle">KYC Form</div>
+          <div class="kf-lsub">{% if existing_kyc_form %}Submitted{% else %}Not yet uploaded{% endif %}</div>
         </div>
-
-        <!-- Page Header -->
-        <div class="page-header">
-            <div class="page-title">
-                <i class="fas fa-file-shield" style="margin-right: 8px;"></i>
-                Know Your Customer (KYC) Documents
-            </div>
-            <div class="page-subtitle">
-                Upload your required KYC documents for identity verification and compliance
-            </div>
+      </div>
+      <div class="kf-label">
+        <div class="kf-dot {% if existing_copy_of_omang %}ok{% else %}no{% endif %}"></div>
+        <div>
+          <div class="kf-ltitle">Copy of Omang</div>
+          <div class="kf-lsub">{% if existing_copy_of_omang %}Submitted{% else %}Not yet uploaded{% endif %}</div>
         </div>
-
-        <!-- Document Status Overview -->
-        <div class="status-overview">
-            <div class="status-header">
-                <i class="fas fa-clipboard-check" style="margin-right: 8px;"></i>
-                Document Submission Status
-            </div>
-            <div class="status-grid">
-                <div class="status-item {% if existing_kyc_form %}status-submitted{% else %}status-missing{% endif %}">
-                    <i class="fas {% if existing_kyc_form %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
-                    <span class="status-text">
-                        KYC Form: {% if existing_kyc_form %}Submitted{% else %}Missing{% endif %}
-                    </span>
-                </div>
-                <div class="status-item {% if existing_copy_of_omang %}status-submitted{% else %}status-missing{% endif %}">
-                    <i class="fas {% if existing_copy_of_omang %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
-                    <span class="status-text">
-                        Copy of Omang: {% if existing_copy_of_omang %}Submitted{% else %}Missing{% endif %}
-                    </span>
-                </div>
-                <div class="status-item {% if existing_residence_proof %}status-submitted{% else %}status-missing{% endif %}">
-                    <i class="fas {% if existing_residence_proof %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
-                    <span class="status-text">
-                        Proof of Residence: {% if existing_residence_proof %}Submitted{% else %}Missing{% endif %}
-                    </span>
-                </div>
-                <div class="status-item {% if existing_income_proof %}status-submitted{% else %}status-missing{% endif %}">
-                    <i class="fas {% if existing_income_proof %}fa-check-circle status-icon{% else %}fa-exclamation-circle status-icon{% endif %}"></i>
-                    <span class="status-text">
-                        Proof of Income: {% if existing_income_proof %}Submitted{% else %}Missing{% endif %}
-                    </span>
-                </div>
-            </div>
+      </div>
+    </div>
+    <div class="kf-row">
+      <div class="kf-label">
+        <div class="kf-dot {% if existing_residence_proof %}ok{% else %}no{% endif %}"></div>
+        <div>
+          <div class="kf-ltitle">Proof of Residence</div>
+          <div class="kf-lsub">{% if existing_residence_proof %}Submitted{% else %}Not yet uploaded{% endif %}</div>
         </div>
-
-        <!-- Single KYC Forms Card -->
-        <div class="kyc-forms-grid">
-
-        <!-- KYC Forms Grid -->
-        <!-- Single KYC Forms Card -->
-        <div class="kyc-main-card">
-            <div class="kyc-main-header">
-                <i class="fas fa-upload" style="margin-right: 8px;"></i>
-                Document Upload Forms
-            </div>
-            <div class="kyc-main-body">
-                
-                <!-- KYC Form Section -->
-                <div class="kyc-form-section">
-                    <div class="section-title">
-                        <i class="fas fa-file-alt section-icon"></i>
-                        KYC Form
-                    </div>
-                    {% if existing_kyc_form %}
-                        <div class="submitted-notice">
-                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
-                            KYC form already submitted! 
-                            {% if existing_kyc_form.kyc_form %}
-                                <a href="{{ existing_kyc_form.kyc_form.url }}" target="_blank">View Document</a>
-                            {% else %}
-                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    <form method="POST" action="{% url 'customer:upload_kyc_form' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="{{ KYCuploadForm.kyc_form.id_for_label }}">
-                                {% if existing_kyc_form %}Replace KYC Form{% else %}Upload KYC Form{% endif %}
-                            </label>
-                            <input type="file" name="kyc_form" id="{{ KYCuploadForm.kyc_form.id }}" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
-                            {{ KYCuploadForm.kyc_form.errors }}
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-{% if existing_kyc_form %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
-                            {% if existing_kyc_form %}Replace Document{% else %}Submit Form{% endif %}
-                        </button>
-                    </form>
-                    <a href="{% static 'Downloads/KYC.pdf' %}" download class="download-link">
-                        <i class="fas fa-download" style="margin-right: 5px;"></i>
-                        Download KYC Form Template
-                    </a>
-                </div>
-
-                <!-- Copy of Omang Section -->
-                <div class="kyc-form-section">
-                    <div class="section-title">
-                        <i class="fas fa-id-card section-icon"></i>
-                        Copy of Omang
-                    </div>
-                    {% if existing_copy_of_omang %}
-                        <div class="submitted-notice">
-                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
-                            Copy of Omang has been submitted! 
-                            {% if existing_copy_of_omang.copy_of_omang %}
-                                <a href="{{ existing_copy_of_omang.copy_of_omang.url }}" target="_blank">View Document</a>
-                            {% else %}
-                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    <form method="POST" action="{% url 'customer:upload_copy_of_omang' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="{{ CopyOfOmangForm.copy_of_omang.id_for_label }}">
-                                {% if existing_copy_of_omang %}Replace Copy of Omang{% else %}Upload Copy of Omang{% endif %}
-                            </label>
-                            <input type="file" name="copy_of_omang" id="{{ CopyOfOmangForm.copy_of_omang.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                            {{ CopyOfOmangForm.copy_of_omang.errors }}
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-{% if existing_copy_of_omang %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
-                            {% if existing_copy_of_omang %}Replace Document{% else %}Submit Document{% endif %}
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Proof of Residence Section -->
-                <div class="kyc-form-section">
-                    <div class="section-title">
-                        <i class="fas fa-home section-icon"></i>
-                        Proof of Residence
-                    </div>
-                    {% if existing_residence_proof %}
-                        <div class="submitted-notice">
-                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
-                            Proof of Residence has been submitted! 
-                            {% if existing_residence_proof.residence_proof %}
-                                <a href="{{ existing_residence_proof.residence_proof.url }}" target="_blank">View Document</a>
-                            {% else %}
-                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    <form method="POST" action="{% url 'customer:upload_residence_proof' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="{{ ResidenceProofForm.residence_proof.id_for_label }}">
-                                {% if existing_residence_proof %}Replace Proof of Residence{% else %}Upload Proof of Residence{% endif %}
-                            </label>
-                            <input type="file" name="residence_proof" id="{{ ResidenceProofForm.residence_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                            {{ ResidenceProofForm.residence_proof.errors }}
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-{% if existing_residence_proof %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
-                            {% if existing_residence_proof %}Replace Document{% else %}Submit Document{% endif %}
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Proof of Income Section -->
-                <div class="kyc-form-section">
-                    <div class="section-title">
-                        <i class="fas fa-money-bill-wave section-icon"></i>
-                        Proof of Income
-                    </div>
-                    {% if existing_income_proof %}
-                        <div class="submitted-notice">
-                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
-                            Proof of Income has been submitted! 
-                            {% if existing_income_proof.income_proof %}
-                                <a href="{{ existing_income_proof.income_proof.url }}" target="_blank">View Document</a>
-                            {% else %}
-                                <span style="color: #e21a22;">Document needs to be re-uploaded</span>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    <form method="POST" action="{% url 'customer:upload_income_proof' %}" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="{{ IncomeProofForm.income_proof.id_for_label }}">
-                                {% if existing_income_proof %}Replace Proof of Income{% else %}Upload Proof of Income{% endif %}
-                            </label>
-                            <input type="file" name="income_proof" id="{{ IncomeProofForm.income_proof.id }}" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
-                            {{ IncomeProofForm.income_proof.errors }}
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-{% if existing_income_proof %}sync-alt{% else %}upload{% endif %}" style="margin-right: 5px;"></i>
-                            {% if existing_income_proof %}Replace Document{% else %}Submit Document{% endif %}
-                        </button>
-                    </form>
-                </div>
-
-            </div>
+      </div>
+      <div class="kf-label">
+        <div class="kf-dot {% if existing_income_proof %}ok{% else %}no{% endif %}"></div>
+        <div>
+          <div class="kf-ltitle">Proof of Income</div>
+          <div class="kf-lsub">{% if existing_income_proof %}Submitted{% else %}Not yet uploaded{% endif %}</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Forms -->
+  <div class="kf-grid">
+
+    <!-- KYC Form -->
+    <div class="kf-card">
+      <div class="kf-heading">
+        <span>KYC Form</span>
+        <a href="{% static 'Downloads/KYC.pdf' %}" target="_blank" style="font-size:11px;color:var(--mc-red);text-decoration:none;font-weight:400;text-transform:none;letter-spacing:0;">
+          <i class="fas fa-download" style="margin-right:4px;"></i>Download Template
+        </a>
+      </div>
+      <div class="kf-body">
+        {% if existing_kyc_form %}
+          <div class="kf-notice">
+            <span>Document on file</span>
+            <a href="{{ existing_kyc_form.kyc_form.url }}" target="_blank" style="color:var(--mc-red);font-size:12px;text-decoration:none;">View &rarr;</a>
+          </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'customer:upload_kyc_form' %}">
+          {% csrf_token %}
+          <div class="mc-form-group">
+            <label class="mc-label">{{ KYCuploadForm.kyc_form.label }}</label>
+            {{ KYCuploadForm.kyc_form }}
+          </div>
+          <button type="submit" class="mc-btn mc-btn-primary" style="width:100%;">
+            {% if existing_kyc_form %}Replace{% else %}Upload{% endif %} KYC Form
+          </button>
+        </form>
+      </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-</body>
-{% endblock content %}
+    <!-- Copy of Omang -->
+    <div class="kf-card">
+      <div class="kf-heading">Copy of Omang</div>
+      <div class="kf-body">
+        {% if existing_copy_of_omang %}
+          <div class="kf-notice">
+            <span>Document on file</span>
+            <a href="{{ existing_copy_of_omang.copy_of_omang.url }}" target="_blank" style="color:var(--mc-red);font-size:12px;text-decoration:none;">View &rarr;</a>
+          </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'customer:upload_copy_of_omang' %}">
+          {% csrf_token %}
+          <div class="mc-form-group">
+            <label class="mc-label">{{ CopyOfOmangForm.copy_of_omang.label }}</label>
+            {{ CopyOfOmangForm.copy_of_omang }}
+          </div>
+          <button type="submit" class="mc-btn mc-btn-primary" style="width:100%;">
+            {% if existing_copy_of_omang %}Replace{% else %}Upload{% endif %} Copy of Omang
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Proof of Residence -->
+    <div class="kf-card">
+      <div class="kf-heading">Proof of Residence</div>
+      <div class="kf-body">
+        {% if existing_residence_proof %}
+          <div class="kf-notice">
+            <span>Document on file</span>
+            <a href="{{ existing_residence_proof.residence_proof.url }}" target="_blank" style="color:var(--mc-red);font-size:12px;text-decoration:none;">View &rarr;</a>
+          </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'customer:upload_residence_proof' %}">
+          {% csrf_token %}
+          <div class="mc-form-group">
+            <label class="mc-label">{{ ResidenceProofForm.residence_proof.label }}</label>
+            {{ ResidenceProofForm.residence_proof }}
+          </div>
+          <button type="submit" class="mc-btn mc-btn-primary" style="width:100%;">
+            {% if existing_residence_proof %}Replace{% else %}Upload{% endif %} Proof of Residence
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Proof of Income -->
+    <div class="kf-card">
+      <div class="kf-heading">Proof of Income</div>
+      <div class="kf-body">
+        {% if existing_income_proof %}
+          <div class="kf-notice">
+            <span>Document on file</span>
+            <a href="{{ existing_income_proof.income_proof.url }}" target="_blank" style="color:var(--mc-red);font-size:12px;text-decoration:none;">View &rarr;</a>
+          </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'customer:upload_income_proof' %}">
+          {% csrf_token %}
+          <div class="mc-form-group">
+            <label class="mc-label">{{ IncomeProofForm.income_proof.label }}</label>
+            {{ IncomeProofForm.income_proof }}
+          </div>
+          <button type="submit" class="mc-btn mc-btn-primary" style="width:100%;">
+            {% if existing_income_proof %}Replace{% else %}Upload{% endif %} Proof of Income
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
