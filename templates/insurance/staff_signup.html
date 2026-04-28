@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Registration - Minet Insurance</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f8f9fa; color: #333; }
+
+        .navbar {
+            background: #e21a22;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar a { color: white; text-decoration: none; font-weight: 700; font-size: 18px; }
+
+        .page {
+            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 40px;
+            width: 100%;
+            max-width: 520px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #111;
+        }
+        .card p.sub { color: #666; font-size: 14px; margin-bottom: 28px; }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #e21a22;
+            margin: 24px 0 14px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 6px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444; }
+        .form-control {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { border-color: #e21a22; }
+
+        .error { color: #c0392b; font-size: 12px; margin-top: 4px; }
+
+        .btn {
+            width: 100%;
+            padding: 11px;
+            background: #e21a22;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+        }
+        .btn:hover { background: #c01118; }
+
+        .login-link { text-align: center; margin-top: 16px; font-size: 13px; color: #666; }
+        .login-link a { color: #e21a22; text-decoration: none; font-weight: 600; }
+
+        .alert { padding: 12px 16px; border-radius: 5px; margin-bottom: 20px; font-size: 14px; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="{% url 'home' %}">Minet Insurance</a>
+</nav>
+
+<div class="page">
+    <div class="card">
+        <h2>Staff Registration</h2>
+        <p class="sub">Create your staff account. Your account will be reviewed before activation.</p>
+
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="section-label">Account Details</div>
+
+            <div class="form-group">
+                <label>First Name</label>
+                {{ userForm.first_name }}
+                {% for e in userForm.first_name.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                {{ userForm.last_name }}
+                {% for e in userForm.last_name.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                {{ userForm.email }}
+                {% for e in userForm.email.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                {{ userForm.username }}
+                {% for e in userForm.username.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                {{ userForm.password }}
+                {% for e in userForm.password.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <div class="section-label">Work Details</div>
+
+            <div class="form-group">
+                <label>Department</label>
+                {{ profileForm.department }}
+                {% for e in profileForm.department.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                {{ profileForm.role }}
+                {% for e in profileForm.role.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                {{ profileForm.phone }}
+                {% for e in profileForm.phone.errors %}<p class="error">{{ e }}</p>{% endfor %}
+            </div>
+
+            <button type="submit" class="btn">Submit Registration</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="{% url 'adminlogin' %}">Sign in</a></p>
+    </div>
+</div>
+
+</body>
+</html>

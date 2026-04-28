@@ -44,7 +44,14 @@ def afterlogin_view(request):
         return redirect('admin-dashboard')
     
 def logout_redirect(request):
-        return redirect('adminlogin')
+    return redirect('adminlogin')
+
+
+from django.contrib.auth import logout as auth_logout
+
+def logout_view(request):
+    auth_logout(request)
+    return redirect('adminlogin')
 
 
 
@@ -70,8 +77,55 @@ def admin_dashboard_view(request):
         'approved_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Approved').count(),
         'disapproved_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Disapproved').count(),
         'waiting_thirdpartypolicy_holder':models.ThirdpartyPolicyRecord.objects.all().filter(thirdpartystatus='Pending').count(),
+        'pending_staff': models.StaffProfile.objects.filter(user__is_active=False).count(),
+        'total_staff': models.StaffProfile.objects.filter(user__is_active=True).count(),
     }
     return render(request,'insurance/admin_dashboard.html',context=dict)
+
+
+def staff_signup_view(request):
+    userForm = forms.StaffUserForm()
+    profileForm = forms.StaffProfileForm()
+    if request.method == 'POST':
+        userForm = forms.StaffUserForm(request.POST)
+        profileForm = forms.StaffProfileForm(request.POST)
+        if userForm.is_valid() and profileForm.is_valid():
+            user = userForm.save(commit=False)
+            user.set_password(userForm.cleaned_data['password'])
+            user.is_active = False  # Pending admin approval
+            user.save()
+            profile = profileForm.save(commit=False)
+            profile.user = user
+            profile.save()
+            staff_group, _ = Group.objects.get_or_create(name='STAFF')
+            user.groups.add(staff_group)
+            messages.success(request, 'Registration submitted. Please wait for admin approval.')
+            return redirect('adminlogin')
+    return render(request, 'insurance/staff_signup.html', {'userForm': userForm, 'profileForm': profileForm})
+
+
+@login_required(login_url='adminlogin')
+def admin_view_staff_view(request):
+    staff = models.StaffProfile.objects.select_related('user').all().order_by('user__is_active', 'user__first_name')
+    return render(request, 'insurance/admin_view_staff.html', {'staff': staff})
+
+
+@login_required(login_url='adminlogin')
+def approve_staff_view(request, pk):
+    profile = models.StaffProfile.objects.get(pk=pk)
+    profile.user.is_active = True
+    profile.user.save()
+    messages.success(request, f"{profile.user.get_full_name()} has been approved.")
+    return redirect('admin-view-staff')
+
+
+@login_required(login_url='adminlogin')
+def reject_staff_view(request, pk):
+    profile = models.StaffProfile.objects.get(pk=pk)
+    name = profile.user.get_full_name()
+    profile.user.delete()
+    messages.success(request, f"{name}'s registration has been rejected and removed.")
+    return redirect('admin-view-staff')
 
 '''
 from django.db.models import Count

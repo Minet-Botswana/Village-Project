@@ -1,6 +1,5 @@
 from django.contrib import admin
 from insurance import views
-from django.contrib.auth.views import LogoutView
 from django.urls import path,include
 from insurance.views import custom_dashboard, logout_redirect
 from customer.views import MyLoginView
@@ -13,9 +12,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('customer/',include('customer.urls')),
+
+    # Staff onboarding
+    path('staff-signup/', views.staff_signup_view, name='staff-signup'),
+    path('admin-view-staff/', views.admin_view_staff_view, name='admin-view-staff'),
+    path('approve-staff/<int:pk>/', views.approve_staff_view, name='approve-staff'),
+    path('reject-staff/<int:pk>/', views.reject_staff_view, name='reject-staff'),
     
     path('',views.home_view,name='home'),
-    path('logout/', LogoutView.as_view(template_name='insurance/logout.html'), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
     path('logout-redirect/', views.logout_redirect, name='logout_redirect'),
     path('aboutus', views.aboutus_view),
     path('benefits', views.benefits, name='benefits'),

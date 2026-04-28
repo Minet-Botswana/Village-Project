@@ -1,0 +1,476 @@
+/*
+ * ============================================================
+ *  MINET CORPORATE DESIGN SYSTEM  (minet-ds.css)
+ *  Branding: KoGae Village Insurance | Minet x Bryte
+ *
+ *  Principles:
+ *    - Sharp 90-degree corners (zero border-radius everywhere)
+ *    - High-contrast, accessible for elderly users
+ *    - Minet red (#c0111a) as primary brand colour
+ *    - Arial as the system font (universally available)
+ *    - Prefix: mc- (Minet Corporate)
+ * ============================================================
+ */
+
+
+/* ── 1. DESIGN TOKENS ────────────────────────────────────── */
+
+:root {
+  /* Brand colours */
+  --mc-red:       #c0111a;
+  --mc-red-dark:  #8b0000;
+  --mc-red-light: #fef0f0;
+
+  /* Neutrals */
+  --mc-dark:      #2c2c2c;   /* section label backgrounds */
+  --mc-page-bg:   #f0f2f5;   /* page canvas */
+  --mc-border:    #d5d5d5;
+  --mc-divider:   #e0e0e0;
+  --mc-surface:   #ffffff;
+
+  /* Status colours */
+  --mc-success:  #28a745;
+  --mc-warning:  #e6a800;
+  --mc-danger:   #dc3545;
+  --mc-orange:   #fd7e14;
+  --mc-info:     #0d6efd;
+
+  /* Typography */
+  --mc-font:      Arial, 'Helvetica Neue', sans-serif;
+  --mc-size-xs:   11px;
+  --mc-size-sm:   12px;
+  --mc-size-base: 14px;
+  --mc-size-md:   15px;
+  --mc-size-lg:   17px;
+}
+
+
+/* ── 2. PAGE WRAPPER ─────────────────────────────────────── */
+
+.mc-wrap {
+  width: 100%;
+  padding: 20px;
+  font-family: var(--mc-font);
+  font-size: var(--mc-size-base);
+  background: var(--mc-page-bg);
+  min-height: calc(100vh - 60px);
+  box-sizing: border-box;
+}
+
+
+/* ── 3. PAGE HEADER BAR ──────────────────────────────────── */
+
+.mc-page-header {
+  background: var(--mc-red);
+  color: #fff;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-left: 6px solid var(--mc-red-dark);
+}
+
+.mc-page-header h1 {
+  font-size: var(--mc-size-lg);
+  font-weight: 700;
+  margin: 0 0 2px;
+  letter-spacing: 0.2px;
+}
+
+.mc-page-header p {
+  font-size: var(--mc-size-sm);
+  margin: 0;
+  opacity: 0.85;
+}
+
+
+/* ── 4. WELCOME STRIP ────────────────────────────────────── */
+
+.mc-welcome {
+  background: var(--mc-surface);
+  border: 1px solid var(--mc-border);
+  border-left: 4px solid var(--mc-red);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.mc-welcome strong {
+  font-size: var(--mc-size-md);
+  color: #111;
+  display: block;
+}
+
+.mc-welcome span {
+  font-size: var(--mc-size-sm);
+  color: #666;
+}
+
+
+/* ── 5. SECTION LABEL ────────────────────────────────────── */
+
+.mc-section-label {
+  background: var(--mc-dark);
+  color: #fff;
+  font-size: var(--mc-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  font-family: var(--mc-font);
+  margin-bottom: 0;
+}
+
+
+/* ── 6. ACTION LIST ──────────────────────────────────────── */
+
+.mc-action-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.mc-action-list li {
+  border-bottom: 1px solid var(--mc-divider);
+}
+
+.mc-action-list li:last-child {
+  border-bottom: none;
+}
+
+.mc-action-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  background: var(--mc-surface);
+  text-decoration: none;
+  color: #111;
+  font-size: var(--mc-size-base);
+  font-weight: 500;
+  font-family: var(--mc-font);
+  transition: background 0.1s;
+}
+
+.mc-action-link:hover {
+  background: var(--mc-red-light);
+  color: var(--mc-red);
+  text-decoration: none;
+}
+
+/* Square icon inside action link */
+.mc-action-link .mc-icon {
+  width: 30px;
+  height: 30px;
+  background: var(--mc-red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* Disabled state */
+.mc-action-link.mc-disabled {
+  color: #aaa;
+  background: #fafafa;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mc-action-link.mc-disabled .mc-icon {
+  background: #ccc;
+}
+
+/* Sub-note under action label */
+.mc-action-link .mc-note {
+  font-size: var(--mc-size-xs);
+  color: #999;
+  display: block;
+  margin-top: 1px;
+  font-weight: 400;
+}
+
+
+/* ── 7. STATS GRID ───────────────────────────────────────── */
+
+.mc-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  border: 1px solid var(--mc-border);
+  background: var(--mc-surface);
+}
+
+.mc-stat {
+  padding: 14px 12px;
+  text-align: center;
+  border-right: 1px solid #e5e5e5;
+}
+
+.mc-stat:last-child {
+  border-right: none;
+}
+
+.mc-stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--mc-red);
+  line-height: 1;
+}
+
+.mc-stat-label {
+  font-size: var(--mc-size-xs);
+  color: #777;
+  margin-top: 4px;
+}
+
+
+/* ── 8. GENERIC CARD ─────────────────────────────────────── */
+
+.mc-card {
+  background: var(--mc-surface);
+  border: 1px solid var(--mc-border);
+}
+
+/* Coloured top border variants */
+.mc-card-top-red    { border-top: 3px solid var(--mc-red); }
+.mc-card-top-green  { border-top: 3px solid var(--mc-success); }
+.mc-card-top-yellow { border-top: 3px solid var(--mc-warning); }
+.mc-card-top-danger { border-top: 3px solid var(--mc-danger); }
+.mc-card-top-orange { border-top: 3px solid var(--mc-orange); }
+
+.mc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #efefef;
+}
+
+.mc-card-title {
+  font-size: var(--mc-size-sm);
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.mc-card-body {
+  padding: 10px 12px;
+}
+
+
+/* ── 9. BADGES ───────────────────────────────────────────── */
+
+.mc-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  letter-spacing: 0.4px;
+}
+
+.mc-badge-red     { background: var(--mc-red);     color: #fff; }
+.mc-badge-success { background: var(--mc-success); color: #fff; }
+.mc-badge-warning { background: var(--mc-warning); color: #fff; }
+.mc-badge-danger  { background: var(--mc-danger);  color: #fff; }
+.mc-badge-orange  { background: var(--mc-orange);  color: #fff; }
+.mc-badge-dark    { background: var(--mc-dark);    color: #fff; }
+.mc-badge-light   { background: #e9e9e9;           color: #333; }
+
+
+/* ── 10. KEY–VALUE ROW ───────────────────────────────────── */
+
+.mc-kv-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 13px;
+  font-family: var(--mc-font);
+}
+
+.mc-kv-row:last-child {
+  border-bottom: none;
+}
+
+.mc-kv-key { color: #777; }
+.mc-kv-val { font-weight: 600; color: #111; }
+
+
+/* ── 11. ALERT STRIPS ────────────────────────────────────── */
+
+.mc-alert {
+  padding: 7px 10px;
+  font-size: var(--mc-size-sm);
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.mc-alert-warning { background: #fff8f0; border-left: 3px solid var(--mc-orange); }
+.mc-alert-danger  { background: #fff5f5; border-left: 3px solid var(--mc-danger); }
+.mc-alert-info    { background: #f0f6ff; border-left: 3px solid var(--mc-info); }
+.mc-alert-success { background: #f0fdf4; border-left: 3px solid var(--mc-success); }
+
+
+/* ── 12. BUTTONS ─────────────────────────────────────────── */
+
+.mc-btn {
+  display: inline-block;
+  padding: 9px 16px;
+  font-size: var(--mc-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  font-family: var(--mc-font);
+  text-align: center;
+}
+
+.mc-btn-primary {
+  background: var(--mc-red);
+  color: #fff;
+}
+
+.mc-btn-primary:hover {
+  background: var(--mc-red-dark);
+  color: #fff;
+  text-decoration: none;
+}
+
+.mc-btn-outline {
+  background: transparent;
+  color: var(--mc-red);
+  border: 1px solid var(--mc-red);
+}
+
+.mc-btn-outline:hover {
+  background: var(--mc-red);
+  color: #fff;
+  text-decoration: none;
+}
+
+.mc-btn-danger {
+  background: var(--mc-danger);
+  color: #fff;
+}
+
+.mc-btn-danger:hover {
+  background: #b02a37;
+  color: #fff;
+  text-decoration: none;
+}
+
+.mc-btn-full {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+
+/* ── 13. FORM ELEMENTS ───────────────────────────────────── */
+
+.mc-form-group {
+  margin-bottom: 14px;
+}
+
+.mc-label {
+  display: block;
+  font-size: var(--mc-size-sm);
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  font-family: var(--mc-font);
+}
+
+.mc-input,
+.mc-select,
+.mc-textarea {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--mc-border);
+  background: var(--mc-surface);
+  font-size: var(--mc-size-base);
+  font-family: var(--mc-font);
+  color: #111;
+  outline: none;
+  /* No border-radius — corporate sharp corners */
+}
+
+.mc-input:focus,
+.mc-select:focus,
+.mc-textarea:focus {
+  border-color: var(--mc-red);
+}
+
+.mc-input.mc-invalid,
+.mc-select.mc-invalid {
+  border-color: var(--mc-danger);
+}
+
+.mc-field-error {
+  font-size: var(--mc-size-xs);
+  color: var(--mc-danger);
+  margin-top: 3px;
+}
+
+
+/* ── 14. TABLE ───────────────────────────────────────────── */
+
+.mc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--mc-size-base);
+  font-family: var(--mc-font);
+  background: var(--mc-surface);
+}
+
+.mc-table th {
+  background: var(--mc-dark);
+  color: #fff;
+  font-size: var(--mc-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 9px 12px;
+  text-align: left;
+}
+
+.mc-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mc-divider);
+  vertical-align: middle;
+  color: #111;
+}
+
+.mc-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mc-table tr:hover td {
+  background: #fafafa;
+}
+
+
+/* ── 15. UTILITY ─────────────────────────────────────────── */
+
+.mc-mt-1  { margin-top: 8px; }
+.mc-mt-2  { margin-top: 16px; }
+.mc-mb-1  { margin-bottom: 8px; }
+.mc-mb-2  { margin-bottom: 16px; }
+.mc-p-1   { padding: 8px; }
+.mc-p-2   { padding: 16px; }
+.mc-text-red   { color: var(--mc-red); }
+.mc-text-muted { color: #777; }
+.mc-text-bold  { font-weight: 700; }
+.mc-text-small { font-size: var(--mc-size-sm); }
+.mc-border-top { border-top: 1px solid var(--mc-divider); }
+.mc-divider-line { height: 1px; background: var(--mc-divider); margin: 12px 0; }
+
+
+/* ── 16. RESPONSIVE ──────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  .mc-wrap { padding: 12px; }
+}

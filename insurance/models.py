@@ -4,6 +4,38 @@ from customer.models import Customer
 import random
 import string
 
+
+class StaffProfile(models.Model):
+    DEPARTMENT_CHOICES = [
+        ('Claims', 'Claims'),
+        ('Underwriting', 'Underwriting'),
+        ('Finance', 'Finance'),
+        ('IT', 'IT'),
+        ('HR', 'HR'),
+        ('Operations', 'Operations'),
+    ]
+    ROLE_CHOICES = [
+        ('Manager', 'Manager'),
+        ('Officer', 'Officer'),
+        ('Analyst', 'Analyst'),
+        ('Administrator', 'Administrator'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    employee_id = models.CharField(max_length=20, unique=True, blank=True)
+    department = models.CharField(max_length=20, choices=DEPARTMENT_CHOICES)
+    phone = models.CharField(max_length=20)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return f"{self.user.get_full_name()} ({self.role} - {self.department})"
+
+    def save(self, *args, **kwargs):
+        if not self.employee_id:
+            self.employee_id = 'EMP-' + ''.join(random.choices(string.digits, k=6))
+        super().save(*args, **kwargs)
+
+
 class CustomModelName(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) # instead of user_id = IntegerField()
 

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,8 @@
     <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Minet Corporate Design System -->
+    <link rel="stylesheet" href="{% static 'styles/minet-ds.css' %}">
     
     <style>
         * {
@@ -256,9 +259,12 @@
 
             <div class="admin-user">
                 <span class="user-info">Welcome, {{ user.first_name|default:user.username }}</span>
-                <a href="{% url 'logout' %}" class="logout-btn">
-                    <i class="ri-logout-box-line"></i> Logout
-                </a>
+                <form action="{% url 'logout' %}" method="post" style="margin:0;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-btn" style="background:none;border:none;cursor:pointer;padding:0;">
+                        <i class="ri-logout-box-line"></i> Logout
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
