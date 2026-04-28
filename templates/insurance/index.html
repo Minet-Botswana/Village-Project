@@ -1,551 +1,294 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
-    <title>KoGae Product | Minet X Bryte</title>
-
-
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>KoGae Village Insurance | Minet x Bryte</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-      color: #333;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #c0111a;
+      --dark:   #1a1a1a;
+      --border: #d5d5d5;
+      --bg:     #f0f2f5;
+      --font:   Arial, 'Helvetica Neue', sans-serif;
     }
 
-    .section__container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 30px 15px;
-    }
+    body { font-family: var(--font); font-size: 14px; color: #333; background: #fff; line-height: 1.6; }
 
-    .section__header {
-      margin-bottom: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      color: #333;
-    }
+    a { color: inherit; text-decoration: none; }
 
-    .btn {
-      padding: 12px 24px;
-      background-color: #e22a21;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
+    /* ── NAV ── */
+    .lp-nav { background: var(--red); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .lp-nav img { height: 36px; background: #fff; padding: 4px 8px; }
+    .lp-nav-links { display: flex; gap: 28px; list-style: none; }
+    .lp-nav-links a { color: #fff; font-size: 13px; font-weight: 600; opacity: 0.9; letter-spacing: 0.3px; }
+    .lp-nav-links a:hover { opacity: 1; text-decoration: underline; }
+    .lp-btn-login { background: #fff; color: var(--red); padding: 8px 20px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; border: none; }
+    .lp-btn-login:hover { background: #f0f0f0; }
+    .lp-hamburger { display: none; background: none; border: none; cursor: pointer; }
+    .lp-hamburger span { display: block; width: 22px; height: 2px; background: #fff; margin: 4px 0; }
 
-    .btn:hover {
-      background-color: #c41f17;
-    }
+    /* ── HERO ── */
+    .lp-hero { background: var(--red); color: #fff; padding: 40px 40px; text-align: center; border-bottom: 4px solid #8b0000; }
+    .lp-hero h1 { font-size: 36px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .lp-hero p  { font-size: 16px; max-width: 560px; margin: 0 auto 28px; opacity: 0.92; line-height: 1.7; }
+    .lp-hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .lp-btn-white  { background: #fff; color: var(--red); padding: 11px 28px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; border: none; }
+    .lp-btn-white:hover { background: #f0f0f0; }
+    .lp-btn-ghost  { background: transparent; color: #fff; padding: 11px 28px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; border: 2px solid rgba(255,255,255,0.7); }
+    .lp-btn-ghost:hover { border-color: #fff; }
 
-    .btn a {
-      color: white;
-      text-decoration: none;
-    }
+    /* ── STATS STRIP ── */
+    .lp-stats { background: var(--dark); color: #fff; display: grid; grid-template-columns: repeat(3,1fr); }
+    .lp-stat  { padding: 20px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); }
+    .lp-stat:last-child { border-right: none; }
+    .lp-stat-num   { font-size: 26px; font-weight: 700; color: #fff; }
+    .lp-stat-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
 
-    header {
-      background-color: #e22a21;
-      color: white;
-      padding: 0;
-    }
+    /* ── SECTION WRAPPER ── */
+    .lp-section { padding: 56px 40px; }
+    .lp-section-alt { background: var(--bg); }
+    .lp-inner { max-width: 960px; margin: 0 auto; }
+    .lp-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--red); margin-bottom: 8px; }
+    .lp-section-title { font-size: 26px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .lp-section-sub   { font-size: 14px; color: #666; margin-bottom: 36px; }
 
-    .nav__container {
-      padding: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+    /* ── FEATURES GRID ── */
+    .lp-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .lp-feat { background: #fff; padding: 28px 24px; }
+    .lp-feat-icon { width: 40px; height: 40px; background: #fef0f0; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .lp-feat-icon i { color: var(--red); font-size: 18px; }
+    .lp-feat h3 { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .lp-feat p  { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 12px; }
+    .lp-feat a  { font-size: 12px; color: var(--red); font-weight: 600; }
+    .lp-feat a:hover { text-decoration: underline; }
 
-    .nav__logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: white;
-    }
+    /* ── HOW IT WORKS ── */
+    .lp-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; counter-reset: steps; }
+    .lp-step  { padding: 32px 24px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); position: relative; }
+    .lp-step:last-child { border-right: none; }
+    .lp-step-num { font-size: 40px; font-weight: 700; color: #e8e8e8; line-height: 1; margin-bottom: 12px; }
+    .lp-step h4 { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .lp-step p  { font-size: 12px; color: #777; line-height: 1.6; }
 
-    .nav__logo span {
-      color: #fb923c;
-    }
+    /* ── COVERS TABLE ── */
+    .lp-covers { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .lp-cover  { border: 1px solid var(--border); background: #fff; }
+    .lp-cover-head { background: var(--red); color: #fff; padding: 14px 20px; font-size: 13px; font-weight: 700; }
+    .lp-cover-body { padding: 20px; }
+    .lp-cover-row  { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #444; }
+    .lp-cover-row:last-child { border-bottom: none; }
+    .lp-cover-row i { color: var(--red); font-size: 11px; margin-top: 3px; flex-shrink: 0; }
 
-    .nav__links {
-      list-style: none;
-      display: flex;
-      gap: 30px;
-      margin: 0;
-      padding: 0;
-    }
+    /* ── CONTACT STRIP ── */
+    .lp-contact { background: var(--dark); color: #fff; padding: 40px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+    .lp-contact-item { display: flex; gap: 14px; align-items: flex-start; }
+    .lp-contact-icon { width: 36px; height: 36px; background: var(--red); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .lp-contact-icon i { color: #fff; font-size: 14px; }
+    .lp-contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #888; margin-bottom: 4px; }
+    .lp-contact-val   { font-size: 13px; color: #ddd; line-height: 1.5; }
 
-    .link a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 14px;
-    }
+    /* ── FOOTER ── */
+    .lp-footer { background: #111; color: #888; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+    .lp-footer a { color: #888; }
 
-    .link a:hover {
-      color: #fb923c;
-    }
-
-    .header__container {
-      text-align: center;
-      padding: 40px 15px;
-      background-color: #e21a22;
-      color: #333;
-      border-bottom: 2px solid #e22a21;
-    }
-
-    .header__content {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .header__content h3 {
-      font-size: 36px;
-      margin-bottom: 20px;
-      line-height: 1.3;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .header__content p {
-      font-size: 18px;
-      margin-bottom: 0;
-      color: #fff;
-      line-height: 1.6;
-    }
-
-    .service__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-top: 30px;
-    }
-
-    .service__card {
-      padding: 25px;
-      text-align: center;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: white;
-    }
-
-    .service__card span {
-      display: inline-block;
-      margin-bottom: 15px;
-      padding: 15px;
-      font-size: 32px;
-      color: #e22a21;
-      background-color: #f8f9fa;
-      border-radius: 50%;
-    }
-
-    .service__card h4 {
-      margin-bottom: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .service__card p {
-      color: #666;
-      margin-bottom: 15px;
-    }
-
-    .about__container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .about__content .feature-box {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 25px;
-      margin-bottom: 25px;
-      border-left: 4px solid #e22a21;
-    }
-
-    .about__content .feature-box strong {
-      color: #e22a21;
-      font-size: 18px;
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .about__content .feature-box p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: #555;
-      margin: 0 0 10px 0;
-    }
-
-    .about__content .feature-box a {
-      color: #e22a21;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    .about__content .feature-box a:hover {
-      text-decoration: underline;
-    }
-
-    .why__container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .why__grid {
-      margin-top: 30px;
-      display: grid;
-      grid-template-columns: 60px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .why__grid span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: #e22a21;
-      background-color: #f8f9fa;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-    }
-
-    .why__grid h4 {
-      margin-bottom: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .why__grid p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .footer {
-      background-color: #f8f9fa;
-      border-top: 1px solid #ddd;
-    }
-
-    .footer__container {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 40px;
-    }
-
-    .footer__col h3 {
-      margin-bottom: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #e22a21;
-    }
-
-    .footer__col h3 span {
-      color: #fb923c;
-    }
-
-    .footer__col h4 {
-      margin-bottom: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #e22a21;
-    }
-
-    .footer__col p {
-      margin-bottom: 8px;
-      color: #333;
-      font-size: 14px;
-    }
-
-    .footer__col i {
-      color: #e22a21;
-      margin-right: 8px;
-    }
-
-    .footer__bar {
-      background-color: #e22a21;
-      padding: 15px 0;
-    }
-
-    .footer__bar__content {
-      max-width: 1200px;
-      margin: auto;
-      padding: 0 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .footer__bar__content p {
-      font-size: 12px;
-      color: white;
-      margin: 0;
-    }
-
-    .footer__socials {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-size: 14px;
-      color: white;
-    }
-
-    .footer__socials span {
-      cursor: pointer;
-    }
-
-    .mobile__menu {
-      display: none;
-      font-size: 24px;
-      color: white;
-      cursor: pointer;
-    }
-
-    /* Mobile responsive */
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .nav__links {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background-color: #e22a21;
-        padding: 20px;
-        gap: 15px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .nav__links.active {
-        display: flex;
-      }
-
-      .mobile__menu {
-        display: block;
-      }
-
-      .header__container {
-        padding: 30px 15px;
-      }
-
-      .header__content h3 {
-        font-size: 28px;
-        margin-bottom: 15px;
-      }
-
-      .header__content p {
-        font-size: 16px;
-      }
-
-      .why__grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 15px;
-      }
-
-      .why__grid span {
-        margin: 0 auto;
-      }
-
-      .footer__container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-      }
-
-      .footer__bar__content {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .section__container {
-        padding: 20px 15px;
-      }
-
-      .about__content .feature-box {
-        padding: 20px;
-        margin-bottom: 20px;
-      }
+      .lp-nav-links, .lp-btn-login { display: none; }
+      .lp-hamburger { display: block; }
+      .lp-nav-links.open { display: flex; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--red); padding: 16px 24px; gap: 14px; z-index: 100; }
+      .lp-hero { padding: 40px 20px; }
+      .lp-hero h1 { font-size: 26px; }
+      .lp-stats { grid-template-columns: 1fr 1fr; }
+      .lp-section { padding: 40px 20px; }
+      .lp-covers { grid-template-columns: 1fr; }
+      .lp-contact { grid-template-columns: 1fr; padding: 28px 20px; }
+      .lp-footer { flex-direction: column; gap: 8px; text-align: center; }
+      .lp-steps { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
+<body>
 
+<!-- NAV -->
+<nav class="lp-nav" style="position:sticky;top:0;z-index:200;">
+  <a href="/"><img src="/static/image/minetbryte.png" alt="Minet Bryte Logo"></a>
+  <ul class="lp-nav-links" id="navLinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/covers">Covers</a></li>
+    <li><a href="/claims">Claims</a></li>
+    <li><a href="/customer/customerclick">Your Information</a></li>
+  </ul>
+  <a href="/customer/customerlogin"><button class="lp-btn-login">Log In</button></a>
+  <button class="lp-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-  <body>
-    <header>
-      <nav class="section__container nav__container">
-        <!--div class="nav__logo">Ko<span>Gae</span></div-->
-        <img src="static/image/minetbryte.png" alt="Minet Bryte Logo" style="width: 200px; height: auto; background-color: white; border-radius: 7px;" />
-        <ul class="nav__links">
-         <li class="link"><a href="/" class="nav-item nav-link">Home</a>
-          <!--li class="link"><a href="#about">Benefits</a></li-->
-          <li class="link"><a href="/covers">Covers</a></li>
-          <li class="link"><a href="/customer/customerclick">Your Information</a></li>
-          <li class="link"><a href="/claims">Claims</a></li>
-        </ul>
-        <button class="btn">
-          <a href="/customer/customerlogin">Login</a>
-        </button>
-        <div class="mobile__menu">
-          <i class="ri-menu-line"></i>
-        </div>
-      </nav>
-      <div class="section__container header__container" id="home">
-        <div class="header__content">
-          <h3>KoGae Village Insurance</h3>
-          <p>
-            Professional insurance protection for village homes. Simple, reliable, and designed for Botswana communities.
-          </p>
+<!-- HERO -->
+<section class="lp-hero">
+  <h1>KoGae Village Insurance</h1>
+  <p>Professional insurance protection for village homes. Simple, reliable, and designed for Botswana communities.</p>
+  <div class="lp-hero-btns">
+    <a href="/customer/customerlogin"><button class="lp-btn-white">Log In to Apply</button></a>
+    <a href="/covers"><button class="lp-btn-ghost">View Covers</button></a>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="lp-stats">
+  <div class="lp-stat">
+    <div class="lp-stat-num">2</div>
+    <div class="lp-stat-label">Insurance Products</div>
+  </div>
+  <div class="lp-stat">
+    <div class="lp-stat-num">P500K</div>
+    <div class="lp-stat-label">Motor Cover Limit</div>
+  </div>
+  <div class="lp-stat">
+    <div class="lp-stat-num">24/7</div>
+    <div class="lp-stat-label">Emergency Support</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="lp-section">
+  <div class="lp-inner">
+    <div class="lp-section-label">What we offer</div>
+    <div class="lp-section-title">Built for Village Communities</div>
+    <div class="lp-section-sub">Everything you need to protect your home and vehicle, accessible from any device.</div>
+    <div class="lp-features">
+      <div class="lp-feat">
+        <div class="lp-feat-icon"><i class="fas fa-home"></i></div>
+        <h3>Homeowners Insurance</h3>
+        <p>Covers your main residence, outbuildings and fixtures against fire, lightning, storm and flood damage.</p>
+        <a href="/covers">Learn more</a>
+      </div>
+      <div class="lp-feat">
+        <div class="lp-feat-icon"><i class="fas fa-car"></i></div>
+        <h3>Third Party Motor Insurance</h3>
+        <p>Covers your legal liability for accidental injury or property damage, up to P500,000 per event.</p>
+        <a href="/covers">Learn more</a>
+      </div>
+      <div class="lp-feat">
+        <div class="lp-feat-icon"><i class="fas fa-file-alt"></i></div>
+        <h3>Easy Claims Process</h3>
+        <p>Report claims by phone, WhatsApp or email. Step-by-step guidance and fast turnaround.</p>
+        <a href="/claims">File a claim</a>
+      </div>
+      <div class="lp-feat">
+        <div class="lp-feat-icon"><i class="fas fa-laptop"></i></div>
+        <h3>Full Digital Onboarding</h3>
+        <p>Apply, upload documents and manage your cover entirely online — no office visits needed.</p>
+        <a href="/customer/customerclick">Get started</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="lp-section lp-section-alt">
+  <div class="lp-inner">
+    <div class="lp-section-label">Getting started</div>
+    <div class="lp-section-title">How It Works</div>
+    <div class="lp-section-sub">Four simple steps to get covered.</div>
+    <div class="lp-steps" style="border:1px solid var(--border);">
+      <div class="lp-step">
+        <div class="lp-step-num">01</div>
+        <h4>Register</h4>
+        <p>Create your account on the portal with your name and contact details.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">02</div>
+        <h4>Upload KYC</h4>
+        <p>Submit your KYC form, Omang, proof of residence and income.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">03</div>
+        <h4>Apply for Cover</h4>
+        <p>Fill in the online application form for homeowners or motor insurance.</p>
+      </div>
+      <div class="lp-step" style="border-right:none;">
+        <div class="lp-step-num">04</div>
+        <h4>Get Covered</h4>
+        <p>Once approved your policy is active and you can view it in the portal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERS SUMMARY -->
+<section class="lp-section">
+  <div class="lp-inner">
+    <div class="lp-section-label">Cover details</div>
+    <div class="lp-section-title">What is Covered</div>
+    <div class="lp-section-sub">A summary of what each product covers.</div>
+    <div class="lp-covers">
+      <div class="lp-cover">
+        <div class="lp-cover-head"><i class="fas fa-home" style="margin-right:8px;"></i>Homeowners Insurance</div>
+        <div class="lp-cover-body">
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Main dwelling and outbuildings</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Fixtures and fittings</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Fire and lightning damage</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Storm and flood damage</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Policy wording available on portal</div>
         </div>
       </div>
-    </header>
-
-    <section class="section__container about__container" id="about">
-      <div class="about__content">
-        <h2 class="section__header">Summary of Features</h2>
-        
-        <div class="feature-box">
-          <strong>Village Home Coverage</strong>
-          <p>Insurance designed specifically for village properties. We understand the unique needs of rural homes and communities.</p>
-        </div>
-        
-        <div class="feature-box">
-          <strong>Our Insurance Covers</strong>
-          <p>We offer two main insurance products: <strong>Homeowners Insurance Cover</strong> that protects your main residence, outbuildings, and fixtures against fire, lightning, storm, and flood damages; and <strong>Third Party Vehicle Insurance</strong> that covers your legal liability for accidental injury or property damage with up to P500,000 coverage per event.</p>
-          <a href="/covers">Read more about our covers here →</a>
-        </div>
-        
-        <div class="feature-box">
-          <strong>Claims Process</strong>
-          <p>Filing a claim is simple and fast. You can report claims by phone, WhatsApp, or email. Our team provides step-by-step guidance and 24/7 emergency support. We make the claims process straightforward so you get help when you need it most.</p>
-          <a href="/claims">Learn more about claims or file a claim here →</a>
-        </div>
-        
-        <div class="feature-box">
-          <strong>Other Features</strong>
-          <p>For Cover Applications, Proposal Forms, Claims Forms, and Policy Wordings, please login to our system.</p>
-          <a href="/customer/customerlogin">Login to our system →</a>
-        </div>
-        
-        <div class="feature-box">
-          <strong>Digital Onboarding</strong>
-          <p>Complete your application online from anywhere with our digital onboarding process. No need for office visits - everything can be done from your phone or computer. Through onboarding, you will be able to apply for covers and do everything wherever you are.</p>
-          <a href="/customer/customerclick">Go to Your Information to start onboarding →</a>
+      <div class="lp-cover">
+        <div class="lp-cover-head"><i class="fas fa-car" style="margin-right:8px;"></i>Third Party Motor Insurance</div>
+        <div class="lp-cover-body">
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Third party bodily injury liability</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Third party property damage</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Up to P500,000 cover per event</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Territorial limits apply</div>
+          <div class="lp-cover-row"><i class="fas fa-check"></i>Requires active homeowners policy</div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section class="section__container why__container" id="benefits">
-      <div class="why__content">
-        <h2 class="section__header">Why Choose KoGae</h2>
-        <p>
-          We make insurance simple and accessible for village communities. Get the protection you need without complicated processes.
-        </p>
-        <div class="why__grid">
-          <span><i class="ri-smartphone-line"></i></span>
-          <div>
-            <h4>Easy to Use</h4>
-            <p>Simple online platform that works on any device. Apply and manage your insurance from your phone.</p>
-          </div>
-          <span><i class="ri-shield-check-line"></i></span>
-          <div>
-            <h4>Reliable Coverage</h4>
-            <p>Trusted insurance protection backed by established insurance providers in Botswana.</p>
-          </div>
-          <span><i class="ri-customer-service-2-line"></i></span>
-          <div>
-            <h4>Local Support</h4>
-            <p>Get help in your language. Our team understands village communities and local needs.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+<!-- CONTACT STRIP -->
+<div class="lp-contact">
+  <div class="lp-contact-item">
+    <div class="lp-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+    <div>
+      <div class="lp-contact-label">Address</div>
+      <div class="lp-contact-val">Minet House, Plot 50368<br>Gaborone Business Park, Showgrounds<br>Gaborone, Botswana</div>
+    </div>
+  </div>
+  <div class="lp-contact-item">
+    <div class="lp-contact-icon"><i class="fas fa-envelope"></i></div>
+    <div>
+      <div class="lp-contact-label">Email</div>
+      <div class="lp-contact-val">info@minet.co.bw</div>
+    </div>
+  </div>
+  <div class="lp-contact-item">
+    <div class="lp-contact-icon"><i class="fas fa-phone"></i></div>
+    <div>
+      <div class="lp-contact-label">Phone</div>
+      <div class="lp-contact-val">(+267) 361 7300</div>
+    </div>
+  </div>
+</div>
 
-    <footer class="footer">
-      <div class="section__container footer__container">
-        <div class="footer__col">
-          <h3>Ko<span>Gae</span></h3>
-          <p>
-            Protect your home and peace of mind with our village insurance solutions, designed to safeguard what matters most to you.
-          </p>
-          <p>
-            From unexpected risks to everyday security, trust us to keep your home and loved ones covered every step of the way.
-          </p>
-        </div>
-      
-        <div class="footer__col">
-          <h4>Contact Us</h4>
-          <p>
-            <i class="ri-map-pin-2-fill"></i> Minet House | Plot 50368 | Gaborone Business Park | Showgrounds | Gaborone | Botswana
-          </p>
-          <p><i class="ri-mail-fill"></i> info@minet.co.bw</p>
-          <p><i class="ri-phone-fill"></i> (+267) 361 7300</p>
-        </div>
-      </div>
-      <div class="footer__bar">
-        <div class="footer__bar__content">
-          <p>Copyright © 2025 | Minet X Bryte. All rights reserved. </p>
-          <div class="footer__socials">
-            Minet Botswana Holdings
-            <span><i class="ri-instagram-line"></i></span>
-            <span><i class="ri-facebook-fill"></i></span>
-            <span><i class="ri-heart-fill"></i></span>
-            <span><i class="ri-twitter-fill"></i></span>
-          </div>
-        </div>
-      </div>
-    </footer>
+<!-- FOOTER -->
+<div class="lp-footer">
+  <span>&copy; <script>document.write(new Date().getFullYear())</script> Minet Botswana Holdings &times; Bryte Insurance. All rights reserved.</span>
+  <span>KoGae Village Insurance</span>
+</div>
 
-    <script>
-      // Mobile menu functionality
-      const mobileMenu = document.querySelector('.mobile__menu');
-      const navLinks = document.querySelector('.nav__links');
-      
-      if (mobileMenu) {
-        mobileMenu.addEventListener('click', () => {
-          navLinks.classList.toggle('active');
-          
-          // Change icon based on menu state
-          const icon = mobileMenu.querySelector('i');
-          if (navLinks.classList.contains('active')) {
-            icon.classList.remove('ri-menu-line');
-            icon.classList.add('ri-close-line');
-          } else {
-            icon.classList.remove('ri-close-line');
-            icon.classList.add('ri-menu-line');
-          }
-        });
-      }
-      
-      // Close mobile menu when clicking a nav link
-      const links = document.querySelectorAll('.nav__links li a');
-      links.forEach(link => {
-        link.addEventListener('click', () => {
-          if (navLinks.classList.contains('active')) {
-            navLinks.classList.remove('active');
-            const icon = mobileMenu.querySelector('i');
-            icon.classList.remove('ri-close-line');
-            icon.classList.add('ri-menu-line');
-          }
-        });
-      });
-    </script>
-  </body>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  if (hamburger) {
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  }
+</script>
+</body>
 </html>
