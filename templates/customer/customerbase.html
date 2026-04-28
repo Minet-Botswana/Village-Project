@@ -8,521 +8,147 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <!-- Minet Corporate Design System -->
   <link rel="stylesheet" href="{% static 'styles/minet-ds.css' %}" />
   <title>KoGae Village Scheme | Minet X Bryte</title>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', 'Arial', sans-serif;
-      background-color: #f8f9fa;
-      padding-top: 60px; /* Account for fixed navbar */
-    }
-
-    /* Top Navigation Bar */
-    .top-navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: #ffffff;
-      height: 60px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      border-bottom: 1px solid #e0e0e0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 15px;
-    }
-
-    .logo-section {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo-section img {
-      height: 35px;
-      width: auto;
-    }
-
-    /* Navigation Menu */
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .nav-item {
-      position: relative;
-    }
-
-    .nav-link {
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 6px 12px;
-      border-radius: 4px;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .nav-link:hover {
-      color: #e21a22;
-      background-color: #f8f9fa;
-      text-decoration: none;
-    }
-
-    .nav-link.active {
-      color: #e21a22;
-      background-color: #f8f9fa;
-    }
-
-    /* Dropdown Menu */
-    .dropdown {
-      position: relative;
-    }
-
-    .dropdown-toggle {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-    }
-
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      min-width: 160px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 1001;
-    }
-
-    .dropdown-menu.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .dropdown-item {
-      display: block;
-      padding: 10px 12px;
-      color: #333;
-      text-decoration: none;
-      font-size: 13px;
-      transition: background-color 0.3s ease;
-      white-space: nowrap;
-    }
-
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-      color: #e21a22;
-      text-decoration: none;
-    }
-
-    /* User Section */
-    .user-section {
-      position: relative;
-    }
-
-    .user-dropdown {
-      position: relative;
-    }
-
-    .user-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      background-color: #f8f9fa;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .user-toggle:hover {
-      background-color: #e9ecef;
-    }
-
-    .user-info {
-      text-align: left;
-    }
-
-    .user-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: #333;
-      margin-bottom: 1px;
-    }
-
-    .user-role {
-      font-size: 11px;
-      color: #666;
-    }
-
-    .user-dropdown-menu {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      min-width: 140px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 1001;
-    }
-
-    .user-dropdown-menu.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .logout-btn {
-      width: 100%;
-      background: none;
-      border: none;
-      padding: 10px 12px;
-      text-align: left;
-      color: #333;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .logout-btn:hover {
-      background-color: #f8f9fa;
-      color: #e21a22;
-    }
-
-    /* Mobile Menu */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 24px;
-      color: #333;
-      cursor: pointer;
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .top-navbar {
-        padding: 0 10px;
-      }
-
-      .nav-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        border-top: 1px solid #e0e0e0;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      }
-
-      .nav-menu.show {
-        display: flex;
-      }
-
-      .nav-item {
-        border-bottom: 1px solid #f0f0f0;
-      }
-
-      .nav-link {
-        padding: 12px 15px;
-        border-radius: 0;
-      }
-
-      .dropdown-menu {
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        box-shadow: none;
-        border: none;
-        border-top: 1px solid #f0f0f0;
-        background: #f8f9fa;
-        display: none;
-      }
-
-      .dropdown-menu.show {
-        display: block;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .user-dropdown-menu {
-        right: auto;
-        left: 0;
-      }
-    }
-
-    /* WhatsApp Button Styles */
-    .whatsapp-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #25d366, #128c7e);
-      color: white;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-size: 28px;
-      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-      transition: all 0.3s ease;
-      z-index: 1000;
-    }
-
-    .whatsapp-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-      color: white;
-      text-decoration: none;
-    }
-
-    .whatsapp-tooltip {
-      position: absolute;
-      right: 70px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #333;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 5px;
-      font-size: 14px;
-      white-space: nowrap;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .whatsapp-button:hover .whatsapp-tooltip {
-      opacity: 1;
-      visibility: visible;
-    }
+    body { font-family: var(--mc-font); background: var(--mc-page-bg); padding-top: 56px; }
+    main { min-height: calc(100vh - 56px); background: #f4f4f4; }
   </style>
 </head>
 
 <body>
-  <!-- Top Navigation Bar -->
-  <nav class="top-navbar">
-    <!-- Logo Section -->
-    <div class="logo-section">
+
+  <!-- ── Top Navigation ── -->
+  <nav class="mc-nav">
+
+    <a href="{% url 'customer:customer-dashboard' %}" class="mc-nav-logo">
       <img src="{% static 'image/minetbryte.png' %}" alt="Minet Logo" />
+    </a>
+
+    <div class="mc-nav-menu" id="mcNavMenu">
+
+      <div class="mc-nav-item">
+        <a href="{% url 'customer:customer-dashboard' %}" class="mc-nav-link">Home</a>
+      </div>
+
+      <div class="mc-nav-item">
+        <a href="{% url 'customer:my-applications' %}" class="mc-nav-link">My Applications</a>
+      </div>
+
+      <div class="mc-nav-item mc-nav-dropdown">
+        <div class="mc-nav-link mc-nav-dropdown-toggle">
+          Policy Documents <i class="fas fa-chevron-down" style="font-size:9px;margin-left:3px;"></i>
+        </div>
+        <div class="mc-nav-dropdown-menu">
+          <a href="{% url 'customer:client_forms' %}" class="mc-nav-dropdown-item">KYC Forms</a>
+          <a href="{% url 'customer:policy-wordings' %}" class="mc-nav-dropdown-item">Policy Wordings</a>
+        </div>
+      </div>
+
+      <div class="mc-nav-item mc-nav-dropdown">
+        <div class="mc-nav-link mc-nav-dropdown-toggle">
+          Customer Support <i class="fas fa-chevron-down" style="font-size:9px;margin-left:3px;"></i>
+        </div>
+        <div class="mc-nav-dropdown-menu">
+          <a href="{% url 'customer:ask-question' %}" class="mc-nav-dropdown-item">Make an Inquiry</a>
+          <a href="{% url 'customer:question-history' %}" class="mc-nav-dropdown-item">Inquiries History</a>
+          <a href="{% url 'customer:claims-guidelines' %}" class="mc-nav-dropdown-item">Apply for a Claim</a>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Navigation Menu -->
-    <div class="nav-menu" id="navMenu">
-      <div class="nav-item">
-        <a href="{% url 'customer:customer-dashboard' %}" class="nav-link">
-          Home
-        </a>
-      </div>
-      
-      <div class="nav-item">
-        <a href="{% url 'customer:my-applications' %}" class="nav-link">
-          My Applications
-        </a>
-      </div>
-      
-      <div class="nav-item dropdown">
-        <div class="nav-link dropdown-toggle">
-          Policy Documents
-          <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px;"></i>
-        </div>
-        <div class="dropdown-menu">
-          <a href="{% url 'customer:client_forms' %}" class="dropdown-item">
-            KYC Forms
-          </a>
-          <a href="{% url 'customer:policy-wordings' %}" class="dropdown-item">
-            Policy Wordings
-          </a>
-        </div>
-      </div>
-      
-      <div class="nav-item dropdown">
-        <div class="nav-link dropdown-toggle">
-          Customer Support
-          <i class="fas fa-chevron-down" style="margin-left: 4px; font-size: 10px;"></i>
-        </div>
-        <div class="dropdown-menu">
-          <a href="{% url 'customer:ask-question' %}" class="dropdown-item">
-            Make an Inquiry
-          </a>
-          <a href="{% url 'customer:question-history' %}" class="dropdown-item">
-            Inquiries History
-          </a>
-          <a href="{% url 'customer:claims-guidelines' %}" class="dropdown-item">
-            Apply for a Claim
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" id="mobileMenuBtn">
+    <button class="mc-nav-mobile-btn" id="mcNavMobileBtn">
       <i class="fas fa-bars"></i>
     </button>
 
-    <!-- User Section -->
-    <div class="user-section">
-      <div class="user-dropdown">
-        <div class="user-toggle">
-          <div class="user-info">
-            <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
-            <div class="user-role">Client</div>
-          </div>
-          <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+    <div class="mc-nav-user" id="mcNavUser">
+      <div class="mc-nav-user-toggle" id="mcUserToggle">
+        <div>
+          <div class="mc-nav-user-name">{{ user.first_name }} {{ user.last_name }}</div>
+          <div class="mc-nav-user-role">Client</div>
         </div>
-        <div class="user-dropdown-menu">
-          <form action="{% url 'logout' %}" method="post" style="margin: 0;">
-            {% csrf_token %}
-            <button type="submit" class="logout-btn">
-              Logout
-            </button>
-          </form>
-        </div>
+        <i class="fas fa-chevron-down" style="font-size:9px;color:#666;"></i>
+      </div>
+      <div class="mc-nav-user-menu" id="mcUserMenu">
+        <form action="{% url 'logout' %}" method="post" style="margin:0;">
+          {% csrf_token %}
+          <button type="submit" class="mc-nav-logout">Logout</button>
+        </form>
       </div>
     </div>
+
   </nav>
 
-  <!-- Main Content -->
-  <main style="min-height: calc(100vh - 60px); background: #f4f4f4;">
+  <!-- ── Main Content ── -->
+  <main>
     {% block content %}
     {% endblock content %}
   </main>
 
-  <!-- WhatsApp Button -->
-  <a href="https://wa.me/26778299555?text=Hello." target="_blank" class="whatsapp-button" rel="noopener noreferrer">
-    <div class="whatsapp-tooltip">Chat with a Broker on WhatsApp</div>
+  <!-- ── WhatsApp FAB ── -->
+  <a href="https://wa.me/26778299555?text=Hello." target="_blank" class="mc-whatsapp-btn" rel="noopener noreferrer">
+    <span class="mc-whatsapp-tooltip">Chat with a Broker on WhatsApp</span>
     <i class="fab fa-whatsapp"></i>
   </a>
 
-  <!-- JavaScript -->
   <script>
-    // Mobile menu toggle
-    document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-      const navMenu = document.getElementById('navMenu');
-      navMenu.classList.toggle('show');
-    });
+    document.addEventListener('DOMContentLoaded', function () {
 
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-      const navMenu = document.getElementById('navMenu');
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      
-      if (!navMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
-        navMenu.classList.remove('show');
-      }
-    });
-
-    // Dropdown functionality for better reliability
-    document.addEventListener('DOMContentLoaded', function() {
-      // Handle dropdown clicks
-      const dropdowns = document.querySelectorAll('.dropdown');
-      
-      dropdowns.forEach(dropdown => {
-        const toggle = dropdown.querySelector('.dropdown-toggle');
-        const menu = dropdown.querySelector('.dropdown-menu');
-        
-        // Click event for dropdown toggle
-        toggle.addEventListener('click', function(e) {
-          e.preventDefault();
+      // ── Mobile menu ──
+      const mobileBtn = document.getElementById('mcNavMobileBtn');
+      const navMenu   = document.getElementById('mcNavMenu');
+      if (mobileBtn) {
+        mobileBtn.addEventListener('click', function (e) {
           e.stopPropagation();
-          
-          // Close other dropdowns
-          dropdowns.forEach(otherDropdown => {
-            if (otherDropdown !== dropdown) {
-              otherDropdown.querySelector('.dropdown-menu').classList.remove('show');
-            }
+          navMenu.classList.toggle('show');
+        });
+      }
+
+      // ── Dropdowns ──
+      document.querySelectorAll('.mc-nav-dropdown').forEach(function (dropdown) {
+        const toggle = dropdown.querySelector('.mc-nav-dropdown-toggle');
+        const menu   = dropdown.querySelector('.mc-nav-dropdown-menu');
+        if (toggle && menu) {
+          toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            document.querySelectorAll('.mc-nav-dropdown-menu').forEach(function (m) {
+              if (m !== menu) m.classList.remove('show');
+            });
+            var userMenu = document.getElementById('mcUserMenu');
+            if (userMenu) userMenu.classList.remove('show');
+            menu.classList.toggle('show');
           });
-          
-          // Close user dropdown if open
-          const userMenu = document.querySelector('.user-dropdown-menu');
-          userMenu.classList.remove('show');
-          
-          // Toggle current dropdown
-          menu.classList.toggle('show');
-        });
-      });
-      
-      // Handle user dropdown
-      const userDropdown = document.querySelector('.user-dropdown');
-      const userToggle = userDropdown.querySelector('.user-toggle');
-      const userMenu = userDropdown.querySelector('.user-dropdown-menu');
-      
-      userToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Close other dropdowns
-        dropdowns.forEach(dropdown => {
-          dropdown.querySelector('.dropdown-menu').classList.remove('show');
-        });
-        
-        // Toggle user dropdown
-        userMenu.classList.toggle('show');
-      });
-      
-      // Close dropdowns when clicking outside
-      document.addEventListener('click', function(event) {
-        const allDropdowns = document.querySelectorAll('.dropdown');
-        allDropdowns.forEach(dropdown => {
-          const menu = dropdown.querySelector('.dropdown-menu');
-          if (!dropdown.contains(event.target)) {
-            menu.classList.remove('show');
-          }
-        });
-        
-        // Close user dropdown
-        if (!userDropdown.contains(event.target)) {
-          userMenu.classList.remove('show');
         }
       });
 
-      // Set active nav link based on current page
-      const currentPath = window.location.pathname;
-      const navLinks = document.querySelectorAll('.nav-link');
-      
-      navLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-          link.classList.add('active');
-        }
+      // ── User dropdown ──
+      var userToggle = document.getElementById('mcUserToggle');
+      var userMenu   = document.getElementById('mcUserMenu');
+      if (userToggle && userMenu) {
+        userToggle.addEventListener('click', function (e) {
+          e.stopPropagation();
+          document.querySelectorAll('.mc-nav-dropdown-menu').forEach(function (m) { m.classList.remove('show'); });
+          userMenu.classList.toggle('show');
+        });
+      }
+
+      // ── Close everything on outside click ──
+      document.addEventListener('click', function () {
+        document.querySelectorAll('.mc-nav-dropdown-menu').forEach(function (m) { m.classList.remove('show'); });
+        if (userMenu) userMenu.classList.remove('show');
+        if (navMenu)  navMenu.classList.remove('show');
       });
+
+      // ── Active link highlight ──
+      var currentPath = window.location.pathname;
+      document.querySelectorAll('.mc-nav-link[href]').forEach(function (link) {
+        if (link.getAttribute('href') === currentPath) link.classList.add('active');
+      });
+
     });
   </script>
+
 </body>
 </html>

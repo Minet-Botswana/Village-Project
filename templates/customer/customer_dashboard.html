@@ -2,267 +2,84 @@
 {% load widget_tweaks %}
 {% block content %}
 
+{# Page-specific layout only — all component styles come from minet-ds.css #}
 <style>
-  * { box-sizing: border-box; }
-
-  .db-wrap {
-    width: 100%;
-    padding: 20px 20px;
-    font-family: Arial, sans-serif;
-    background: #f0f2f5;
-    min-height: calc(100vh - 60px);
-  }
-
-  /* ── Page header bar ── */
-  .db-header {
-    background: #c0111a;
-    color: #fff;
-    padding: 14px 18px;
-    margin-bottom: 16px;
-    border-left: 6px solid #8b0000;
-  }
-  .db-header h1 { font-size: 17px; font-weight: 700; margin: 0 0 2px; letter-spacing: 0.2px; }
-  .db-header p  { font-size: 13px; margin: 0; opacity: 0.85; }
-
-  /* ── Welcome strip ── */
-  .db-welcome {
-    background: #fff;
-    border: 1px solid #d5d5d5;
-    border-left: 4px solid #c0111a;
-    padding: 10px 14px;
-    margin-bottom: 16px;
-  }
-  .db-welcome strong { font-size: 15px; color: #111; display: block; }
-  .db-welcome span   { font-size: 12px; color: #666; }
-
-  /* ── Two-column layout ── */
   .db-body {
     display: grid;
     grid-template-columns: 1fr 280px;
     gap: 16px;
     align-items: start;
   }
-
-  /* ── Section label ── */
-  .db-section-label {
-    background: #2c2c2c;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    padding: 6px 12px;
-    margin-bottom: 0;
-  }
-
-  /* ── Action buttons ── */
-  .db-action-list { list-style: none; padding: 0; margin: 0 0 16px; }
-  .db-action-list li { border-bottom: 1px solid #e0e0e0; }
-  .db-action-list li:last-child { border-bottom: none; }
-
-  .db-action-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 14px;
-    background: #fff;
-    text-decoration: none;
-    color: #111;
-    font-size: 14px;
-    font-weight: 500;
-    border: none;
-    transition: background 0.1s;
-  }
-  .db-action-link:hover {
-    background: #fef0f0;
-    color: #c0111a;
-    text-decoration: none;
-  }
-  .db-action-link .icon {
-    width: 30px;
-    height: 30px;
-    background: #c0111a;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    flex-shrink: 0;
-  }
-  .db-action-link.disabled {
-    color: #aaa;
-    background: #fafafa;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  .db-action-link.disabled .icon { background: #ccc; }
-  .db-action-link .note {
-    font-size: 11px;
-    color: #999;
-    display: block;
-    margin-top: 1px;
-    font-weight: 400;
-  }
-
-  /* ── Right column: stats + KYC ── */
   .db-right { display: flex; flex-direction: column; gap: 16px; }
-
-  /* Stats */
-  .db-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border: 1px solid #d5d5d5;
-    background: #fff;
-  }
-  .db-stat {
-    padding: 14px 12px;
-    text-align: center;
-    border-right: 1px solid #e5e5e5;
-  }
-  .db-stat:last-child { border-right: none; }
-  .db-stat-num   { font-size: 28px; font-weight: 700; color: #c0111a; line-height: 1; }
-  .db-stat-label { font-size: 11px; color: #777; margin-top: 4px; }
-
-  /* KYC card */
-  .db-kyc {
-    background: #fff;
-    border: 1px solid #d5d5d5;
-    border-top: 3px solid #c0111a;
-  }
-  .db-kyc.compliant    { border-top-color: #28a745; }
-  .db-kyc.pending      { border-top-color: #e6a800; }
-  .db-kyc.non-compliant{ border-top-color: #dc3545; }
-  .db-kyc.renewal      { border-top-color: #fd7e14; }
-
-  .db-kyc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    border-bottom: 1px solid #efefef;
-  }
-  .db-kyc-title { font-size: 12px; font-weight: 700; color: #333; text-transform: uppercase; letter-spacing: 0.4px; }
-
-  .kyc-badge {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    letter-spacing: 0.4px;
-  }
-  .kyc-badge.compliant    { background: #28a745; color: #fff; }
-  .kyc-badge.pending      { background: #e6a800; color: #fff; }
-  .kyc-badge.non-compliant{ background: #dc3545; color: #fff; }
-  .kyc-badge.renewal      { background: #fd7e14; color: #fff; }
-
-  .db-kyc-body { padding: 10px 12px; }
-
-  .db-kyc-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px solid #f5f5f5;
-    font-size: 13px;
-  }
-  .db-kyc-row:last-child { border-bottom: none; }
-  .db-kyc-row span:first-child { color: #777; }
-  .db-kyc-row span:last-child  { font-weight: 600; color: #111; }
-
-  .db-kyc-alert {
-    margin: 8px 0;
-    padding: 7px 10px;
-    background: #fff8f0;
-    border-left: 3px solid #fd7e14;
-    font-size: 12px;
-    color: #555;
-    line-height: 1.4;
-  }
-
-  .db-kyc-action {
-    display: block;
-    margin: 10px 12px 10px;
-    padding: 9px 12px;
-    background: #c0111a;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-  }
-  .db-kyc-action:hover { background: #9b0d14; color: #fff; text-decoration: none; }
-
-  /* ── Mobile ── */
   @media (max-width: 700px) {
     .db-body { grid-template-columns: 1fr; }
-    .db-wrap { padding: 12px; }
   }
 </style>
 
-<div class="db-wrap">
+<div class="mc-wrap">
 
-  <!-- Header -->
-  <div class="db-header">
+  <!-- Page header -->
+  <div class="mc-page-header">
     <h1>KoGae Village Insurance</h1>
     <p>Member portal &mdash; manage your cover and applications</p>
   </div>
 
-  <!-- Welcome -->
-  <div class="db-welcome">
+  <!-- Welcome strip -->
+  <div class="mc-welcome">
     <strong>Welcome, {{ user.first_name }} {{ user.last_name }}</strong>
     <span>Use the menu below to apply for cover, view your applications or get support.</span>
   </div>
 
   <div class="db-body">
 
-    <!-- Left: actions -->
-    <div class="db-left">
-      <div class="db-section-label">Quick Actions</div>
-      <ul class="db-action-list">
+    <!-- Left: quick actions -->
+    <div>
+      <div class="mc-section-label">Quick Actions</div>
+      <ul class="mc-action-list">
 
         <li>
-          <a href="{% url 'customer:apply-policy' %}" class="db-action-link">
-            <span class="icon"><i class="fas fa-home"></i></span>
+          <a href="{% url 'customer:apply-policy' %}" class="mc-action-link">
+            <span class="mc-icon"><i class="fas fa-home"></i></span>
             <span>Apply for Homeowners Insurance</span>
           </a>
         </li>
 
         {% if has_approved_homeowners %}
         <li>
-          <a href="{% url 'customer:apply-thirdparty' %}" class="db-action-link">
-            <span class="icon"><i class="fas fa-car"></i></span>
+          <a href="{% url 'customer:apply-thirdparty' %}" class="mc-action-link">
+            <span class="mc-icon"><i class="fas fa-car"></i></span>
             <span>Apply for Motor Insurance Add-on</span>
           </a>
         </li>
         {% else %}
         <li>
-          <div class="db-action-link disabled">
-            <span class="icon"><i class="fas fa-car"></i></span>
+          <div class="mc-action-link mc-disabled">
+            <span class="mc-icon"><i class="fas fa-car"></i></span>
             <span>
               Motor Insurance Add-on
-              <span class="note">Requires approved homeowners cover first</span>
+              <span class="mc-note">Requires approved homeowners cover first</span>
             </span>
           </div>
         </li>
         {% endif %}
 
         <li>
-          <a href="{% url 'customer:my-applications' %}" class="db-action-link">
-            <span class="icon"><i class="fas fa-list"></i></span>
+          <a href="{% url 'customer:my-applications' %}" class="mc-action-link">
+            <span class="mc-icon"><i class="fas fa-list"></i></span>
             <span>View My Applications</span>
           </a>
         </li>
 
         <li>
-          <a href="{% url 'customer:profile-update' %}" class="db-action-link">
-            <span class="icon"><i class="fas fa-user-edit"></i></span>
+          <a href="{% url 'customer:profile-update' %}" class="mc-action-link">
+            <span class="mc-icon"><i class="fas fa-user-edit"></i></span>
             <span>Update My Profile</span>
           </a>
         </li>
 
         <li>
-          <a href="{% url 'customer:ask-question' %}" class="db-action-link">
-            <span class="icon"><i class="fas fa-question-circle"></i></span>
+          <a href="{% url 'customer:ask-question' %}" class="mc-action-link">
+            <span class="mc-icon"><i class="fas fa-question-circle"></i></span>
             <span>Ask a Question</span>
           </a>
         </li>
@@ -275,57 +92,66 @@
 
       <!-- Stats -->
       <div>
-        <div class="db-section-label">My Account</div>
-        <div class="db-stats">
-          <div class="db-stat">
-            <div class="db-stat-num">{{ total_applications }}</div>
-            <div class="db-stat-label">Applications</div>
+        <div class="mc-section-label">My Account</div>
+        <div class="mc-stats">
+          <div class="mc-stat">
+            <div class="mc-stat-num">{{ total_applications }}</div>
+            <div class="mc-stat-label">Applications</div>
           </div>
-          <div class="db-stat">
-            <div class="db-stat-num">{{ total_question }}</div>
-            <div class="db-stat-label">Questions</div>
+          <div class="mc-stat">
+            <div class="mc-stat-num">{{ total_question }}</div>
+            <div class="mc-stat-label">Questions</div>
           </div>
         </div>
       </div>
 
-      <!-- KYC -->
-      <div class="db-kyc {% if kyc_status == 'Compliant' %}compliant{% elif kyc_status == 'Pending' %}pending{% elif kyc_status == 'Non-Compliant' %}non-compliant{% else %}renewal{% endif %}">
-        <div class="db-kyc-header">
-          <span class="db-kyc-title">KYC Status</span>
-          <span class="kyc-badge {% if kyc_status == 'Compliant' %}compliant{% elif kyc_status == 'Pending' %}pending{% elif kyc_status == 'Non-Compliant' %}non-compliant{% else %}renewal{% endif %}">
+      <!-- KYC card -->
+      <div class="mc-card
+        {% if kyc_status == 'Compliant' %}mc-card-top-green
+        {% elif kyc_status == 'Pending' %}mc-card-top-yellow
+        {% elif kyc_status == 'Non-Compliant' %}mc-card-top-danger
+        {% else %}mc-card-top-orange{% endif %}">
+
+        <div class="mc-card-header">
+          <span class="mc-card-title">KYC Status</span>
+          <span class="mc-badge
+            {% if kyc_status == 'Compliant' %}mc-badge-success
+            {% elif kyc_status == 'Pending' %}mc-badge-warning
+            {% elif kyc_status == 'Non-Compliant' %}mc-badge-danger
+            {% else %}mc-badge-orange{% endif %}">
             {{ kyc_status }}
           </span>
         </div>
 
-        <div class="db-kyc-body">
+        <div class="mc-card-body">
           {% if kyc_alert_message %}
-          <div class="db-kyc-alert">{{ kyc_alert_message }}</div>
+          <div class="mc-alert mc-alert-warning mc-mb-1">{{ kyc_alert_message }}</div>
           {% endif %}
 
           {% if customer.kyc_approval_date %}
-          <div class="db-kyc-row">
-            <span>Approval Date</span>
-            <span>{{ customer.kyc_approval_date|date:"d M Y" }}</span>
+          <div class="mc-kv-row">
+            <span class="mc-kv-key">Approval Date</span>
+            <span class="mc-kv-val">{{ customer.kyc_approval_date|date:"d M Y" }}</span>
           </div>
           {% endif %}
 
           {% if customer.kyc_expiry_date %}
-          <div class="db-kyc-row">
-            <span>Expiry Date</span>
-            <span>{{ customer.kyc_expiry_date|date:"d M Y" }}</span>
+          <div class="mc-kv-row">
+            <span class="mc-kv-key">Expiry Date</span>
+            <span class="mc-kv-val">{{ customer.kyc_expiry_date|date:"d M Y" }}</span>
           </div>
           {% endif %}
 
           {% if customer.days_until_kyc_expiry is not None and kyc_status == 'Compliant' %}
-          <div class="db-kyc-row">
-            <span>Days to Renewal</span>
-            <span>{% if customer.days_until_kyc_expiry < 0 %}Expired{% else %}{{ customer.days_until_kyc_expiry }}{% endif %}</span>
+          <div class="mc-kv-row">
+            <span class="mc-kv-key">Days to Renewal</span>
+            <span class="mc-kv-val">{% if customer.days_until_kyc_expiry < 0 %}Expired{% else %}{{ customer.days_until_kyc_expiry }}{% endif %}</span>
           </div>
           {% endif %}
         </div>
 
         {% if kyc_needs_attention %}
-        <a href="{% url 'customer:upload_kyc_form' %}" class="db-kyc-action">
+        <a href="{% url 'customer:upload_kyc_form' %}" class="mc-btn mc-btn-primary mc-btn-full" style="padding: 10px 12px;">
           Upload / Update KYC Documents
         </a>
         {% endif %}

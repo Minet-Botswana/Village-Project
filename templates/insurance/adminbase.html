@@ -12,265 +12,66 @@
     <link rel="stylesheet" href="{% static 'styles/minet-ds.css' %}">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Titillium Web', sans-serif;
-            background-color: #f8f9fa;
-            color: #000000;
-            line-height: 1.6;
-        }
-
-        /* Top Navigation Bar */
-        .admin-navbar {
-            background-color: #e21a22;
-            color: white;
-            padding: 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            height: 60px;
-        }
-
-        .admin-logo {
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
-        }
-
-        .admin-nav-links {
-            display: flex;
-            list-style: none;
-            gap: 0;
-            margin: 0;
-            height: 100%;
-        }
-
-        .nav-item {
-            height: 100%;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            height: 100%;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            border-right: 1px solid rgba(255,255,255,0.2);
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(0,0,0,0.1);
-            text-decoration: none;
-            color: white;
-        }
-
-        .nav-link i {
-            margin-right: 8px;
-            font-size: 16px;
-        }
-
-        .admin-user {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info {
-            font-size: 14px;
-        }
-
-        .logout-btn {
-            background: none;
-            border: 1px solid white;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .logout-btn:hover {
-            background-color: white;
-            color: #e21a22;
-            text-decoration: none;
-        }
-
-        /* Main Content Container */
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        /* Mobile Responsive Styles */
-        @media (max-width: 768px) {
-            .nav-container {
-                padding: 0 15px;
-                height: auto;
-                flex-wrap: wrap;
-            }
-
-            .admin-logo {
-                font-size: 18px;
-                padding: 15px 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .admin-nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                order: 3;
-                gap: 0;
-                border-top: 1px solid rgba(255,255,255,0.2);
-            }
-
-            .admin-nav-links.show {
-                display: flex;
-            }
-
-            .nav-item {
-                width: 100%;
-                height: auto;
-            }
-
-            .nav-link {
-                padding: 12px 15px;
-                border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                height: auto;
-            }
-
-            .admin-user {
-                padding: 15px 0;
-                order: 2;
-            }
-
-            .user-info {
-                display: none;
-            }
-
-            .logout-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .admin-container {
-                padding: 20px 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .admin-logo {
-                font-size: 16px;
-            }
-
-            .nav-link {
-                font-size: 13px;
-            }
-
-            .nav-link i {
-                font-size: 14px;
-            }
-
-            .admin-container {
-                padding: 15px 10px;
-            }
-        }
-
+        body { font-family: var(--mc-font); background: var(--mc-page-bg); color: #111; line-height: 1.6; }
         {% block extra_css %}{% endblock %}
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <nav class="admin-navbar">
-        <div class="nav-container">
-            <a href="{% url 'admin-dashboard' %}" class="admin-logo">
+    <!-- ── Top Navigation ── -->
+    <nav class="mc-admin-nav">
+        <div class="mc-admin-nav-inner">
+
+            <a href="{% url 'admin-dashboard' %}" class="mc-admin-nav-logo">
                 <i class="ri-shield-user-line"></i> Minet Admin
             </a>
-            
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
+
+            <button class="mc-admin-nav-mobile-btn" id="mobileMenuBtn">
                 <i class="ri-menu-line"></i>
             </button>
 
-            <ul class="admin-nav-links" id="adminNavLinks">
-                <li class="nav-item">
-                    <a href="{% url 'admin-view-customer' %}" class="nav-link">
+            <ul class="mc-admin-nav-links" id="adminNavLinks">
+                <li class="mc-admin-nav-item">
+                    <a href="{% url 'admin-view-customer' %}" class="mc-admin-nav-link">
                         <i class="ri-user-line"></i> Customers
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin-view-policy-holder' %}" class="nav-link">
+                <li class="mc-admin-nav-item">
+                    <a href="{% url 'admin-view-policy-holder' %}" class="mc-admin-nav-link">
                         <i class="ri-file-list-3-line"></i> Applications
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin-kyc-dashboard' %}" class="nav-link">
+                <li class="mc-admin-nav-item">
+                    <a href="{% url 'admin-kyc-dashboard' %}" class="mc-admin-nav-link">
                         <i class="ri-shield-check-line"></i> KYC Compliance
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin-policy-wordings' %}" class="nav-link">
+                <li class="mc-admin-nav-item">
+                    <a href="{% url 'admin-policy-wordings' %}" class="mc-admin-nav-link">
                         <i class="ri-file-text-line"></i> Policy Wordings
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'admin-question' %}" class="nav-link">
+                <li class="mc-admin-nav-item">
+                    <a href="{% url 'admin-question' %}" class="mc-admin-nav-link">
                         <i class="ri-question-answer-line"></i> Support
                     </a>
                 </li>
             </ul>
 
-            <div class="admin-user">
-                <span class="user-info">Welcome, {{ user.first_name|default:user.username }}</span>
+            <div class="mc-admin-nav-user">
+                <span class="mc-admin-nav-greeting">Welcome, {{ user.first_name|default:user.username }}</span>
                 <form action="{% url 'logout' %}" method="post" style="margin:0;">
                     {% csrf_token %}
-                    <button type="submit" class="logout-btn" style="background:none;border:none;cursor:pointer;padding:0;">
+                    <button type="submit" class="mc-admin-logout">
                         <i class="ri-logout-box-line"></i> Logout
                     </button>
                 </form>
             </div>
+
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="admin-container">
+    <!-- ── Main Content ── -->
+    <div class="mc-admin-body">
         {% block content %}
         {% endblock %}
     </div>

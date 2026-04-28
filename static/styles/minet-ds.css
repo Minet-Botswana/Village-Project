@@ -474,3 +474,401 @@
 @media (max-width: 700px) {
   .mc-wrap { padding: 12px; }
 }
+
+
+/* ── 17. CUSTOMER NAVIGATION BAR ────────────────────────── */
+
+.mc-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: #fff;
+  height: 56px;
+  border-bottom: 3px solid var(--mc-red);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-family: var(--mc-font);
+}
+
+/* Logo */
+.mc-nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.mc-nav-logo img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+/* Nav menu */
+.mc-nav-menu {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.mc-nav-item {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.mc-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  padding: 0 14px;
+  color: #222;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px; /* aligns with nav border-bottom */
+  cursor: pointer;
+  font-family: var(--mc-font);
+}
+
+.mc-nav-link:hover,
+.mc-nav-link.active {
+  color: var(--mc-red);
+  border-bottom-color: var(--mc-red);
+  text-decoration: none;
+}
+
+/* Dropdown */
+.mc-nav-dropdown {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.mc-nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-top: 2px solid var(--mc-red);
+  min-width: 180px;
+  z-index: 1001;
+  display: none;
+}
+
+.mc-nav-dropdown-menu.show { display: block; }
+
+.mc-nav-dropdown-item {
+  display: block;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #222;
+  text-decoration: none;
+  border-bottom: 1px solid #f5f5f5;
+  font-family: var(--mc-font);
+  white-space: nowrap;
+}
+
+.mc-nav-dropdown-item:last-child { border-bottom: none; }
+
+.mc-nav-dropdown-item:hover {
+  background: var(--mc-red-light);
+  color: var(--mc-red);
+  text-decoration: none;
+}
+
+/* User section */
+.mc-nav-user { position: relative; flex-shrink: 0; }
+
+.mc-nav-user-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #f5f5f5;
+  border: 1px solid var(--mc-border);
+  cursor: pointer;
+  font-family: var(--mc-font);
+}
+
+.mc-nav-user-name { font-size: 12px; font-weight: 600; color: #111; }
+.mc-nav-user-role { font-size: 10px; color: #777; }
+
+.mc-nav-user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--mc-border);
+  border-top: 2px solid var(--mc-red);
+  min-width: 140px;
+  z-index: 1001;
+  display: none;
+}
+
+.mc-nav-user-menu.show { display: block; }
+
+.mc-nav-logout {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 13px;
+  color: #222;
+  cursor: pointer;
+  font-family: var(--mc-font);
+}
+
+.mc-nav-logout:hover { background: var(--mc-red-light); color: var(--mc-red); }
+
+/* Mobile hamburger */
+.mc-nav-mobile-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #333;
+  cursor: pointer;
+  padding: 4px;
+}
+
+@media (max-width: 768px) {
+  .mc-nav-menu {
+    display: none;
+    position: absolute;
+    top: 56px; left: 0; right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    border-top: 1px solid var(--mc-divider);
+    border-bottom: 3px solid var(--mc-red);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    z-index: 999;
+  }
+
+  .mc-nav-menu.show { display: flex; }
+
+  .mc-nav-item {
+    height: auto;
+    border-bottom: 1px solid var(--mc-divider);
+  }
+
+  .mc-nav-link {
+    height: auto;
+    padding: 12px 16px;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .mc-nav-dropdown-menu {
+    position: static;
+    border-top: none;
+    border-left: 3px solid var(--mc-red);
+    margin-left: 16px;
+  }
+
+  .mc-nav-mobile-btn { display: block; }
+}
+
+
+/* ── 18. ADMIN NAVIGATION BAR ────────────────────────────── */
+
+.mc-admin-nav {
+  background: var(--mc-red);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid var(--mc-red-dark);
+}
+
+.mc-admin-nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 20px;
+}
+
+.mc-admin-nav-logo {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  font-family: var(--mc-font);
+  flex-shrink: 0;
+}
+
+.mc-admin-nav-logo:hover { color: #fff; text-decoration: none; }
+
+.mc-admin-nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.mc-admin-nav-item { height: 100%; }
+
+.mc-admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0 16px;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  font-family: var(--mc-font);
+  white-space: nowrap;
+}
+
+.mc-admin-nav-link:hover { background: rgba(0,0,0,0.15); color: #fff; text-decoration: none; }
+
+.mc-admin-nav-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.mc-admin-nav-greeting {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+  font-family: var(--mc-font);
+}
+
+.mc-admin-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.6);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--mc-font);
+  text-decoration: none;
+  letter-spacing: 0.2px;
+}
+
+.mc-admin-logout:hover { background: #fff; color: var(--mc-red); text-decoration: none; }
+
+.mc-admin-nav-mobile-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Admin main content wrapper */
+.mc-admin-body {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+@media (max-width: 768px) {
+  .mc-admin-nav-inner {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 10px 15px;
+  }
+
+  .mc-admin-nav-logo { padding: 6px 0; }
+
+  .mc-admin-nav-mobile-btn { display: block; }
+
+  .mc-admin-nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    order: 3;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    height: auto;
+  }
+
+  .mc-admin-nav-links.show { display: flex; }
+
+  .mc-admin-nav-item { width: 100%; height: auto; }
+
+  .mc-admin-nav-link {
+    padding: 12px 15px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    height: auto;
+  }
+
+  .mc-admin-nav-user { order: 2; padding: 6px 0; }
+
+  .mc-admin-nav-greeting { display: none; }
+
+  .mc-admin-body { padding: 16px 12px; }
+}
+
+
+/* ── 19. WHATSAPP FLOATING BUTTON ────────────────────────── */
+
+.mc-whatsapp-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 26px;
+  box-shadow: 0 4px 12px rgba(37,211,102,0.35);
+  z-index: 1000;
+}
+
+.mc-whatsapp-btn:hover { color: white; text-decoration: none; opacity: 0.9; }
+
+.mc-whatsapp-tooltip {
+  position: absolute;
+  right: 64px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #333;
+  color: white;
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  font-family: var(--mc-font);
+}
+
+.mc-whatsapp-btn:hover .mc-whatsapp-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
