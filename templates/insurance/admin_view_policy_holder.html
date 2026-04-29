@@ -1,640 +1,564 @@
-{% extends "insurance/adminbase.html" %}
+﻿{% extends "insurance/adminbase.html" %}
 
 {% block title %}Policy Applications - Minet Insurance{% endblock %}
 
 {% block extra_css %}
-/* Policy Applications Specific Styles */
-.page-header {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+.apps-shell {
+    display: grid;
+    gap: 20px;
+}
+
+/* Hero */
+.apps-hero {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    border-left: 6px solid var(--mc-red);
+    padding: 26px 28px;
+}
+
+.apps-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mc-red);
+    margin-bottom: 10px;
 }
 
 .page-title {
-    color: #000000;
-    font-size: 26px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
     margin-bottom: 8px;
 }
 
 .page-subtitle {
     color: #666;
-    font-size: 16px;
-}
-
-.applications-container {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.applications-table {
-    width: 100%;
-    border-collapse: collapse;
     font-size: 14px;
 }
 
-.applications-table th {
-    background-color: #f8f9fa;
-    color: #000000;
-    font-weight: 600;
-    padding: 15px 12px;
-    text-align: left;
-    border-bottom: 1px solid #e1e5e9;
+/* Stats grid */
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
+
+.stat-cell {
+    padding: 16px 18px;
+    border-right: 1px solid var(--mc-divider);
+}
+
+.stat-cell:last-child { border-right: none; }
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--mc-red);
+    line-height: 1;
+}
+
+.stat-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 6px;
+}
+
+/* Policy type stats */
+.policy-type-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.policy-type-card {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    padding: 20px;
+}
+
+.policy-type-heading {
     font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 12px;
 }
 
-.applications-table td {
-    padding: 12px;
-    border-bottom: 1px solid #f1f3f4;
-    color: #000000;
-    vertical-align: top;
-}
-
-.applications-table tr:hover {
-    background-color: #f8f9fa;
-}
-
-.applications-table tr:last-child td {
-    border-bottom: none;
-}
-
-.customer-info {
-    color: #000000;
-    font-weight: 600;
-    margin-bottom: 2px;
-}
-
-.customer-details {
-    color: #666;
+.policy-type-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
     font-size: 12px;
 }
 
-.policy-info {
-    color: #000000;
-    font-weight: 500;
-    margin-bottom: 2px;
+.breakdown-item {
+    text-align: center;
 }
 
-.policy-details {
-    color: #666;
-    font-size: 12px;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
+.breakdown-label {
+    color: #777;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.status-pending {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.status-approved {
-    background-color: #d1f2eb;
-    color: #00875a;
-}
-
-.status-rejected {
-    background-color: #ffe6e6;
-    color: #cc0000;
-}
-
-.policy-type-indicator {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 10px;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
     font-size: 10px;
-    font-weight: bold;
-    margin-right: 5px;
 }
 
-.policy-type-homeowners {
-    background-color: #e3f2fd;
-    color: #1976d2;
+.breakdown-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
 }
 
-.policy-type-motor {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
-}
-
-.policy-relationship-warning {
-    background-color: #fff3cd;
-    color: #856404;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    margin-top: 4px;
-    display: inline-block;
-}
-
-.policy-relationship-success {
-    background-color: #d1f2eb;
-    color: #00875a;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    margin-top: 4px;
-    display: inline-block;
-}
-
-.action-buttons {
+/* Nav tabs */
+.apps-tabs {
     display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    overflow: hidden;
 }
 
-.btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
+.apps-tab {
+    flex: 1;
+    padding: 13px 14px;
+    text-align: center;
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
     text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    color: #555;
+    border-right: 1px solid var(--mc-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+.apps-tab:last-child { border-right: none; }
+.apps-tab:hover { background: #f5f5f5; color: #111; text-decoration: none; }
+.apps-tab.active { background: #111; color: #fff; }
+
+.tab-count {
+    background: rgba(255,255,255,0.2);
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.apps-tab:not(.active) .tab-count {
+    background: #e8e8e8;
+    color: #555;
+}
+
+/* Table workspace */
+.apps-workspace {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    overflow: hidden;
+}
+
+.table-head {
+    display: grid;
+    grid-template-columns: 1.8fr 1.6fr 1.6fr 1fr 0.8fr 0.8fr 1.2fr;
+    background: #111;
+    color: #fff;
+}
+
+.th-cell {
+    padding: 12px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.th-cell:last-child { border-right: none; }
+
+.apps-list { display: grid; }
+
+.apps-row {
+    display: grid;
+    grid-template-columns: 1.8fr 1.6fr 1.6fr 1fr 0.8fr 0.8fr 1.2fr;
+    border-bottom: 1px solid var(--mc-divider);
+}
+
+.apps-row:last-child { border-bottom: none; }
+.apps-row:hover { background: #fafbfc; }
+
+.td-cell {
+    padding: 14px;
+    font-size: 13px;
+    color: #111;
+    vertical-align: top;
+    min-width: 0;
+}
+
+.td-primary { font-weight: 700; margin-bottom: 3px; }
+.td-secondary { font-size: 11px; color: #666; }
+
+/* Policy entries */
+.policy-entry {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--mc-divider);
+}
+
+.policy-entry:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Status badges */
+.s-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.s-badge.pending  { background: #fef9ec; color: #92400e; }
+.s-badge.approved { background: #edf7ee; color: #167c3a; }
+.s-badge.rejected { background: #fef2f2; color: #991b1b; }
+
+/* Warning text */
+.warning-text {
+    font-size: 11px;
+    color: #dc3545;
+    margin-top: 4px;
+}
+
+.success-text {
+    font-size: 11px;
+    color: #28a745;
+    margin-top: 4px;
+}
+
+/* None italic */
+.none-text {
+    font-size: 12px;
+    color: #bbb;
+    font-style: italic;
+}
+
+/* Action links */
+.action-group { display: flex; flex-direction: column; gap: 8px; }
+
+.action-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
     display: inline-flex;
     align-items: center;
     gap: 4px;
 }
 
-.btn-approve {
-    background-color: #28a745;
-    color: white;
-}
+.action-link:hover { color: #084298; }
+.action-link.approve { color: #167c3a; }
+.action-link.approve:hover { color: #0d5227; }
+.action-link.reject  { color: #991b1b; }
+.action-link.reject:hover  { color: #6b1212; }
 
-.btn-approve:hover {
-    background-color: #218838;
-    color: white;
-    text-decoration: none;
-}
-
-.btn-reject {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-reject:hover {
-    background-color: #c82333;
-    color: white;
-    text-decoration: none;
-}
-
-.btn-view {
-    background-color: #e21a22;
-    color: white;
-}
-
-.btn-view:hover {
-    background-color: #c41f17;
-    color: white;
-    text-decoration: none;
-}
-
-.filter-tabs {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.tab-list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.tab-item {
-    flex: 1;
-}
-
-.tab-link {
-    display: block;
-    padding: 15px 20px;
-    background: #f8f9fa;
-    color: #666;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-    border-right: 1px solid #e1e5e9;
-    transition: all 0.3s ease;
-}
-
-.tab-link:last-child {
-    border-right: none;
-}
-
-.tab-link.active,
-.tab-link:hover {
-    background: #e21a22;
-    color: white;
-    text-decoration: none;
-}
-
-.tab-badge {
-    background: rgba(255,255,255,0.2);
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 10px;
-    margin-left: 6px;
-}
-
-.stats-overview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.stat-card {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.stat-number {
-    font-size: 28px;
-    font-weight: 700;
-    color: #e21a22;
-    margin-bottom: 8px;
-}
-
-.stat-label {
-    color: #000000;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 4px;
-}
-
-.stat-description {
-    color: #666;
-    font-size: 12px;
-}
-
-.search-controls {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
-.search-input {
-    width: 100%;
-    max-width: 400px;
-    padding: 8px 12px;
-    border: 1px solid #e1e5e9;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.search-input:focus {
-    border-color: #e21a22;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(226, 26, 34, 0.1);
-}
-
+/* Empty state */
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
+    padding: 64px 20px;
     color: #666;
 }
 
 .empty-state i {
-    font-size: 48px;
-    color: #e1e5e9;
-    margin-bottom: 20px;
+    font-size: 44px;
+    color: #ccc;
+    margin-bottom: 16px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .applications-container {
-        overflow-x: auto;
-    }
-    
-    .applications-table {
-        min-width: 800px;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .tab-list {
-        flex-direction: column;
-    }
-    
-    .tab-link {
-        border-right: none;
-        border-bottom: 1px solid #e1e5e9;
-    }
-    
-    .tab-link:last-child {
-        border-bottom: none;
-    }
+@media (max-width: 1100px) {
+    .apps-workspace { overflow-x: auto; }
+    .table-head, .apps-row { min-width: 1000px; }
+    .stats-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .apps-tabs { flex-wrap: wrap; }
+    .apps-tab { flex: none; width: 50%; }
+}
+
+@media (max-width: 600px) {
+    .stats-strip { grid-template-columns: 1fr; }
+    .policy-type-breakdown { grid-template-columns: 1fr; }
 }
 {% endblock %}
 
 {% block content %}
-<!-- Page Header -->
-<div class="page-header">
-    <h1 class="page-title">Policy Applications Management</h1>
-    <p class="page-subtitle">Review and manage homeowners and motor insurance applications</p>
-</div>
+<div class="apps-shell">
 
-<!-- Statistics Overview -->
-<div class="stats-overview">
-    <div class="stat-card">
-        <div class="stat-number">{{ total_applications }}</div>
-        <div class="stat-label">Total Applications</div>
-        <div class="stat-description">All time</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-number">{{ pending_count }}</div>
-        <div class="stat-label">Pending Review</div>
-        <div class="stat-description">Awaiting decision</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-number">{{ approved_count }}</div>
-        <div class="stat-label">Approved</div>
-        <div class="stat-description">Active policies</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-number">{{ rejected_count }}</div>
-        <div class="stat-label">Rejected</div>
-        <div class="stat-description">Declined applications</div>
-    </div>
-</div>
+    <section class="apps-hero">
+        <div class="apps-kicker">Applications Management</div>
+        <h1 class="page-title">Policy Applications - All Statuses</h1>
+        <p class="page-subtitle">Review and manage all homeowners and motor insurance applications across all statuses.</p>
+    </section>
 
-<!-- Policy Type Statistics -->
-<div class="stats-overview">
-    <div class="stat-card">
-        <div class="stat-number">{{ homeowners_records.count }}</div>
-        <div class="stat-label">Homeowners Policies</div>
-        <div class="stat-description">
-            Pending: {{ homeowners_pending }} | 
-            Approved: {{ homeowners_approved }} | 
-            Rejected: {{ homeowners_rejected }}
+    <!-- Main Stats -->
+    <section class="stats-strip">
+        <div class="stat-cell">
+            <div class="stat-label">Total Applications</div>
+            <div class="stat-value">{{ total_applications }}</div>
+            <div class="stat-note">All time</div>
+        </div>
+        <div class="stat-cell">
+            <div class="stat-label">Pending Review</div>
+            <div class="stat-value">{{ pending_count }}</div>
+            <div class="stat-note">Awaiting decision</div>
+        </div>
+        <div class="stat-cell">
+            <div class="stat-label">Approved</div>
+            <div class="stat-value">{{ approved_count }}</div>
+            <div class="stat-note">Active policies</div>
+        </div>
+        <div class="stat-cell">
+            <div class="stat-label">Rejected</div>
+            <div class="stat-value">{{ rejected_count }}</div>
+            <div class="stat-note">Declined</div>
+        </div>
+    </section>
+
+    <!-- Policy Type Breakdown -->
+    <div class="policy-type-stats">
+        <div class="policy-type-card">
+            <div class="policy-type-heading">Homeowners Policies</div>
+            <div class="policy-type-breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Total</div>
+                    <div class="breakdown-value">{{ homeowners_records.count }}</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Pending</div>
+                    <div class="breakdown-value">{{ homeowners_pending }}</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Approved</div>
+                    <div class="breakdown-value">{{ homeowners_approved }}</div>
+                </div>
+            </div>
+            <div style="font-size: 11px; color: #999; margin-top: 10px; text-align: center;">
+                Rejected: {{ homeowners_rejected }}
+            </div>
+        </div>
+        <div class="policy-type-card">
+            <div class="policy-type-heading">Motor Insurance Add-ons</div>
+            <div class="policy-type-breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Total</div>
+                    <div class="breakdown-value">{{ thirdparty_records.count }}</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Pending</div>
+                    <div class="breakdown-value">{{ thirdparty_pending }}</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-label">Approved</div>
+                    <div class="breakdown-value">{{ thirdparty_approved }}</div>
+                </div>
+            </div>
+            <div style="font-size: 11px; color: #999; margin-top: 10px; text-align: center;">
+                Rejected: {{ thirdparty_rejected }}
+            </div>
         </div>
     </div>
-    <div class="stat-card">
-        <div class="stat-number">{{ thirdparty_records.count }}</div>
-        <div class="stat-label">Motor Insurance Add-ons</div>
-        <div class="stat-description">
-            Pending: {{ thirdparty_pending }} | 
-            Approved: {{ thirdparty_approved }} | 
-            Rejected: {{ thirdparty_rejected }}
+
+    <nav class="apps-tabs">
+        <a href="{% url 'admin-view-policy-holder' %}" class="apps-tab active">
+            <i class="ri-file-list-3-line"></i> All Applications
+            <span class="tab-count">{{ total_applications }}</span>
+        </a>
+        <a href="{% url 'admin-view-waiting-policy-holder' %}" class="apps-tab">
+            <i class="ri-time-line"></i> Pending Review
+            <span class="tab-count">{{ pending_count }}</span>
+        </a>
+        <a href="{% url 'admin-view-approved-policy-holder' %}" class="apps-tab">
+            <i class="ri-checkbox-circle-line"></i> Approved
+            <span class="tab-count">{{ approved_count }}</span>
+        </a>
+        <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="apps-tab">
+            <i class="ri-close-circle-line"></i> Rejected
+            <span class="tab-count">{{ rejected_count }}</span>
+        </a>
+    </nav>
+
+    <section class="apps-workspace">
+        {% if customer_policies %}
+        <div class="table-head">
+            <div class="th-cell">Customer</div>
+            <div class="th-cell">Homeowners Policy</div>
+            <div class="th-cell">Motor Insurance</div>
+            <div class="th-cell">Coverage Period</div>
+            <div class="th-cell">Total Premium</div>
+            <div class="th-cell">Status</div>
+            <div class="th-cell">Actions</div>
         </div>
-    </div>
-</div>
 
-<!-- Filter Tabs -->
-<div class="filter-tabs">
-    <ul class="tab-list">
-        <li class="tab-item">
-            <a href="{% url 'admin-view-policy-holder' %}" class="tab-link active">
-                All Applications
-                <span class="tab-badge">{{ total_applications }}</span>
-            </a>
-        </li>
-        <li class="tab-item">
-            <a href="{% url 'admin-view-waiting-policy-holder' %}" class="tab-link">
-                Pending Review
-                <span class="tab-badge">{{ pending_count }}</span>
-            </a>
-        </li>
-        <li class="tab-item">
-            <a href="{% url 'admin-view-approved-policy-holder' %}" class="tab-link">
-                Approved
-                <span class="tab-badge">{{ approved_count }}</span>
-            </a>
-        </li>
-        <li class="tab-item">
-            <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="tab-link">
-                Rejected
-                <span class="tab-badge">{{ rejected_count }}</span>
-            </a>
-        </li>
-    </ul>
-</div>
+        <div class="apps-list">
+            {% for customer_id, policies in customer_policies.items %}
+            {% with customer=policies.customer homeowners=policies.homeowners motor=policies.motor %}
+            <div class="apps-row">
 
-<!-- Search Controls -->
-<div class="search-controls">
-    <input type="text" id="applicationSearch" class="search-input" placeholder="Search applications by customer name, policy, or ID...">
-</div>
+                <!-- Customer -->
+                <div class="td-cell">
+                    <div class="td-primary">{{ customer.user.first_name }} {{ customer.user.last_name }}</div>
+                    <div class="td-secondary">ID: {{ customer.id_number|default:"Not provided" }}</div>
+                    <div class="td-secondary">{{ customer.mobile }}</div>
+                </div>
 
-<!-- Applications Table -->
-<div class="applications-container">
-    {% if customer_policies %}
-        <table class="applications-table">
-            <thead>
-                <tr>
-                    <th>Customer</th>
-                    <th>Homeowners Policy</th>
-                    <th>Motor Insurance Add-on</th>
-                    <th>Coverage Period</th>
-                    <th>Total Premium</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="applicationsTableBody">
-                {% for customer_id, policies in customer_policies.items %}
-                {% with customer=policies.customer homeowners=policies.homeowners motor=policies.motor %}
-                <tr class="application-row" data-search="{{ customer.user.first_name|lower }} {{ customer.user.last_name|lower }} {{ customer.id_number|lower }}">
-                    <td>
-                        <div class="customer-info">{{ customer.user.first_name }} {{ customer.user.last_name }}</div>
-                        <div class="customer-details">
-                            ID: {{ customer.id_number|default:"Not provided" }}<br>
-                            Phone: {{ customer.mobile }}
+                <!-- Homeowners -->
+                <div class="td-cell">
+                    {% if homeowners %}
+                        {% for record in homeowners %}
+                        <div class="policy-entry">
+                            <div class="td-primary" style="font-size:12px;">{{ record.Policy.policy_name }}</div>
+                            <div class="td-secondary">#{{ record.Policy.policy_number }}</div>
+                            <div class="td-secondary">BWP {{ record.Policy.premium|floatformat:2 }}</div>
                         </div>
-                    </td>
-                    <td>
+                        {% endfor %}
+                    {% else %}
+                        <span class="none-text">None</span>
+                    {% endif %}
+                </div>
+
+                <!-- Motor -->
+                <div class="td-cell">
+                    {% if motor %}
+                        {% for record in motor %}
+                        <div class="policy-entry">
+                            <div class="td-primary" style="font-size:12px;">{{ record.thirdpartypolicy.policy_name }}</div>
+                            <div class="td-secondary">{{ record.thirdpartypolicy.vehicle_make }} {{ record.thirdpartypolicy.vehicle_model }}</div>
+                            <div class="td-secondary">BWP {{ record.thirdpartypolicy.premium|floatformat:2 }}</div>
+                            {% if not homeowners or not homeowners.0.status == 'Approved' %}
+                            <div class="warning-text">âš ï¸ Requires approved homeowners</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <span class="none-text">None</span>
+                        {% if homeowners and homeowners.0.status == 'Approved' %}
+                        <div class="success-text">âœ“ Eligible for motor</div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                <!-- Coverage period -->
+                <div class="td-cell">
+                    {% if homeowners %}{% for record in homeowners %}
+                    <div class="policy-entry">
+                        <div class="td-secondary">{{ record.Policy.tenure }} months</div>
+                        <div class="td-secondary">{{ record.Policy.cover_start|default:"TBC" }} â€” {{ record.Policy.cover_end|default:"TBC" }}</div>
+                    </div>
+                    {% endfor %}{% endif %}
+                    {% if motor %}{% for record in motor %}
+                    <div class="policy-entry">
+                        <div class="td-secondary">{{ record.thirdpartypolicy.tenure }} months</div>
+                        <div class="td-secondary">{{ record.thirdpartypolicy.cover_start|default:"TBC" }} â€” {{ record.thirdpartypolicy.cover_end|default:"TBC" }}</div>
+                    </div>
+                    {% endfor %}{% endif %}
+                </div>
+
+                <!-- Premium total -->
+                <div class="td-cell">
+                    <div class="td-primary">BWP {{ policies.total_premium|floatformat:2 }}</div>
+                    {% if homeowners %}
+                        {% for record in homeowners %}
+                        <div class="td-secondary">H: {{ record.Policy.premium|floatformat:2 }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if motor %}
+                        {% for record in motor %}
+                        <div class="td-secondary">M: {{ record.thirdpartypolicy.premium|floatformat:2 }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Status -->
+                <div class="td-cell">
+                    {% if homeowners %}{% for record in homeowners %}
+                    <div class="policy-entry">
+                        <span class="s-badge pending">H: {{ record.status }}</span>
+                    </div>
+                    {% endfor %}{% endif %}
+                    {% if motor %}{% for record in motor %}
+                    <div class="policy-entry">
+                        <span class="s-badge pending">M: {{ record.thirdpartystatus }}</span>
+                    </div>
+                    {% endfor %}{% endif %}
+                </div>
+
+                <!-- Actions -->
+                <div class="td-cell">
+                    <div class="action-group">
                         {% if homeowners %}
                             {% for record in homeowners %}
-                            <div class="policy-info">{{ record.Policy.policy_name }}</div>
-                            <div class="policy-details">
-                                Policy #: {{ record.Policy.policy_number }}<br>
-                                Premium: P{{ record.Policy.premium|floatformat:2 }}<br>
-                                <span class="status-badge status-{{ record.status|lower }}">{{ record.status }}</span>
-                            </div>
-                            {% if not forloop.last %}<hr style="margin: 8px 0;">{% endif %}
-                            {% endfor %}
-                        {% else %}
-                            <div class="policy-details" style="color: #999; font-style: italic;">
-                                No homeowners policy
-                            </div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if motor %}
-                            {% for record in motor %}
-                            <div class="policy-info">{{ record.thirdpartypolicy.policy_name }}</div>
-                            <div class="policy-details">
-                                Policy #: {{ record.thirdpartypolicy.policy_number }}<br>
-                                Vehicle: {{ record.thirdpartypolicy.vehicle_make }} {{ record.thirdpartypolicy.vehicle_model }}<br>
-                                Premium: P{{ record.thirdpartypolicy.premium|floatformat:2 }}<br>
-                                <span class="status-badge status-{{ record.thirdpartystatus|lower }}">{{ record.thirdpartystatus }}</span>
-                                {% if not homeowners or not homeowners.0.status == 'Approved' %}
-                                <br><small style="color: #dc3545;">⚠️ Requires approved homeowners policy</small>
+                                {% if record.status == 'Pending' %}
+                                <a href="{% url 'approve-request' record.id %}" class="action-link approve"
+                                   onclick="return confirm('Approve this homeowners application?')">
+                                    <i class="ri-check-line"></i> Approve H
+                                </a>
+                                <a href="{% url 'reject-request' record.id %}" class="action-link reject"
+                                   onclick="return confirm('Reject this homeowners application?')">
+                                    <i class="ri-close-line"></i> Reject H
+                                </a>
                                 {% endif %}
-                            </div>
-                            {% if not forloop.last %}<hr style="margin: 8px 0;">{% endif %}
                             {% endfor %}
-                        {% else %}
-                            <div class="policy-details" style="color: #999; font-style: italic;">
-                                No motor insurance add-on
-                                {% if homeowners and homeowners.0.status == 'Approved' %}
-                                <br><small style="color: #28a745;">✓ Eligible for motor insurance</small>
+                        {% endif %}
+                        {% if motor %}
+                            {% for record in motor %}
+                                {% if record.thirdpartystatus == 'Pending' %}
+                                <a href="{% url 'approve-thirdpartyrequest' record.id %}" class="action-link approve"
+                                   onclick="return confirm('Approve this motor application?')">
+                                    <i class="ri-check-line"></i> Approve M
+                                </a>
+                                <a href="{% url 'reject-thirdpartyrequest' record.id %}" class="action-link reject"
+                                   onclick="return confirm('Reject this motor application?')">
+                                    <i class="ri-close-line"></i> Reject M
+                                </a>
                                 {% endif %}
-                            </div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if homeowners %}
-                            {% for record in homeowners %}
-                            <div class="policy-info">{{ record.Policy.tenure }} months</div>
-                            <div class="policy-details">
-                                Start: {{ record.Policy.cover_start|default:"Not set" }}<br>
-                                End: {{ record.Policy.cover_end|default:"Not set" }}
-                            </div>
-                            {% if not forloop.last %}<hr style="margin: 8px 0;">{% endif %}
                             {% endfor %}
                         {% endif %}
-                        {% if motor %}
-                            {% for record in motor %}
-                            <div class="policy-info">{{ record.thirdpartypolicy.tenure }} months</div>
-                            <div class="policy-details">
-                                Start: {{ record.thirdpartypolicy.cover_start|default:"Not set" }}<br>
-                                End: {{ record.thirdpartypolicy.cover_end|default:"Not set" }}
-                            </div>
-                            {% if not forloop.last %}<hr style="margin: 8px 0;">{% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="policy-info">P{{ policies.total_premium|floatformat:2 }}</div>
-                        <div class="policy-details">
-                            {% if homeowners %}
-                                {% for record in homeowners %}
-                                    Homeowners: P{{ record.Policy.premium|floatformat:2 }}<br>
-                                {% endfor %}
-                            {% endif %}
-                            {% if motor %}
-                                {% for record in motor %}
-                                    Motor: P{{ record.thirdpartypolicy.premium|floatformat:2 }}<br>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </td>
-                    <td>
-                        {% if homeowners %}
-                            {% for record in homeowners %}
-                                <span class="status-badge status-{{ record.status|lower }}">H: {{ record.status }}</span><br>
-                            {% endfor %}
-                        {% endif %}
-                        {% if motor %}
-                            {% for record in motor %}
-                                <span class="status-badge status-{{ record.thirdpartystatus|lower }}">M: {{ record.thirdpartystatus }}</span><br>
-                            {% endfor %}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div class="action-buttons">
-                            {% if homeowners %}
-                                {% for record in homeowners %}
-                                    {% if record.status == 'Pending' %}
-                                        <a href="{% url 'approve-request' record.id %}" 
-                                           class="btn btn-approve"
-                                           onclick="return confirm('Are you sure you want to approve this homeowners application?')">
-                                            <i class="ri-check-line"></i> Approve H
-                                        </a>
-                                        <a href="{% url 'reject-request' record.id %}" 
-                                           class="btn btn-reject"
-                                           onclick="return confirm('Are you sure you want to reject this homeowners application?')">
-                                            <i class="ri-close-line"></i> Reject H
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                            {% if motor %}
-                                {% for record in motor %}
-                                    {% if record.thirdpartystatus == 'Pending' %}
-                                        <a href="{% url 'approve-thirdpartyrequest' record.id %}" 
-                                           class="btn btn-approve"
-                                           onclick="return confirm('Are you sure you want to approve this motor insurance application?')">
-                                            <i class="ri-check-line"></i> Approve M
-                                        </a>
-                                        <a href="{% url 'reject-thirdpartyrequest' record.id %}" 
-                                           class="btn btn-reject"
-                                           onclick="return confirm('Are you sure you want to reject this motor insurance application?')">
-                                            <i class="ri-close-line"></i> Reject M
-                                        </a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                            <a href="{% url 'admin-policy-holder-details' customer.id %}" class="btn btn-view">
-                                <i class="ri-eye-line"></i> View Details
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% endwith %}
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
+                        <a href="{% url 'admin-policy-holder-details' customer.id %}" class="action-link">
+                            <i class="ri-eye-line"></i> View Details
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+
+        {% else %}
         <div class="empty-state">
             <i class="ri-file-list-3-line"></i>
             <h3>No Applications Found</h3>
             <p>There are currently no policy applications to review.</p>
         </div>
-    {% endif %}
+        {% endif %}
+    </section>
+
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-// Application search functionality
-document.getElementById('applicationSearch').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const rows = document.querySelectorAll('.application-row');
-    
-    rows.forEach(row => {
-        const searchData = row.getAttribute('data-search');
-        if (searchData.includes(searchTerm)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-});
-
-// Confirmation for actions
-function confirmAction(action, message) {
-    return confirm(message || `Are you sure you want to ${action} this application?`);
-}
-</script>
 {% endblock %}
