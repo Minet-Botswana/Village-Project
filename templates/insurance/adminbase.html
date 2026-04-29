@@ -12,21 +12,91 @@
     <link rel="stylesheet" href="{% static 'styles/minet-ds.css' %}">
     
     <style>
+        html,
+        body {
+            overflow-x: hidden;
+        }
         body { font-family: var(--mc-font); background: var(--mc-page-bg); color: #111; line-height: 1.6; }
         .mc-admin-nav-inner,
         .mc-admin-body {
             max-width: none;
-            width: 100%;
+            box-sizing: border-box;
+        }
+        .mc-admin-nav {
+            overflow-x: clip;
+        }
+        .mc-admin-nav-inner {
+            gap: 12px;
+            min-width: 0;
         }
         .mc-admin-nav-logo {
             display: inline-flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0;
         }
         .mc-admin-nav-logo img {
             height: 40px;
             width: auto;
             display: block;
+        }
+        .mc-admin-nav-links {
+            flex: 1;
+            min-width: 0;
+            justify-content: center;
+        }
+        .mc-admin-nav-user {
+            min-width: 0;
+            flex-shrink: 0;
+        }
+        .mc-admin-nav-greeting {
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (max-width: 1220px) {
+            .mc-admin-nav-inner {
+                height: auto;
+                flex-wrap: wrap;
+                padding: 10px 15px;
+            }
+            .mc-admin-nav-logo {
+                padding: 6px 0;
+            }
+            .mc-admin-nav-mobile-btn {
+                display: block;
+                margin-left: auto;
+            }
+            .mc-admin-nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                order: 3;
+                border-top: 1px solid rgba(255,255,255,0.2);
+                height: auto;
+                justify-content: flex-start;
+            }
+            .mc-admin-nav-links.show {
+                display: flex;
+            }
+            .mc-admin-nav-item {
+                width: 100%;
+                height: auto;
+            }
+            .mc-admin-nav-link {
+                padding: 12px 15px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                height: auto;
+            }
+            .mc-admin-nav-user {
+                order: 2;
+                padding: 6px 0;
+                margin-left: 0;
+            }
+            .mc-admin-nav-greeting {
+                display: none;
+            }
         }
         {% block extra_css %}{% endblock %}
     </style>

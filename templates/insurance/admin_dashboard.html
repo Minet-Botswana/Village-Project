@@ -171,22 +171,23 @@
 .queue-action {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 10px 14px;
-    min-width: 110px;
-    background: var(--mc-red);
-    color: #fff;
+    justify-content: flex-start;
+    padding: 0;
+    min-width: 0;
+    background: transparent;
+    color: #0d6efd;
     text-decoration: none;
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
+    text-decoration: underline;
 }
 
 .queue-action:hover {
-    background: #8b0000;
-    color: #fff;
-    text-decoration: none;
+    background: transparent;
+    color: #084298;
+    text-decoration: underline;
 }
 
 .workspace-sections {
@@ -286,23 +287,24 @@
 .workspace-link-cta {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     align-self: center;
-    padding: 9px 12px;
-    min-width: 92px;
-    background: #111;
-    color: #fff;
+    padding: 0;
+    min-width: 0;
+    background: transparent;
+    color: #0d6efd;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.7px;
     white-space: nowrap;
     flex-shrink: 0;
+    text-decoration: underline;
 }
 
 .workspace-link:hover .workspace-link-cta {
-    background: var(--mc-red);
-    color: #fff;
+    background: transparent;
+    color: #084298;
 }
 
 @media (max-width: 1180px) {
