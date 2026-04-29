@@ -449,14 +449,14 @@
                             <div class="td-secondary">{{ record.thirdpartypolicy.vehicle_make }} {{ record.thirdpartypolicy.vehicle_model }}</div>
                             <div class="td-secondary">BWP {{ record.thirdpartypolicy.premium|floatformat:2 }}</div>
                             {% if not homeowners or not homeowners.0.status == 'Approved' %}
-                            <div class="warning-text">âš ï¸ Requires approved homeowners</div>
+                            <div class="warning-text">Requires approved homeowners policy</div>
                             {% endif %}
                         </div>
                         {% endfor %}
                     {% else %}
                         <span class="none-text">None</span>
                         {% if homeowners and homeowners.0.status == 'Approved' %}
-                        <div class="success-text">âœ“ Eligible for motor</div>
+                        <div class="success-text">Eligible for motor insurance</div>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -466,13 +466,13 @@
                     {% if homeowners %}{% for record in homeowners %}
                     <div class="policy-entry">
                         <div class="td-secondary">{{ record.Policy.tenure }} months</div>
-                        <div class="td-secondary">{{ record.Policy.cover_start|default:"TBC" }} â€” {{ record.Policy.cover_end|default:"TBC" }}</div>
+                        <div class="td-secondary">{{ record.Policy.cover_start|default:"TBC" }} - {{ record.Policy.cover_end|default:"TBC" }}</div>
                     </div>
                     {% endfor %}{% endif %}
                     {% if motor %}{% for record in motor %}
                     <div class="policy-entry">
                         <div class="td-secondary">{{ record.thirdpartypolicy.tenure }} months</div>
-                        <div class="td-secondary">{{ record.thirdpartypolicy.cover_start|default:"TBC" }} â€” {{ record.thirdpartypolicy.cover_end|default:"TBC" }}</div>
+                        <div class="td-secondary">{{ record.thirdpartypolicy.cover_start|default:"TBC" }} - {{ record.thirdpartypolicy.cover_end|default:"TBC" }}</div>
                     </div>
                     {% endfor %}{% endif %}
                 </div>

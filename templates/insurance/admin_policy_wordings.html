@@ -1,479 +1,466 @@
 {% extends 'insurance/adminbase.html' %}
-{% block content %}
 
-<style>
-    .page-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px;
-    }
+{% block title %}Policy Wordings - Minet Insurance{% endblock %}
 
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
+{% block extra_css %}
+.wordings-shell {
+    display: grid;
+    gap: 20px;
+}
 
-    .page-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-        margin: 0;
-    }
+.wordings-hero {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    border-left: 6px solid var(--mc-red);
+    padding: 26px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
 
-    .btn-add {
-        background: #e21a22;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 14px;
-        transition: background 0.2s;
-    }
+.wordings-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mc-red);
+    margin-bottom: 10px;
+}
 
-    .btn-add:hover {
-        background: #c01018;
-        color: white;
-        text-decoration: none;
-    }
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 6px;
+}
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
-    }
+.page-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
 
-    .stat-card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 15px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
+.btn-add-wording {
+    background: var(--mc-red);
+    color: #fff;
+    border: 1px solid var(--mc-red);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    padding: 10px 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
 
-    .stat-number {
-        font-size: 28px;
-        font-weight: 700;
-        color: #e21a22;
-        margin-bottom: 5px;
-    }
+.btn-add-wording:hover {
+    background: #a00e15;
+    color: #fff;
+    text-decoration: none;
+}
 
-    .stat-label {
-        font-size: 13px;
-        color: #666;
-    }
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
 
-    .filters-section {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
+.stat-cell {
+    padding: 16px 18px;
+    border-right: 1px solid var(--mc-divider);
+}
 
+.stat-cell:last-child {
+    border-right: none;
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--mc-red);
+    line-height: 1;
+}
+
+.stat-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 6px;
+}
+
+.filters-panel {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
+
+.filters-head {
+    background: #111;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.filters-body {
+    padding: 16px 20px;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr auto auto;
+    gap: 14px;
+    align-items: end;
+}
+
+.filter-field {
+    min-width: 0;
+}
+
+.filter-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #777;
+    margin-bottom: 6px;
+}
+
+.filter-input,
+.filter-select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--mc-border);
+    background: #fff;
+    font-size: 13px;
+    color: #111;
+    padding: 10px 12px;
+    font-family: var(--mc-font);
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    border-color: var(--mc-red);
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--mc-red);
+}
+
+.filter-btn {
+    border: 1px solid var(--mc-red);
+    background: var(--mc-red);
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.filter-btn:hover {
+    background: #a00e15;
+}
+
+.clear-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 0;
+    display: inline-block;
+}
+
+.clear-link:hover {
+    color: #084298;
+}
+
+.wordings-table-shell {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    overflow: hidden;
+}
+
+.table-head {
+    display: grid;
+    grid-template-columns: 2fr 1fr 0.7fr 1fr 0.8fr 1.2fr 1.4fr;
+    background: #111;
+    color: #fff;
+}
+
+.th-cell {
+    padding: 12px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.th-cell:last-child {
+    border-right: none;
+}
+
+.table-body {
+    display: grid;
+}
+
+.wording-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 0.7fr 1fr 0.8fr 1.2fr 1.4fr;
+    border-bottom: 1px solid var(--mc-divider);
+}
+
+.wording-row:last-child {
+    border-bottom: none;
+}
+
+.wording-row:hover {
+    background: #fafbfc;
+}
+
+.td-cell {
+    padding: 13px 14px;
+    font-size: 13px;
+    color: #111;
+    min-width: 0;
+}
+
+.td-primary {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.td-secondary {
+    font-size: 11px;
+    color: #666;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.badge-active {
+    background: #edf7ee;
+    color: #167c3a;
+}
+
+.badge-inactive {
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.action-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.action-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.action-link:hover {
+    color: #084298;
+}
+
+.action-link.warn {
+    color: #92400e;
+}
+
+.action-link.warn:hover {
+    color: #6b2f07;
+}
+
+.action-link.danger {
+    color: #991b1b;
+}
+
+.action-link.danger:hover {
+    color: #6b1212;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 58px 18px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 44px;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1200px) {
     .filters-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        align-items: end;
+        grid-template-columns: 1fr 1fr;
     }
+}
 
-    .filter-group label {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 5px;
-    }
-
-    .filter-group select,
-    .filter-group input {
-        width: 100%;
-        padding: 8px 12px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .btn-filter {
-        background: #007bff;
-        color: white;
-        padding: 8px 20px;
-        border: none;
-        border-radius: 4px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .btn-filter:hover {
-        background: #0056b3;
-    }
-
-    .wordings-card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .card-header {
-        background: #f8f9fa;
-        border-bottom: 2px solid #e21a22;
-        padding: 12px 20px;
-        font-size: 16px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    thead {
-        background: #f8f9fa;
-    }
-
-    thead th {
-        padding: 12px 15px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #555;
-        text-align: left;
-        border-bottom: 2px solid #dee2e6;
-    }
-
-    tbody tr {
-        border-bottom: 1px solid #e9ecef;
-        transition: background 0.2s;
-    }
-
-    tbody tr:hover {
-        background: #f8f9fa;
-    }
-
-    tbody td {
-        padding: 12px 15px;
-        font-size: 13px;
-        color: #333;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 4px 10px;
-        border-radius: 3px;
-        font-size: 11px;
-        font-weight: 600;
-    }
-
-    .badge-active {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .badge-inactive {
-        background: #f8d7da;
-        color: #721c24;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 8px;
-    }
-
-    .btn-action {
-        padding: 5px 10px;
-        font-size: 12px;
-        font-weight: 600;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-edit {
-        background: #007bff;
-        color: white;
-    }
-
-    .btn-edit:hover {
-        background: #0056b3;
-        color: white;
-    }
-
-    .btn-toggle {
-        background: #ffc107;
-        color: #333;
-    }
-
-    .btn-toggle:hover {
-        background: #e0a800;
-    }
-
-    .btn-delete {
-        background: #dc3545;
-        color: white;
-    }
-
-    .btn-delete:hover {
-        background: #c82333;
-    }
-
-    .no-data {
-        padding: 40px 20px;
-        text-align: center;
-        color: #6c757d;
-    }
-
-    .table-responsive {
+@media (max-width: 1100px) {
+    .wordings-table-shell {
         overflow-x: auto;
     }
 
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-        .page-container {
-            padding: 15px 10px;
-        }
-
-        .page-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .page-title {
-            font-size: 20px;
-        }
-
-        .btn-add {
-            width: 100%;
-            text-align: center;
-            padding: 8px 15px;
-            font-size: 13px;
-        }
-
-        .stats-grid {
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .stat-card {
-            padding: 12px;
-        }
-
-        .stat-number {
-            font-size: 24px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-        }
-
-        .filters-grid {
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .filter-group select,
-        .filter-group input {
-            font-size: 13px;
-            padding: 7px 10px;
-        }
-
-        .btn-filter {
-            width: 100%;
-            padding: 7px 15px;
-            font-size: 13px;
-        }
-
-        .card-header {
-            padding: 10px 15px;
-            font-size: 15px;
-        }
-
-        thead th {
-            font-size: 11px;
-            padding: 10px 8px;
-        }
-
-        tbody td {
-            font-size: 12px;
-            padding: 10px 8px;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .btn-action {
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .status-badge {
-            font-size: 10px;
-            padding: 3px 8px;
-        }
+    .table-head,
+    .wording-row {
+        min-width: 1000px;
     }
 
-    @media (max-width: 480px) {
-        .page-container {
-            padding: 10px 5px;
-        }
-
-        .page-title {
-            font-size: 18px;
-        }
-
-        .stat-number {
-            font-size: 20px;
-        }
-
-        .filters-section {
-            padding: 12px;
-        }
-
-        .card-header {
-            font-size: 14px;
-            padding: 8px 12px;
-        }
-
-        thead th {
-            font-size: 10px;
-            padding: 8px 5px;
-        }
-
-        tbody td {
-            font-size: 11px;
-            padding: 8px 5px;
-        }
-
-        .no-data {
-            padding: 30px 15px;
-            font-size: 13px;
-        }
+    .stats-strip {
+        grid-template-columns: 1fr;
     }
-</style>
+}
+{% endblock %}
 
-<div class="page-container">
-    <div class="page-header">
-        <h1 class="page-title">Policy Wordings Management</h1>
-        <a href="{% url 'admin-add-policy-wording' %}" class="btn-add">+ Add Policy Wording</a>
-    </div>
+{% block content %}
+<div class="wordings-shell">
+    <section class="wordings-hero">
+        <div>
+            <div class="wordings-kicker">Policy Configuration</div>
+            <h1 class="page-title">Policy Wordings Management</h1>
+            <p class="page-subtitle">Manage policy wording documents, versions, and publication status.</p>
+        </div>
+        <a href="{% url 'admin-add-policy-wording' %}" class="btn-add-wording">
+            <i class="ri-add-line"></i> Add Policy Wording
+        </a>
+    </section>
 
-    <!-- Statistics -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number">{{ total_wordings }}</div>
+    <section class="stats-strip">
+        <div class="stat-cell">
             <div class="stat-label">Total Wordings</div>
+            <div class="stat-value">{{ total_wordings }}</div>
+            <div class="stat-note">All records</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ active_wordings }}</div>
-            <div class="stat-label">Active Wordings</div>
+        <div class="stat-cell">
+            <div class="stat-label">Active</div>
+            <div class="stat-value">{{ active_wordings }}</div>
+            <div class="stat-note">Visible in use</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ inactive_wordings }}</div>
-            <div class="stat-label">Inactive Wordings</div>
+        <div class="stat-cell">
+            <div class="stat-label">Inactive</div>
+            <div class="stat-value">{{ inactive_wordings }}</div>
+            <div class="stat-note">Archived or paused</div>
         </div>
-    </div>
+    </section>
 
-    <!-- Filters -->
-    <div class="filters-section">
-        <form method="GET">
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label>Policy Type</label>
-                    <select name="policy_type">
-                        <option value="">All Types</option>
-                        {% for type_value, type_label in policy_types %}
-                        <option value="{{ type_value }}" {% if selected_policy_type == type_value %}selected{% endif %}>
-                            {{ type_label }}
-                        </option>
-                        {% endfor %}
-                    </select>
+    <section class="filters-panel">
+        <div class="filters-head">Filters</div>
+        <div class="filters-body">
+            <form method="GET">
+                <div class="filters-grid">
+                    <div class="filter-field">
+                        <label class="filter-label" for="policy_type">Policy Type</label>
+                        <select id="policy_type" class="filter-select" name="policy_type">
+                            <option value="">All Types</option>
+                            {% for type_value, type_label in policy_types %}
+                            <option value="{{ type_value }}" {% if selected_policy_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="filter-field">
+                        <label class="filter-label" for="status">Status</label>
+                        <select id="status" class="filter-select" name="status">
+                            <option value="">All Status</option>
+                            <option value="active" {% if selected_status == 'active' %}selected{% endif %}>Active</option>
+                            <option value="inactive" {% if selected_status == 'inactive' %}selected{% endif %}>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="filter-field">
+                        <label class="filter-label" for="search">Search</label>
+                        <input id="search" class="filter-input" type="text" name="search" placeholder="Search title or version" value="{{ search_query }}">
+                    </div>
+                    <div class="filter-field">
+                        <button type="submit" class="filter-btn">Apply Filters</button>
+                    </div>
+                    <div class="filter-field">
+                        <a href="{% url 'admin-policy-wordings' %}" class="clear-link">Clear</a>
+                    </div>
                 </div>
-                <div class="filter-group">
-                    <label>Status</label>
-                    <select name="status">
-                        <option value="">All Status</option>
-                        <option value="active" {% if selected_status == 'active' %}selected{% endif %}>Active</option>
-                        <option value="inactive" {% if selected_status == 'inactive' %}selected{% endif %}>Inactive</option>
-                    </select>
+            </form>
+        </div>
+    </section>
+
+    <section class="wordings-table-shell">
+        {% if wordings %}
+        <div class="table-head">
+            <div class="th-cell">Title</div>
+            <div class="th-cell">Policy Type</div>
+            <div class="th-cell">Version</div>
+            <div class="th-cell">Effective Date</div>
+            <div class="th-cell">Status</div>
+            <div class="th-cell">Uploaded By</div>
+            <div class="th-cell">Actions</div>
+        </div>
+        <div class="table-body">
+            {% for wording in wordings %}
+            <div class="wording-row">
+                <div class="td-cell">
+                    <div class="td-primary">{{ wording.title }}</div>
                 </div>
-                <div class="filter-group">
-                    <label>Search</label>
-                    <input type="text" name="search" placeholder="Title, version..." value="{{ search_query }}">
+                <div class="td-cell">
+                    <div class="td-secondary">{{ wording.get_policy_type_display }}</div>
                 </div>
-                <div class="filter-group">
-                    <button type="submit" class="btn-filter">Apply Filters</button>
+                <div class="td-cell">
+                    <div class="td-secondary">v{{ wording.version }}</div>
+                </div>
+                <div class="td-cell">
+                    <div class="td-secondary">{{ wording.effective_date|date:'d M Y' }}</div>
+                </div>
+                <div class="td-cell">
+                    {% if wording.is_active %}
+                    <span class="badge badge-active">Active</span>
+                    {% else %}
+                    <span class="badge badge-inactive">Inactive</span>
+                    {% endif %}
+                </div>
+                <div class="td-cell">
+                    <div class="td-secondary">{{ wording.uploaded_by.get_full_name|default:wording.uploaded_by.username }}</div>
+                </div>
+                <div class="td-cell">
+                    <div class="action-links">
+                        <a href="{% url 'admin-edit-policy-wording' wording.id %}" class="action-link">Edit</a>
+                        <a href="{% url 'admin-toggle-wording-status' wording.id %}" class="action-link warn">{% if wording.is_active %}Deactivate{% else %}Activate{% endif %}</a>
+                        <a href="{% url 'admin-delete-policy-wording' wording.id %}" class="action-link danger" onclick="return confirm('Are you sure you want to delete this policy wording?')">Delete</a>
+                    </div>
                 </div>
             </div>
-        </form>
-    </div>
-
-    <!-- Wordings Table -->
-    <div class="wordings-card">
-        <div class="card-header">Policy Wordings</div>
-        {% if wordings %}
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Policy Type</th>
-                        <th>Version</th>
-                        <th>Effective Date</th>
-                        <th>Status</th>
-                        <th>Uploaded By</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for wording in wordings %}
-                    <tr>
-                        <td><strong>{{ wording.title }}</strong></td>
-                        <td>{{ wording.get_policy_type_display }}</td>
-                        <td>v{{ wording.version }}</td>
-                        <td>{{ wording.effective_date|date:"d M Y" }}</td>
-                        <td>
-                            {% if wording.is_active %}
-                            <span class="status-badge badge-active">Active</span>
-                            {% else %}
-                            <span class="status-badge badge-inactive">Inactive</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ wording.uploaded_by.get_full_name|default:wording.uploaded_by.username }}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{% url 'admin-edit-policy-wording' wording.id %}" class="btn-action btn-edit">Edit</a>
-                                <a href="{% url 'admin-toggle-wording-status' wording.id %}" class="btn-action btn-toggle">
-                                    {% if wording.is_active %}Deactivate{% else %}Activate{% endif %}
-                                </a>
-                                <a href="{% url 'admin-delete-policy-wording' wording.id %}" 
-                                   class="btn-action btn-delete"
-                                   onclick="return confirm('Are you sure you want to delete this policy wording?')">Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% endfor %}
         </div>
         {% else %}
-        <div class="no-data">
-            <p>No policy wordings found.</p>
+        <div class="empty-state">
+            <i class="ri-file-list-3-line"></i>
+            <h3>No Policy Wordings Found</h3>
+            <p>Try adjusting your filters or add a new policy wording.</p>
         </div>
         {% endif %}
-    </div>
+    </section>
 </div>
-
 {% endblock %}

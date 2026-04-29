@@ -1,241 +1,284 @@
 {% extends 'insurance/adminbase.html' %}
+{% block title %}Edit Policy Wording - Minet Insurance{% endblock %}
+
+{% block extra_css %}
+.edit-shell {
+    display: grid;
+    gap: 20px;
+}
+
+.edit-hero {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    border-left: 6px solid var(--mc-red);
+    padding: 26px 28px;
+}
+
+.edit-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mc-red);
+    margin-bottom: 10px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.edit-note {
+    background: #fff7e6;
+    border: 1px solid #f3d7a4;
+    border-left: 4px solid #b26a00;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #7a4b00;
+}
+
+.form-card {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
+
+.form-section-head {
+    background: #111;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-section-body {
+    padding: 20px;
+    border-bottom: 1px solid var(--mc-divider);
+}
+
+.form-section-body:last-of-type {
+    border-bottom: none;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.form-field.span-2 {
+    grid-column: 1 / -1;
+}
+
+.field-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #555;
+}
+
+.field-label .required {
+    color: var(--mc-red);
+}
+
+.field-input,
+.field-select,
+.field-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid var(--mc-border);
+    font-size: 13px;
+    font-family: var(--mc-font);
+    background: #fff;
+    color: #111;
+}
+
+.field-textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.field-input:focus,
+.field-select:focus,
+.field-textarea:focus {
+    border-color: var(--mc-red);
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--mc-red);
+}
+
+.help-text {
+    font-size: 11px;
+    color: #666;
+}
+
+.current-file {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #0d6efd;
+}
+
+.current-file a {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+.checkbox-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-inline input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+}
+
+.form-actions {
+    background: #f8f8f8;
+    border-top: 1px solid var(--mc-border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.btn-save {
+    padding: 11px 24px;
+    background: var(--mc-red);
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--mc-font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    background: #a00e15;
+}
+
+.btn-cancel {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-cancel:hover {
+    color: #084298;
+}
+
+@media (max-width: 760px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-field.span-2 {
+        grid-column: auto;
+    }
+}
+{% endblock %}
+
 {% block content %}
-
-<style>
-    .page-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .page-header {
-        margin-bottom: 20px;
-    }
-
-    .page-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-        margin: 0 0 5px 0;
-    }
-
-    .page-subtitle {
-        font-size: 13px;
-        color: #666;
-        margin: 0;
-    }
-
-    .form-card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 25px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .form-section-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #e21a22;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 6px;
-    }
-
-    .form-group label .required {
-        color: #e21a22;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        font-size: 14px;
-        transition: border-color 0.2s;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #e21a22;
-        box-shadow: 0 0 0 3px rgba(226, 26, 34, 0.1);
-    }
-
-    textarea.form-control {
-        min-height: 100px;
-        resize: vertical;
-    }
-
-    .checkbox-group {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .checkbox-group input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
-
-    .help-text {
-        font-size: 12px;
-        color: #6c757d;
-        margin-top: 4px;
-    }
-
-    .current-file {
-        display: inline-block;
-        padding: 8px 12px;
-        background: #e7f3ff;
-        border-radius: 4px;
-        margin-top: 8px;
-        font-size: 13px;
-        color: #004085;
-    }
-
-    .btn-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 25px;
-    }
-
-    .btn-submit {
-        flex: 1;
-        background: #e21a22;
-        color: white;
-        padding: 12px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .btn-submit:hover {
-        background: #c01018;
-    }
-
-    .btn-cancel {
-        flex: 1;
-        background: #6c757d;
-        color: white;
-        padding: 12px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        transition: background 0.2s;
-    }
-
-    .btn-cancel:hover {
-        background: #5a6268;
-        color: white;
-        text-decoration: none;
-    }
-
-    .info-box {
-        background: #fff5f5;
-        border-left: 3px solid #e21a22;
-        padding: 12px 15px;
-        margin-bottom: 20px;
-        border-radius: 4px;
-        font-size: 13px;
-        color: #721c24;
-    }
-</style>
-
-<div class="page-container">
-    <div class="page-header">
+<div class="edit-shell">
+    <section class="edit-hero">
+        <div class="edit-kicker">Policy Configuration</div>
         <h1 class="page-title">Edit Policy Wording</h1>
-        <p class="page-subtitle">Update policy wording document</p>
+        <p class="page-subtitle">Update policy wording metadata, document, and activation state.</p>
+    </section>
+
+    <div class="edit-note">
+        When this wording is marked active, other versions for the same title are deactivated automatically.
     </div>
 
     <div class="form-card">
-        <div class="info-box">
-            Note: When marked as active, this version will automatically deactivate other versions of the same policy title.
-        </div>
-
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            
-            <div class="form-section-title">Policy Information</div>
-            
-            <div class="form-group">
-                <label>Title <span class="required">*</span></label>
-                <input type="text" name="title" class="form-control" value="{{ wording.title }}" required>
-            </div>
 
-            <div class="form-group">
-                <label>Policy Type <span class="required">*</span></label>
-                <select name="policy_type" class="form-control" required>
-                    {% for type_value, type_label in policy_types %}
-                    <option value="{{ type_value }}" {% if wording.policy_type == type_value %}selected{% endif %}>
-                        {{ type_label }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
+            <div class="form-section-head">Policy Information</div>
+            <div class="form-section-body">
+                <div class="form-grid">
+                    <div class="form-field span-2">
+                        <label class="field-label">Title <span class="required">*</span></label>
+                        <input type="text" name="title" class="field-input" value="{{ wording.title }}" required>
+                    </div>
 
-            <div class="form-group">
-                <label>Version <span class="required">*</span></label>
-                <input type="text" name="version" class="form-control" value="{{ wording.version }}" required>
-            </div>
+                    <div class="form-field">
+                        <label class="field-label">Policy Type <span class="required">*</span></label>
+                        <select name="policy_type" class="field-select" required>
+                            {% for type_value, type_label in policy_types %}
+                            <option value="{{ type_value }}" {% if wording.policy_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-            <div class="form-group">
-                <label>Description <span class="required">*</span></label>
-                <textarea name="description" class="form-control" required>{{ wording.description }}</textarea>
-            </div>
+                    <div class="form-field">
+                        <label class="field-label">Version <span class="required">*</span></label>
+                        <input type="text" name="version" class="field-input" value="{{ wording.version }}" required>
+                    </div>
 
-            <div class="form-section-title">Document Details</div>
-
-            <div class="form-group">
-                <label>Document (PDF)</label>
-                <input type="file" name="document" class="form-control" accept=".pdf">
-                <div class="help-text">Leave empty to keep current document</div>
-                {% if wording.document %}
-                <div class="current-file">
-                    📄 Current: {{ wording.document.name|slice:"17:" }}
+                    <div class="form-field span-2">
+                        <label class="field-label">Description <span class="required">*</span></label>
+                        <textarea name="description" class="field-textarea" required>{{ wording.description }}</textarea>
+                    </div>
                 </div>
-                {% endif %}
             </div>
 
-            <div class="form-group">
-                <label>Effective Date <span class="required">*</span></label>
-                <input type="date" name="effective_date" class="form-control" value="{{ wording.effective_date|date:'Y-m-d' }}" required>
-            </div>
+            <div class="form-section-head">Document Details</div>
+            <div class="form-section-body">
+                <div class="form-grid">
+                    <div class="form-field span-2">
+                        <label class="field-label">Document (PDF)</label>
+                        <input type="file" name="document" class="field-input" accept=".pdf">
+                        <div class="help-text">Leave empty to keep the current document.</div>
+                        {% if wording.document %}
+                        <div class="current-file">Current file: <a href="{{ wording.document.url }}" target="_blank">{{ wording.document.name|slice:'17:' }}</a></div>
+                        {% endif %}
+                    </div>
 
-            <div class="form-group">
-                <div class="checkbox-group">
-                    <input type="checkbox" name="is_active" id="is_active" {% if wording.is_active %}checked{% endif %}>
-                    <label for="is_active" style="margin: 0;">Mark as Active Version</label>
+                    <div class="form-field">
+                        <label class="field-label">Effective Date <span class="required">*</span></label>
+                        <input type="date" name="effective_date" class="field-input" value="{{ wording.effective_date|date:'Y-m-d' }}" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="field-label">Status</label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_active" {% if wording.is_active %}checked{% endif %}>
+                            <span>Mark as active version</span>
+                        </label>
+                        <div class="help-text">Active versions are visible to customers.</div>
+                    </div>
                 </div>
-                <div class="help-text">Active versions are visible to customers</div>
             </div>
 
-            <div class="btn-group">
-                <button type="submit" class="btn-submit">Update Policy Wording</button>
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Update Policy Wording</button>
                 <a href="{% url 'admin-policy-wordings' %}" class="btn-cancel">Cancel</a>
             </div>
         </form>
     </div>
 </div>
-
 {% endblock %}

@@ -246,7 +246,7 @@
     <!-- Breadcrumb -->
     <div class="pd-breadcrumb">
         <a href="{% url 'customer:my-applications' %}"><i class="ri-arrow-left-line"></i> My Applications</a>
-        <span class="pd-breadcrumb-sep">›</span>
+        <span class="pd-breadcrumb-sep">&gt;</span>
         <span>Policy Detail</span>
     </div>
 
@@ -310,23 +310,23 @@
             <div class="pd-fields">
                 <div class="pd-field">
                     <span class="pd-label">Plot Number</span>
-                    <span class="pd-value">{{ policy.plot_number|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.plot_number|default:"-" }}</span>
                 </div>
                 <div class="pd-field">
                     <span class="pd-label">Ward / Kgotla</span>
-                    <span class="pd-value">{{ policy.ward_kgotla|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.ward_kgotla|default:"-" }}</span>
                 </div>
                 <div class="pd-field">
                     <span class="pd-label">Village / Township</span>
-                    <span class="pd-value">{{ policy.village|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.village|default:"-" }}</span>
                 </div>
                 <div class="pd-field">
                     <span class="pd-label">District</span>
-                    <span class="pd-value">{{ policy.district|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.district|default:"-" }}</span>
                 </div>
                 <div class="pd-field full">
                     <span class="pd-label">Financial Interest</span>
-                    <span class="pd-value">{{ policy.financial_interest|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.financial_interest|default:"-" }}</span>
                 </div>
             </div>
         </div>
@@ -358,11 +358,11 @@
                 </div>
                 <div class="pd-field">
                     <span class="pd-label">Effective Date</span>
-                    <span class="pd-value">{{ policy.cover_start|date:"d M Y"|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.cover_start|date:"d M Y"|default:"-" }}</span>
                 </div>
                 <div class="pd-field">
                     <span class="pd-label">Expiry / Cover End</span>
-                    <span class="pd-value">{{ policy.cover_end|date:"d M Y"|default:"—" }}</span>
+                    <span class="pd-value">{{ policy.cover_end|date:"d M Y"|default:"-" }}</span>
                 </div>
                 <div class="pd-field">
                     <span class="pd-label">Application Date</span>
@@ -404,7 +404,7 @@
     </div>
 
     {% if policy.title_deed %}
-    <!-- ── Documents ── -->
+    <!-- Documents -->
     <div class="pd-section-heading"><i class="fas fa-paperclip" style="margin-right:6px;"></i>Attached Documents</div>
     <div class="pd-rows" style="padding-top:12px;padding-bottom:14px;">
       <a href="{{ policy.title_deed.url }}" target="_blank" class="mc-btn mc-btn-outline" style="font-size:12px;">

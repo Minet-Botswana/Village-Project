@@ -1,172 +1,278 @@
 {% extends "insurance/adminbase.html" %}
 {% block title %}Policy Holder Details - Minet Insurance{% endblock %}
+
 {% block extra_css %}
-<style>
-.page-header {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+.details-shell {
+    display: grid;
+    gap: 20px;
 }
-.page-title {
-    color: #000000;
-    font-size: 26px;
-    font-weight: 600;
-    margin-bottom: 8px;
+
+.details-hero {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    border-left: 6px solid var(--mc-red);
+    padding: 26px 28px;
 }
-.page-subtitle {
-    color: #666;
-    font-size: 16px;
-}
-.details-section {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    margin-bottom: 30px;
-    padding: 25px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.details-section h2 {
-    color: #e21a22;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 18px;
-}
-.applications-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+
+.details-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mc-red);
     margin-bottom: 10px;
 }
-.applications-table th {
-    background-color: #f8f9fa;
-    color: #000000;
-    font-weight: 600;
-    padding: 12px 10px;
-    text-align: left;
-    border-bottom: 1px solid #e1e5e9;
-    font-size: 13px;
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.section-card {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
+
+.section-head {
+    background: #111;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
-.applications-table td {
-    padding: 10px;
-    border-bottom: 1px solid #f1f3f4;
-    color: #000000;
-    vertical-align: top;
+
+.section-body {
+    padding: 20px;
+    border-bottom: 1px solid var(--mc-divider);
 }
-.applications-table tr:last-child td {
+
+.section-body:last-child {
     border-bottom: none;
 }
+
+.kv-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 24px;
+}
+
+.kv-item {
+    min-width: 0;
+}
+
+.kv-item.full {
+    grid-column: 1 / -1;
+}
+
+.kv-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.kv-value {
+    font-size: 13px;
+    color: #111;
+    font-weight: 600;
+}
+
 .status-badge {
     display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
+
 .status-pending {
-    background-color: #fff3cd;
-    color: #856404;
+    background: #fef9ec;
+    color: #92400e;
 }
-.status-approved {
-    background-color: #d1f2eb;
-    color: #00875a;
+
+.status-approved,
+.status-active {
+    background: #edf7ee;
+    color: #167c3a;
 }
+
 .status-rejected {
-    background-color: #ffe6e6;
-    color: #cc0000;
+    background: #fef2f2;
+    color: #991b1b;
 }
-@media (max-width: 768px) {
-    .details-section {
-        padding: 12px;
+
+.policy-block {
+    border: 1px solid var(--mc-divider);
+    margin-bottom: 14px;
+}
+
+.policy-block:last-child {
+    margin-bottom: 0;
+}
+
+.policy-title {
+    padding: 10px 14px;
+    background: #f8f8f8;
+    border-bottom: 1px solid var(--mc-divider);
+    font-size: 12px;
+    font-weight: 700;
+    color: #111;
+}
+
+.file-link,
+.back-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.file-link:hover,
+.back-link:hover {
+    color: #084298;
+}
+
+.empty-text {
+    color: #888;
+    font-size: 13px;
+}
+
+.details-toolbar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+    .kv-grid {
+        grid-template-columns: 1fr;
     }
-    .applications-table {
-        min-width: 600px;
-        font-size: 13px;
+
+    .kv-item.full {
+        grid-column: auto;
     }
 }
-</style>
 {% endblock %}
+
 {% block content %}
-<div class="page-header">
-    <h1 class="page-title">Policy Holder Details</h1>
-    <p class="page-subtitle">Full details for {{ customer.user.first_name }} {{ customer.user.last_name }} (ID: {{ customer.id_number }})</p>
-</div>
+<div class="details-shell">
+    <section class="details-hero">
+        <div class="details-kicker">Applications Management</div>
+        <h1 class="page-title">Policy Holder Details</h1>
+        <p class="page-subtitle">Full details for {{ customer.user.first_name }} {{ customer.user.last_name }} (ID: {{ customer.id_number|default:"Not provided" }})</p>
+    </section>
 
-<div class="details-section">
-    <h2>Customer Information</h2>
-    <ul>
-        <li><strong>Name:</strong> {{ customer.user.first_name }} {{ customer.user.last_name }}</li>
-        <li><strong>ID Number:</strong> {{ customer.id_number }}</li>
-        <li><strong>Phone:</strong> {{ customer.mobile }}</li>
-        <li><strong>Email:</strong> {{ customer.user.email }}</li>
-        <li><strong>Address:</strong> {{ customer.address }}</li>
-    </ul>
-</div>
+    <div class="details-toolbar">
+        <a href="{% url 'admin-view-policy-holder' %}" class="back-link">Back to All Applications</a>
+    </div>
 
-<div class="details-section">
-    <h2>Homeowners Policies</h2>
-    {% if homeowners %}
-        {% for record in homeowners %}
-        <div class="details-subsection">
-            <table class="applications-table">
-                <tr><th>Policy Name</th><td>{{ record.Policy.policy_name }}</td></tr>
-                <tr><th>Policy #</th><td>{{ record.Policy.policy_number }}</td></tr>
-                <tr><th>Category</th><td>{{ record.Policy.category.category_name }}</td></tr>
-                <tr><th>Sum Assured</th><td>P{{ record.Policy.sum_assurance|floatformat:2 }}</td></tr>
-                <tr><th>Premium</th><td>P{{ record.Policy.premium|floatformat:2 }}</td></tr>
-                <tr><th>Tenure</th><td>{{ record.Policy.tenure }} months</td></tr>
-                <tr><th>Status</th><td><span class="status-badge status-{{ record.status|lower }}">{{ record.status }}</span></td></tr>
-                <tr><th>Coverage Period</th><td>{{ record.Policy.cover_start|default:"Not set" }} - {{ record.Policy.cover_end|default:"Not set" }}</td></tr>
-                <tr><th>Plot Number</th><td>{{ record.Policy.plot_number }}</td></tr>
-                <tr><th>Ward/Kgotla</th><td>{{ record.Policy.ward_kgotla }}</td></tr>
-                <tr><th>Village</th><td>{{ record.Policy.village }}</td></tr>
-                <tr><th>District</th><td>{{ record.Policy.district }}</td></tr>
-                <tr><th>Title Deed</th><td>{% if record.Policy.title_deed %}<a href="{{ record.Policy.title_deed.url }}" target="_blank">Download</a>{% else %}N/A{% endif %}</td></tr>
-                <tr><th>Financial Interest</th><td>{{ record.Policy.financial_interest }}</td></tr>
-                <tr><th>Created</th><td>{{ record.Policy.creation_date }}</td></tr>
-                <tr><th>Expiry Date</th><td>{{ record.Policy.expiry_date|default:"N/A" }}</td></tr>
-            </table>
+    <section class="section-card">
+        <div class="section-head"><i class="ri-user-line"></i> Customer Information</div>
+        <div class="section-body">
+            <div class="kv-grid">
+                <div class="kv-item">
+                    <div class="kv-label">Name</div>
+                    <div class="kv-value">{{ customer.user.first_name }} {{ customer.user.last_name }}</div>
+                </div>
+                <div class="kv-item">
+                    <div class="kv-label">ID Number</div>
+                    <div class="kv-value">{{ customer.id_number|default:"Not provided" }}</div>
+                </div>
+                <div class="kv-item">
+                    <div class="kv-label">Phone</div>
+                    <div class="kv-value">{{ customer.mobile|default:"Not provided" }}</div>
+                </div>
+                <div class="kv-item">
+                    <div class="kv-label">Email</div>
+                    <div class="kv-value">{{ customer.user.email|default:"Not provided" }}</div>
+                </div>
+                <div class="kv-item full">
+                    <div class="kv-label">Address</div>
+                    <div class="kv-value">{{ customer.address|default:"Not provided" }}</div>
+                </div>
+            </div>
         </div>
-        {% endfor %}
-    {% else %}
-        <p>No homeowners policies found.</p>
-    {% endif %}
-</div>
+    </section>
 
-<div class="details-section">
-    <h2>Motor Insurance Add-ons</h2>
-    {% if motor %}
-        {% for record in motor %}
-        <div class="details-subsection">
-            <table class="applications-table">
-                <tr><th>Policy Name</th><td>{{ record.thirdpartypolicy.policy_name }}</td></tr>
-                <tr><th>Policy #</th><td>{{ record.thirdpartypolicy.policy_number }}</td></tr>
-                <tr><th>Category</th><td>{{ record.thirdpartypolicy.category.category_name }}</td></tr>
-                <tr><th>Premium</th><td>P{{ record.thirdpartypolicy.premium|floatformat:2 }}</td></tr>
-                <tr><th>Tenure</th><td>{{ record.thirdpartypolicy.tenure }} months</td></tr>
-                <tr><th>Status</th><td><span class="status-badge status-{{ record.thirdpartystatus|lower }}">{{ record.thirdpartystatus }}</span></td></tr>
-                <tr><th>Coverage Period</th><td>{{ record.thirdpartypolicy.cover_start|default:"Not set" }} - {{ record.thirdpartypolicy.cover_end|default:"Not set" }}</td></tr>
-                <tr><th>Vehicle Type</th><td>{{ record.thirdpartypolicy.vehicle_type }}</td></tr>
-                <tr><th>Make</th><td>{{ record.thirdpartypolicy.vehicle_make }}</td></tr>
-                <tr><th>Model</th><td>{{ record.thirdpartypolicy.vehicle_model }}</td></tr>
-                <tr><th>Year</th><td>{{ record.thirdpartypolicy.vehicle_year }}</td></tr>
-                <tr><th>Chassis Number</th><td>{{ record.thirdpartypolicy.chassis_number }}</td></tr>
-                <tr><th>Registration Number</th><td>{{ record.thirdpartypolicy.registration_number }}</td></tr>
-                <tr><th>Engine Number</th><td>{{ record.thirdpartypolicy.engine_number }}</td></tr>
-                <tr><th>Territorial Limits</th><td>{{ record.thirdpartypolicy.territorial_limits }}</td></tr>
-                <tr><th>Created</th><td>{{ record.thirdpartypolicy.creation_date }}</td></tr>
-                <tr><th>Expiry Date</th><td>{{ record.thirdpartypolicy.expiry_date|default:"N/A" }}</td></tr>
-            </table>
+    <section class="section-card">
+        <div class="section-head"><i class="ri-home-4-line"></i> Homeowners Policies</div>
+        <div class="section-body">
+            {% if homeowners %}
+                {% for record in homeowners %}
+                <div class="policy-block">
+                    <div class="policy-title">{{ record.Policy.policy_name }} (#{{ record.Policy.policy_number }})</div>
+                    <div class="section-body">
+                        <div class="kv-grid">
+                            <div class="kv-item"><div class="kv-label">Category</div><div class="kv-value">{{ record.Policy.category.category_name }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Status</div><div class="kv-value"><span class="status-badge status-{{ record.status|lower }}">{{ record.status }}</span></div></div>
+                            <div class="kv-item"><div class="kv-label">Sum Assured</div><div class="kv-value">P{{ record.Policy.sum_assurance|floatformat:2 }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Premium</div><div class="kv-value">P{{ record.Policy.premium|floatformat:2 }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Tenure</div><div class="kv-value">{{ record.Policy.tenure }} months</div></div>
+                            <div class="kv-item"><div class="kv-label">Coverage Period</div><div class="kv-value">{{ record.Policy.cover_start|default:"Not set" }} - {{ record.Policy.cover_end|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Plot Number</div><div class="kv-value">{{ record.Policy.plot_number|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Ward / Kgotla</div><div class="kv-value">{{ record.Policy.ward_kgotla|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Village</div><div class="kv-value">{{ record.Policy.village|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">District</div><div class="kv-value">{{ record.Policy.district|default:"Not set" }}</div></div>
+                            <div class="kv-item full"><div class="kv-label">Financial Interest</div><div class="kv-value">{{ record.Policy.financial_interest|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Created</div><div class="kv-value">{{ record.Policy.creation_date|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Expiry Date</div><div class="kv-value">{{ record.Policy.expiry_date|default:"N/A" }}</div></div>
+                            <div class="kv-item full"><div class="kv-label">Title Deed</div><div class="kv-value">{% if record.Policy.title_deed %}<a href="{{ record.Policy.title_deed.url }}" target="_blank" class="file-link">Download</a>{% else %}N/A{% endif %}</div></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-text">No homeowners policies found.</p>
+            {% endif %}
         </div>
-        {% endfor %}
-    {% else %}
-        <p>No motor insurance add-ons found.</p>
-    {% endif %}
+    </section>
+
+    <section class="section-card">
+        <div class="section-head"><i class="ri-car-line"></i> Motor Insurance Add-ons</div>
+        <div class="section-body">
+            {% if motor %}
+                {% for record in motor %}
+                <div class="policy-block">
+                    <div class="policy-title">{{ record.thirdpartypolicy.policy_name }} (#{{ record.thirdpartypolicy.policy_number }})</div>
+                    <div class="section-body">
+                        <div class="kv-grid">
+                            <div class="kv-item"><div class="kv-label">Category</div><div class="kv-value">{{ record.thirdpartypolicy.category.category_name }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Status</div><div class="kv-value"><span class="status-badge status-{{ record.thirdpartystatus|lower }}">{{ record.thirdpartystatus }}</span></div></div>
+                            <div class="kv-item"><div class="kv-label">Premium</div><div class="kv-value">P{{ record.thirdpartypolicy.premium|floatformat:2 }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Tenure</div><div class="kv-value">{{ record.thirdpartypolicy.tenure }} months</div></div>
+                            <div class="kv-item full"><div class="kv-label">Coverage Period</div><div class="kv-value">{{ record.thirdpartypolicy.cover_start|default:"Not set" }} - {{ record.thirdpartypolicy.cover_end|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Vehicle Type</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_type|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Make</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_make|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Model</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_model|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Year</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_year|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Chassis Number</div><div class="kv-value">{{ record.thirdpartypolicy.chassis_number|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Registration Number</div><div class="kv-value">{{ record.thirdpartypolicy.registration_number|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Engine Number</div><div class="kv-value">{{ record.thirdpartypolicy.engine_number|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Territorial Limits</div><div class="kv-value">{{ record.thirdpartypolicy.territorial_limits|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Created</div><div class="kv-value">{{ record.thirdpartypolicy.creation_date|default:"Not set" }}</div></div>
+                            <div class="kv-item"><div class="kv-label">Expiry Date</div><div class="kv-value">{{ record.thirdpartypolicy.expiry_date|default:"N/A" }}</div></div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty-text">No motor insurance add-ons found.</p>
+            {% endif %}
+        </div>
+    </section>
 </div>
 {% endblock %}

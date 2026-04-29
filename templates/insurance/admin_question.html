@@ -1,467 +1,393 @@
 {% extends 'insurance/adminbase.html' %}
-{% block content %}
 
-<style>
-    .page-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 20px;
-    }
+{% block title %}Customer Questions - Minet Insurance{% endblock %}
 
-    .page-header {
-        margin-bottom: 20px;
-    }
+{% block extra_css %}
+.questions-shell {
+    display: grid;
+    gap: 20px;
+}
 
-    .page-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #333;
-        margin: 0 0 5px 0;
-    }
+.questions-hero {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    border-left: 6px solid var(--mc-red);
+    padding: 26px 28px;
+}
 
-    .page-subtitle {
-        font-size: 13px;
-        color: #666;
-        margin: 0;
-    }
+.questions-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mc-red);
+    margin-bottom: 10px;
+}
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
-    }
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+}
 
-    .stat-card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 15px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
+.page-subtitle {
+    color: #666;
+    font-size: 14px;
+}
 
-    .stat-number {
-        font-size: 28px;
-        font-weight: 700;
-        color: #e21a22;
-        margin-bottom: 5px;
-    }
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
 
-    .stat-label {
-        font-size: 13px;
-        color: #666;
-    }
+.stat-cell {
+    padding: 16px 18px;
+    border-right: 1px solid var(--mc-divider);
+}
 
-    .questions-card {
-        background: white;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
+.stat-cell:last-child {
+    border-right: none;
+}
 
-    .card-header {
-        background: #e21a22;
-        color: white;
-        padding: 12px 20px;
-        font-size: 16px;
-        font-weight: 600;
-    }
+.stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #777;
+    margin-bottom: 8px;
+}
 
-    .table-responsive {
+.stat-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--mc-red);
+    line-height: 1;
+}
+
+.stat-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 6px;
+}
+
+.questions-table-shell {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    overflow: hidden;
+}
+
+.table-head {
+    display: grid;
+    grid-template-columns: 0.5fr 1.2fr 2fr 1.6fr 1.2fr 0.9fr 1fr 1.3fr;
+    background: #111;
+    color: #fff;
+}
+
+.th-cell {
+    padding: 12px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.th-cell:last-child {
+    border-right: none;
+}
+
+.table-body {
+    display: grid;
+}
+
+.question-row {
+    display: grid;
+    grid-template-columns: 0.5fr 1.2fr 2fr 1.6fr 1.2fr 0.9fr 1fr 1.3fr;
+    border-bottom: 1px solid var(--mc-divider);
+}
+
+.question-row:last-child {
+    border-bottom: none;
+}
+
+.question-row:hover {
+    background: #fafbfc;
+}
+
+.td-cell {
+    padding: 13px 14px;
+    font-size: 13px;
+    color: #111;
+    min-width: 0;
+}
+
+.td-primary {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.td-secondary {
+    font-size: 11px;
+    color: #666;
+}
+
+.question-preview {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.45;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.status-answered {
+    background: #edf7ee;
+    color: #167c3a;
+}
+
+.status-pending {
+    background: #fef9ec;
+    color: #92400e;
+}
+
+.action-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.action-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.action-link:hover {
+    color: #084298;
+}
+
+.answer-panel {
+    background: #f8f8f8;
+    border-top: 1px solid var(--mc-divider);
+    padding: 14px;
+}
+
+.answer-panel textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--mc-border);
+    background: #fff;
+    font-family: var(--mc-font);
+    font-size: 13px;
+    padding: 10px 12px;
+    min-height: 90px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.answer-panel textarea:focus {
+    border-color: var(--mc-red);
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--mc-red);
+}
+
+.answer-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-save {
+    border: 1px solid var(--mc-red);
+    background: var(--mc-red);
+    color: #fff;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    background: #a00e15;
+}
+
+.btn-cancel {
+    border: none;
+    background: transparent;
+    color: #0d6efd;
+    text-decoration: underline;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.btn-cancel:hover {
+    color: #084298;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 58px 18px;
+    color: #666;
+}
+
+.empty-state i {
+    font-size: 44px;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 1200px) {
+    .questions-table-shell {
         overflow-x: auto;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 0;
+    .table-head,
+    .question-row {
+        min-width: 1200px;
     }
+}
 
-    thead {
-        background: #f8f9fa;
+@media (max-width: 800px) {
+    .stats-strip {
+        grid-template-columns: 1fr;
     }
+}
+{% endblock %}
 
-    thead th {
-        padding: 12px 15px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #555;
-        text-align: left;
-        border-bottom: 2px solid #dee2e6;
-    }
-
-    tbody tr {
-        border-bottom: 1px solid #e9ecef;
-        transition: background 0.2s;
-    }
-
-    tbody tr:hover {
-        background: #f8f9fa;
-    }
-
-    tbody tr:last-child {
-        border-bottom: none;
-    }
-
-    tbody td {
-        padding: 12px 15px;
-        font-size: 13px;
-        color: #333;
-        vertical-align: middle;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 3px;
-        font-size: 11px;
-        font-weight: 600;
-    }
-
-    .status-answered {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .status-pending {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .question-text {
-        max-width: 400px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .btn-answer {
-        background: #007bff;
-        color: white;
-        padding: 5px 12px;
-        border-radius: 3px;
-        text-decoration: none;
-        font-size: 12px;
-        font-weight: 600;
-        display: inline-block;
-        transition: background 0.2s;
-    }
-
-    .btn-answer:hover {
-        background: #0056b3;
-        color: white;
-        text-decoration: none;
-    }
-
-    .no-data {
-        padding: 40px 20px;
-        text-align: center;
-        color: #6c757d;
-        font-size: 14px;
-    }
-
-    .answer-form {
-        background: #f8f9fa;
-        padding: 15px;
-        border-top: 1px solid #dee2e6;
-        margin-top: 10px;
-    }
-
-    .answer-form textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        font-size: 13px;
-        min-height: 80px;
-        resize: vertical;
-        margin-bottom: 10px;
-    }
-
-    .answer-form textarea:focus {
-        outline: none;
-        border-color: #e21a22;
-        box-shadow: 0 0 0 3px rgba(226, 26, 34, 0.1);
-    }
-
-    .btn-submit-answer {
-        background: #28a745;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .btn-submit-answer:hover {
-        background: #218838;
-    }
-
-    .btn-cancel {
-        background: #6c757d;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 4px;
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-left: 8px;
-        transition: background 0.2s;
-    }
-
-    .btn-cancel:hover {
-        background: #5a6268;
-    }
-
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-        .page-container {
-            padding: 15px 10px;
-        }
-
-        .page-title {
-            font-size: 20px;
-        }
-
-        .page-subtitle {
-            font-size: 12px;
-        }
-
-        .stats-grid {
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .stat-card {
-            padding: 12px;
-        }
-
-        .stat-number {
-            font-size: 24px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-        }
-
-        .card-header {
-            padding: 10px 15px;
-            font-size: 15px;
-        }
-
-        thead th {
-            font-size: 11px;
-            padding: 10px 8px;
-        }
-
-        tbody td {
-            font-size: 12px;
-            padding: 10px 8px;
-        }
-
-        .question-text {
-            max-width: 200px;
-            font-size: 12px;
-        }
-
-        .btn-answer {
-            width: 100%;
-            text-align: center;
-            font-size: 11px;
-            padding: 4px 10px;
-        }
-
-        .status-badge {
-            font-size: 10px;
-            padding: 3px 6px;
-        }
-
-        .answer-form {
-            padding: 12px;
-        }
-
-        .answer-form textarea {
-            font-size: 12px;
-            min-height: 70px;
-        }
-
-        .btn-submit-answer,
-        .btn-cancel {
-            font-size: 12px;
-            padding: 7px 12px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .page-container {
-            padding: 10px 5px;
-        }
-
-        .page-title {
-            font-size: 18px;
-        }
-
-        .questions-card {
-            border-radius: 4px;
-        }
-
-        .card-header {
-            padding: 8px 12px;
-            font-size: 14px;
-        }
-
-        thead th {
-            font-size: 10px;
-            padding: 8px 5px;
-        }
-
-        tbody td {
-            font-size: 11px;
-            padding: 8px 5px;
-        }
-
-        .question-text {
-            max-width: 150px;
-        }
-
-        .no-data {
-            padding: 30px 15px;
-            font-size: 13px;
-        }
-
-        .answer-form {
-            padding: 10px;
-        }
-    }
-</style>
-
-<div class="page-container">
-    <div class="page-header">
+{% block content %}
+<div class="questions-shell">
+    <section class="questions-hero">
+        <div class="questions-kicker">Support Management</div>
         <h1 class="page-title">Customer Support Questions</h1>
-        <p class="page-subtitle">View and respond to customer inquiries</p>
-    </div>
+        <p class="page-subtitle">View, answer, and edit responses to customer inquiries.</p>
+    </section>
 
-    <!-- Statistics -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number">{{ total_questions }}</div>
+    <section class="stats-strip">
+        <div class="stat-cell">
             <div class="stat-label">Total Questions</div>
+            <div class="stat-value">{{ total_questions }}</div>
+            <div class="stat-note">All submissions</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ answered_questions }}</div>
+        <div class="stat-cell">
             <div class="stat-label">Answered</div>
+            <div class="stat-value">{{ answered_questions }}</div>
+            <div class="stat-note">With admin response</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ pending_questions }}</div>
-            <div class="stat-label">Pending Response</div>
+        <div class="stat-cell">
+            <div class="stat-label">Pending</div>
+            <div class="stat-value">{{ pending_questions }}</div>
+            <div class="stat-note">Needs response</div>
         </div>
-    </div>
+    </section>
 
-    <!-- Questions Table -->
-    <div class="questions-card">
-        <div class="card-header">All Customer Questions</div>
-        
+    <section class="questions-table-shell">
         {% if questions %}
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">No.</th>
-                        <th>Customer</th>
-                        <th>Question</th>
-                        <th>Admin Response</th>
-                        <th style="width: 120px;">Answered By</th>
-                        <th style="width: 100px;">Status</th>
-                        <th style="width: 120px;">Asked Date</th>
-                        <th style="width: 100px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for question in questions %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><strong>{{ question.customer.get_full_name }}</strong></td>
-                        <td>
-                            <div class="question-text" title="{{ question.description }}">
-                                {{ question.description }}
-                            </div>
-                        </td>
-                        <td>
-                            {% if question.admin_comment != 'Nothing' %}
-                                {{ question.admin_comment }}
-                            {% else %}
-                                <span style="color: #adb5bd; font-style: italic;">No response yet</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if question.answered_by %}
-                                <div style="font-weight: 600; color: #333;">{{ question.answered_by.get_full_name|default:question.answered_by.username }}</div>
-                                {% if question.answered_date %}
-                                    <div style="font-size: 11px; color: #6c757d;">{{ question.answered_date|date:"d M Y H:i" }}</div>
-                                {% endif %}
-                            {% else %}
-                                <span style="color: #adb5bd; font-style: italic;">-</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if question.admin_comment != 'Nothing' %}
-                                <span class="status-badge status-answered">Answered</span>
-                            {% else %}
-                                <span class="status-badge status-pending">Pending</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ question.asked_date|date:"d M Y" }}</td>
-                        <td>
-                            <button class="btn-answer" onclick="toggleAnswerForm({{ question.id }})">
-                                {% if question.admin_comment != 'Nothing' %}Edit{% else %}Answer{% endif %}
-                            </button>
-                        </td>
-                    </tr>
-                    <tr id="answer-form-{{ question.id }}" style="display: none;">
-                        <td colspan="8">
-                            <div class="answer-form">
-                                <form method="POST" action="{% url 'admin-question' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="question_id" value="{{ question.id }}">
-                                    <textarea name="admin_comment" placeholder="Type your response here..." required>{% if question.admin_comment != 'Nothing' %}{{ question.admin_comment }}{% endif %}</textarea>
-                                    <button type="submit" class="btn-submit-answer">Submit Response</button>
-                                    <button type="button" class="btn-cancel" onclick="toggleAnswerForm({{ question.id }})">Cancel</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="table-head">
+            <div class="th-cell">No.</div>
+            <div class="th-cell">Customer</div>
+            <div class="th-cell">Question</div>
+            <div class="th-cell">Admin Response</div>
+            <div class="th-cell">Answered By</div>
+            <div class="th-cell">Status</div>
+            <div class="th-cell">Asked Date</div>
+            <div class="th-cell">Actions</div>
+        </div>
+        <div class="table-body">
+            {% for question in questions %}
+            <div class="question-row">
+                <div class="td-cell">{{ forloop.counter }}</div>
+                <div class="td-cell">
+                    <div class="td-primary">{{ question.customer.get_full_name }}</div>
+                </div>
+                <div class="td-cell">
+                    <div class="question-preview" title="{{ question.description }}">{{ question.description }}</div>
+                </div>
+                <div class="td-cell">
+                    {% if question.admin_comment != 'Nothing' %}
+                    <div class="question-preview">{{ question.admin_comment }}</div>
+                    {% else %}
+                    <span class="td-secondary">No response yet</span>
+                    {% endif %}
+                </div>
+                <div class="td-cell">
+                    {% if question.answered_by %}
+                    <div class="td-primary">{{ question.answered_by.get_full_name|default:question.answered_by.username }}</div>
+                    {% if question.answered_date %}
+                    <div class="td-secondary">{{ question.answered_date|date:'d M Y H:i' }}</div>
+                    {% endif %}
+                    {% else %}
+                    <span class="td-secondary">-</span>
+                    {% endif %}
+                </div>
+                <div class="td-cell">
+                    {% if question.admin_comment != 'Nothing' %}
+                    <span class="status-badge status-answered">Answered</span>
+                    {% else %}
+                    <span class="status-badge status-pending">Pending</span>
+                    {% endif %}
+                </div>
+                <div class="td-cell">{{ question.asked_date|date:'d M Y' }}</div>
+                <div class="td-cell">
+                    <div class="action-links">
+                        <a href="#" class="action-link" onclick="toggleAnswerPanel({{ question.id }}); return false;">{% if question.admin_comment != 'Nothing' %}Quick Edit{% else %}Quick Reply{% endif %}</a>
+                        <a href="{% url 'update-question' question.id %}" class="action-link">Open Edit Page</a>
+                    </div>
+                </div>
+            </div>
+            <div id="answer-panel-{{ question.id }}" class="answer-panel" style="display:none;">
+                <form method="POST" action="{% url 'admin-question' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="question_id" value="{{ question.id }}">
+                    <textarea name="admin_comment" required placeholder="Type your response here">{% if question.admin_comment != 'Nothing' %}{{ question.admin_comment }}{% endif %}</textarea>
+                    <div class="answer-actions">
+                        <button type="submit" class="btn-save">Save Response</button>
+                        <button type="button" class="btn-cancel" onclick="toggleAnswerPanel({{ question.id }})">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
         </div>
         {% else %}
-        <div class="no-data">
-            <p>No customer questions yet.</p>
-            <p style="font-size: 12px; margin-top: 10px;">Customer questions will appear here when they submit inquiries.</p>
+        <div class="empty-state">
+            <i class="ri-question-answer-line"></i>
+            <h3>No Customer Questions Yet</h3>
+            <p>Customer questions will appear here once submitted.</p>
         </div>
         {% endif %}
-    </div>
+    </section>
 </div>
 
 <script>
-    function toggleAnswerForm(questionId) {
-        const formRow = document.getElementById('answer-form-' + questionId);
-        if (formRow.style.display === 'none') {
-            // Hide all other forms first
-            document.querySelectorAll('[id^="answer-form-"]').forEach(row => {
-                row.style.display = 'none';
-            });
-            // Show this form
-            formRow.style.display = 'table-row';
-        } else {
-            formRow.style.display = 'none';
-        }
-    }
-</script>
+function toggleAnswerPanel(questionId) {
+    const panel = document.getElementById('answer-panel-' + questionId);
+    const isOpen = panel.style.display === 'block';
 
+    document.querySelectorAll('[id^="answer-panel-"]').forEach(function (item) {
+        item.style.display = 'none';
+    });
+
+    panel.style.display = isOpen ? 'none' : 'block';
+}
+</script>
 {% endblock %}
