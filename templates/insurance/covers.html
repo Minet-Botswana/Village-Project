@@ -37,7 +37,7 @@
     .pg-header p  { font-size: 14px; opacity: 0.88; }
 
     /* ── CONTENT ── */
-    .pg-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 40px; }
+    .pg-wrap { max-width: 100%; padding: 32px 40px; }
     .pg-back  { font-size: 12px; color: var(--red); margin-bottom: 24px; display: inline-flex; align-items: center; gap: 6px; }
     .pg-back:hover { text-decoration: underline; }
 
@@ -67,8 +67,18 @@
     /* ── NOTE ── */
     .cv-note { margin: 0 20px 16px; padding: 10px 14px; background: #fffbe6; border-left: 3px solid #e6a800; font-size: 12px; color: #5a4200; }
 
+    /* ── CONTACT STRIP ── */
+    .lp-contact { background: var(--dark); color: #fff; padding: 40px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+    .lp-contact-item { display: flex; gap: 14px; align-items: flex-start; }
+    .lp-contact-icon { width: 36px; height: 36px; background: var(--red); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .lp-contact-icon i { color: #fff; font-size: 14px; }
+    .lp-contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #888; margin-bottom: 4px; }
+    .lp-contact-val   { font-size: 13px; color: #ddd; line-height: 1.5; }
+    .lp-contact-link  { font-size: 12px; color: var(--red); font-weight: 600; margin-top: 6px; display: inline-block; }
+    .lp-contact-link:hover { text-decoration: underline; }
+
     /* ── FOOTER ── */
-    .lp-footer { background: #111; color: #888; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 40px; }
+    .lp-footer { background: #111; color: #888; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 0; }
 
     @media (max-width: 768px) {
       .lp-nav-links, .lp-btn-login { display: none; }
@@ -77,6 +87,7 @@
       .pg-header { padding: 28px 20px; }
       .pg-wrap { padding: 24px 20px; }
       .cv-grid { grid-template-columns: 1fr; }
+      .lp-contact { grid-template-columns: 1fr; padding: 28px 20px; }
       .lp-footer { flex-direction: column; gap: 8px; text-align: center; }
     }
   </style>
@@ -231,6 +242,32 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- CONTACT STRIP -->
+<div class="lp-contact">
+  <div class="lp-contact-item">
+    <div class="lp-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+    <div>
+      <div class="lp-contact-label">Address</div>
+      <div class="lp-contact-val">Minet House, Plot 50368<br>Gaborone Business Park, Showgrounds<br>Gaborone, Botswana</div>
+      <a class="lp-contact-link" href="https://www.google.com/maps/dir/?api=1&destination=Minet+House+Plot+50368+Gaborone+Business+Park+Showgrounds+Gaborone+Botswana" target="_blank" rel="noopener noreferrer">Get Directions &rarr;</a>
+    </div>
+  </div>
+  <div class="lp-contact-item">
+    <div class="lp-contact-icon"><i class="fas fa-phone"></i></div>
+    <div>
+      <div class="lp-contact-label">Phone</div>
+      <div class="lp-contact-val">(+267) 361 7300</div>
+    </div>
+  </div>
+  <div class="lp-contact-item">
+    <div class="lp-contact-icon"><i class="fas fa-envelope"></i></div>
+    <div>
+      <div class="lp-contact-label">Email</div>
+      <div class="lp-contact-val">info@minet.co.bw</div>
+    </div>
   </div>
 </div>
 
