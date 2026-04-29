@@ -270,7 +270,7 @@
                         {% endfor %}
                         {% for field, error_list in customer_form_errors.items %}
                             {% for error in error_list %}
-                                <li><strong>{{ field|title|replace:"_":" " }}:</strong> {{ error }}</li>
+                                <li><strong>{{ field|title }}:</strong> {{ error }}</li>
                             {% endfor %}
                         {% endfor %}
                     </ul>
