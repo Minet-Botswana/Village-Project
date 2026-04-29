@@ -240,6 +240,166 @@
     margin-bottom: 18px;
 }
 
+/* Filter bar */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    padding: 14px 18px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.filter-group.search-group {
+    flex: 3;
+    min-width: 220px;
+}
+
+.filter-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: #555;
+}
+
+.filter-input,
+.filter-select {
+    padding: 10px 12px;
+    border: 1px solid var(--mc-border);
+    font-size: 13px;
+    font-family: var(--mc-font);
+    background: #fff;
+    width: 100%;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    border-color: var(--mc-red);
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--mc-red);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    padding-bottom: 0;
+}
+
+.btn-filter {
+    padding: 10px 18px;
+    background: var(--mc-red);
+    color: #fff;
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--mc-font);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-filter:hover {
+    background: #a00e15;
+}
+
+.btn-clear {
+    padding: 10px 14px;
+    background: transparent;
+    color: #555;
+    border: 1px solid var(--mc-border);
+    font-size: 13px;
+    font-family: var(--mc-font);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.btn-clear:hover {
+    border-color: #999;
+    color: #111;
+}
+
+.result-meta {
+    width: 100%;
+    font-size: 12px;
+    color: #666;
+    padding-top: 2px;
+}
+
+.result-meta strong {
+    color: #111;
+}
+
+/* Pagination */
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    border-top: none;
+    padding: 12px 18px;
+}
+
+.pagination-info {
+    font-size: 13px;
+    color: #555;
+}
+
+.pagination-links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 7px 12px;
+    border: 1px solid var(--mc-border);
+    font-size: 13px;
+    font-family: var(--mc-font);
+    color: #111;
+    text-decoration: none;
+    background: #fff;
+    line-height: 1;
+}
+
+.page-link:hover {
+    border-color: var(--mc-red);
+    color: var(--mc-red);
+}
+
+.page-link.current {
+    background: var(--mc-red);
+    border-color: var(--mc-red);
+    color: #fff;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.page-link.disabled {
+    color: #bbb;
+    pointer-events: none;
+    background: #f5f5f5;
+}
+
 @media (max-width: 1180px) {
     .workspace-header,
     .customer-row {
@@ -305,7 +465,7 @@
     <section class="stats-strip">
         <div class="stat-cell">
             <div class="stat-label">Total Customers</div>
-            <div class="stat-value">{{ customers.count }}</div>
+            <div class="stat-value">{{ total_count }}</div>
             <div class="stat-note">Registered customer accounts</div>
         </div>
         <div class="stat-cell">
@@ -325,15 +485,39 @@
         </div>
     </section>
 
-    <section class="control-bar">
-        <div class="control-meta">
-            <div class="control-title">Customer Register</div>
-            <div class="control-subtitle">Search by customer name, identification number, or mobile number.</div>
+    <form method="get" action="" class="filter-bar">
+        <div class="filter-group search-group">
+            <label class="filter-label">Search</label>
+            <input type="text" name="q" value="{{ search_query }}" class="filter-input" placeholder="Name, ID number, mobile, or email...">
         </div>
-        <div class="search-wrap">
-            <input type="text" id="customerSearch" class="search-input" placeholder="Search customers by name, ID, or phone number...">
+        <div class="filter-group">
+            <label class="filter-label">Gender</label>
+            <select name="gender" class="filter-select">
+                <option value="">All genders</option>
+                <option value="M" {% if gender_filter == 'M' %}selected{% endif %}>Male</option>
+                <option value="F" {% if gender_filter == 'F' %}selected{% endif %}>Female</option>
+            </select>
         </div>
-    </section>
+        <div class="filter-group">
+            <label class="filter-label">Marital Status</label>
+            <select name="marital_status" class="filter-select">
+                <option value="">All statuses</option>
+                <option value="M" {% if marital_filter == 'M' %}selected{% endif %}>Married</option>
+                <option value="S" {% if marital_filter == 'S' %}selected{% endif %}>Single</option>
+                <option value="D" {% if marital_filter == 'D' %}selected{% endif %}>Divorced</option>
+                <option value="W" {% if marital_filter == 'W' %}selected{% endif %}>Widowed</option>
+            </select>
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn-filter"><i class="ri-search-line"></i> Search</button>
+            <a href="{% url 'admin-view-customer' %}" class="btn-clear">Clear</a>
+        </div>
+        {% if search_query or gender_filter or marital_filter %}
+        <div class="result-meta">
+            Showing <strong>{{ filtered_count }}</strong> result{{ filtered_count|pluralize }} out of <strong>{{ total_count }}</strong> customers.
+        </div>
+        {% endif %}
+    </form>
 
     <section class="customers-workspace">
         {% if customers %}
@@ -347,8 +531,8 @@
             </div>
 
             <div class="customer-list" id="customersTableBody">
-                {% for customer in customers %}
-                <div class="customer-row" data-search="{{ customer.user.first_name|lower }} {{ customer.user.last_name|lower }} {{ customer.id_number|lower }} {{ customer.mobile|lower }}">
+                {% for customer in page_obj %}
+                <div class="customer-row">
                     <div class="customer-cell">
                         <div class="customer-name">{{ customer.user.first_name }} {{ customer.user.last_name }}</div>
                         <div class="customer-id">ID: {{ customer.id_number|default:"Not provided" }}</div>
@@ -381,6 +565,40 @@
                 </div>
                 {% endfor %}
             </div>
+
+            {% if page_obj.has_other_pages %}
+            <div class="pagination-bar">
+                <div class="pagination-info">
+                    Page {{ page_obj.number }} of {{ paginator.num_pages }} &mdash; {{ paginator.count }} record{{ paginator.count|pluralize }}
+                </div>
+                <div class="pagination-links">
+                    {% if page_obj.has_previous %}
+                        <a class="page-link" href="?{{ filter_query_string }}&page=1">&laquo; First</a>
+                        <a class="page-link" href="?{{ filter_query_string }}&page={{ page_obj.previous_page_number }}">Prev</a>
+                    {% else %}
+                        <span class="page-link disabled">&laquo; First</span>
+                        <span class="page-link disabled">Prev</span>
+                    {% endif %}
+
+                    {% for num in paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <span class="page-link current">{{ num }}</span>
+                        {% elif num >= page_obj.number|add:"-3" and num <= page_obj.number|add:"3" %}
+                            <a class="page-link" href="?{{ filter_query_string }}&page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class="page-link" href="?{{ filter_query_string }}&page={{ page_obj.next_page_number }}">Next</a>
+                        <a class="page-link" href="?{{ filter_query_string }}&page={{ paginator.num_pages }}">Last &raquo;</a>
+                    {% else %}
+                        <span class="page-link disabled">Next</span>
+                        <span class="page-link disabled">Last &raquo;</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
         {% else %}
             <div class="empty-state">
                 <i class="ri-user-line"></i>
@@ -393,20 +611,4 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-// Customer search functionality
-document.getElementById('customerSearch').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const rows = document.querySelectorAll('.customer-row');
-    
-    rows.forEach(row => {
-        const searchData = row.getAttribute('data-search');
-        if (searchData.includes(searchTerm)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-});
-</script>
 {% endblock %}

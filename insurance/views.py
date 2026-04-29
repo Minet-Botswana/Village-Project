@@ -135,54 +135,65 @@ def admin_view_customer_view(request):
     return render(request,'insurance/admin_view_customer.html',{'customers':customers})
 '''
 import json
-from django.db.models import Count
+from django.db.models import Count, Q
+from django.core.paginator import Paginator
 from .models import Customer
 @login_required(login_url='adminlogin')
 def admin_view_customer_view(request):
-    customers = Customer.objects.filter(user__groups__name='CUSTOMER')
+    all_customers = Customer.objects.filter(user__groups__name='CUSTOMER')
 
-    # Count the number of users for each gender
-    gender_distribution = customers.values('gender').annotate(count=Count('gender'))
-    # Count the number of customers for each marital status
-    marital_status_distribution = customers.values('marital_status').annotate(count=Count('marital_status'))
+    # Search
+    search_query = request.GET.get('q', '').strip()
+    if search_query:
+        all_customers = all_customers.filter(
+            Q(user__first_name__icontains=search_query) |
+            Q(user__last_name__icontains=search_query) |
+            Q(id_number__icontains=search_query) |
+            Q(mobile__icontains=search_query) |
+            Q(user__email__icontains=search_query)
+        )
 
-    total_users = customers.count()
-    total_customers = customers.count()
+    # Filters
+    gender_filter = request.GET.get('gender', '')
+    marital_filter = request.GET.get('marital_status', '')
+    if gender_filter:
+        all_customers = all_customers.filter(gender=gender_filter)
+    if marital_filter:
+        all_customers = all_customers.filter(marital_status=marital_filter)
 
-    # Calculate the percentage of each gender category
-    gender_percentage = {}
-    for entry in gender_distribution:
-        gender_percentage[entry['gender']] = (entry['count'] / total_users) * 100
+    # Summary counts on unfiltered base set
+    base = Customer.objects.filter(user__groups__name='CUSTOMER')
+    male_count = base.filter(gender='M').count()
+    female_count = base.filter(gender='F').count()
+    married_count = base.filter(marital_status='M').count()
+    single_count = base.filter(marital_status='S').count()
 
-    # Serialize gender_percentage dictionary to JSON
-    gender_percentage_json = json.dumps(gender_percentage)
-    
-    # Extract marital status counts
-    marital_status_counts = {}
-    for entry in marital_status_distribution:
-        marital_status_counts[entry['marital_status']] = entry['count']
-        
-    # Get individual counts for template use
-    male_count = customers.filter(gender='M').count()
-    female_count = customers.filter(gender='F').count()
-    married_count = customers.filter(marital_status='M').count()
-    single_count = customers.filter(marital_status='S').count()
-        
-    # Serialize marital_status_counts dictionary to JSON
-    marital_status_counts_json = json.dumps(marital_status_counts)
-    print("Marital Status Counts:", marital_status_counts)
-    print("gender_percentage", gender_percentage_json)
+    # Pagination
+    paginator = Paginator(all_customers.order_by('user__first_name', 'user__last_name'), 20)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Build query string without 'page' for pagination links
+    query_params = request.GET.copy()
+    query_params.pop('page', None)
+    filter_query_string = query_params.urlencode()
 
     context = {
-        'customers': customers, 
-        'gender_percentage_json': gender_percentage_json,
-        'marital_status_counts_json': marital_status_counts_json,
+        'customers': page_obj,
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'filter_query_string': filter_query_string,
+        'search_query': search_query,
+        'gender_filter': gender_filter,
+        'marital_filter': marital_filter,
         'male_count': male_count,
         'female_count': female_count,
         'married_count': married_count,
         'single_count': single_count,
+        'total_count': base.count(),
+        'filtered_count': paginator.count,
     }
-    
+
     return render(request, 'insurance/admin_view_customer.html', context)
 
 
