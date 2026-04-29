@@ -4,11 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - KoGae Insurance</title>
-    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
-    
+    <title>Login - Minet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --red: #c0111a;
+            --dark: #1a1a1a;
+            --border: #d5d5d5;
+            --bg: #f0f2f5;
+            --font: Arial;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,119 +22,187 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+            font-family: var(--font);
+            background-color: var(--bg);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .main-content {
-            min-height: calc(100vh - 80px);
+        .lp-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--red);
+            padding: 0 40px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            justify-content: space-between;
+            height: 80px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .login-container {
+        .lp-nav img {
+            height: 64px;
+        }
+
+        .lp-nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .lp-nav-links a {
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0.9;
+            text-decoration: none;
+        }
+
+        .lp-nav-links a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .lp-btn-login {
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            color: var(--red);
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: var(--font);
+            cursor: pointer;
+            border: none;
+        }
+
+        .lp-btn-login:hover {
+            background: #f0f0f0;
+        }
+
+        .lp-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .lp-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: white;
+            margin: 4px 0;
+        }
+
+        .pg-wrap {
+            flex: 1;
+            padding: 60px 40px;
+            max-width: 100%;
+        }
+
+        .pg-header {
+            background-color: var(--red);
+            color: white;
             padding: 40px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-header {
+            margin: -60px -40px 40px -40px;
             text-align: center;
-            margin-bottom: 30px;
         }
 
-        .login-title {
-            color: #e22a21;
-            font-size: 28px;
-            font-weight: bold;
+        .pg-header h1 {
+            font-size: 36px;
             margin-bottom: 10px;
+            font-weight: 700;
         }
 
-        .login-subtitle {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.5;
+        .pg-header p {
+            font-size: 16px;
+            opacity: 0.95;
         }
 
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-            padding: 12px;
+        .lg-container {
+            background: white;
+            padding: 40px;
+            border: 1px solid var(--border);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .lg-error {
+            background-color: #fef2f2;
+            color: var(--dark);
+            border: 1px solid var(--border);
+            padding: 16px;
             margin-bottom: 20px;
             font-size: 14px;
+        }
+
+        .lg-error i {
+            margin-right: 8px;
+            color: var(--red);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .form-label {
             display: block;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: #333;
+            color: var(--dark);
             font-size: 14px;
-            text-transform: capitalize;
         }
 
         .form-control {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
             font-size: 14px;
             background-color: white;
+            color: var(--dark);
+            font-family: var(--font);
         }
 
         .form-control:focus {
-            border-color: #e22a21;
             outline: none;
-            box-shadow: 0 0 0 2px rgba(226, 42, 33, 0.2);
+            border-color: var(--red);
+            box-shadow: inset 0 0 0 1px var(--red);
         }
 
-        .password-wrapper {
+        .pwd-wrapper {
             position: relative;
         }
 
-        .password-toggle {
+        .pwd-toggle {
             position: absolute;
             right: 12px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: #666;
+            color: var(--dark);
             cursor: pointer;
             font-size: 16px;
-            padding: 0;
+            padding: 4px 8px;
         }
 
-        .password-toggle:hover {
-            color: #e22a21;
+        .pwd-toggle:hover {
+            color: var(--red);
         }
 
         .btn-login {
             width: 100%;
-            background-color: #e22a21;
+            background-color: var(--red);
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 6px;
+            padding: 14px 24px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease;
+            margin-bottom: 16px;
+            transition: background-color 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -136,55 +210,117 @@
         }
 
         .btn-login:hover {
-            background-color: #c41f17;
+            background-color: #a80d16;
         }
 
-        .forgot-password {
+        .lg-links {
             text-align: center;
-        }
-
-        .forgot-password a {
-            color: #e22a21;
-            text-decoration: none;
             font-size: 14px;
-            font-weight: 500;
         }
 
-        .forgot-password a:hover {
+        .lg-links a {
+            color: var(--red);
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 4px;
+        }
+
+        .lg-links a:hover {
             text-decoration: underline;
         }
 
-        /* Mobile responsive */
+        .lp-footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 40px;
+            font-size: 14px;
+            margin-top: auto;
+        }
+
+        .lp-footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .lp-footer a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
-            .main-content {
-                padding: 15px;
+            .lp-nav {
+                padding: 0 20px;
+                height: 60px;
             }
-            
-            .login-container {
+
+            .lp-nav img {
+                height: 48px;
+            }
+
+            .lp-nav-links,
+            .lp-btn-login {
+                display: none;
+            }
+
+            .lp-hamburger {
+                display: block;
+            }
+
+            .lp-nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: var(--red);
+                padding: 16px 24px;
+                gap: 14px;
+                z-index: 100;
+            }
+
+            .pg-wrap {
+                padding: 40px 20px;
+            }
+
+            .pg-header {
+                margin: -40px -20px 30px -20px;
                 padding: 30px 20px;
             }
-            
-            .login-title {
-                font-size: 24px;
+
+            .pg-header h1 {
+                font-size: 28px;
+            }
+
+            .lg-container {
+                padding: 30px 20px;
             }
         }
     </style>
 </head>
 <body>
-    {% include "insurance/navbar.html" %}
-    
-    <div class="main-content">
-        <div class="login-container">
-            <div class="login-header">
-                <h1 class="login-title">KoGae Village Insurance</h1>
-                <p class="login-subtitle">
-                    Welcome! Please log in to your account.
-                </p>
-            </div>
+    <nav class="lp-nav">
+        <a href="/"><img src="/static/image/Minet Logo White.png" alt="Minet Logo"></a>
+        <ul class="lp-nav-links" id="navLinks">
+            <li><a href="/">Home</a></li>
+            <li><a href="/covers">Covers</a></li>
+            <li><a href="/claims">Claims</a></li>
+            <li><a href="/customer/customerclick">Your Information</a></li>
+        </ul>
+        <a href="/customer/customerlogin"><button class="lp-btn-login">Log In</button></a>
+        <button class="lp-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
 
+    <div class="pg-wrap">
+        <div class="pg-header">
+            <h1>Login</h1>
+            <p>Access your Minet account</p>
+        </div>
+
+        <div class="lg-container">
             {% if form.errors %}
-                <div class="alert-error">
-                    <i class="ri-error-warning-line"></i>
+                <div class="lg-error">
+                    <i class="fas fa-exclamation-circle"></i>
                     Incorrect username or password. Please try again.
                 </div>
             {% endif %}
@@ -199,44 +335,51 @@
 
                 <div class="form-group">
                     <label for="id_password" class="form-label">Password</label>
-                    <div class="password-wrapper">
+                    <div class="pwd-wrapper">
                         {% render_field form.password class="form-control" placeholder="Enter your password" %}
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
-                            <i class="ri-eye-line" id="passwordIcon"></i>
+                        <button type="button" class="pwd-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
                         </button>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-login">
-                    <i class="ri-login-box-line"></i>
-                    Login to Dashboard
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
                 </button>
             </form>
 
-            <div class="forgot-password">
-                <a href="{% url 'customer:password_reset' %}">
-                    <i class="ri-lock-password-line"></i>
-                    Forgot Password?
-                </a>
+            <div class="lg-links">
+                <span>Forgot password?</span>
+                <a href="{% url 'customer:password_reset' %}">Reset it here</a>
             </div>
         </div>
     </div>
 
+    <footer class="lp-footer">
+        <p>&copy; <span id="year"></span> Minet. All rights reserved.</p>
+    </footer>
+
     <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        if (hamburger) {
+            hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+        }
+
         function togglePassword() {
             const passwordInput = document.getElementById('id_password');
             const passwordIcon = document.getElementById('passwordIcon');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                passwordIcon.className = 'ri-eye-off-line';
+                passwordIcon.className = 'fas fa-eye-slash';
             } else {
                 passwordInput.type = 'password';
-                passwordIcon.className = 'ri-eye-line';
+                passwordIcon.className = 'fas fa-eye';
             }
         }
     </script>
-
-    {% include "insurance/footer.html" %}
 </body>
 </html>
