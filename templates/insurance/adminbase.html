@@ -13,6 +13,21 @@
     
     <style>
         body { font-family: var(--mc-font); background: var(--mc-page-bg); color: #111; line-height: 1.6; }
+        .mc-admin-nav-inner,
+        .mc-admin-body {
+            max-width: none;
+            width: 100%;
+        }
+        .mc-admin-nav-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .mc-admin-nav-logo img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
         {% block extra_css %}{% endblock %}
     </style>
 </head>
@@ -22,7 +37,7 @@
         <div class="mc-admin-nav-inner">
 
             <a href="{% url 'admin-dashboard' %}" class="mc-admin-nav-logo">
-                <i class="ri-shield-user-line"></i> Minet Admin
+                <img src="{% static 'image/Minet Logo White.png' %}" alt="Minet Logo">
             </a>
 
             <button class="mc-admin-nav-mobile-btn" id="mobileMenuBtn">

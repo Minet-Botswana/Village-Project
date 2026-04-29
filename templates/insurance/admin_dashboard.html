@@ -3,492 +3,631 @@
 {% block title %}Admin Dashboard - KoGae Village{% endblock %}
 
 {% block extra_css %}
-/* Dashboard Specific Styles */
-.dashboard-header {
-    margin-bottom: 30px;
+.dashboard-shell {
+    display: grid;
+    gap: 24px;
+}
+
+.dashboard-hero {
+    background: var(--mc-surface);
+    color: #111;
+    padding: 28px 30px;
+    border: 1px solid var(--mc-border);
+    border-left: 6px solid var(--mc-red);
+}
+
+.dashboard-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+    color: var(--mc-red);
+    margin-bottom: 12px;
 }
 
 .dashboard-title {
-    color: #000000;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 34px;
+    line-height: 1.1;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #111;
 }
 
 .dashboard-subtitle {
-    color: #666;
-    font-size: 16px;
+    font-size: 15px;
+    color: #555;
+    max-width: 720px;
 }
 
-/* Statistics Overview */
-.stats-overview {
+.metrics-strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
 }
 
-.stat-card {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.metric-cell {
+    padding: 16px 14px;
+    border-right: 1px solid var(--mc-divider);
 }
 
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.metric-cell:last-child {
+    border-right: none;
 }
 
-.stat-number {
-    font-size: 32px;
-    font-weight: 700;
-    color: #e21a22;
+.metric-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #777;
     margin-bottom: 8px;
 }
 
-.stat-label {
-    color: #000000;
-    font-size: 14px;
-    font-weight: 500;
+.metric-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--mc-red);
+    line-height: 1;
+    margin-bottom: 6px;
 }
 
-.stat-description {
-    color: #666;
+.metric-note {
     font-size: 12px;
+    color: #555;
+}
+
+.operations-grid {
+    display: block;
+}
+
+.workspace-panel {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+    margin-bottom: 24px;
+}
+
+.workspace-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--mc-divider);
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 12px;
+}
+
+.workspace-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111;
+}
+
+.workspace-subtitle {
+    font-size: 13px;
+    color: #666;
     margin-top: 4px;
 }
 
-/* Quick Actions Grid */
-.quick-actions {
-    margin-bottom: 40px;
+.workspace-badge {
+    background: var(--mc-dark);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
 }
 
-.section-title {
-    color: #000000;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e21a22;
-}
-
-.actions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.action-card {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.action-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.action-header {
-    background-color: #f8f9fa;
-    padding: 15px 20px;
-    border-bottom: 1px solid #e1e5e9;
-}
-
-.action-title {
-    color: #000000;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.action-subtitle {
-    color: #666;
-    font-size: 13px;
-}
-
-.action-body {
-    padding: 20px;
-}
-
-.action-list {
+.queue-list,
+.snapshot-list,
+.activity-list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.action-item {
-    margin-bottom: 12px;
-}
-
-.action-item:last-child {
-    margin-bottom: 0;
-}
-
-.action-link {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background-color: #f8f9fa;
-    border: 1px solid #e1e5e9;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #000000;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.action-link:hover {
-    background-color: #e21a22;
-    color: white;
-    border-color: #e21a22;
-    text-decoration: none;
-}
-
-.action-icon {
-    margin-right: 10px;
-    font-size: 16px;
-    width: 20px;
-    text-align: center;
-}
-
-/* Recent Activity Section */
-.recent-activity {
-    background: white;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    padding: 25px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-
+.queue-item,
 .activity-item {
-    padding: 12px 0;
-    border-bottom: 1px solid #f1f3f4;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
     align-items: center;
-    gap: 15px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--mc-divider);
 }
 
-.activity-item:last-child {
+.activity-item:last-child,
+.queue-item:last-child,
     border-bottom: none;
 }
 
+.queue-icon,
 .activity-icon {
-    width: 36px;
-    height: 36px;
-    background-color: #f8f9fa;
-    border-radius: 50%;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    color: #e21a22;
+    background: var(--mc-red-light);
+    color: var(--mc-red);
+    font-size: 15px;
 }
 
-.activity-content {
-    flex: 1;
-}
-
-.activity-text {
-    color: #000000;
+.queue-main strong,
+.activity-main strong {
+    display: block;
     font-size: 14px;
-    margin-bottom: 2px;
+    color: #111;
 }
 
-.activity-time {
-    color: #666;
+.queue-main span,
+.activity-main span {
+    display: block;
     font-size: 12px;
+    color: #666;
+    margin-top: 3px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .dashboard-title {
-        font-size: 24px;
+.queue-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    min-width: 110px;
+    background: var(--mc-red);
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.queue-action:hover {
+    background: #8b0000;
+    color: #fff;
+    text-decoration: none;
+}
+
+.workspace-sections {
+    background: var(--mc-surface);
+    border: 1px solid var(--mc-border);
+}
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.workspace-column {
+    border-right: 1px solid var(--mc-divider);
+}
+
+.workspace-column:last-child {
+    border-right: none;
+}
+
+.workspace-column-head {
+    padding: 14px 16px;
+    background: #111;
+    color: #fff;
+}
+
+.workspace-column-head h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.workspace-column-head p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.72);
+}
+
+.workspace-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.workspace-links li {
+    border-bottom: 1px solid var(--mc-divider);
+}
+
+.workspace-links li:last-child {
+    border-bottom: none;
+}
+
+.workspace-link {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: #111;
+}
+
+.workspace-link:hover {
+    background: var(--mc-red-light);
+    color: var(--mc-red);
+    text-decoration: none;
+}
+
+.workspace-link i {
+    color: var(--mc-red);
+    font-size: 15px;
+    margin-top: 2px;
+}
+
+.workspace-link-main {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.workspace-link strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.workspace-link span {
+    display: block;
+    font-size: 12px;
+    color: #666;
+}
+
+.workspace-link:hover span {
+    color: #8b0000;
+}
+
+.workspace-link-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    padding: 9px 12px;
+    min-width: 92px;
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.workspace-link:hover .workspace-link-cta {
+    background: var(--mc-red);
+    color: #fff;
+}
+
+@media (max-width: 1180px) {
+    .metrics-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .stats-overview {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-    }
-
-    .actions-grid {
+    .workspace-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
     }
 
-    .stat-number {
+    .workspace-column {
+        border-right: none;
+        border-bottom: 1px solid var(--mc-divider);
+    }
+
+    .workspace-column:last-child {
+        border-bottom: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-hero {
+        padding: 24px 20px;
+    }
+
+    .dashboard-title {
         font-size: 28px;
+    }
+
+    .metrics-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .queue-item {
+        grid-template-columns: 1fr;
+        align-items: flex-start;
+    }
+
+    .queue-action {
+        width: 100%;
+    }
+
+    .workspace-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .workspace-link {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .workspace-link-cta {
+        width: 100%;
     }
 }
 
 @media (max-width: 480px) {
-    .action-header,
-    .action-body,
-    .recent-activity {
-        padding: 15px;
+    .metrics-strip {
+        grid-template-columns: 1fr;
     }
 }
 {% endblock %}
 
 {% block content %}
-<!-- Dashboard Header -->
-<div class="dashboard-header">
-    <h1 class="dashboard-title">Admin Dashboard</h1>
-    <p class="dashboard-subtitle">Manage customers, policies, and insurance operations</p>
-</div>
+<div class="dashboard-shell">
+    <section class="dashboard-hero">
+        <div class="dashboard-kicker">Insurance Operations</div>
+        <h1 class="dashboard-title">Admin Dashboard</h1>
+        <p class="dashboard-subtitle">Monitor underwriting queues, customer servicing, policy production, and compliance activity from one professional insurance workspace.</p>
+    </section>
 
-<!-- Statistics Overview -->
-<div class="stats-overview">
-    <div class="stat-card">
-        <div class="stat-number">{{ total_user }}</div>
-        <div class="stat-label">Total Customers</div>
-        <div class="stat-description">Registered users</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-number">{{ total_policy_holder }}</div>
-        <div class="stat-label">Homeowners Applications</div>
-        <div class="stat-description">Total applications</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-number">{{ total_thirdpartypolicy_holder }}</div>
-        <div class="stat-label">Motor Add-on Applications</div>
-        <div class="stat-description">Total applications</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-number">{{ waiting_policy_holder|add:waiting_thirdpartypolicy_holder }}</div>
-        <div class="stat-label">Pending Reviews</div>
-        <div class="stat-description">Awaiting approval</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-number">{{ approved_policy_holder|add:approved_thirdpartypolicy_holder }}</div>
-        <div class="stat-label">Approved Policies</div>
-        <div class="stat-description">Active coverage</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-number">{{ total_question }}</div>
-        <div class="stat-label">Support Questions</div>
-        <div class="stat-description">Customer inquiries</div>
-    </div>
-</div>
+    <section class="metrics-strip">
+        <div class="metric-cell">
+            <div class="metric-label">Customers</div>
+            <div class="metric-value">{{ total_user }}</div>
+            <div class="metric-note">Registered policyholders and applicants</div>
+        </div>
+        <div class="metric-cell">
+            <div class="metric-label">Homeowners</div>
+            <div class="metric-value">{{ total_policy_holder }}</div>
+            <div class="metric-note">Home cover applications on record</div>
+        </div>
+        <div class="metric-cell">
+            <div class="metric-label">Motor Add-ons</div>
+            <div class="metric-value">{{ total_thirdpartypolicy_holder }}</div>
+            <div class="metric-note">Motor product applications submitted</div>
+        </div>
+        <div class="metric-cell">
+            <div class="metric-label">Pending</div>
+            <div class="metric-value">{{ waiting_policy_holder|add:waiting_thirdpartypolicy_holder }}</div>
+            <div class="metric-note">Applications awaiting review</div>
+        </div>
+        <div class="metric-cell">
+            <div class="metric-label">Approved</div>
+            <div class="metric-value">{{ approved_policy_holder|add:approved_thirdpartypolicy_holder }}</div>
+            <div class="metric-note">Policies cleared and active</div>
+        </div>
+        <div class="metric-cell">
+            <div class="metric-label">Support</div>
+            <div class="metric-value">{{ total_question }}</div>
+            <div class="metric-note">Questions logged for action</div>
+        </div>
+    </section>
 
-<!-- Quick Actions -->
-<div class="quick-actions">
-    <h2 class="section-title">Quick Actions</h2>
-    
-    <div class="actions-grid">
-        <!-- Customer Management -->
-        <div class="action-card">
-            <div class="action-header">
-                <h3 class="action-title">Customer Management</h3>
-                <p class="action-subtitle">Manage customer accounts and profiles</p>
+    <section class="operations-grid">
+        <div class="workspace-panel">
+            <div class="workspace-head">
+                <div>
+                    <div class="workspace-title">Priority Queue</div>
+                    <div class="workspace-subtitle">Immediate operational workload across underwriting, support, and exceptions.</div>
+                </div>
+                <div class="workspace-badge">Action Required</div>
             </div>
-            <div class="action-body">
-                <ul class="action-list">
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-customer' %}" class="action-link">
-                            <i class="ri-user-search-line action-icon"></i>
-                            View All Customers
+            <ul class="queue-list">
+                <li class="queue-item">
+                    <div class="queue-icon"><i class="ri-home-gear-line"></i></div>
+                    <div class="queue-main">
+                        <strong>Pending homeowners applications</strong>
+                        <span>Applications waiting for underwriting review and approval.</span>
+                    </div>
+                    <a href="{% url 'admin-view-waiting-policy-holder' %}" class="queue-action">Review {{ waiting_policy_holder }}</a>
+                </li>
+                <li class="queue-item">
+                    <div class="queue-icon"><i class="ri-car-line"></i></div>
+                    <div class="queue-main">
+                        <strong>Pending motor add-on applications</strong>
+                        <span>Motor-related submissions requiring processing.</span>
+                    </div>
+                    <a href="{% url 'admin-view-waiting-thirdpartypolicy-holder' %}" class="queue-action">Review {{ waiting_thirdpartypolicy_holder }}</a>
+                </li>
+                <li class="queue-item">
+                    <div class="queue-icon"><i class="ri-question-answer-line"></i></div>
+                    <div class="queue-main">
+                        <strong>Customer support questions</strong>
+                        <span>Open customer requests and assistance items in the system.</span>
+                    </div>
+                    <a href="{% url 'admin-question' %}" class="queue-action">Open {{ total_question }}</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="workspace-sections">
+        <div class="workspace-head">
+            <div>
+                <div class="workspace-title">Operational Workspace</div>
+                <div class="workspace-subtitle">Structured access to policy administration, customer servicing, and configuration tools.</div>
+            </div>
+            <div class="workspace-badge">Core Functions</div>
+        </div>
+
+        <div class="workspace-grid">
+            <div class="workspace-column">
+                <div class="workspace-column-head">
+                    <h3>Customer & Compliance</h3>
+                    <p>Customer administration and KYC servicing.</p>
+                </div>
+                <ul class="workspace-links">
+                    <li>
+                        <a href="{% url 'admin-view-customer' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-user-search-line"></i>
+                                <div>
+                                    <strong>View all customers</strong>
+                                    <span>Review account records, profiles, and client details.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
                         </a>
                     </li>
-                    <li class="action-item">
-                        <a href="{% url 'admin_customerforms' %}" class="action-link">
-                            <i class="ri-folder-user-line action-icon"></i>
-                            KYC Documents
+                    <li>
+                        <a href="{% url 'admin_customerforms' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-folder-user-line"></i>
+                                <div>
+                                    <strong>KYC documents</strong>
+                                    <span>Inspect submitted compliance files and supporting documents.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-kyc-dashboard' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-shield-check-line"></i>
+                                <div>
+                                    <strong>KYC dashboard</strong>
+                                    <span>Track compliance workflow and outstanding verification items.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="workspace-column">
+                <div class="workspace-column-head">
+                    <h3>Underwriting & Policies</h3>
+                    <p>Application review and policy production actions.</p>
+                </div>
+                <ul class="workspace-links">
+                    <li>
+                        <a href="{% url 'admin-view-waiting-policy-holder' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-time-line"></i>
+                                <div>
+                                    <strong>Pending homeowners applications</strong>
+                                    <span>Review and action waiting homeowners submissions.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Review</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-view-waiting-thirdpartypolicy-holder' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-car-line"></i>
+                                <div>
+                                    <strong>Pending motor add-ons</strong>
+                                    <span>Process motor add-on applications currently in queue.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Review</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-add-policy' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-home-line"></i>
+                                <div>
+                                    <strong>Create homeowners policy</strong>
+                                    <span>Issue a new homeowners policy for an approved applicant.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Create</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-add-thirdparty-policy' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-roadster-line"></i>
+                                <div>
+                                    <strong>Create motor add-on policy</strong>
+                                    <span>Capture and issue approved motor policy records.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Create</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="workspace-column">
+                <div class="workspace-column-head">
+                    <h3>Support & Control</h3>
+                    <p>Service resolution, portfolio review, and setup tools.</p>
+                </div>
+                <ul class="workspace-links">
+                    <li>
+                        <a href="{% url 'admin-question' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-question-answer-line"></i>
+                                <div>
+                                    <strong>Customer support queue</strong>
+                                    <span>Respond to customer questions and service requests.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-view-approved-policy-holder' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-shield-check-line"></i>
+                                <div>
+                                    <strong>Approved policies</strong>
+                                    <span>Review the active book of approved policies.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-close-circle-line"></i>
+                                <div>
+                                    <strong>Rejected applications</strong>
+                                    <span>Inspect declined submissions and underwriting outcomes.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-view-policy' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-file-list-3-line"></i>
+                                <div>
+                                    <strong>All policies</strong>
+                                    <span>Browse the full policy register across products.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Open</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin-view-category' %}" class="workspace-link">
+                            <div class="workspace-link-main">
+                                <i class="ri-price-tag-3-line"></i>
+                                <div>
+                                    <strong>Manage categories</strong>
+                                    <span>Maintain category definitions and supporting setup data.</span>
+                                </div>
+                            </div>
+                            <span class="workspace-link-cta">Manage</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
-
-        <!-- Policy Applications -->
-        <div class="action-card">
-            <div class="action-header">
-                <h3 class="action-title">Policy Applications</h3>
-                <p class="action-subtitle">Review and manage insurance applications</p>
-            </div>
-            <div class="action-body">
-                <ul class="action-list">
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-waiting-policy-holder' %}" class="action-link">
-                            <i class="ri-time-line action-icon"></i>
-                            Pending Homeowners ({{ waiting_policy_holder }})
-                        </a>
-                    </li>
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-waiting-thirdpartypolicy-holder' %}" class="action-link">
-                            <i class="ri-car-line action-icon"></i>
-                            Pending Motor Add-ons ({{ waiting_thirdpartypolicy_holder }})
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Insurance Policies -->
-        <div class="action-card">
-            <div class="action-header">
-                <h3 class="action-title">Insurance Policies</h3>
-                <p class="action-subtitle">Create and manage insurance policies</p>
-            </div>
-            <div class="action-body">
-                <ul class="action-list">
-                    <li class="action-item">
-                        <a href="{% url 'admin-add-policy' %}" class="action-link">
-                            <i class="ri-home-line action-icon"></i>
-                            Create Homeowners Policy
-                        </a>
-                    </li>
-                    <li class="action-item">
-                        <a href="{% url 'admin-add-thirdparty-policy' %}" class="action-link">
-                            <i class="ri-car-line action-icon"></i>
-                            Create Motor Add-on Policy
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Support & Communication -->
-        <div class="action-card">
-            <div class="action-header">
-                <h3 class="action-title">Customer Support</h3>
-                <p class="action-subtitle">Handle customer questions and support</p>
-            </div>
-            <div class="action-body">
-                <ul class="action-list">
-                    <li class="action-item">
-                        <a href="{% url 'admin-question' %}" class="action-link">
-                            <i class="ri-question-answer-line action-icon"></i>
-                            Customer Questions ({{ total_question }})
-                        </a>
-                    </li>
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-approved-policy-holder' %}" class="action-link">
-                            <i class="ri-shield-check-line action-icon"></i>
-                            Active Policies
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- System Management -->
-        <div class="action-card">
-            <div class="action-header">
-                <h3 class="action-title">System Management</h3>
-                <p class="action-subtitle">Manage categories and system settings</p>
-            </div>
-            <div class="action-body">
-                <ul class="action-list">
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-category' %}" class="action-link">
-                            <i class="ri-price-tag-3-line action-icon"></i>
-                            Manage Categories
-                        </a>
-                    </li>
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-policy' %}" class="action-link">
-                            <i class="ri-file-list-3-line action-icon"></i>
-                            All Policies
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Reports & Analytics -->
-        <div class="action-card">
-            <div class="action-header">
-                <h3 class="action-title">Reports & Analytics</h3>
-                <p class="action-subtitle">View insights and generate reports</p>
-            </div>
-            <div class="action-body">
-                <ul class="action-list">
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-approved-policy-holder' %}" class="action-link">
-                            <i class="ri-bar-chart-line action-icon"></i>
-                            Approved Policies ({{ approved_policy_holder|add:approved_thirdpartypolicy_holder }})
-                        </a>
-                    </li>
-                    <li class="action-item">
-                        <a href="{% url 'admin-view-disapproved-policy-holder' %}" class="action-link">
-                            <i class="ri-close-circle-line action-icon"></i>
-                            Rejected Applications
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Activity -->
-<div class="recent-activity">
-    <h2 class="section-title">Recent System Activity</h2>
-    
-    {% if waiting_policy_holder > 0 or waiting_thirdpartypolicy_holder > 0 %}
-    <div class="activity-item">
-        <div class="activity-icon">
-            <i class="ri-time-line"></i>
-        </div>
-        <div class="activity-content">
-            <div class="activity-text">
-                {{ waiting_policy_holder|add:waiting_thirdpartypolicy_holder }} new application(s) awaiting your review
-            </div>
-            <div class="activity-time">Review needed</div>
-        </div>
-    </div>
-    {% endif %}
-    
-    {% if total_question > 0 %}
-    <div class="activity-item">
-        <div class="activity-icon">
-            <i class="ri-question-answer-line"></i>
-        </div>
-        <div class="activity-content">
-            <div class="activity-text">
-                {{ total_question }} customer question(s) in the system
-            </div>
-            <div class="activity-time">Support needed</div>
-        </div>
-    </div>
-    {% endif %}
-    
-    <div class="activity-item">
-        <div class="activity-icon">
-            <i class="ri-user-add-line"></i>
-        </div>
-        <div class="activity-content">
-            <div class="activity-text">
-                {{ total_user }} total customers registered in the system
-            </div>
-            <div class="activity-time">Customer base</div>
-        </div>
-    </div>
-    
-    <div class="activity-item">
-        <div class="activity-icon">
-            <i class="ri-shield-check-line"></i>
-        </div>
-        <div class="activity-content">
-            <div class="activity-text">
-                {{ approved_policy_holder|add:approved_thirdpartypolicy_holder }} active insurance policies
-            </div>
-            <div class="activity-time">Coverage active</div>
-        </div>
-    </div>
+    </section>
 </div>
 {% endblock %}
