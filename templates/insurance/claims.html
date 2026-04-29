@@ -1,293 +1,172 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurance Claims - KoGae</title>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
-    
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="https://storage.cloud.google.com/ko_gae_bucket/logos/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Claims | KoGae</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --red:#c0111a; --dark:#1a1a1a; --border:#d5d5d5; --bg:#f0f2f5; --font:Arial,'Helvetica Neue',sans-serif; }
+    body { font-family: var(--font); font-size: 14px; color: #333; background: var(--bg); line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    /* NAV */
+    .lp-nav { background: var(--red); padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 200; }
+    .lp-nav img { height: 36px; background: #fff; padding: 4px 8px; }
+    .lp-nav-links { display: flex; gap: 28px; list-style: none; }
+    .lp-nav-links a { color: #fff; font-size: 13px; font-weight: 600; opacity: 0.9; }
+    .lp-nav-links a:hover { opacity: 1; text-decoration: underline; }
+    .lp-btn-login { background: #fff; color: var(--red); padding: 8px 20px; font-size: 13px; font-weight: 700; font-family: var(--font); cursor: pointer; border: none; }
+    .lp-btn-login:hover { background: #f0f0f0; }
+    .lp-hamburger { display: none; background: none; border: none; cursor: pointer; }
+    .lp-hamburger span { display: block; width: 22px; height: 2px; background: #fff; margin: 4px 0; }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-            background: white;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
+    /* PAGE HEADER */
+    .pg-header { background: var(--red); color: #fff; padding: 36px 40px; border-bottom: 4px solid #8b0000; text-align: center; }
+    .pg-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+    .pg-header p  { font-size: 14px; opacity: 0.88; }
 
-        .page-title {
-            color: #e22a21;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    /* WRAP */
+    .pg-wrap { max-width: 1000px; margin: 0 auto; padding: 32px 40px; }
+    .pg-back  { font-size: 12px; color: var(--red); margin-bottom: 24px; display: inline-flex; align-items: center; gap: 6px; }
+    .pg-back:hover { text-decoration: underline; }
 
-        .page-subtitle {
-            color: #666;
-            font-size: 16px;
-        }
+    /* SECTION LABEL */
+    .pg-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--red); margin-bottom: 12px; }
 
-        .claims-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
+    /* ACTION CARDS GRID */
+    .cl-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 24px; }
+    .cl-card { background: #fff; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .cl-icon { width: 48px; height: 48px; background: #fef0f0; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .cl-icon i { color: var(--red); font-size: 20px; }
+    .cl-card h3 { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+    .cl-card p  { font-size: 12px; color: #666; line-height: 1.6; margin-bottom: 16px; flex: 1; }
+    .lp-btn { background: var(--red); color: #fff; padding: 9px 20px; font-size: 12px; font-weight: 700; font-family: var(--font); border: none; cursor: pointer; white-space: nowrap; }
+    .lp-btn:hover { background: #8b0000; }
+    .lp-btn-out { background: transparent; color: var(--red); border: 1px solid var(--red); }
+    .lp-btn-out:hover { background: var(--red); color: #fff; }
 
-        .claim-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 25px;
-            text-align: center;
-        }
+    /* CONTACT STRIP */
+    .cl-contact { background: var(--dark); color: #fff; display: grid; grid-template-columns: repeat(3,1fr); margin-top: 24px; }
+    .cl-citem { padding: 28px 24px; border-right: 1px solid rgba(255,255,255,0.07); text-align: center; }
+    .cl-citem:last-child { border-right: none; }
+    .cl-cicon { width: 40px; height: 40px; background: var(--red); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+    .cl-cicon i { color: #fff; font-size: 16px; }
+    .cl-citem h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .cl-citem p  { font-size: 12px; color: #aaa; margin-bottom: 14px; line-height: 1.5; }
 
-        .claim-icon {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #e22a21;
-            margin: 0 auto 15px;
-        }
+    /* FOOTER */
+    .lp-footer { background: #111; color: #888; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
 
-        .claim-card h3 {
-            color: #333;
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .claim-card p {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            background-color: #e22a21;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background-color: #c41f17;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: #e22a21;
-            border: 1px solid #e22a21;
-        }
-
-        .btn-outline:hover {
-            background-color: #e22a21;
-            color: white;
-        }
-
-        .contact-section {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 30px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .contact-section h2 {
-            color: #e22a21;
-            font-size: 24px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .contact-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .contact-method {
-            text-align: center;
-        }
-
-        .contact-icon {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            background-color: #f8f9fa;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: #e22a21;
-            margin: 0 auto 10px;
-        }
-
-        .contact-method h4 {
-            color: #333;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .contact-method p {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .back-link {
-            margin-bottom: 20px;
-        }
-
-        .back-link a {
-            color: #e22a21;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .claims-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .claim-card {
-                padding: 20px;
-            }
-            
-            .page-title {
-                font-size: 24px;
-            }
-            
-            .contact-methods {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .lp-nav-links, .lp-btn-login { display: none; }
+      .lp-hamburger { display: block; }
+      .lp-nav-links.open { display: flex; flex-direction: column; position: absolute; top: 60px; left: 0; right: 0; background: var(--red); padding: 16px 24px; gap: 14px; z-index: 100; }
+      .pg-header { padding: 28px 20px; }
+      .pg-wrap { padding: 24px 20px; }
+      .cl-grid { grid-template-columns: 1fr 1fr; }
+      .cl-contact { grid-template-columns: 1fr; }
+      .cl-citem { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .lp-footer { flex-direction: column; gap: 8px; text-align: center; }
+    }
+    @media (max-width: 480px) { .cl-grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="back-link">
-            <a href="/"><i class="ri-arrow-left-line"></i> Back to Home</a>
-        </div>
 
-        <div class="page-header">
-            <h1 class="page-title">Insurance Claims</h1>
-            <p class="page-subtitle">Need to file a claim? We're here to help you through the process.</p>
-        </div>
+<nav class="lp-nav">
+  <a href="/"><img src="/static/image/minetbryte.png" alt="Minet Bryte Logo"></a>
+  <ul class="lp-nav-links" id="navLinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/covers">Covers</a></li>
+    <li><a href="/claims">Claims</a></li>
+    <li><a href="/customer/customerclick">Your Information</a></li>
+  </ul>
+  <a href="/customer/customerlogin"><button class="lp-btn-login">Log In</button></a>
+  <button class="lp-hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
 
-        <div class="claims-grid">
-            <div class="claim-card">
-                <div class="claim-icon">
-                    <i class="ri-file-list-3-line"></i>
-                </div>
-                <h3>How to File a Claim</h3>
-                <p>Step-by-step guide on filing your insurance claim. Learn what documents you need and how the process works.</p>
-                <a href="/claims/guidelines" class="btn">View Guidelines</a>
-            </div>
+<div class="pg-header">
+  <h1>Insurance Claims</h1>
+  <p>Need to file a claim? We&rsquo;re here to help you through the process.</p>
+</div>
 
-            <div class="claim-card">
-                <div class="claim-icon">
-                    <i class="ri-phone-line"></i>
-                </div>
-                <h3>Report a Claim by Phone</h3>
-                <p>Call us directly to report your claim. Our team will guide you through the process and help you get started.</p>
-                <a href="tel:+26736173000" class="btn">Call Now</a>
-            </div>
+<div class="pg-wrap">
 
-            <div class="claim-card">
-                <div class="claim-icon">
-                    <i class="ri-whatsapp-line"></i>
-                </div>
-                <h3>WhatsApp Support</h3>
-                <p>Get quick help through WhatsApp. Send us a message and we'll assist you with your claim immediately.</p>
-                <a href="https://wa.me/+26778299555" target="_blank" class="btn">Chat on WhatsApp</a>
-            </div>
+  <a href="/" class="pg-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
-            <div class="claim-card">
-                <div class="claim-icon">
-                    <i class="ri-mail-line"></i>
-                </div>
-                <h3>Email Your Claim</h3>
-                <p>Send us your claim details by email. Include photos and documents to help us process your claim faster.</p>
-                <a href="mailto:claims@minet.co.bw" class="btn">Send Email</a>
-            </div>
-        </div>
+  <div class="pg-label">How to reach us</div>
+  <div class="cl-grid">
 
-        <div class="contact-section">
-            <h2>Need Help with Your Claim?</h2>
-            <p>Our claims team is ready to assist you. Choose the method that works best for you:</p>
-            
-            <div class="contact-methods">
-                <div class="contact-method">
-                    <div class="contact-icon">
-                        <i class="ri-time-line"></i>
-                    </div>
-                    <h4>Office Hours</h4>
-                    <p>Monday - Friday: 8:00 AM - 5:00 PM<br>Saturday: 8:00 AM - 1:00 PM</p>
-                    <a href="/claims/guidelines" class="btn btn-outline">View Process</a>
-                </div>
-
-                <div class="contact-method">
-                    <div class="contact-icon">
-                        <i class="ri-customer-service-2-line"></i>
-                    </div>
-                    <h4>24/7 Emergency</h4>
-                    <p>For urgent claims after hours, call our emergency line for immediate assistance.</p>
-                    <a href="tel:+26778299555" class="btn btn-outline">Emergency Line</a>
-                </div>
-
-                <div class="contact-method">
-                    <div class="contact-icon">
-                        <i class="ri-map-pin-line"></i>
-                    </div>
-                    <h4>Visit Our Office</h4>
-                    <p>Minet House, Plot 50368<br>Gaborone Business Park, Gaborone</p>
-                    <a href="#" class="btn btn-outline">Get Directions</a>
-                </div>
-            </div>
-        </div>
+    <div class="cl-card">
+      <div class="cl-icon"><i class="fas fa-file-alt"></i></div>
+      <h3>How to File a Claim</h3>
+      <p>Step-by-step guide on filing your insurance claim. Learn what documents you need and how the process works.</p>
+      <a href="/claims/guidelines"><button class="lp-btn">View Guidelines</button></a>
     </div>
+
+    <div class="cl-card">
+      <div class="cl-icon"><i class="fas fa-phone"></i></div>
+      <h3>Report by Phone</h3>
+      <p>Call us directly to report your claim. Our team will guide you through the process and help you get started.</p>
+      <a href="tel:+26736173000"><button class="lp-btn">Call Now</button></a>
+    </div>
+
+    <div class="cl-card">
+      <div class="cl-icon"><i class="fab fa-whatsapp"></i></div>
+      <h3>WhatsApp Support</h3>
+      <p>Get quick help through WhatsApp. Send us a message and we&rsquo;ll assist you with your claim immediately.</p>
+      <a href="https://wa.me/+26778299555" target="_blank"><button class="lp-btn">Chat on WhatsApp</button></a>
+    </div>
+
+    <div class="cl-card">
+      <div class="cl-icon"><i class="fas fa-envelope"></i></div>
+      <h3>Email Your Claim</h3>
+      <p>Send your claim details by email. Include photos and documents to help us process your claim faster.</p>
+      <a href="mailto:claims@minet.co.bw"><button class="lp-btn">Send Email</button></a>
+    </div>
+
+  </div>
+
+  <div class="pg-label">Office details</div>
+  <div class="cl-contact">
+
+    <div class="cl-citem">
+      <div class="cl-cicon"><i class="fas fa-clock"></i></div>
+      <h4>Office Hours</h4>
+      <p>Monday &ndash; Friday: 8:00 AM &ndash; 5:00 PM<br>Saturday: 8:00 AM &ndash; 1:00 PM</p>
+      <a href="/claims/guidelines"><button class="lp-btn lp-btn-out">View Process</button></a>
+    </div>
+
+    <div class="cl-citem">
+      <div class="cl-cicon"><i class="fas fa-headset"></i></div>
+      <h4>24/7 Emergency</h4>
+      <p>For urgent claims after hours, call our emergency line for immediate assistance.</p>
+      <a href="tel:+26778299555"><button class="lp-btn lp-btn-out">Emergency Line</button></a>
+    </div>
+
+    <div class="cl-citem">
+      <div class="cl-cicon"><i class="fas fa-map-marker-alt"></i></div>
+      <h4>Visit Our Office</h4>
+      <p>Minet House, Plot 50368<br>Gaborone Business Park, Gaborone</p>
+      <a href="#"><button class="lp-btn lp-btn-out">Get Directions</button></a>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="lp-footer">
+  <span>&copy; <script>document.write(new Date().getFullYear())</script> Minet Botswana Holdings &times; Bryte Insurance. All rights reserved.</span>
+  <span>KoGae Village Insurance</span>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  if (hamburger) hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+</script>
 </body>
 </html>
