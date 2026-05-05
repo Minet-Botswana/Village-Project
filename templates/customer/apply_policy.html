@@ -259,16 +259,67 @@ document.getElementById('applyForm').addEventListener('submit', function(e) {
 
 /* ── District / Village cascading dropdowns ── */
 var BW_VILLAGES = {
-  'Central District': ['Bobonong','Dibete','Gobojango','Gweta','Khumaga','Lecheng','Lerala','Letlhakane','Mahalapye','Maitengwe','Malaka','Maunatlala','Mmadinare','Mmashoro','Mokgenene','Mookane','Mopipi','Mogorosi','Mosetse','Nata','Orapa','Paje','Palapye','Radisele','Rakops','Sebina','Selebi-Phikwe','Serowe','Shoshong','Taupye','Tobane','Tutume'],
-  'Chobe District': ['Kachikau','Kasane','Kavimba','Kazungula','Mabele','Muchenje','Ngoma','Pandamatenga','Satau'],
-  'Ghanzi District': ['Bere','Charles Hill','D\'Kar','East Hanahai','Ghanzi','Karakubis','Kalkfontein','New Xade','Tsootsha'],
-  'Kgalagadi District': ['Hukuntsi','Kang','Khakhea','Lokgwabe','Mabule','Middlepits','Ncojane','Sekoma','Struizendam','Tshane','Tsabong','Werda','Zutshwa'],
-  'Kgatleng District': ['Artesia','Bokaa','Dikwididi','Leshibitse','Malolwane','Matebele','Mmamashia','Mmathubudukwane','Mochudi','Mokatse','Morwa','Oodi','Pilane','Rasesa'],
-  'Kweneng District': ['Dutlwe','Gabane','Khudumelapye','Kopong','Kumakwane','Lentsweletau','Lephephe','Letlhakeng','Mmopane','Molepolole','Ngware','Salajwe','Shadishadi','Sojwe','Takatokwane','Thamaga'],
-  'North East District': ['Francistown','Jackalas No. 1','Jackalas No. 2','Matshelagabedi','Masunga','Ramokgwebana','Shashe Mooke','Tati Siding','Tonota'],
-  'North West District': ['Beetsha','Bothatogo','Chanoga','Etsha 6','Etsha 13','Gumare','Maun','Ngarange','Nokaneng','Samochima','Sehithwa','Seronga','Sexaxa','Shakawe','Toteng','Tsau'],
-  'South East District': ['Gaborone','Mogoditshane','Odi','Ramotswa','Tlokweng'],
-  'Southern District': ['Barolong','Boatle','Digawana','Goodhope','Jwaneng','Kanye','Lobatse','Mmankgodi','Mmathethe','Mokhomba','Mosopa','Moshupa','Ranaka','Sese','Selokolela']
+  'Central District': [
+    'Bobonong','Borolong','Borotsi','Chadibe','Dagwi','Damochojena','Dibete Station','Dimajwe',
+    'Dinokwe','Dovedale','Dukwi','Gobojango','Gojwane','Gootau','Goshwe','Gweta','Jamataka',
+    'Kalamare','Kedia','Kgagodi','Khwee','Kodibeleng','Kudumatse','Kumaga','Kutamogree','Lecheng',
+    'Lepokole','Lerala','Lesenepole','Letlhakane','Maape','Mabeleapudi','Mabesekwa','Machaneng',
+    'Mafongo','Mahalapye','Majwaneng','Makalamabedi','Makobo','Malatswai','Malaka','Mandunyane',
+    'Marapong','Marobela','Mathangwane','Mathathane','Matsitama','Matlhakola','Maunatlala',
+    'Mmadikola','Mmadinare','Mmaphashalala','Mmashoro','Mmatshumo','Mmeya','Mogapi','Mogapinyana',
+    'Mogorosi','Moiyabana','Mokoboxane','Mokobeng','Mokgenene','Molalatau','Moletemane','Mookane',
+    'Mopipi','Moralane','Mosetse','Moshopha','Mosolotshane','Mosu','Motlhabaneng','Motopi',
+    'Motshegaletau','Mokubilo','Natale','Nata','Nkange','Nshakashokwe','Nswazwi','Orapa',
+    'Otse','Paje','Palapye','Pilikwe','Radisele','Rakops','Ramokgonami','Ratholo','Sebina',
+    'Sefhare','Sefophe','Seleka','Selebi-Phikwe','Semolale','Senete','Seolwane','Sepako',
+    'Sehunou','Serowe','Serule','Shakwe','Shashe-Mooke','Shoshong','Sowa Town','Thabala',
+    'Tobane','Topisi','Tsetsebjwe','Tshimoyapula','Tshokwe','Tumasera','Tutume','Xhumo','Zoroga'
+  ],
+  'Chobe District': [
+    'Kachikau','Kasane','Kazungula','Lesoma','Pandamatenga','Parakarungu'
+  ],
+  'Ghanzi District': [
+    'Charles Hill','Chobokwane','D\'Kar','Dekar','Ghanzi','Groote Laagte','Karakobis','Kuke',
+    'Ncojane','New Xade','Qabo','Tsootsha','West Hanahai'
+  ],
+  'Kgalagadi District': [
+    'Bray','Hukuntsi','Kang','Khakhea','Khawa','Kokotsha','Lehututu','Lokgwabe',
+    'Makopong','Middlepits','Omaweneno','Phepheng','Struizendam','Tshane','Tshabong','Werda','Zutshwa'
+  ],
+  'Kgatleng District': [
+    'Artisia','Bokaa','Leshibitse','Mabalane','Malolwane','Malotwana Siding','Matebeleng',
+    'Mmamashia','Mmathubudukwane','Mochudi','Modipane','Mokatse','Morwa','Oodi','Pilane','Rasesa','Sikwane'
+  ],
+  'Kweneng District': [
+    'Boatlaname','Botlhapatlou','Ditshegwane','Dutlwe','Gabane','Gakuto','Gamodubu',
+    'Hatsalatladi','Kaudwane','Khudumelapye','Kopong','Kumakwane','Leologane','Lentsweletau',
+    'Letlhakeng','Maboane','Malwelwe','Mmankgodi','Mmanoko','Mmatseta','Mogoditshane',
+    'Mokolodi','Molepolole','Mmopane','Moshaweng','Motokwe','Ngware','Salajwe','Serinane',
+    'Sesung','Shadishadi','Sojwe','Sorilatholo','Takatokwane','Thamaga','Tloaneng'
+  ],
+  'North East District': [
+    'Ditladi','Francistown','Jackalas No. 1','Jackalas No. 2','Makaleng','Mapoka',
+    'Matshelagabedi','Masunga','Matsiloje','Moroka','Mosojane','Mulambakwena','Nlakhwane',
+    'Ramokgwebana','Senyawe','Shashe Bridge','Siviya','Themashanga','Tsamaya','Tshesebe','Zwenshambe'
+  ],
+  'North West District': [
+    'Beetsha','Bodibeng','Etsha 1','Etsha 6','Etsha 13','Gani','Gumare','Kareng',
+    'Kauxwhi','Matlapana','Maun','Mogomotho','Mohembo West','Ngarange','Nokaneng',
+    'Nxamasere','Qangwa','Samochema','Sehithwa','Sepopa','Seronga','Shakawe','Shorobe',
+    'Toteng','Tsau','Xakao'
+  ],
+  'South East District': [
+    'Gaborone','Mogobane','Otse','Ramotswa','Taung','Tlokweng'
+  ],
+  'Southern District': [
+    'Digawana','Gasita','Gathwane','Good Hope','Jwaneng','Kanye','Keng','Kgomokasitwa',
+    'Khakhea','Kokong','Lekgolobotlo','Lobatse','Lorolwana','Lorwana','Lotlhakane',
+    'Lotlhakane West','Mabule','Mabutsane','Magoriapitse','Magotlhwane','Mahotshwane',
+    'Maokane','Manyana','Metlobo','Mmathethe','Mokhomba','Molapowabojang','Mogonye',
+    'Moshupa','Moshaneng','Mosopa','Ntlhantlhe','Phitshane Molopo','Pitsana-Potokwe',
+    'Pitsane Siding','Pitseng','Rakhuna','Ramatlabama','Ranaka','Sekhutlane','Sekoma',
+    'Selokolela','Segwagwa','Sese','Tlhankane'
+  ]
 };
 
 function populateVillages(district, selectedVillage) {
