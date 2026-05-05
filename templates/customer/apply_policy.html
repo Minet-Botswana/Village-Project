@@ -154,13 +154,43 @@
           </div>
           <div class="mc-form-group">
             <label class="mc-label" for="sum_assurance">Sum Insured &mdash; Replacement Value (BWP) <span style="color:var(--mc-red)">*</span></label>
-            <input type="number" class="mc-input" id="sum_assurance" name="sum_assurance" placeholder="e.g., 500000" required oninput="calcPremium()">
+            <input type="number" class="mc-input" id="sum_assurance" name="sum_assurance" placeholder="e.g., 500000" min="75000" required oninput="calcPremium()">
+            <span class="mc-text-muted mc-text-small">Minimum sum insured: BWP 75,000</span>
           </div>
-          <div class="mc-form-group">
-            <label class="mc-label" for="premium">Annual Premium (BWP)</label>
-            <input type="text" class="mc-input" id="premium" name="premium" placeholder="Auto-calculated" readonly style="background:#f5f5f5;color:#555;">
-            <span class="mc-text-muted mc-text-small">Calculated at {{ premium_rate_pct|floatformat:2 }}% of sum insured</span>
+
+          <!-- Premium display -->
+          <div class="mc-form-group" id="premiumDisplayGroup" style="display:none;">
+            <label class="mc-label">Calculated Premium</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="background:#f5f5f5;border:1px solid #e0e0e0;padding:10px 14px;text-align:center;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:#888;margin-bottom:4px;">Annual</div>
+                <div style="font-size:18px;font-weight:700;color:#111;" id="annualDisplay">BWP 0.00</div>
+                <div style="font-size:10px;color:#aaa;margin-top:2px;" id="annualRateDisplay"></div>
+              </div>
+              <div style="background:#f5f5f5;border:1px solid #e0e0e0;padding:10px 14px;text-align:center;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.6px;color:#888;margin-bottom:4px;">Monthly</div>
+                <div style="font-size:18px;font-weight:700;color:var(--mc-red);" id="monthlyDisplay">BWP 0.00</div>
+                <div style="font-size:10px;color:#aaa;margin-top:2px;">per month &times; 12</div>
+              </div>
+            </div>
           </div>
+
+          <!-- Payment frequency choice -->
+          <div class="mc-form-group" id="frequencyGroup" style="display:none;">
+            <label class="mc-label">Payment Frequency <span style="color:var(--mc-red)">*</span></label>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;">
+                <input type="radio" name="payment_frequency" id="freqAnnual" value="annual" onchange="onFreqChange()" style="accent-color:var(--mc-red);width:16px;height:16px;"> Annual &mdash; pay once
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:600;">
+                <input type="radio" name="payment_frequency" id="freqMonthly" value="monthly" onchange="onFreqChange()" style="accent-color:var(--mc-red);width:16px;height:16px;"> Monthly &mdash; pay each month
+              </label>
+            </div>
+          </div>
+
+          <!-- Hidden fields submitted to server -->
+          <input type="hidden" name="premium" id="premium">
+          <input type="hidden" name="payment_frequency_hidden" id="payment_frequency_hidden" value="annual">
           <!-- cover_start and tenure are set by the system on submission -->
           <input type="hidden" name="cover_start" id="cover_start">
           <input type="hidden" name="tenure" value="12">
@@ -197,10 +227,66 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-var PREMIUM_RATE = {{ premium_rate }};
+/* ── Banded premium calculation ── */
+var PREMIUM_BANDS = [
+  { min: 75000,     max: 100000,    rate: 0.0040 },
+  { min: 100001,    max: 150000,    rate: 0.0030 },
+  { min: 150001,    max: 200000,    rate: 0.0020 },
+  { min: 200001,    max: 250000,    rate: 0.0015 },
+  { min: 250001,    max: 300000,    rate: 0.0014 },
+  { min: 300001,    max: 350000,    rate: 0.0014 },
+  { min: 350001,    max: 400000,    rate: 0.0013 },
+  { min: 400001,    max: 450000,    rate: 0.0012 },
+  { min: 450001,    max: 500000,    rate: 0.0011 },
+  { min: 500001,    max: 750000,    rate: 0.0011 },
+  { min: 750001,    max: 1000000,   rate: 0.0011 },
+  { min: 1000001,   max: 1500000,   rate: 0.0010 },
+  { min: 1500001,   max: 99999999,  rate: 0.0010 }
+];
+var MIN_ANNUAL  = 350;
+var MIN_MONTHLY = 50;
+
+function getBandedRate(sum) {
+  for (var i = 0; i < PREMIUM_BANDS.length; i++) {
+    if (sum >= PREMIUM_BANDS[i].min && sum <= PREMIUM_BANDS[i].max) {
+      return PREMIUM_BANDS[i].rate;
+    }
+  }
+  return null;
+}
+
 function calcPremium() {
   var v = parseFloat(document.getElementById('sum_assurance').value);
-  document.getElementById('premium').value = isNaN(v) ? '' : (v * PREMIUM_RATE).toFixed(2);
+  var displayGroup  = document.getElementById('premiumDisplayGroup');
+  var freqGroup     = document.getElementById('frequencyGroup');
+  if (isNaN(v) || v < 75000) {
+    displayGroup.style.display  = 'none';
+    freqGroup.style.display     = 'none';
+    document.getElementById('premium').value = '';
+    return;
+  }
+  var rate   = getBandedRate(v);
+  if (!rate) { displayGroup.style.display = 'none'; freqGroup.style.display = 'none'; return; }
+  var annual  = Math.max(v * rate, MIN_ANNUAL);
+  var monthly = Math.max(annual / 12, MIN_MONTHLY);
+  document.getElementById('annualDisplay').textContent  = 'BWP ' + annual.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('monthlyDisplay').textContent = 'BWP ' + monthly.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('annualRateDisplay').textContent = (rate * 100).toFixed(2) + '% of sum insured';
+  displayGroup.style.display = 'block';
+  freqGroup.style.display    = 'block';
+  onFreqChange(); /* update hidden premium field */
+}
+
+function onFreqChange() {
+  var v = parseFloat(document.getElementById('sum_assurance').value);
+  if (isNaN(v) || v < 75000) return;
+  var rate    = getBandedRate(v);
+  if (!rate) return;
+  var annual  = Math.max(v * rate, MIN_ANNUAL);
+  var monthly = Math.max(annual / 12, MIN_MONTHLY);
+  var isMonthly = document.getElementById('freqMonthly').checked;
+  document.getElementById('premium').value = isMonthly ? monthly.toFixed(2) : annual.toFixed(2);
+  document.getElementById('payment_frequency_hidden').value = isMonthly ? 'monthly' : 'annual';
 }
 document.getElementById('previewBtn').addEventListener('click', function () {
   var rows = [
@@ -211,7 +297,8 @@ document.getElementById('previewBtn').addEventListener('click', function () {
     ['Village', document.getElementById('village').value || 'Not entered'],
     ['District', document.getElementById('district').value || 'Not entered'],
     ['Sum Insured', 'BWP ' + (document.getElementById('sum_assurance').value || '0')],
-    ['Annual Premium', 'BWP ' + (document.getElementById('premium').value || '0')],
+    ['Payment Frequency', document.getElementById('freqMonthly') && document.getElementById('freqMonthly').checked ? 'Monthly' : 'Annual'],
+    ['Premium Payable', 'BWP ' + (document.getElementById('premium').value || '0')],
   ];
   var html = '<table style="width:100%;border-collapse:collapse;font-family:Arial;font-size:13px;">';
   rows.forEach(function(r) {
@@ -243,7 +330,8 @@ document.getElementById('applyForm').addEventListener('submit', function(e) {
       + '<div style="display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:#888;">Policy Type</span><span style="font-weight:600;color:#111;">Short Term Homeowners Cover</span></div>'
       + '<div style="display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:#888;">Risk</span><span style="font-weight:600;color:#111;max-width:55%;text-align:right;">' + (riskVal || '—') + '</span></div>'
       + '<div style="display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:#888;">Sum Insured</span><span style="font-weight:600;color:#111;">BWP ' + (sumVal ? parseFloat(sumVal).toLocaleString() : '0') + '</span></div>'
-      + '<div style="display:flex;justify-content:space-between;padding:8px 12px;font-size:13px;"><span style="color:#888;">Annual Premium</span><span style="font-weight:700;color:#c0111a;">BWP ' + (premVal ? parseFloat(premVal).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}) : '0.00') + '</span></div>'
+      + '<div style="display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;"><span style="color:#888;">Payment Frequency</span><span style="font-weight:600;color:#111;">' + (document.getElementById('freqMonthly') && document.getElementById('freqMonthly').checked ? 'Monthly' : 'Annual') + '</span></div>'
+      + '<div style="display:flex;justify-content:space-between;padding:8px 12px;font-size:13px;"><span style="color:#888;">Premium Payable</span><span style="font-weight:700;color:#c0111a;">BWP ' + (premVal ? parseFloat(premVal).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}) : '0.00') + '</span></div>'
       + '</div>'
       + '<p style="margin:12px 0 0;font-size:11px;color:#aaa;">Once submitted, your application will be reviewed by the underwriting team.</p>'
       + '</div>',
