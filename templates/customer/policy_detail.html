@@ -394,26 +394,3 @@
 </div>
 
 {% endblock content %}
-      <div class="pd-field"><span class="pd-label">Application Date</span><span class="pd-value">{{ policy_record.creation_date|date:"d M Y" }}</span></div>
-      {% else %}
-      <div class="pd-field full" style="grid-column:1/-1;">
-        <span class="pd-label">Cover Dates</span>
-        <span class="pd-value" style="color:#f0a500;font-size:12px;"><i class="fas fa-clock" style="margin-right:4px;"></i>Dates will be confirmed once your application is approved</span>
-      </div>
-      {% endif %}
-    </div>
-
-    {% if policy.title_deed %}
-    <!-- Documents -->
-    <div class="pd-section-heading"><i class="fas fa-paperclip" style="margin-right:6px;"></i>Attached Documents</div>
-    <div class="pd-rows" style="padding-top:12px;padding-bottom:14px;">
-      <a href="{{ policy.title_deed.url }}" target="_blank" class="mc-btn mc-btn-outline" style="font-size:12px;">
-        <i class="fas fa-file-pdf"></i>&nbsp; View Title Deed
-      </a>
-    </div>
-    {% endif %}
-
-  </div><!-- /pd-card -->
-
-</div>
-{% endblock content %}
