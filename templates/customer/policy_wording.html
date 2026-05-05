@@ -156,56 +156,42 @@
   <div class="policy-section">
     <h3 style="margin-bottom: 20px; color: #333;">Available Policy Documents</h3>
     
-    <!-- Sample Policy Documents - In future, these will be dynamically loaded from database -->
+    <!-- Homeowners Policy Wording (2026) -->
     <div class="policy-item">
-      <div class="policy-title">Homeowners Insurance Policy Wording</div>
+      <div class="policy-title">Homeowners Insurance Policy Wording <span style="font-size:12px;background:#e21a22;color:#fff;padding:2px 8px;margin-left:8px;font-weight:600;">2026</span></div>
       <div class="policy-description">
-        Comprehensive policy terms and conditions for homeowners insurance coverage including property damage, theft, and liability protection.
+        Bryte Personal Lines policy document covering Buildings under the B.I.C.B. Limited trading as Bryte Risk Services Botswana policy. Includes defined events (fire, lightning, explosion, storm, burst pipes, theft, impact), automatic extensions (bereavement, contents, fire-fighting, debris removal), exclusions, first amounts payable, and general conditions.
       </div>
       <div class="policy-meta">
-        Document Type: PDF | Last Updated: Coming Soon
+        Insurer: B.I.C.B. Limited t/a Bryte Risk Services Botswana &nbsp;|&nbsp; Document Type: PDF &nbsp;|&nbsp; Effective: 2026
       </div>
       <div class="policy-actions">
-        <a href="#" class="view-btn" onclick="alert('Document will be available soon');">
+        <a href="{% url 'customer:policy-wordings' %}" class="view-btn">
           <i class="fas fa-eye" style="margin-right: 5px;"></i>
-          View Online
-        </a>
-        <a href="#" class="download-btn" onclick="alert('Document will be available soon');">
-          <i class="fas fa-download" style="margin-right: 5px;"></i>
-          Download PDF
+          View Policy Wordings
         </a>
       </div>
     </div>
-    
+
+    <!-- Motor Insurance Policy Wording -->
     <div class="policy-item">
       <div class="policy-title">Motor Insurance Policy Wording</div>
       <div class="policy-description">
         Third-party motor insurance policy terms, coverage details, exclusions, and claims procedures for vehicle insurance.
       </div>
       <div class="policy-meta">
-        Document Type: PDF | Last Updated: Coming Soon
+        Document Type: PDF &nbsp;|&nbsp; Status: Coming Soon
       </div>
       <div class="policy-actions">
-        <a href="#" class="view-btn" onclick="alert('Document will be available soon');">
-          <i class="fas fa-eye" style="margin-right: 5px;"></i>
-          View Online
-        </a>
-        <a href="#" class="download-btn" onclick="alert('Document will be available soon');">
-          <i class="fas fa-download" style="margin-right: 5px;"></i>
-          Download PDF
-        </a>
+        <span class="view-btn" style="opacity:0.5;cursor:not-allowed;">
+          <i class="fas fa-clock" style="margin-right: 5px;"></i>
+          Coming Soon
+        </span>
       </div>
     </div>
     
-    <!-- Placeholder for future admin-uploaded documents -->
-    <div class="empty-state" style="margin-top: 40px;">
-      <div class="empty-icon">
-        <i class="fas fa-file-upload"></i>
-      </div>
-      <h4 class="empty-title">More Documents Coming Soon</h4>
-      <p class="empty-subtitle">Additional policy wording documents will be uploaded by our administrators and made available here.</p>
-    </div>
-  </div>
+    <!-- Additional documents uploaded by admins appear via policy-wordings page -->
+
 
   <!-- Help Section -->
   <div class="policy-section">

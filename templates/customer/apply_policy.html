@@ -50,6 +50,69 @@
     <p>Complete the form below to apply for Short Term Homeowners Insurance</p>
   </div>
 
+  <!-- Coverage at a Glance -->
+  <div class="ap-section" style="margin-bottom:20px;">
+    <div class="ap-section-heading"><i class="fas fa-shield-alt" style="margin-right:6px;"></i>Coverage at a Glance — Bryte Personal Lines (2026)</div>
+    <div class="ap-section-body" style="padding:16px 20px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px 24px;font-family:var(--mc-font);">
+
+        <!-- Defined Events -->
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--mc-red);margin-bottom:8px;"><i class="fas fa-check-circle" style="margin-right:4px;"></i>What's Covered</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:#444;line-height:1.9;">
+            <li>Fire</li>
+            <li>Lightning</li>
+            <li>Explosion</li>
+            <li>Storm, wind, water, hail or snow</li>
+            <li>Burst / leaking pipes &amp; installations</li>
+            <li>Theft or attempted theft (forcible entry)</li>
+            <li>Impact &amp; fallen trees from storm/flood</li>
+          </ul>
+        </div>
+
+        <!-- Automatic Extensions -->
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#167c3a;margin-bottom:8px;"><i class="fas fa-plus-circle" style="margin-right:4px;"></i>Automatic Extensions</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:#444;line-height:1.9;">
+            <li>Bereavement expenses — BWP 5,000/period</li>
+            <li>House contents — BWP 5,000/incident, BWP 10,000/period</li>
+            <li>Fire-fighting charges (max BWP 40,000)</li>
+            <li>Debris removal</li>
+            <li>Emergency accommodation while uninhabitable</li>
+            <li>Professional &amp; rebuilding costs</li>
+            <li>Glass &amp; sanitary ware (accidental breakage)</li>
+          </ul>
+        </div>
+
+        <!-- Exclusions -->
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:#777;margin-bottom:8px;"><i class="fas fa-times-circle" style="margin-right:4px;"></i>Key Exclusions</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:#444;line-height:1.9;">
+            <li>Thatch roofs / non-standard buildings</li>
+            <li>Commercial-use dwellings</li>
+            <li>Theft after 60 days unoccupied</li>
+            <li>Pre-existing damage</li>
+            <li>Malicious damage</li>
+            <li>Load shedding / deliberate power cuts</li>
+            <li>Subsidence &amp; landslip (excess: 1%, min BWP 5,000)</li>
+            <li>Renovation / construction activities</li>
+            <li>Faulty design or workmanship</li>
+            <li>TV aerials &amp; satellite dishes</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Excess notice -->
+      <div style="margin-top:14px;background:#fff8e1;border-left:3px solid #f0a500;padding:9px 14px;font-size:12px;color:#5a3e00;">
+        <i class="fas fa-info-circle" style="margin-right:5px;"></i>
+        <strong>First Amount Payable (Excess):</strong> BWP 2,000 basic on every claim.
+        Subsidence/Landslip: 1% of sum insured, minimum BWP 5,000.
+        Cover does <strong>not</strong> apply to average (under-insurance condition) for properties valued <strong>below BWP 500,000</strong>.
+      </div>
+    </div>
+  </div>
+
   <form method="POST" enctype="multipart/form-data" autocomplete="off" id="applyForm" action="{% url 'customer:apply-policy' %}">
     {% csrf_token %}
     <input type="hidden" name="category" value="3">
