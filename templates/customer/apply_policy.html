@@ -87,14 +87,28 @@
             <span class="mc-text-muted mc-text-small">Ward number or traditional authority area</span>
           </div>
           <div class="mc-form-group">
-            <label class="mc-label" for="village">Village / Township <span style="color:var(--mc-red)">*</span></label>
-            <input type="text" class="mc-input" id="village" name="village" placeholder="e.g., Gaborone Village" required>
-            <span class="mc-text-muted mc-text-small">Village or township name</span>
+            <label class="mc-label" for="district">District <span style="color:var(--mc-red)">*</span></label>
+            <select class="mc-input" id="district" name="district" required>
+              <option value="">— Select District —</option>
+              <option value="Central District">Central District</option>
+              <option value="Chobe District">Chobe District</option>
+              <option value="Ghanzi District">Ghanzi District</option>
+              <option value="Kgalagadi District">Kgalagadi District</option>
+              <option value="Kgatleng District">Kgatleng District</option>
+              <option value="Kweneng District">Kweneng District</option>
+              <option value="North East District">North East District</option>
+              <option value="North West District">North West District (Ngamiland)</option>
+              <option value="South East District">South East District</option>
+              <option value="Southern District">Southern District</option>
+            </select>
+            <span class="mc-text-muted mc-text-small">Administrative district of the property</span>
           </div>
           <div class="mc-form-group">
-            <label class="mc-label" for="district">District <span style="color:var(--mc-red)">*</span></label>
-            <input type="text" class="mc-input" id="district" name="district" placeholder="e.g., South East District" required>
-            <span class="mc-text-muted mc-text-small">Administrative district</span>
+            <label class="mc-label" for="village">Village / Township <span style="color:var(--mc-red)">*</span></label>
+            <select class="mc-input" id="village" name="village" required disabled>
+              <option value="">— Select District first —</option>
+            </select>
+            <span class="mc-text-muted mc-text-small">Village or township within the selected district</span>
           </div>
           <div class="mc-form-group">
             <label class="mc-label" for="title_deed">Title Deed <span class="mc-text-muted">(Optional &mdash; PDF only)</span></label>
@@ -243,6 +257,47 @@ document.getElementById('applyForm').addEventListener('submit', function(e) {
   });
 });
 
+/* ── District / Village cascading dropdowns ── */
+var BW_VILLAGES = {
+  'Central District': ['Bobonong','Dibete','Gobojango','Gweta','Khumaga','Lecheng','Lerala','Letlhakane','Mahalapye','Maitengwe','Malaka','Maunatlala','Mmadinare','Mmashoro','Mokgenene','Mookane','Mopipi','Mogorosi','Mosetse','Nata','Orapa','Paje','Palapye','Radisele','Rakops','Sebina','Selebi-Phikwe','Serowe','Shoshong','Taupye','Tobane','Tutume'],
+  'Chobe District': ['Kachikau','Kasane','Kavimba','Kazungula','Mabele','Muchenje','Ngoma','Pandamatenga','Satau'],
+  'Ghanzi District': ['Bere','Charles Hill','D\'Kar','East Hanahai','Ghanzi','Karakubis','Kalkfontein','New Xade','Tsootsha'],
+  'Kgalagadi District': ['Hukuntsi','Kang','Khakhea','Lokgwabe','Mabule','Middlepits','Ncojane','Sekoma','Struizendam','Tshane','Tsabong','Werda','Zutshwa'],
+  'Kgatleng District': ['Artesia','Bokaa','Dikwididi','Leshibitse','Malolwane','Matebele','Mmamashia','Mmathubudukwane','Mochudi','Mokatse','Morwa','Oodi','Pilane','Rasesa'],
+  'Kweneng District': ['Dutlwe','Gabane','Khudumelapye','Kopong','Kumakwane','Lentsweletau','Lephephe','Letlhakeng','Mmopane','Molepolole','Ngware','Salajwe','Shadishadi','Sojwe','Takatokwane','Thamaga'],
+  'North East District': ['Francistown','Jackalas No. 1','Jackalas No. 2','Matshelagabedi','Masunga','Ramokgwebana','Shashe Mooke','Tati Siding','Tonota'],
+  'North West District': ['Beetsha','Bothatogo','Chanoga','Etsha 6','Etsha 13','Gumare','Maun','Ngarange','Nokaneng','Samochima','Sehithwa','Seronga','Sexaxa','Shakawe','Toteng','Tsau'],
+  'South East District': ['Gaborone','Mogoditshane','Odi','Ramotswa','Tlokweng'],
+  'Southern District': ['Barolong','Boatle','Digawana','Goodhope','Jwaneng','Kanye','Lobatse','Mmankgodi','Mmathethe','Mokhomba','Mosopa','Moshupa','Ranaka','Sese','Selokolela']
+};
+
+function populateVillages(district, selectedVillage) {
+  var sel = document.getElementById('village');
+  sel.innerHTML = '';
+  var placeholder = document.createElement('option');
+  placeholder.value = '';
+  if (!district || !BW_VILLAGES[district]) {
+    placeholder.textContent = '— Select District first —';
+    sel.appendChild(placeholder);
+    sel.disabled = true;
+    return;
+  }
+  placeholder.textContent = '— Select Village / Township —';
+  sel.appendChild(placeholder);
+  BW_VILLAGES[district].forEach(function(v) {
+    var opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    if (v === selectedVillage) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.disabled = false;
+}
+
+document.getElementById('district').addEventListener('change', function() {
+  populateVillages(this.value, '');
+});
+
 /* ── Draft save / restore ── */
 var AP_DRAFT_KEY = 'ap_homeowners_draft_{{ request.user.id }}';
 var AP_FIELDS = ['id_number','plot_number','ward_kgotla','village','district','financial_interest','policy_name','sum_assurance'];
@@ -260,10 +315,16 @@ function apFormRestoreDraft() {
   try {
     var draft = JSON.parse(localStorage.getItem(AP_DRAFT_KEY));
     if (!draft) return;
+    /* Restore all fields except village (depends on district) */
     AP_FIELDS.forEach(function(id) {
+      if (id === 'village') return;
       var el = document.getElementById(id);
       if (el && draft[id]) el.value = draft[id];
     });
+    /* Populate village options for the restored district, then set saved value */
+    if (draft['district']) {
+      populateVillages(draft['district'], draft['village'] || '');
+    }
     calcPremium();
     /* Show a subtle notice that the draft was restored */
     var notice = document.getElementById('ap-draft-notice');
