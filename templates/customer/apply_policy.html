@@ -221,6 +221,7 @@
     <div class="ap-modal-body" id="previewBody"></div>
     <div class="ap-modal-footer">
       <button class="mc-btn" style="background:#e0e0e0;color:#333;" id="closeModalBtn">Close</button>
+      <button class="mc-btn mc-btn-primary" id="submitFromPreview" style="margin-left:8px;"><i class="fas fa-paper-plane"></i>&nbsp; Submit Application</button>
     </div>
   </div>
 </div>
@@ -289,22 +290,63 @@ function onFreqChange() {
   document.getElementById('payment_frequency_hidden').value = isMonthly ? 'monthly' : 'annual';
 }
 document.getElementById('previewBtn').addEventListener('click', function () {
-  var rows = [
-    ['Cover Category', 'Short Term Cover'],
-    ['Omang / ID', document.getElementById('id_number').value || 'Not entered'],
-    ['Risk', document.getElementById('policy_name').value || 'Not entered'],
-    ['Plot Number', document.getElementById('plot_number').value || 'Not entered'],
-    ['Village', document.getElementById('village').value || 'Not entered'],
-    ['District', document.getElementById('district').value || 'Not entered'],
-    ['Sum Insured', 'BWP ' + (document.getElementById('sum_assurance').value || '0')],
-    ['Payment Frequency', document.getElementById('freqMonthly') && document.getElementById('freqMonthly').checked ? 'Monthly' : 'Annual'],
-    ['Premium Payable', 'BWP ' + (document.getElementById('premium').value || '0')],
-  ];
-  var html = '<table style="width:100%;border-collapse:collapse;font-family:Arial;font-size:13px;">';
-  rows.forEach(function(r) {
-    html += '<tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:7px 8px;color:#777;width:45%;">' + r[0] + '</td><td style="padding:7px 8px;font-weight:600;color:#111;">' + r[1] + '</td></tr>';
-  });
+  var isMonthly  = document.getElementById('freqMonthly') && document.getElementById('freqMonthly').checked;
+  var freqLabel  = isMonthly ? 'Monthly' : 'Annual';
+  var premVal    = document.getElementById('premium').value;
+  var sumVal     = document.getElementById('sum_assurance').value;
+
+  /* Compute both amounts for display */
+  var annualAmt = '', monthlyAmt = '';
+  var sv = parseFloat(sumVal);
+  if (!isNaN(sv) && sv >= 75000) {
+    var r = getBandedRate(sv);
+    if (r) {
+      annualAmt  = 'BWP ' + Math.max(sv * r, MIN_ANNUAL).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+      monthlyAmt = 'BWP ' + Math.max((sv * r) / 12, MIN_MONTHLY).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+  }
+
+  function row(label, value, highlight) {
+    var valStyle = highlight
+      ? 'font-weight:700;color:#c0111a;font-size:14px;'
+      : 'font-weight:600;color:#111;';
+    return '<tr style="border-bottom:1px solid #f3f3f3;">'
+      + '<td style="padding:8px 10px;color:#777;width:42%;font-size:12px;vertical-align:top;">' + label + '</td>'
+      + '<td style="padding:8px 10px;' + valStyle + 'font-size:13px;">' + (value || '<span style="color:#bbb;font-style:italic;">Not provided</span>') + '</td>'
+      + '</tr>';
+  }
+  function sectionHead(title, icon) {
+    return '<tr><td colspan="2" style="padding:10px 10px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--mc-red);border-bottom:2px solid var(--mc-red);background:#fafafa;">'
+      + '<i class="' + icon + '" style="margin-right:5px;"></i>' + title + '</td></tr>';
+  }
+
+  var html = '<table style="width:100%;border-collapse:collapse;font-family:Arial;">';
+
+  html += sectionHead('Customer Information', 'fas fa-user');
+  html += row('Omang / ID Number', document.getElementById('id_number').value);
+
+  html += sectionHead('Property Details', 'fas fa-home');
+  html += row('Plot Number',   document.getElementById('plot_number').value);
+  html += row('Ward / Kgotla', document.getElementById('ward_kgotla').value);
+  html += row('Village / Township', document.getElementById('village').value);
+  html += row('District',      document.getElementById('district').value);
+  var fi = document.getElementById('financial_interest').value;
+  if (fi) html += row('Financial Interest', fi);
+  var td = document.getElementById('title_deed');
+  if (td && td.files && td.files.length) html += row('Title Deed', '<i class="fas fa-check-circle" style="color:#167c3a;"></i> ' + td.files[0].name);
+
+  html += sectionHead('Policy Information', 'fas fa-shield-alt');
+  html += row('Risk Description', document.getElementById('policy_name').value);
+  html += row('Sum Insured', sumVal ? 'BWP ' + parseFloat(sumVal).toLocaleString('en') : '');
+
+  html += sectionHead('Premium', 'fas fa-money-bill-wave');
+  html += row('Annual Premium',  annualAmt);
+  html += row('Monthly Premium', monthlyAmt);
+  html += row('Payment Frequency', '<span style="background:' + (isMonthly ? '#1a6fc4' : '#167c3a') + ';color:#fff;padding:2px 10px;font-size:11px;font-weight:700;">' + freqLabel.toUpperCase() + '</span>');
+  html += row('Amount Payable', premVal ? 'BWP ' + parseFloat(premVal).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2}) : '', true);
+
   html += '</table>';
+
   document.getElementById('previewBody').innerHTML = html;
   document.getElementById('previewModal').classList.add('show');
 });
@@ -312,6 +354,11 @@ function closeModal() { document.getElementById('previewModal').classList.remove
 document.getElementById('closeModal').addEventListener('click', closeModal);
 document.getElementById('closeModalBtn').addEventListener('click', closeModal);
 document.getElementById('previewModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.getElementById('submitFromPreview').addEventListener('click', function() {
+  closeModal();
+  apConfirmed = false;
+  document.getElementById('applyForm').dispatchEvent(new Event('submit', {bubbles:true, cancelable:true}));
+});
 
 var apConfirmed = false;
 document.getElementById('applyForm').addEventListener('submit', function(e) {
