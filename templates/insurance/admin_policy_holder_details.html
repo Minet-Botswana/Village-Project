@@ -241,38 +241,5 @@
         </div>
     </section>
 
-    <section class="section-card">
-        <div class="section-head"><i class="ri-car-line"></i> Motor Insurance Add-ons</div>
-        <div class="section-body">
-            {% if motor %}
-                {% for record in motor %}
-                <div class="policy-block">
-                    <div class="policy-title">{{ record.thirdpartypolicy.policy_name }} (#{{ record.thirdpartypolicy.policy_number }})</div>
-                    <div class="section-body">
-                        <div class="kv-grid">
-                            <div class="kv-item"><div class="kv-label">Category</div><div class="kv-value">{{ record.thirdpartypolicy.category.category_name }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Status</div><div class="kv-value"><span class="status-badge status-{{ record.thirdpartystatus|lower }}">{{ record.thirdpartystatus }}</span></div></div>
-                            <div class="kv-item"><div class="kv-label">Premium</div><div class="kv-value">P{{ record.thirdpartypolicy.premium|floatformat:2 }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Tenure</div><div class="kv-value">{{ record.thirdpartypolicy.tenure }} months</div></div>
-                            <div class="kv-item full"><div class="kv-label">Coverage Period</div><div class="kv-value">{{ record.thirdpartypolicy.cover_start|default:"Not set" }} - {{ record.thirdpartypolicy.cover_end|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Vehicle Type</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_type|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Make</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_make|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Model</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_model|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Year</div><div class="kv-value">{{ record.thirdpartypolicy.vehicle_year|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Chassis Number</div><div class="kv-value">{{ record.thirdpartypolicy.chassis_number|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Registration Number</div><div class="kv-value">{{ record.thirdpartypolicy.registration_number|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Engine Number</div><div class="kv-value">{{ record.thirdpartypolicy.engine_number|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Territorial Limits</div><div class="kv-value">{{ record.thirdpartypolicy.territorial_limits|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Created</div><div class="kv-value">{{ record.thirdpartypolicy.creation_date|default:"Not set" }}</div></div>
-                            <div class="kv-item"><div class="kv-label">Expiry Date</div><div class="kv-value">{{ record.thirdpartypolicy.expiry_date|default:"N/A" }}</div></div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="empty-text">No motor insurance add-ons found.</p>
-            {% endif %}
-        </div>
-    </section>
 </div>
 {% endblock %}

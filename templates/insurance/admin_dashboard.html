@@ -390,18 +390,13 @@
             <div class="metric-note">Home cover applications on record</div>
         </div>
         <div class="metric-cell">
-            <div class="metric-label">Motor Add-ons</div>
-            <div class="metric-value">{{ total_thirdpartypolicy_holder }}</div>
-            <div class="metric-note">Motor product applications submitted</div>
-        </div>
-        <div class="metric-cell">
             <div class="metric-label">Pending</div>
-            <div class="metric-value">{{ waiting_policy_holder|add:waiting_thirdpartypolicy_holder }}</div>
+            <div class="metric-value">{{ waiting_policy_holder }}</div>
             <div class="metric-note">Applications awaiting review</div>
         </div>
         <div class="metric-cell">
             <div class="metric-label">Approved</div>
-            <div class="metric-value">{{ approved_policy_holder|add:approved_thirdpartypolicy_holder }}</div>
+            <div class="metric-value">{{ approved_policy_holder }}</div>
             <div class="metric-note">Policies cleared and active</div>
         </div>
         <div class="metric-cell">
@@ -428,14 +423,6 @@
                         <span>Applications waiting for underwriting review and approval.</span>
                     </div>
                     <a href="{% url 'admin-view-waiting-policy-holder' %}" class="queue-action">Review {{ waiting_policy_holder }}</a>
-                </li>
-                <li class="queue-item">
-                    <div class="queue-icon"><i class="ri-car-line"></i></div>
-                    <div class="queue-main">
-                        <strong>Pending motor add-on applications</strong>
-                        <span>Motor-related submissions requiring processing.</span>
-                    </div>
-                    <a href="{% url 'admin-view-waiting-thirdpartypolicy-holder' %}" class="queue-action">Review {{ waiting_thirdpartypolicy_holder }}</a>
                 </li>
                 <li class="queue-item">
                     <div class="queue-icon"><i class="ri-question-answer-line"></i></div>
@@ -523,36 +510,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'admin-view-waiting-thirdpartypolicy-holder' %}" class="workspace-link">
-                            <div class="workspace-link-main">
-                                <i class="ri-car-line"></i>
-                                <div>
-                                    <strong>Pending motor add-ons</strong>
-                                    <span>Process motor add-on applications currently in queue.</span>
-                                </div>
-                            </div>
-                            <span class="workspace-link-cta">Review</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="{% url 'admin-add-policy' %}" class="workspace-link">
                             <div class="workspace-link-main">
                                 <i class="ri-home-line"></i>
                                 <div>
                                     <strong>Create homeowners policy</strong>
                                     <span>Issue a new homeowners policy for an approved applicant.</span>
-                                </div>
-                            </div>
-                            <span class="workspace-link-cta">Create</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'admin-add-thirdparty-policy' %}" class="workspace-link">
-                            <div class="workspace-link-main">
-                                <i class="ri-roadster-line"></i>
-                                <div>
-                                    <strong>Create motor add-on policy</strong>
-                                    <span>Capture and issue approved motor policy records.</span>
                                 </div>
                             </div>
                             <span class="workspace-link-cta">Create</span>

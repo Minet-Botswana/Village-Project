@@ -464,11 +464,10 @@
     </div>
     
     <!-- Policy Information -->
-    {% if homeowners or motor %}
+    {% if homeowners %}
     <div class="section-card">
         <div class="section-title">Policy Information</div>
         
-        {% if homeowners %}
         <h4>Homeowners Policies</h4>
         {% for record in homeowners %}
         <div class="document-item">
@@ -480,21 +479,6 @@
             </div>
         </div>
         {% endfor %}
-        {% endif %}
-        
-        {% if motor %}
-        <h4 style="margin-top: 20px;">Motor Insurance Policies</h4>
-        {% for record in motor %}
-        <div class="document-item">
-            <div class="document-name">{{ record.thirdpartypolicy.policy_name }} - {{ record.thirdpartypolicy.policy_number }}</div>
-            <div class="document-date">
-                Status: <strong>{{ record.thirdpartystatus }}</strong> | 
-                Vehicle: {{ record.thirdpartypolicy.vehicle_make }} {{ record.thirdpartypolicy.vehicle_model }} |
-                Premium: P{{ record.thirdpartypolicy.premium }}
-            </div>
-        </div>
-        {% endfor %}
-        {% endif %}
     </div>
     {% endif %}
 </div>
