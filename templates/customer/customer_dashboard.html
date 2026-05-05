@@ -44,25 +44,6 @@
           </a>
         </li>
 
-        {% if has_approved_homeowners %}
-        <li>
-          <a href="{% url 'customer:apply-thirdparty' %}" class="mc-action-link">
-            <span class="mc-icon"><i class="fas fa-car"></i></span>
-            <span>Apply for Motor Insurance Add-on</span>
-          </a>
-        </li>
-        {% else %}
-        <li>
-          <div class="mc-action-link mc-disabled">
-            <span class="mc-icon"><i class="fas fa-car"></i></span>
-            <span>
-              Motor Insurance Add-on
-              <span class="mc-note">Requires approved homeowners cover first</span>
-            </span>
-          </div>
-        </li>
-        {% endif %}
-
         <li>
           <a href="{% url 'customer:my-applications' %}" class="mc-action-link">
             <span class="mc-icon"><i class="fas fa-list"></i></span>
