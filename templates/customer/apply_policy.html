@@ -129,7 +129,28 @@
         <div class="ap-grid">
           <div class="mc-form-group">
             <label class="mc-label" for="policy_name">Risk Description <span style="color:var(--mc-red)">*</span></label>
-            <input type="text" class="mc-input" id="policy_name" name="policy_name" placeholder="e.g., Dwelling - Brick Construction" required>
+            <select class="mc-input" id="policy_name" name="policy_name" required>
+              <option value="">— Select Risk Description —</option>
+              <optgroup label="Standard Construction">
+                <option value="Dwelling - Brick &amp; Mortar Construction">Dwelling — Brick &amp; Mortar Construction</option>
+                <option value="Dwelling - Brick &amp; Mortar with Tiled Roof">Dwelling — Brick &amp; Mortar with Tiled Roof</option>
+                <option value="Dwelling - Brick &amp; Mortar with IBR / Corrugated Iron Roof">Dwelling — Brick &amp; Mortar with IBR / Corrugated Iron Roof</option>
+                <option value="Dwelling - Concrete Block Construction">Dwelling — Concrete Block Construction</option>
+                <option value="Dwelling - Precast / Prefabricated Construction">Dwelling — Precast / Prefabricated Construction</option>
+              </optgroup>
+              <optgroup label="Property Use">
+                <option value="Owner-Occupied Residential Dwelling">Owner-Occupied Residential Dwelling</option>
+                <option value="Residential Dwelling - Tenanted">Residential Dwelling — Tenanted</option>
+                <option value="Residential Dwelling - Partially Tenanted">Residential Dwelling — Partially Tenanted</option>
+              </optgroup>
+              <optgroup label="Outbuildings &amp; Extensions">
+                <option value="Main Dwelling with Outbuildings">Main Dwelling with Outbuildings</option>
+                <option value="Main Dwelling with Perimeter Wall / Boundary Fence">Main Dwelling with Perimeter Wall / Boundary Fence</option>
+                <option value="Main Dwelling with Swimming Pool">Main Dwelling with Swimming Pool</option>
+                <option value="Main Dwelling with Outbuildings, Perimeter Wall &amp; Swimming Pool">Main Dwelling with Outbuildings, Perimeter Wall &amp; Swimming Pool</option>
+              </optgroup>
+            </select>
+            <span class="mc-text-muted mc-text-small">Select the description that best matches your property</span>
           </div>
           <div class="mc-form-group">
             <label class="mc-label" for="sum_assurance">Sum Insured &mdash; Replacement Value (BWP) <span style="color:var(--mc-red)">*</span></label>
